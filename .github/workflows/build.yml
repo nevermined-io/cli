@@ -15,6 +15,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn
+          yarn add jest
       - name: Build
         run: |
           yarn build
