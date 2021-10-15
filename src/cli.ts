@@ -1,5 +1,5 @@
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import yargs from "yargs"
+import { hideBin } from "yargs/helpers"
 import {
   showNft,
   mintNft,
@@ -12,15 +12,15 @@ import {
   listAgreements,
   downloadNft,
   searchNft
-} from "./commands";
-import chalk from "chalk";
+} from "./commands"
+import chalk from "chalk"
 
 const cmdHandler = async (cmd: Function, argv: any) => {
-  const { network } = argv;
+  const { network } = argv
 
-  console.log(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`));
-  return process.exit(await cmd(argv));
-};
+  console.log(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
+  return process.exit(await cmd(argv))
+}
 
 const y = yargs(hideBin(process.argv))
   .wrap(yargs.terminalWidth())
@@ -35,7 +35,7 @@ const y = yargs(hideBin(process.argv))
     type: "string",
     default: "mainnet",
     description: "the network to use"
-  });
+  })
 
 // hidden default command to display the help when used without parameters
 y.command(
@@ -43,10 +43,10 @@ y.command(
   false,
   () => {},
   argv => {
-    yargs.showHelp();
-    return process.exit();
+    yargs.showHelp()
+    return process.exit()
   }
-);
+)
 
 y.command(
   "accounts",
@@ -62,10 +62,10 @@ y.command(
             type: "boolean",
             default: false,
             description: "Load NFT inventory as well"
-          });
+          })
         },
         async argv => {
-          return cmdHandler(accountsList, argv);
+          return cmdHandler(accountsList, argv)
         }
       )
       .command(
@@ -75,18 +75,18 @@ y.command(
           return yargs.positional("account", {
             describe: "the account to fund",
             type: "string"
-          });
+          })
         },
         async argv => {
-          return cmdHandler(accountsFund, argv);
+          return cmdHandler(accountsFund, argv)
         }
-      );
+      )
   },
   () => {
-    yargs.showHelp();
-    return process.exit();
+    yargs.showHelp()
+    return process.exit()
   }
-);
+)
 
 y.command(
   "agreements",
@@ -101,10 +101,10 @@ y.command(
           return yargs.positional("did", {
             describe: "the did to list the agreements for",
             type: "string"
-          });
+          })
         },
         async argv => {
-          return cmdHandler(listAgreements, argv);
+          return cmdHandler(listAgreements, argv)
         }
       )
       .command(
@@ -114,18 +114,18 @@ y.command(
           return yargs.positional("agreementId", {
             describe: "the agreement id address",
             type: "string"
-          });
+          })
         },
         async argv => {
-          return cmdHandler(showAgreement, argv);
+          return cmdHandler(showAgreement, argv)
         }
-      );
+      )
   },
   () => {
-    yargs.showHelp();
-    return process.exit();
+    yargs.showHelp()
+    return process.exit()
   }
-);
+)
 
 y.command(
   "nfts",
@@ -140,10 +140,10 @@ y.command(
           return yargs.positional("did", {
             describe: "the did to retrieve",
             type: "string"
-          });
+          })
         },
         async argv => {
-          return cmdHandler(showNft, argv);
+          return cmdHandler(showNft, argv)
         }
       )
       .command(
@@ -158,10 +158,10 @@ y.command(
             .positional("metadata", {
               describe: "the json file with the metadata",
               type: "string"
-            });
+            })
         },
         async argv => {
-          return cmdHandler(createNft, argv);
+          return cmdHandler(createNft, argv)
         }
       )
       .command(
@@ -183,7 +183,7 @@ y.command(
             })
         },
         async argv => {
-          return cmdHandler(mintNft, argv);
+          return cmdHandler(mintNft, argv)
         }
       )
       .command(
@@ -198,10 +198,10 @@ y.command(
             .positional("buyer", {
               describe: "the buyer address",
               type: "string"
-            });
+            })
         },
         async argv => {
-          return cmdHandler(orderNft, argv);
+          return cmdHandler(orderNft, argv)
         }
       )
       .command(
@@ -216,10 +216,10 @@ y.command(
             .positional("seller", {
               describe: "the seller address",
               type: "string"
-            });
+            })
         },
         async argv => {
-          return cmdHandler(transferNft, argv);
+          return cmdHandler(transferNft, argv)
         }
       )
       .command(
@@ -238,10 +238,10 @@ y.command(
             .positional("destination", {
               describe: "the destination of the files",
               type: "string"
-            });
+            })
         },
         async argv => {
-          return cmdHandler(downloadNft, argv);
+          return cmdHandler(downloadNft, argv)
         }
       )
       .command(
@@ -256,17 +256,17 @@ y.command(
             .positional("consumer", {
               describe: "the seller address",
               type: "string"
-            });
+            })
         },
         async argv => {
-          return cmdHandler(searchNft, argv);
+          return cmdHandler(searchNft, argv)
         }
-      );
+      )
   },
   () => {
-    yargs.showHelp();
-    return process.exit();
+    yargs.showHelp()
+    return process.exit()
   }
-);
+)
 
-y.argv;
+y.argv
