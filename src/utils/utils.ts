@@ -24,14 +24,11 @@ const loadContract = (
   return contract
 }
 
-export const loadNftContract = (config: ConfigEntry): Contract => {
+export const loadNftContract = (config: ConfigEntry): Contract =>
   // @ts-ignore
-  return loadContract(config.nvm, ERC721, config.nftTokenAddress)
-}
+  loadContract(config.nvm, ERC721, config.nftTokenAddress)
 
-export const formatDid = (did: string): string => {
-  return `did:nv:${noZeroX(did)}`
-}
+export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
 export const findAccountOrFirst = (
   accounts: Account[],
@@ -50,7 +47,7 @@ export const findAccountOrFirst = (
     }
   }
 
-  return account!
+  return account
 }
 
 export const printNftTokenBanner = async (nftContract: Contract) => {
@@ -63,7 +60,7 @@ export const printNftTokenBanner = async (nftContract: Contract) => {
   ])
 
   console.log('\n')
-  console.log(chalk.dim(`===== NFT Contract =====`))
+  console.log(chalk.dim('===== NFT Contract ====='))
   console.log(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
   console.log(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
   console.log(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
@@ -72,21 +69,24 @@ export const printNftTokenBanner = async (nftContract: Contract) => {
 }
 
 export const printTokenBanner = async (token: Token | null) => {
-  if (token === null) printNativeTokenBanner()
-  else {
+  if (token === null) {
+    printNativeTokenBanner()
+  } else {
     const { address } = token
     if (
       address.toLowerCase() === Constants.ZeroAddress.toLowerCase() ||
       address.toLowerCase() === Constants.ShortZeroAddress.toLowerCase()
-    )
+    ) {
       printNativeTokenBanner()
-    else printErc20TokenBanner(token)
+    } else {
+      printErc20TokenBanner(token)
+    }
   }
 }
 
 export const printNativeTokenBanner = async () => {
   console.log('\n')
-  console.log(chalk.dim(`===== Native Token (ETH, MATIC, etc) =====`))
+  console.log(chalk.dim('===== Native Token (ETH, MATIC, etc) ====='))
   console.log(
     chalk.dim(`Decimals: ${chalk.whiteBright(Constants.ETHDecimals)}\n`)
   )
@@ -103,7 +103,7 @@ export const printErc20TokenBanner = async (token: Token) => {
   ])
 
   console.log('\n')
-  console.log(chalk.dim(`===== ERC20 Contract =====`))
+  console.log(chalk.dim('===== ERC20 Contract ====='))
   console.log(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
   console.log(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
   console.log(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
@@ -118,7 +118,7 @@ export const printErc20TokenBanner = async (token: Token) => {
 export const loadNevermined = async (
   config: ConfigEntry,
   network: string,
-  verbose: boolean = false
+  verbose = false
 ): Promise<{ token: Token | null; nvm: Nevermined }> => {
   const nvm = await Nevermined.getInstance({
     ...config.nvm,
@@ -170,7 +170,9 @@ export const loadNevermined = async (
       )
     }
 
-    if (verbose) await printErc20TokenBanner(token)
+    if (verbose) {
+      await printErc20TokenBanner(token)
+    }
   }
 
   return {

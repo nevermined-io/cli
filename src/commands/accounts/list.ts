@@ -1,10 +1,10 @@
 import {
   Constants,
+  StatusCodes,
   getConfig,
   loadNevermined,
   loadNftContract,
-  printNftTokenBanner,
-  StatusCodes
+  printNftTokenBanner
 } from '../../utils'
 import chalk from 'chalk'
 import utils from 'web3-utils'
@@ -12,7 +12,9 @@ import utils from 'web3-utils'
 export const accountsList = async (argv: any): Promise<number> => {
   const { verbose, network, withInventory } = argv
 
-  if (verbose) console.log(chalk.dim(`Loading accounts ...`))
+  if (verbose) {
+    console.log(chalk.dim('Loading accounts ...'))
+  }
 
   const config = getConfig(network as string)
 
@@ -25,7 +27,9 @@ export const accountsList = async (argv: any): Promise<number> => {
   const accounts = await nvm.accounts.list()
 
   const nft = loadNftContract(config)
-  if (verbose) await printNftTokenBanner(nft)
+  if (verbose) {
+    await printNftTokenBanner(nft)
+  }
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
@@ -71,7 +75,7 @@ export const accountsList = async (argv: any): Promise<number> => {
                 }
               })
             )
-          ).filter((inv) => !!inv)
+          ).filter((inv) => Boolean(inv))
         : []
 
       return {
@@ -105,7 +109,7 @@ export const accountsList = async (argv: any): Promise<number> => {
     console.log(chalk.dim(`NFT Balance: ${chalk.whiteBright(a.nftBalance)}`))
 
     if (a.inventory.length > 0) {
-      console.log(chalk.dim(`\nNFT Inventory`))
+      console.log(chalk.dim('\nNFT Inventory'))
       for (const inv of a.inventory) {
         console.log(
           chalk.dim(`===== NFT ${chalk.whiteBright(inv!.tokenId)} =====`)

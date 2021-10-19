@@ -12,12 +12,8 @@
     "ecmaFeatures": {
       "jsx": false
     },
-    "project": [
-      "./tsconfig.json",
-      "./test/tsconfig.json",
-      "./integration/tsconfig.json"
-    ],
-    "sourceType": "module"
+    "project": "tsconfig.json",
+    "tsconfigRootDir": "."
   },
   "plugins": [
     "@typescript-eslint",
@@ -29,7 +25,7 @@
     "@typescript-eslint/explicit-member-accessibility": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/member-delimiter-style": [
-      "error",
+      "warn",
       {
         "multiline": {
           "delimiter": "none",

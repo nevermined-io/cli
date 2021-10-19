@@ -1,14 +1,14 @@
 import {
+  Constants,
   StatusCodes,
-  getConfig,
-  loadNftContract,
   findAccountOrFirst,
-  printNftTokenBanner,
+  getConfig,
   loadNevermined,
-  Constants
+  loadNftContract,
+  printNftTokenBanner
 } from '../../utils'
 import chalk from 'chalk'
-import { MetaDataMain, File } from '@nevermined-io/nevermined-sdk-js'
+import { File, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import readline from 'readline'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -22,7 +22,7 @@ const rl = readline.createInterface({
 export const createNft = async (argv: any): Promise<number> => {
   const { verbose, network, creator, metadata } = argv
 
-  console.log(chalk.dim(`Creating NFT ...`))
+  console.log(chalk.dim('Creating NFT ...'))
 
   const config = getConfig(network as string)
   const { nvm, token } = await loadNevermined(config, network, verbose)
@@ -32,16 +32,19 @@ export const createNft = async (argv: any): Promise<number> => {
   }
 
   const nft = loadNftContract(config)
-  if (verbose) await printNftTokenBanner(nft)
+  if (verbose) {
+    await printNftTokenBanner(nft)
+  }
 
   const accounts = await nvm.accounts.list()
-  let creatorAccount = findAccountOrFirst(accounts, creator)
+  const creatorAccount = findAccountOrFirst(accounts, creator)
 
-  if (verbose)
+  if (verbose) {
     console.log(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
+  }
 
   let ddoMetadata
-  let ddoPrice: Number
+  let ddoPrice: number
   if (!metadata) {
     const authorInput = await new Promise((resolve) =>
       rl.question('Author Name: ', (author) => {

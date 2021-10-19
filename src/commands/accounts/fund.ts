@@ -1,11 +1,12 @@
-import { getConfig, loadNevermined, StatusCodes } from '../../utils'
+import { StatusCodes, getConfig, loadNevermined } from '../../utils'
 import chalk from 'chalk'
 
 export const accountsFund = async (argv: any): Promise<number> => {
   const { verbose, network, account } = argv
 
-  if (verbose)
+  if (verbose) {
     console.log(chalk.dim(`Funding account: '${chalk.whiteBright(account)}'`))
+  }
 
   const config = getConfig(network as string)
   const { nvm } = await loadNevermined(config, network, verbose)
@@ -26,7 +27,9 @@ export const accountsFund = async (argv: any): Promise<number> => {
       )
     )
 
-    if (verbose) console.log(err)
+    if (verbose) {
+      console.log(err)
+    }
   }
 
   try {
@@ -40,7 +43,9 @@ export const accountsFund = async (argv: any): Promise<number> => {
         }`
       )
     )
-    if (verbose) console.log(err)
+    if (verbose) {
+      console.log(err)
+    }
   }
 
   return StatusCodes.OK

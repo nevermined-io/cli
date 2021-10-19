@@ -1,11 +1,11 @@
 import {
-  StatusCodes,
-  getConfig,
-  formatDid,
-  loadNftContract,
   Constants,
-  printNftTokenBanner,
-  loadNevermined
+  StatusCodes,
+  formatDid,
+  getConfig,
+  loadNevermined,
+  loadNftContract,
+  printNftTokenBanner
 } from '../../utils'
 import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
@@ -28,7 +28,9 @@ export const showAgreement = async (argv: any): Promise<number> => {
   }
 
   const nft = loadNftContract(config)
-  if (verbose) await printNftTokenBanner(nft)
+  if (verbose) {
+    await printNftTokenBanner(nft)
+  }
 
   const { did } = await nvm.keeper.agreementStoreManager.getAgreement(
     agreementId

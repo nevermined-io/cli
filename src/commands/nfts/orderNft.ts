@@ -1,11 +1,11 @@
 import {
+  Constants,
   StatusCodes,
-  getConfig,
-  loadNftContract,
   findAccountOrFirst,
-  printNftTokenBanner,
+  getConfig,
   loadNevermined,
-  Constants
+  loadNftContract,
+  printNftTokenBanner
 } from '../../utils'
 import chalk from 'chalk'
 import {
@@ -29,7 +29,9 @@ export const orderNft = async (argv: any): Promise<number> => {
   const buyerAccount = findAccountOrFirst(accounts, buyer)
 
   const nft = loadNftContract(config)
-  if (verbose) await printNftTokenBanner(nft)
+  if (verbose) {
+    await printNftTokenBanner(nft)
+  }
 
   const ddo = await nvm.assets.resolve(did)
 

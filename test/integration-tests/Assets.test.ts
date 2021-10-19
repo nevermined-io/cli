@@ -18,30 +18,29 @@ describe('Assets e2e Testing', () => {
     console.log(`Resolved: ${stdoutResolve}`)
     expect(stdoutResolve.includes('DID found'))
     expect(stdoutResolve.includes(did))
-
   })
 
-//   test('Registering a new algorithm', async () => {
-//     expect(false)
-//   })
+  //   test('Registering a new algorithm', async () => {
+  //     expect(false)
+  //   })
 
-//   test('Registering a new workflow', async () => {
-//     expect(false)
-//   })
+  //   test('Registering a new workflow', async () => {
+  //     expect(false)
+  //   })
 
-//   test('Registering an asset using metadata from a JSON', async () => {
-//     expect(false)
-//   })
+  //   test('Registering an asset using metadata from a JSON', async () => {
+  //     expect(false)
+  //   })
 
-//   test('Search for an asset', async () => {
-//     expect(false)
-//   })
+  //   test('Search for an asset', async () => {
+  //     expect(false)
+  //   })
 
-//   test('Download my own asset', async () => {
-//     expect(false)
-//   })
+  //   test('Download my own asset', async () => {
+  //     expect(false)
+  //   })
 
-//   test('Order and download an asset', async () => {
-//     expect(false)
-//   })
+  //   test('Order and download an asset', async () => {
+  //     expect(false)
+  //   })
 })

@@ -1,16 +1,16 @@
 import {
+  Constants,
   StatusCodes,
   findAccountOrFirst,
-  Constants,
   loadNevermined,
   printTokenBanner
 } from '../../utils'
 import chalk from 'chalk'
 import {
-  MetaDataMain,
   File,
-  Nevermined,
-  MetaData
+  MetaData,
+  MetaDataMain,
+  Nevermined
 } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import readline from 'readline'
@@ -29,22 +29,26 @@ export const registerDataset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  logger.info(chalk.dim(`Registering dataset ...`))
+  logger.info(chalk.dim('Registering dataset ...'))
 
   const { verbose, network, creator, metadata } = argv
   const { nvm, token } = await loadNevermined(config, network, verbose)
 
-  if (!nvm.keeper) return StatusCodes.FAILED_TO_CONNECT
+  if (!nvm.keeper) {
+    return StatusCodes.FAILED_TO_CONNECT
+  }
 
-  if (verbose) printTokenBanner(token)
+  if (verbose) {
+    printTokenBanner(token)
+  }
 
   const accounts = await nvm.accounts.list()
-  let creatorAccount = findAccountOrFirst(accounts, creator)
+  const creatorAccount = findAccountOrFirst(accounts, creator)
 
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   let ddoMetadata: MetaData
-  let ddoPrice: Number
+  let ddoPrice: number
   if (!metadata) {
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
@@ -53,9 +57,9 @@ export const registerDataset = async (
 
     logger.debug(`Using Price ${argv.price}`)
 
-    let _files: File[] = []
+    const _files: File[] = []
     let _fileIndex = 0
-    argv.urls.forEach(function (_url: string) {
+    argv.urls.forEach((_url: string) => {
       _files.push({
         index: _fileIndex,
         url: _url,

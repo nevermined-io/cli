@@ -102,7 +102,9 @@ const config: CliConfig = {
 }
 
 export function getConfig(network: string): ConfigEntry {
-  if (!config[network]) throw new Error(`Network '${network}' is not supported`)
+  if (!config[network]) {
+    throw new Error(`Network '${network}' is not supported`)
+  }
 
   if (!process.env.NODE_URL) {
     throw new Error(

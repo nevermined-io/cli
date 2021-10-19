@@ -1,17 +1,17 @@
 import {
   StatusCodes,
-  getConfig,
-  loadNftContract,
   findAccountOrFirst,
-  printNftTokenBanner,
-  loadNevermined
+  getConfig,
+  loadNevermined,
+  loadNftContract,
+  printNftTokenBanner
 } from '../../utils'
 import chalk from 'chalk'
 
 export const searchNft = async (argv: any): Promise<number> => {
   const { verbose, network, search } = argv
 
-  console.log(chalk.dim(`Searching NFTs ...`))
+  console.log(chalk.dim('Searching NFTs ...'))
 
   const config = getConfig(network as string)
   const { nvm } = await loadNevermined(config, network, verbose)
@@ -21,7 +21,9 @@ export const searchNft = async (argv: any): Promise<number> => {
   }
 
   const nft = loadNftContract(config)
-  if (verbose) await printNftTokenBanner(nft)
+  if (verbose) {
+    await printNftTokenBanner(nft)
+  }
 
   const s = await nvm.assets.search(search)
 

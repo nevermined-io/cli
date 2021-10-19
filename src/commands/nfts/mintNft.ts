@@ -1,10 +1,10 @@
 import {
   StatusCodes,
-  getConfig,
-  loadNftContract,
   findAccountOrFirst,
-  printNftTokenBanner,
-  loadNevermined
+  getConfig,
+  loadNevermined,
+  loadNftContract,
+  printNftTokenBanner
 } from '../../utils'
 import chalk from 'chalk'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -23,15 +23,18 @@ export const mintNft = async (argv: any): Promise<number> => {
 
   const accounts = await nvm.accounts.list()
 
-  let minterAccount = findAccountOrFirst(accounts, minter)
+  const minterAccount = findAccountOrFirst(accounts, minter)
 
-  if (verbose)
+  if (verbose) {
     console.log(
       chalk.dim(`Using Minter: ${chalk.whiteBright(minterAccount.getId())}`)
     )
+  }
 
   const nft = loadNftContract(config)
-  if (verbose) await printNftTokenBanner(nft)
+  if (verbose) {
+    await printNftTokenBanner(nft)
+  }
 
   const contractOwner: string = await nft.methods.owner().call()
 

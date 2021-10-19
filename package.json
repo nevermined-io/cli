@@ -13,8 +13,8 @@
     "clean": "rm -rf ./dist/ ./doc/ ./.nyc_output",
     "build:watch": "npm build --watch",
     "start": "ts-node src/index.ts",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test": "jest --coverage --rootDir test",
+    "test:watch": "jest --watch --rootDir test"
   },
   "bin": {
     "nvm": "./dist/src/index.js"

@@ -1,10 +1,10 @@
 import {
+  Constants,
   StatusCodes,
   getConfig,
+  loadNevermined,
   loadNftContract,
-  Constants,
-  printNftTokenBanner,
-  loadNevermined
+  printNftTokenBanner
 } from '../../utils'
 import { DDO } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
@@ -30,7 +30,9 @@ export const showNft = async (argv: any): Promise<number> => {
   const ddo = await nvm.assets.resolve(did)
 
   const nft = loadNftContract(config)
-  if (verbose) await printNftTokenBanner(nft)
+  if (verbose) {
+    await printNftTokenBanner(nft)
+  }
 
   const [contractTokenUri, contractTokenOwner] = await Promise.all([
     nft.methods.tokenURI(zeroX(ddo.shortId())).call(),
@@ -85,7 +87,9 @@ export const showNft = async (argv: any): Promise<number> => {
 
   console.log('\n')
 
-  if (verbose) console.log(chalk.dim(DDO.serialize(ddo)))
+  if (verbose) {
+    console.log(chalk.dim(DDO.serialize(ddo)))
+  }
 
   return StatusCodes.OK
 }

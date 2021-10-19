@@ -1,9 +1,9 @@
 import {
+  Constants,
   StatusCodes,
-  getConfig,
   findAccountOrFirst,
-  loadNevermined,
-  Constants
+  getConfig,
+  loadNevermined
 } from '../../utils'
 import chalk from 'chalk'
 import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -11,10 +11,11 @@ import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-j
 export const transferNft = async (argv: any): Promise<number> => {
   const { verbose, network, agreementId, seller } = argv
 
-  if (verbose)
+  if (verbose) {
     console.log(
       chalk.dim(`Executing agreement: '${chalk.whiteBright(agreementId)}'`)
     )
+  }
 
   const config = getConfig(network as string)
   const { nvm, token } = await loadNevermined(config, network, verbose)
@@ -31,7 +32,7 @@ export const transferNft = async (argv: any): Promise<number> => {
 
   const accounts = await nvm.accounts.list()
 
-  let sellerAccount = findAccountOrFirst(accounts, seller)
+  const sellerAccount = findAccountOrFirst(accounts, seller)
 
   if (verbose) {
     console.log(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))

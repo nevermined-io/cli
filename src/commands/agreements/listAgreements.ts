@@ -1,9 +1,9 @@
 import {
   StatusCodes,
   getConfig,
+  loadNevermined,
   loadNftContract,
-  printNftTokenBanner,
-  loadNevermined
+  printNftTokenBanner
 } from '../../utils'
 import { ConditionState } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
@@ -24,12 +24,15 @@ export const listAgreements = async (argv: any): Promise<number> => {
   }
 
   const nft = loadNftContract(config)
-  if (verbose) await printNftTokenBanner(nft)
+  if (verbose) {
+    await printNftTokenBanner(nft)
+  }
 
   const agreements = await nvm.agreements.getAgreements(ddo.shortId())
 
-  if (agreements.length === 0)
+  if (agreements.length === 0) {
     console.log(chalk.dim(`No agreements for '${chalk.whiteBright(ddo.id)}'!`))
+  }
 
   agreements.sort((a, b) => a.blockNumberUpdated - b.blockNumberUpdated)
 
