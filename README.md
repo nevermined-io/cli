@@ -38,13 +38,17 @@ export MINTER_PASSWORD="<keyfile password>"
 ---
 
 ```
-export INFURA_TOKEN="<your infura token>"
+export NODE_URL="https://rinkeby.infura.io/v3/INFURA_TOKEN"
+or
+export NODE_URL="https://eth-rinkeby.alchemyapi.io/v2/-ALCHEMY_TOKEN"
 
 to switch the NFT token address (optional):
 export NFT_TOKEN_ADDRESS="<your erc721 compatible token address>"
 
-to switch the ERC20 token address (optional):
-export ERC20_TOKEN_ADDRESS="<your erc20 compatible token address>"
+to switch the token address (optional):
+export TOKEN_ADDRESS="<your erc20 compatible token address>"
+if you want to use the native token of the network where you are operating you can specify the 0x0 address
+export TOKEN_ADDRESS=0x0
 ```
 
 ```

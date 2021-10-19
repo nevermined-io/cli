@@ -14,11 +14,23 @@ jobs:
           node-version: '12.x'
       - name: Install dependencies
         run: |
-          npm install -g jest
-          npm i
+          yarn
       - name: Build
         run: |
-          npm run build
+          yarn build
+          yarn lint
+      - name: Run Nevermined Tools
+        run: |
+          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}          
+          sudo chmod go+r /etc/hosts
+          sudo echo "127.0.0.1  nevermined-metadata" | sudo tee -a /etc/hosts
+          git clone https://github.com/nevermined-io/tools
+          cd tools
+          export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
+          rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
+          ./start_nevermined.sh --latest --no-marketplace --spree-embedded-contracts &
+          cd ..          
+          ./scripts/wait-nevermined.sh          
       - name: Tests
         run: |
-          npm run test
+          yarn test
