@@ -30,7 +30,11 @@ jobs:
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
           ./start_nevermined.sh --latest --no-marketplace --spree-embedded-contracts &
           cd ..          
-          ./scripts/wait-nevermined.sh          
-      - name: Tests
+      - name: Run integration tests
+        env:
+          MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
+          TOKEN_ADDRESS: "0x0"
+          NODE_URL: "http://localhost:8545"
         run: |
+          ./scripts/wait-nevermined.sh
           yarn test
