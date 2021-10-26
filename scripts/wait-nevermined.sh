@@ -9,7 +9,7 @@ printf '\n\e[33m◯ Waiting for contracts to be generated...\e[0m\n'
 
 mkdir -p artifacts
 
-until [ $COMMAND_STATUS -eq 0 ] || [ $RETRY_COUNT -eq 120 ]; do
+until [ $COMMAND_STATUS -eq 0 ] || [ $RETRY_COUNT -eq 240 ]; do
   cat ~/.nevermined/nevermined-contracts/artifacts/ready
   COMMAND_STATUS=$?
   if [ $COMMAND_STATUS -eq 0 ]; then
