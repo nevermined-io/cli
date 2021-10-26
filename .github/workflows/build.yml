@@ -14,7 +14,6 @@ jobs:
           node-version: '12.x'
       - name: Install dependencies
         run: |
-          apt install nodejs
           yarn
       - name: Build
         run: |
