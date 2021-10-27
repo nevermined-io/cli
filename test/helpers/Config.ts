@@ -10,6 +10,7 @@ export const metadataConfig = {
 
 export const execOpts = {
   env: {
+    ...process.env,
     NODE_URL: 'http://localhost:8545',
     TOKEN_ADDRESS: '0x0',
     MNEMONIC: process.env.MNEMONIC
