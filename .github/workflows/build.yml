@@ -37,6 +37,5 @@ jobs:
           NODE_URL: "http://localhost:8545"
         run: |
           ./scripts/wait-nevermined.sh
-          sudo ln -s /usr/bin/nodejs /usr/bin/node
-          export PATH=$PATH:node_modules/.bin/
+          sleep 20 # Wating for the gateway to starts
           yarn test
