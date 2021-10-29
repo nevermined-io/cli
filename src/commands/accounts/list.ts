@@ -1,17 +1,23 @@
-import { Account } from '@nevermined-io/nevermined-sdk-js';
-import chalk from 'chalk';
-import { Logger } from 'log4js';
-import { Contract } from 'web3-eth-contract';
-import utils from 'web3-utils';
+import { Account } from '@nevermined-io/nevermined-sdk-js'
+import chalk from 'chalk'
+import { Logger } from 'log4js'
+import { Contract } from 'web3-eth-contract'
+import utils from 'web3-utils'
 
-import { ConfigEntry, Constants, loadNevermined, loadNftContract, printNftTokenBanner, StatusCodes } from '../../utils';
+import {
+  ConfigEntry,
+  Constants,
+  loadNevermined,
+  loadNftContract,
+  printNftTokenBanner,
+  StatusCodes
+} from '../../utils'
 
-export const accountsList  = async (
+export const accountsList = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  
   const { verbose, network, withInventory, account } = argv
   const { nvm, token } = await loadNevermined(config, network, verbose)
   if (!nvm.keeper) {
@@ -21,20 +27,18 @@ export const accountsList  = async (
   logger.debug(chalk.dim('Loading account/s ...'))
 
   let accounts
-  if (account)
-    accounts = [new Account(account)]    
-  else
-    accounts = await nvm.accounts.list()
+  if (account) accounts = [new Account(account)]
+  else accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
-    
+
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  let nft:Contract
-  if (withInventory)  {
-    if (!config.nftTokenAddress)  {
+  let nft: Contract
+  if (withInventory) {
+    if (!config.nftTokenAddress) {
       logger.error(`TOKEN_ADDRESS env variable not found`)
       return StatusCodes.ERROR
     }
@@ -55,8 +59,7 @@ export const accountsList  = async (
         (token ? await token.balanceOf(a.getId()) : 0) / 10 ** decimals
 
       const inventory = withInventory
-        ? 
-          (
+        ? (
             await Promise.all(
               (
                 await nft.getPastEvents('Transfer', {
@@ -93,7 +96,9 @@ export const accountsList  = async (
         tokenBalance,
         url: `${config.etherscanUrl}/address/${a.getId()}`,
         nftTokenUrl: `${config.etherscanUrl}/token/${config.nftTokenAddress}`,
-        nftBalance: withInventory ? await nft.methods.balanceOf(a.getId()).call() : 0,
+        nftBalance: withInventory
+          ? await nft.methods.balanceOf(a.getId()).call()
+          : 0,
         inventory
       }
     })
@@ -131,6 +136,6 @@ export const accountsList  = async (
 
     logger.info('\n')
   }
-  
+
   return StatusCodes.OK
 }

@@ -1,8 +1,4 @@
-import {
-  StatusCodes,
-  loadNevermined,
-  printSearchResult
-} from '../../utils'
+import { StatusCodes, loadNevermined, printSearchResult } from '../../utils'
 import chalk from 'chalk'
 
 import readline from 'readline'
@@ -19,7 +15,6 @@ export const searchAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-
   const { verbose, network, query } = argv
   const { nvm, token } = await loadNevermined(config, network, verbose)
   if (!nvm.keeper) {
@@ -29,7 +24,7 @@ export const searchAsset = async (
   logger.info(chalk.dim(`Search using query: ${query}`))
 
   const assets = await nvm.assets.search(query, argv.offset, argv.page)
-  
+
   printSearchResult(assets, logger)
 
   return StatusCodes.OK

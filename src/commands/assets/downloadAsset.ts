@@ -20,7 +20,6 @@ export const downloadAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-
   const { verbose, network, did, account } = argv
   const { nvm, token } = await loadNevermined(config, network, verbose)
   if (!nvm.keeper) {
@@ -34,8 +33,14 @@ export const downloadAsset = async (
 
   logger.debug(chalk.dim(`Using account: '${userAccount.getId()}'`))
 
-  const path = await nvm.assets.download(did, userAccount, argv.path, argv.fileIndex, false)
-  
+  const path = await nvm.assets.download(
+    did,
+    userAccount,
+    argv.path,
+    argv.fileIndex,
+    false
+  )
+
   logger.info(chalk.dim(`Files downloaded to: ${path}`))
 
   return StatusCodes.OK

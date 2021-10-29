@@ -49,10 +49,15 @@ const config: CliConfig = {
   rinkeby: {
     nvm: {
       // default nvm rinkeby faucet
-      faucetUri: process.env.FAUCET_URL || 'https://faucet.rinkeby.nevermined.rocks',
-      metadataUri: process.env.METADATA_URL || 'https://metadata.rinkeby.nevermined.rocks',
-      gatewayUri: process.env.GATEWAY_URL || 'https://gateway.rinkeby.nevermined.rocks',
-      gatewayAddress: process.env.GATEWAY_ADDRESS || '0xF8D50e0e0F47c5dbE943AeD661cCF25c3468c44f',
+      faucetUri:
+        process.env.FAUCET_URL || 'https://faucet.rinkeby.nevermined.rocks',
+      metadataUri:
+        process.env.METADATA_URL || 'https://metadata.rinkeby.nevermined.rocks',
+      gatewayUri:
+        process.env.GATEWAY_URL || 'https://gateway.rinkeby.nevermined.rocks',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0xF8D50e0e0F47c5dbE943AeD661cCF25c3468c44f',
       // default infura rinkeby endpoint
       nodeUri: `${process.env.NODE_URL}`,
       verbose: LogLevel.Error
@@ -78,9 +83,12 @@ const config: CliConfig = {
   spree: {
     nvm: {
       faucetUri: process.env.FAUCET_URL || 'http://localhost:3001',
-      metadataUri: process.env.METADATA_URL || 'http://nevermined-metadata:5000',
+      metadataUri:
+        process.env.METADATA_URL || 'http://nevermined-metadata:5000',
       gatewayUri: process.env.GATEWAY_URL || 'http://localhost:8030',
-      gatewayAddress: process.env.GATEWAY_ADDRESS || '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0',
       nodeUri: `${process.env.NODE_URL}`,
       verbose: LogLevel.Error
     } as Config,

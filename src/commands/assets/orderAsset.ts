@@ -1,8 +1,4 @@
-import {
-  StatusCodes,
-  loadNevermined,
-  findAccountOrFirst
-} from '../../utils'
+import { StatusCodes, loadNevermined, findAccountOrFirst } from '../../utils'
 import chalk from 'chalk'
 
 import readline from 'readline'
@@ -19,7 +15,6 @@ export const orderAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-
   const { verbose, network, did, account } = argv
   const { nvm, token } = await loadNevermined(config, network, verbose)
   if (!nvm.keeper) {
@@ -33,8 +28,8 @@ export const orderAsset = async (
 
   logger.debug(chalk.dim(`Using account: '${userAccount.getId()}'`))
 
-  const agreementId = await nvm.assets.order(did, 'access', userAccount)  
-  
+  const agreementId = await nvm.assets.order(did, 'access', userAccount)
+
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))
 
   return StatusCodes.OK

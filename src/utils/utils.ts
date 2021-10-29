@@ -1,7 +1,12 @@
 import { Contract } from 'web3-eth-contract'
 import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import { noZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { Account, Config, DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import {
+  Account,
+  Config,
+  DDO,
+  Nevermined
+} from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721URIStorage.json'
@@ -86,18 +91,27 @@ export const printTokenBanner = async (token: Token | null) => {
   }
 }
 
-export const printSearchResult = async (queryResult: QueryResult, logger:Logger) => {
-  
-  logger.info(chalk.dim(`Total Results: ${queryResult.totalResults} - Total Pages: ${queryResult.totalPages}`))
+export const printSearchResult = async (
+  queryResult: QueryResult,
+  logger: Logger
+) => {
+  logger.info(
+    chalk.dim(
+      `Total Results: ${queryResult.totalResults} - Total Pages: ${queryResult.totalPages}`
+    )
+  )
   logger.info(chalk.dim(`Page: ${queryResult.page}`))
   logger.info(chalk.dim(`---------------------------`))
 
   queryResult.results.forEach((_ddo: DDO) => {
     let _metadata = _ddo.findServiceByType('metadata')
-    logger.info(chalk.dim(`${_metadata.attributes.main.type} > Name: ${_metadata.attributes.main.name} - Url: ${_metadata.serviceEndpoint}`))  
+    logger.info(
+      chalk.dim(
+        `${_metadata.attributes.main.type} > Name: ${_metadata.attributes.main.name} - Url: ${_metadata.serviceEndpoint}`
+      )
+    )
   })
   logger.info(chalk.dim(`---------------------------`))
-  
 }
 
 export const printNativeTokenBanner = async () => {
@@ -156,7 +170,7 @@ export const loadNevermined = async (
     config.erc20TokenAddress.toLowerCase() ===
       Constants.ShortZeroAddress.toLowerCase()
   ) {
-    if (verbose)    
+    if (verbose)
       console.debug(
         chalk.yellow(
           'INFO: Using native token (ETH, MATIC, etc) for payments!\n'

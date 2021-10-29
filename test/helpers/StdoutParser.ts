@@ -4,10 +4,13 @@ export const commandRegex = {
     totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\n', 'g'),
     downloadPath: new RegExp('.*Files downloaded to:.(.*)\n', 'g'),
     serviceAgreement: new RegExp('.*Agreement Id:.(.*)\n', 'g')
-    //    
+    //
   },
   accounts: {
-    newAccount: new RegExp('.*Account address:.(.*)\nAccount private key: (.*)\n', 'g')
+    newAccount: new RegExp(
+      '.*Account address:.(.*)\nAccount private key: (.*)\n',
+      'g'
+    )
   }
 }
 

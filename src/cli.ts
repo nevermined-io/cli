@@ -12,7 +12,7 @@ import {
   registerAsset,
   resolveDID,
   searchAsset,
-  downloadAsset, 
+  downloadAsset,
   orderAsset,
   getAsset,
   searchNft,
@@ -58,7 +58,7 @@ const y = yargs(hideBin(process.argv))
     type: 'string',
     default: '',
     description: 'The account to use'
-  })  
+  })
 
 // hidden default command to display the help when used without parameters
 y.command(
@@ -81,15 +81,16 @@ y.command(
         'list',
         'List all accounts',
         (yargs) =>
-          yargs.positional('account', {
-            describe: 'the account to retrieve the balance',
-            type: 'string'
-          })
-          .option('with-inventory', {
-            type: 'boolean',
-            default: false,
-            description: 'Load NFT inventory as well'
-          }),
+          yargs
+            .positional('account', {
+              describe: 'the account to retrieve the balance',
+              type: 'string'
+            })
+            .option('with-inventory', {
+              type: 'boolean',
+              default: false,
+              description: 'Load NFT inventory as well'
+            }),
         async (argv) => cmdHandler(accountsList, argv)
       )
       .command(
@@ -102,26 +103,28 @@ y.command(
             description: 'Load NFT inventory as well'
           }),
         async (argv) => cmdHandler(accountsList, argv)
-      )      
+      )
       .command(
         'fund account',
         'Funds an account on a test net',
         (yargs) =>
-          yargs.positional('account', {
-            describe: 'the account to fund',
-            type: 'string'
-          })
-          .option('token', {
-            type: 'string',
-            default: 'both',
-            description: 'What kind of tokens you want to fund the account (native, erc20 or both)'
-          }),
+          yargs
+            .positional('account', {
+              describe: 'the account to fund',
+              type: 'string'
+            })
+            .option('token', {
+              type: 'string',
+              default: 'both',
+              description:
+                'What kind of tokens you want to fund the account (native, erc20 or both)'
+            }),
         async (argv) => cmdHandler(accountsFund, argv)
       )
       .command(
         'new',
-        'Creates a new account', 
-        (yargs) => yargs,                 
+        'Creates a new account',
+        (yargs) => yargs,
         async (argv) => cmdHandler(accountsNew, argv)
       ),
   () => {
@@ -229,20 +232,22 @@ y.command(
             .option('entrypoint', {
               type: 'string',
               demandOption: true,
-              description: 'The entrypoint for running the algorithm. Example: python word_count.py'
+              description:
+                'The entrypoint for running the algorithm. Example: python word_count.py'
             })
             .option('container', {
               type: 'string',
               demandOption: true,
-              description: 'The docker container where the algorithm can be executed. Example: python:3.8-alpine'
-            })                        
+              description:
+                'The docker container where the algorithm can be executed. Example: python:3.8-alpine'
+            })
             .option('assetType', {
               type: 'string',
               default: 'algorithm',
               hidden: true
             }),
         async (argv) => cmdHandler(registerAsset, argv)
-      )      
+      )
       .command(
         'import',
         'Import an asset using the metadata in JSON format',
@@ -257,40 +262,43 @@ y.command(
         'search query',
         'Searching for assets',
         (yargs) =>
-          yargs.positional('query', {
-            describe: 'The search query',
-            type: 'string'
-          })
-          .option('offset', {
-            type: 'number',
-            default: '10',
-            description: 'Search offset'
-          })
-          .option('page', {
-            type: 'number',
-            default: '1',
-            description: 'Page to show'
-          }),
+          yargs
+            .positional('query', {
+              describe: 'The search query',
+              type: 'string'
+            })
+            .option('offset', {
+              type: 'number',
+              default: '10',
+              description: 'Search offset'
+            })
+            .option('page', {
+              type: 'number',
+              default: '1',
+              description: 'Page to show'
+            }),
         async (argv) => cmdHandler(searchAsset, argv)
       )
       .command(
         'download did',
         'Download an asset owned by me',
         (yargs) =>
-          yargs.positional('did', {
-            describe: 'The asset did',
-            type: 'string'
-          })
-          .option('fileIndex', {
-            type: 'number',
-            default: '-1',
-            description: 'The index of the file in the DDO'
-          })
-          .option('path', {
-            type: 'string',
-            default: '.',
-            description: 'Local path where the asset contents will be downloaded'
-          }),
+          yargs
+            .positional('did', {
+              describe: 'The asset did',
+              type: 'string'
+            })
+            .option('fileIndex', {
+              type: 'number',
+              default: '-1',
+              description: 'The index of the file in the DDO'
+            })
+            .option('path', {
+              type: 'string',
+              default: '.',
+              description:
+                'Local path where the asset contents will be downloaded'
+            }),
         async (argv) => cmdHandler(downloadAsset, argv)
       )
       .command(
@@ -307,27 +315,30 @@ y.command(
         'get did',
         'Order & download or download directly a previously purchased asset',
         (yargs) =>
-          yargs.positional('did', {
-            describe: 'The asset did',
-            type: 'string'
-          })
-          .option('agreementId', {
-            type: 'string',
-            default: '',
-            description: 'Agreement Id of a previously purchased asset. If not given a new purchase will be executed'
-          })          
-          .option('fileIndex', {
-            type: 'number',
-            default: -1,
-            description: 'The index of the file in the DDO'
-          })
-          .option('path', {
-            type: 'string',
-            default: '.',
-            description: 'Local path where the asset contents will be downloaded'
-          }),          
+          yargs
+            .positional('did', {
+              describe: 'The asset did',
+              type: 'string'
+            })
+            .option('agreementId', {
+              type: 'string',
+              default: '',
+              description:
+                'Agreement Id of a previously purchased asset. If not given a new purchase will be executed'
+            })
+            .option('fileIndex', {
+              type: 'number',
+              default: -1,
+              description: 'The index of the file in the DDO'
+            })
+            .option('path', {
+              type: 'string',
+              default: '.',
+              description:
+                'Local path where the asset contents will be downloaded'
+            }),
         async (argv) => cmdHandler(getAsset, argv)
-      )                    
+      )
       .command(
         'resolve did',
         'Resolve an asset using a given DID',

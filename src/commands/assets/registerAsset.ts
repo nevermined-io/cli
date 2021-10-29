@@ -29,8 +29,7 @@ export const registerAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  
-  const { verbose, network, account, metadata, assetType } = argv  
+  const { verbose, network, account, metadata, assetType } = argv
   const { nvm, token } = await loadNevermined(config, network, verbose)
 
   if (!nvm.keeper) {
@@ -83,24 +82,23 @@ export const registerAsset = async (
       } as MetaDataMain
     }
     if (assetType === 'algorithm') {
-      
       const containerTokens = argv.container.split(':')
       ddoMetadata.main.algorithm = {
         language: argv.language,
-        version: "0.1",
+        version: '0.1',
         entrypoint: argv.entrypoint,
         requirements: {
-            container: {
-                image: containerTokens[0],
-                tag: containerTokens.length > 1 ? containerTokens[1] : 'latest'
-            }
+          container: {
+            image: containerTokens[0],
+            tag: containerTokens.length > 1 ? containerTokens[1] : 'latest'
+          }
         }
       }
     }
-
   } else {
-    ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())    
-    ddoPrice = Number(ddoMetadata.main.price) > 0 ? Number(ddoMetadata.main.price) : 0
+    ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
+    ddoPrice =
+      Number(ddoMetadata.main.price) > 0 ? Number(ddoMetadata.main.price) : 0
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))
