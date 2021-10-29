@@ -93,7 +93,7 @@ describe('Assets e2e Testing', () => {
     console.log(`DID: ${did}`)
     expect(did === null ? false : did.startsWith('did:nv:'))
 
-    const downloadCommand = `${baseCommands.assets.downloadAsset} ${did} --account "${execOpts.accounts[0]}" --path /tmp `
+    const downloadCommand = `${baseCommands.assets.downloadAsset} ${did} --account "${execOpts.accounts[0]}" --path /tmp --fileIndex 0`
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const downloadStdout = execSync(downloadCommand, execOpts)
@@ -108,7 +108,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name "order test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name "order test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
     console.debug(`COMMAND: ${registerDatasetCommand}`)
 
     const stdout = execSync(registerDatasetCommand, execOpts)
@@ -125,7 +125,7 @@ describe('Assets e2e Testing', () => {
     console.log(`STDOUT: ${orderStdout}`)
     const serviceAgreementId = parseServiceAgreementId(orderStdout)
 
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${execOpts.accounts[0]}" --path /tmp/ `
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${execOpts.accounts[0]}" --path /tmp/ --fileIndex 0 `
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execSync(getCommand, execOpts)
