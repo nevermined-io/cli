@@ -1,0 +1,64 @@
+{
+    "main": {
+      "author": "Met Office",
+      "checksum": "0x52b5c93b82dd9e7ecc3d9fdf4755f7f69a54484941897dc517b4adfe3bbc3377",
+      "dateCreated": "2019-02-08T08:13:49Z",
+      "datePublished": "2019-02-08T08:13:49Z",
+      "files": [
+        {
+          "url": "https://raw.githubusercontent.com/tbertinmahieux/MSongsDB/master/Tasks_Demos/CoverSongs/shs_dataset_test.txt",
+          "index": 0,
+          "name": "shs_dataset_test.txt",
+          "checksum": "efb2c764274b745f5fc37f97c6b0e761",
+          "contentLength": "4535431",
+          "contentType": "text/csv",
+          "encoding": "UTF-8",
+          "compression": "zip"
+        }
+      ],
+      "license": "CC-BY",
+      "name": "UK Weather information 2011",
+      "price": "1",
+      "type": "dataset"
+    },
+
+    "additionalInformation": {
+
+      "description": "Weather information of UK including temperature and humidity",
+      "tags": ["weather", "uk", "2011", "temperature", "humidity"],
+      "workExample": "423432fsd,51.509865,-0.118092,2011-01-01T10:55:11+00:00,7.2,68",
+      "copyrightHolder": "Met Office",
+      "links": [
+        {
+          "name": "Sample of Asset Data",
+          "type": "sample",
+          "url": "https://foo.com/sample.csv"
+        },
+        {
+          "name": "Data Format Definition",
+          "type": "format",
+          "url": "https://foo.com/sampl2.csv"
+        }
+      ],
+      "inLanguage": "en",
+
+      "updateFrecuency": "yearly",
+      "structuredMarkup": [
+        {
+          "uri": "http://skos.um.es/unescothes/C01194/jsonld",
+          "mediaType": "application/ld+json"
+        },
+        {
+          "uri": "http://skos.um.es/unescothes/C01194/turtle",
+          "mediaType": "text/turtle"
+        }
+      ]
+    },
+
+    "curation": {
+      "numVotes": 123,
+      "rating": 0.0,
+      "schema": "Binary Votting",
+      "isListed": true
+    }
+}

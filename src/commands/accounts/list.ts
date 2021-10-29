@@ -1,41 +1,48 @@
-import {
-  Constants,
-  StatusCodes,
-  getConfig,
-  loadNevermined,
-  loadNftContract,
-  printNftTokenBanner
-} from '../../utils'
-import chalk from 'chalk'
-import utils from 'web3-utils'
+import { Account } from '@nevermined-io/nevermined-sdk-js';
+import chalk from 'chalk';
+import { Logger } from 'log4js';
+import { Contract } from 'web3-eth-contract';
+import utils from 'web3-utils';
 
-export const accountsList = async (argv: any): Promise<number> => {
-  const { verbose, network, withInventory } = argv
+import { ConfigEntry, Constants, loadNevermined, loadNftContract, printNftTokenBanner, StatusCodes } from '../../utils';
 
-  if (verbose) {
-    console.log(chalk.dim('Loading accounts ...'))
-  }
-
-  const config = getConfig(network as string)
-
+export const accountsList  = async (
+  argv: any,
+  config: ConfigEntry,
+  logger: Logger
+): Promise<number> => {
+  
+  const { verbose, network, withInventory, account } = argv
   const { nvm, token } = await loadNevermined(config, network, verbose)
-
   if (!nvm.keeper) {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  const accounts = await nvm.accounts.list()
+  logger.debug(chalk.dim('Loading account/s ...'))
 
-  const nft = loadNftContract(config)
-  if (verbose) {
-    await printNftTokenBanner(nft)
-  }
+  let accounts
+  if (account)
+    accounts = [new Account(account)]    
+  else
+    accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
+    
+  const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  const symbol = token !== null ? await token.symbol() : 'ETH'
+  let nft:Contract
+  if (withInventory)  {
+    if (!config.nftTokenAddress)  {
+      logger.error(`TOKEN_ADDRESS env variable not found`)
+      return StatusCodes.ERROR
+    }
+    nft = loadNftContract(config)
+    if (verbose) {
+      await printNftTokenBanner(nft)
+    }
+  }
 
   const loadedAccounts = await Promise.all(
     accounts.map(async (a, index) => {
@@ -48,7 +55,8 @@ export const accountsList = async (argv: any): Promise<number> => {
         (token ? await token.balanceOf(a.getId()) : 0) / 10 ** decimals
 
       const inventory = withInventory
-        ? (
+        ? 
+          (
             await Promise.all(
               (
                 await nft.getPastEvents('Transfer', {
@@ -85,19 +93,19 @@ export const accountsList = async (argv: any): Promise<number> => {
         tokenBalance,
         url: `${config.etherscanUrl}/address/${a.getId()}`,
         nftTokenUrl: `${config.etherscanUrl}/token/${config.nftTokenAddress}`,
-        nftBalance: await nft.methods.balanceOf(a.getId()).call(),
+        nftBalance: withInventory ? await nft.methods.balanceOf(a.getId()).call() : 0,
         inventory
       }
     })
   )
 
   for (const a of loadedAccounts) {
-    console.log(
+    logger.info(
       chalk.dim(`===== Account ${chalk.whiteBright(a.address)} =====`)
     )
-    console.log(chalk.dim(`ETH Balance: ${chalk.whiteBright(a.ethBalance)}`))
+    logger.info(chalk.dim(`ETH Balance: ${chalk.whiteBright(a.ethBalance)}`))
     if (token !== null) {
-      console.log(
+      logger.info(
         chalk.dim(
           `Token Balance: ${chalk.whiteBright(
             a.tokenBalance
@@ -105,24 +113,24 @@ export const accountsList = async (argv: any): Promise<number> => {
         )
       )
     }
-    console.log(chalk.dim(`Etherscan Url: ${chalk.whiteBright(a.url)}`))
-    console.log(chalk.dim(`NFT Balance: ${chalk.whiteBright(a.nftBalance)}`))
+    logger.info(chalk.dim(`Etherscan Url: ${chalk.whiteBright(a.url)}`))
+    logger.info(chalk.dim(`NFT Balance: ${chalk.whiteBright(a.nftBalance)}`))
 
     if (a.inventory.length > 0) {
-      console.log(chalk.dim('\nNFT Inventory'))
+      logger.info(chalk.dim('\nNFT Inventory'))
       for (const inv of a.inventory) {
-        console.log(
+        logger.info(
           chalk.dim(`===== NFT ${chalk.whiteBright(inv!.tokenId)} =====`)
         )
-        console.log(
+        logger.info(
           chalk.dim(`Received at block: ${chalk.whiteBright(inv!.block)}`)
         )
-        console.log(chalk.dim(`Etherscan Url: ${chalk.whiteBright(inv!.url)}`))
+        logger.info(chalk.dim(`Etherscan Url: ${chalk.whiteBright(inv!.url)}`))
       }
     }
 
-    console.log('\n')
+    logger.info('\n')
   }
-
+  
   return StatusCodes.OK
 }

@@ -49,7 +49,7 @@ export const transferNft = async (argv: any): Promise<number> => {
     getAssetRewardsFromDDOByService(ddo, 'nft721-sales').getTotalPrice() /
     10 ** decimals
 
-  const symbol = token !== null ? await token.symbol() : 'ETH'
+  const symbol = token !== null ? await token.symbol() : config.nativeToken
 
   console.log(
     chalk.dim(`Price ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)

@@ -14,6 +14,7 @@ interface CliConfig {
 
 export interface ConfigEntry {
   nvm: Config
+  nativeToken: string
   etherscanUrl: string
   nftTokenAddress: string
   erc20TokenAddress: string
@@ -56,6 +57,7 @@ const config: CliConfig = {
       nodeUri: `${process.env.NODE_URL}`,
       verbose: LogLevel.Error
     } as Config,
+    nativeToken: 'ETH',
     etherscanUrl: 'https://rinkeby.etherscan.io',
     nftTokenAddress:
       process.env.NFT_TOKEN_ADDRESS ||
@@ -76,12 +78,13 @@ const config: CliConfig = {
   spree: {
     nvm: {
       faucetUri: process.env.FAUCET_URL || 'http://localhost:3001',
-      metadataUri: process.env.METADATA_URL || 'http://localhost:5000',
+      metadataUri: process.env.METADATA_URL || 'http://nevermined-metadata:5000',
       gatewayUri: process.env.GATEWAY_URL || 'http://localhost:8030',
       gatewayAddress: process.env.GATEWAY_ADDRESS || '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0',
       nodeUri: `${process.env.NODE_URL}`,
       verbose: LogLevel.Error
     } as Config,
+    nativeToken: 'ETH',
     etherscanUrl: 'https://spree.etherscan.io',
     nftTokenAddress:
       process.env.NFT_TOKEN_ADDRESS ||

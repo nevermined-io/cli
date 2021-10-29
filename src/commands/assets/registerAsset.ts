@@ -24,14 +24,13 @@ const rl = readline.createInterface({
   output: process.stdout
 })
 
-export const registerDataset = async (
+export const registerAsset = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  logger.info(chalk.dim('Registering dataset ...'))
-
-  const { verbose, network, creator, metadata } = argv
+  
+  const { verbose, network, account, metadata, assetType } = argv  
   const { nvm, token } = await loadNevermined(config, network, verbose)
 
   if (!nvm.keeper) {
@@ -42,8 +41,12 @@ export const registerDataset = async (
     printTokenBanner(token)
   }
 
+  logger.info(chalk.dim(`Registering asset (${assetType}) ...`))
+
+  logger.info(JSON.stringify(argv))
+
   const accounts = await nvm.accounts.list()
-  const creatorAccount = findAccountOrFirst(accounts, creator)
+  const creatorAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
@@ -71,7 +74,7 @@ export const registerDataset = async (
     ddoMetadata = {
       main: {
         name: argv.name,
-        type: 'dataset',
+        type: assetType,
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
@@ -79,9 +82,25 @@ export const registerDataset = async (
         files: _files
       } as MetaDataMain
     }
+    if (assetType === 'algorithm') {
+      
+      const containerTokens = argv.container.split(':')
+      ddoMetadata.main.algorithm = {
+        language: argv.language,
+        version: "0.1",
+        entrypoint: argv.entrypoint,
+        requirements: {
+            container: {
+                image: containerTokens[0],
+                tag: containerTokens.length > 1 ? containerTokens[1] : 'latest'
+            }
+        }
+      }
+    }
+
   } else {
-    ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
-    ddoPrice = Number(ddoMetadata.main.price)
+    ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())    
+    ddoPrice = Number(ddoMetadata.main.price) > 0 ? Number(ddoMetadata.main.price) : 0
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))

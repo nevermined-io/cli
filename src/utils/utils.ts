@@ -1,7 +1,7 @@
 import { Contract } from 'web3-eth-contract'
 import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import { noZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { Account, Config, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Config, DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721URIStorage.json'
@@ -9,6 +9,8 @@ import { Constants, StatusCodes } from './enums'
 import { ConfigEntry } from './config'
 import { AbiItem } from 'web3-utils'
 import CustomToken from './CustomToken'
+import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
+import { Logger } from 'log4js'
 
 const loadContract = (
   config: Config,
@@ -84,6 +86,20 @@ export const printTokenBanner = async (token: Token | null) => {
   }
 }
 
+export const printSearchResult = async (queryResult: QueryResult, logger:Logger) => {
+  
+  logger.info(chalk.dim(`Total Results: ${queryResult.totalResults} - Total Pages: ${queryResult.totalPages}`))
+  logger.info(chalk.dim(`Page: ${queryResult.page}`))
+  logger.info(chalk.dim(`---------------------------`))
+
+  queryResult.results.forEach((_ddo: DDO) => {
+    let _metadata = _ddo.findServiceByType('metadata')
+    logger.info(chalk.dim(`${_metadata.attributes.main.type} > Name: ${_metadata.attributes.main.name} - Url: ${_metadata.serviceEndpoint}`))  
+  })
+  logger.info(chalk.dim(`---------------------------`))
+  
+}
+
 export const printNativeTokenBanner = async () => {
   console.log('\n')
   console.log(chalk.dim('===== Native Token (ETH, MATIC, etc) ====='))
@@ -140,12 +156,12 @@ export const loadNevermined = async (
     config.erc20TokenAddress.toLowerCase() ===
       Constants.ShortZeroAddress.toLowerCase()
   ) {
-    // sorry not supported now
-    console.debug(
-      chalk.yellow(
-        'WARNING: Using native token (ETH, MATIC, etc) for payments!\n'
+    if (verbose)    
+      console.debug(
+        chalk.yellow(
+          'INFO: Using native token (ETH, MATIC, etc) for payments!\n'
+        )
       )
-    )
   } else {
     // if the token address is not zero try to load it
     token = nvm.keeper.token // eslint-disable-line

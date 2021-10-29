@@ -11,10 +11,10 @@ import chalk from 'chalk'
 export const downloadNft = async (argv: any): Promise<number> => {
   const { verbose, network, did, consumer, destination } = argv
 
-  console.log(chalk.dim('Downloading NFT ...'))
+  console.info(chalk.dim('Downloading NFT ...'))
 
   if (destination) {
-    console.log(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
+    console.info(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
   }
 
   const config = getConfig(network as string)
@@ -32,9 +32,7 @@ export const downloadNft = async (argv: any): Promise<number> => {
   const accounts = await nvm.accounts.list()
   const consumerAccount = findAccountOrFirst(accounts, consumer)
 
-  if (verbose) {
-    console.log(chalk.dim(`Using consumer: '${consumerAccount.getId()}'`))
-  }
+  console.debug(chalk.dim(`Using consumer: '${consumerAccount.getId()}'`))
 
   await nvm.nfts.access(did, consumerAccount, destination)
 

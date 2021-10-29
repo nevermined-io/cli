@@ -50,7 +50,7 @@ export const showNft = async (argv: any): Promise<number> => {
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
 
-  const symbol = token !== null ? await token.symbol() : 'ETH'
+  const symbol = token !== null ? await token.symbol() : config.nativeToken
   const price =
     getAssetRewardsFromDDOByService(ddo, 'nft721-sales').getTotalPrice() /
     10 ** decimals

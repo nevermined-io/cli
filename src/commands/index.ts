@@ -1,5 +1,9 @@
 // assets
-export * from './assets/registerDataset'
+export * from './assets/registerAsset'
+export * from './assets/searchAsset'
+export * from './assets/downloadAsset'
+export * from './assets/orderAsset'
+export * from './assets/getAsset'
 export * from './assets/resolveDID'
 
 // nft
@@ -11,6 +15,7 @@ export * from './nfts/transferNft'
 export * from './nfts/downloadNft'
 export * from './nfts/searchNft'
 // accounts
+export * from './accounts/new'
 export * from './accounts/list'
 export * from './accounts/fund'
 // agreements
