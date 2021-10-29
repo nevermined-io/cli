@@ -119,9 +119,7 @@ export const registerAsset = async (
 
   logger.info(
     chalk.dim(
-      `Created Asset '${chalk.whiteBright(
-        ddo.id
-      )} with service endpoint: ${chalk.whiteBright(register.url)}`
+      `Created Asset ${ddo.id} with service endpoint: ${register.url}`
     )
   )
 

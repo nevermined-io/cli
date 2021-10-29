@@ -1,6 +1,7 @@
 export const commandRegex = {
   assets: {
-    did: new RegExp('.*Registering DID.(.*)\n', 'g'),
+    //did: new RegExp('.*Registering DID.(.*)\n', 'g'),
+    did: new RegExp('.*Created Asset.(.{71}).*', 'g'),
     totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\n', 'g'),
     downloadPath: new RegExp('.*Files downloaded to:.(.*)\n', 'g'),
     serviceAgreement: new RegExp('.*Agreement Id:.(.*)\n', 'g')
