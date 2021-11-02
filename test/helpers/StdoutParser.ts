@@ -3,7 +3,7 @@ export const commandRegex = {
     //did: new RegExp('.*Registering DID.(.*)\n', 'g'),
     did: new RegExp('.*Created Asset.(.{71}).*', 'g'),
     totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\n', 'g'),
-    downloadPath: new RegExp('.*Files downloaded to:.(.*)\n', 'g'),
+    downloadPath: new RegExp('.*Files downloaded to:.(.*)', 'gm'),
     serviceAgreement: new RegExp('.*Agreement Id:.(.*)\n', 'g')
     //
   },
@@ -15,12 +15,12 @@ export const commandRegex = {
   }
 }
 
-export const parseDIDFromNewAsset = (stdout: string): string | null => {
+export const parseDIDFromNewAsset = (stdout: string): string => {
   const did = commandRegex.assets.did.exec(stdout)
   if (did != null) {
     return did[1]
   }
-  return null
+  return ''
 }
 
 export const parseNumberResultsFromSearch = (stdout: string): string | null => {

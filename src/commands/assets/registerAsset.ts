@@ -118,9 +118,7 @@ export const registerAsset = async (
   }
 
   logger.info(
-    chalk.dim(
-      `Created Asset ${ddo.id} with service endpoint: ${register.url}`
-    )
+    chalk.dim(`Created Asset ${ddo.id} with service endpoint: ${register.url}`)
   )
 
   return StatusCodes.OK

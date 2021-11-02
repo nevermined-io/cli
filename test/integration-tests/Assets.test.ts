@@ -6,28 +6,31 @@ import {
   parseServiceAgreementId
 } from '../helpers/StdoutParser'
 import * as fs from 'fs'
+import * as Path from 'path'
 const { execSync } = require('child_process')
 
 describe('Assets e2e Testing', () => {
+  let did = ''
+
   beforeAll(async () => {
     console.log(`Funding account: ${execOpts.accounts[0]}`)
     const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
     const stdout = execSync(fundCommand, execOpts)
-  })
 
-  test('Registering a new dataset and resolve the DID', async () => {
     const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerDatasetCommand}`)
 
-    const stdout = execSync(registerDatasetCommand, execOpts)
+    const registerStdout = execSync(registerDatasetCommand, execOpts)
 
-    console.log(`STDOUT: ${stdout}`)
-    const did = parseDIDFromNewAsset(stdout)
+    console.log(`STDOUT: ${registerStdout}`)
+    did = parseDIDFromNewAsset(registerStdout)
     console.log(`DID: ${did}`)
-    expect(did === null ? false : did.startsWith('did:nv:'))
+    expect(did === '' ? false : did.startsWith('did:nv:'))
+  })
 
+  test('Registering a new dataset and resolve the DID', async () => {
     const resolveDIDCommand = `${baseCommands.assets.resolveDID} ${did}`
     const stdoutResolve = execSync(resolveDIDCommand, execOpts)
 
@@ -43,9 +46,9 @@ describe('Assets e2e Testing', () => {
     const stdout = execSync(registerAlgorithmCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    const did = parseDIDFromNewAsset(stdout)
-    console.log(`DID: ${did}`)
-    expect(did === null ? false : did.startsWith('did:nv:'))
+    const algoDid = parseDIDFromNewAsset(stdout)
+    console.log(`DID: ${algoDid}`)
+    expect(algoDid === null ? false : algoDid.startsWith('did:nv:'))
   })
 
   test('Registering an asset using metadata from a JSON', async () => {
@@ -55,9 +58,9 @@ describe('Assets e2e Testing', () => {
     const stdout = execSync(importCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    const did = parseDIDFromNewAsset(stdout)
-    console.log(`DID: ${did}`)
-    expect(did === null ? false : did.startsWith('did:nv:'))
+    const didImport = parseDIDFromNewAsset(stdout)
+    console.log(`DID: ${didImport}`)
+    expect(didImport === null ? false : didImport.startsWith('did:nv:'))
   })
 
   test('Search for an asset', async () => {
@@ -67,9 +70,9 @@ describe('Assets e2e Testing', () => {
     const stdout = execSync(registerDatasetCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    const did = parseDIDFromNewAsset(stdout)
-    console.log(`DID: ${did}`)
-    expect(did === null ? false : did.startsWith('did:nv:'))
+    const didSearch = parseDIDFromNewAsset(stdout)
+    console.log(`DID: ${didSearch}`)
+    expect(didSearch === null ? false : didSearch.startsWith('did:nv:'))
 
     const searchAssetCommand = `${baseCommands.assets.searchAsset} "searching" `
     console.debug(`COMMAND: ${searchAssetCommand}`)
@@ -83,16 +86,6 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Download my own asset', async () => {
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name "searching test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
-
-    const stdout = execSync(registerDatasetCommand, execOpts)
-
-    console.log(`STDOUT: ${stdout}`)
-    const did = parseDIDFromNewAsset(stdout)
-    console.log(`DID: ${did}`)
-    expect(did === null ? false : did.startsWith('did:nv:'))
-
     const downloadCommand = `${baseCommands.assets.downloadAsset} ${did} --account "${execOpts.accounts[0]}" --path /tmp --fileIndex 0`
     console.debug(`COMMAND: ${downloadCommand}`)
 
@@ -108,16 +101,6 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name "order test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
-
-    const stdout = execSync(registerDatasetCommand, execOpts)
-
-    console.log(`STDOUT: ${stdout}`)
-    const did = parseDIDFromNewAsset(stdout)
-    console.log(`DID: ${did}`)
-    expect(did === null ? false : did.startsWith('did:nv:'))
-
     const orderCommand = `${baseCommands.assets.orderAsset} ${did} --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
@@ -125,17 +108,18 @@ describe('Assets e2e Testing', () => {
     console.log(`STDOUT: ${orderStdout}`)
     const serviceAgreementId = parseServiceAgreementId(orderStdout)
 
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${execOpts.accounts[0]}" --path /tmp/ --fileIndex 0 `
+    const parentPath = '/tmp/nevermined/test-order'
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${execOpts.accounts[0]}" --path ${parentPath} --fileIndex 0 `
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execSync(getCommand, execOpts)
     console.log(`STDOUT: ${getStdout}`)
 
-    const path = parseDownloadPath(getStdout)
-    console.log(`Path: ${path}`)
-    expect(path != null)
-
-    const files = fs.readdirSync(path || '').entries
+    const files = fs.readdirSync(parentPath || '')
     expect(files.length == 1)
+
+    files.forEach((file) => {
+      expect(Path.extname(file) === '.md')
+    })
   })
 })
