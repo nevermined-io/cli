@@ -42,5 +42,9 @@ export const baseCommands = {
     new: `${BASE_COMMAND} ${VERBOSE} accounts new `,
     balance: `${BASE_COMMAND} ${VERBOSE} accounts balance `,
     fund: `${BASE_COMMAND} ${VERBOSE} accounts fund `
+  },
+  agreements: {
+    list: `${BASE_COMMAND} ${VERBOSE} agreements list `,
+    show: `${BASE_COMMAND} ${VERBOSE} agreements show `
   }
 }

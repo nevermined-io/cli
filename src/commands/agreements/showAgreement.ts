@@ -1,24 +1,12 @@
 import {
-  Constants,
   StatusCodes,
-  formatDid,
   getConfig,
-  loadNevermined,
-  loadNftContract,
-  printNftTokenBanner
+  loadNevermined
 } from '../../utils'
-import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
-import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 export const showAgreement = async (argv: any): Promise<number> => {
   const { verbose, network, agreementId } = argv
-
-  console.log(
-    chalk.dim(
-      `Loading information for agreementId: '${chalk.whiteBright(agreementId)}'`
-    )
-  )
 
   const config = getConfig(network as string)
   const { nvm } = await loadNevermined(config, network, verbose)
@@ -27,10 +15,11 @@ export const showAgreement = async (argv: any): Promise<number> => {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  const nft = loadNftContract(config)
-  if (verbose) {
-    await printNftTokenBanner(nft)
-  }
+  console.info(
+    chalk.dim(
+      `Loading information for agreementId: '${chalk.whiteBright(agreementId)}'`
+    )
+  )
 
   const { did } = await nvm.keeper.agreementStoreManager.getAgreement(
     agreementId
@@ -38,23 +27,21 @@ export const showAgreement = async (argv: any): Promise<number> => {
 
   const ddo = await nvm.assets.resolve(did)
 
-  console.log(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
+  console.info(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
 
-  await nvm.keeper.templates.nft721SalesTemplate.printAgreementStatus(
-    agreementId
-  )
+  await nvm.keeper.templates.accessTemplate.printAgreementStatus(agreementId)
 
   const { accessConsumer, accessProvider } =
-    await nvm.keeper.templates.nft721SalesTemplate.getAgreementData(agreementId)
+    await nvm.keeper.templates.accessTemplate.getAgreementData(agreementId)
 
-  console.log(
+  console.info(
     chalk.dim(`Access Consumer: '${chalk.whiteBright(accessConsumer)}'`)
   )
-  console.log(
+  console.info(
     chalk.dim(`Access Provider: '${chalk.whiteBright(accessProvider)}'`)
   )
 
-  console.log('\n')
+  console.info('\n')
 
   return StatusCodes.OK
 }

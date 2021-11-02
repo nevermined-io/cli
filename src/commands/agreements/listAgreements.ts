@@ -1,10 +1,4 @@
-import {
-  StatusCodes,
-  getConfig,
-  loadNevermined,
-  loadNftContract,
-  printNftTokenBanner
-} from '../../utils'
+import { StatusCodes, getConfig, loadNevermined } from '../../utils'
 import { ConditionState } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 
@@ -15,23 +9,18 @@ export const listAgreements = async (argv: any): Promise<number> => {
   const { nvm } = await loadNevermined(config, network, verbose)
   const ddo = await nvm.assets.resolve(did)
 
-  console.log(
-    chalk.dim(`Loading agreements for DID: '${chalk.whiteBright(ddo.id)}'\n`)
-  )
-
   if (!nvm.keeper) {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  const nft = loadNftContract(config)
-  if (verbose) {
-    await printNftTokenBanner(nft)
-  }
+  console.info(
+    chalk.dim(`Loading agreements for DID: '${chalk.whiteBright(ddo.id)}'\n`)
+  )
 
   const agreements = await nvm.agreements.getAgreements(ddo.shortId())
 
   if (agreements.length === 0) {
-    console.log(chalk.dim(`No agreements for '${chalk.whiteBright(ddo.id)}'!`))
+    console.info(chalk.dim(`No agreements for '${chalk.whiteBright(ddo.id)}'!`))
   }
 
   agreements.sort((a, b) => a.blockNumberUpdated - b.blockNumberUpdated)
@@ -39,7 +28,7 @@ export const listAgreements = async (argv: any): Promise<number> => {
   for (const agreement of agreements) {
     const status = await nvm.agreements.status(agreement.agreementId)
 
-    console.log(
+    console.info(
       chalk.dim(
         `Template: ${chalk.whiteBright(
           await nvm.keeper.getTemplateByAddress(agreement.templateId)
@@ -48,7 +37,7 @@ export const listAgreements = async (argv: any): Promise<number> => {
       )
     )
 
-    console.log(
+    console.info(
       chalk.dim(
         `Last updated: ${chalk.whiteBright(
           agreement.blockNumberUpdated
@@ -60,7 +49,7 @@ export const listAgreements = async (argv: any): Promise<number> => {
       )
     )
 
-    console.log('\n')
+    console.info('\n')
   }
 
   return StatusCodes.OK

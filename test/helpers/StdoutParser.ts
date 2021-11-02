@@ -1,3 +1,4 @@
+import { listAgreements } from '../../src/commands/agreements/listAgreements'
 export const commandRegex = {
   assets: {
     //did: new RegExp('.*Registering DID.(.*)\n', 'g'),
@@ -12,6 +13,9 @@ export const commandRegex = {
       '.*Account address:.(.*)\nAccount private key: (.*)\n',
       'g'
     )
+  },
+  agreements: {
+    listAgreements: new RegExp('.*AgreementID: (.*)', 'gm')
   }
 }
 
@@ -53,4 +57,12 @@ export const parseNewAccount = (stdout: string): [string, string] => {
     return [accountDetails[1], accountDetails[2]]
   }
   return ['', '']
+}
+
+export const parseListAgreements = (stdout: string): string => {
+  const parsed = commandRegex.agreements.listAgreements.exec(stdout)
+  if (parsed != null) {
+    return parsed[1]
+  }
+  return ''
 }
