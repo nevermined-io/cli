@@ -1,8 +1,4 @@
-import {
-  StatusCodes,
-  getConfig,
-  loadNevermined
-} from '../../utils'
+import { StatusCodes, getConfig, loadNevermined } from '../../utils'
 import chalk from 'chalk'
 
 export const showAgreement = async (argv: any): Promise<number> => {

@@ -5,7 +5,9 @@ import {
   Account,
   Config,
   DDO,
-  Nevermined
+  Nevermined,
+  ProvenanceMethod,
+  ProvenanceRegistry
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
@@ -89,6 +91,54 @@ export const printTokenBanner = async (token: Token | null) => {
       printErc20TokenBanner(token)
     }
   }
+}
+
+export const printProvenanceEntry = (
+  provenanceId: string,
+  provenance: ProvenanceRegistry,
+  logger: Logger
+) => {
+  logger.info(chalk.dim(`Provenance Id: ${provenanceId}`))
+  logger.info(chalk.dim(`Method: ${ProvenanceMethod[provenance.method]}`))
+  logger.info(chalk.dim(`DID: ${provenance.did}`))
+  logger.info(chalk.dim(`Related DID: ${provenance.relatedDid}`))
+  logger.info(chalk.dim(`Created by: ${provenance.createdBy}`))
+  logger.info(chalk.dim(`Agent: ${provenance.agentId}`))
+  logger.info(chalk.dim(`Agent involved: ${provenance.agentInvolvedId}`))
+  logger.info(chalk.dim(`Activity: ${provenance.activityId}`))
+  logger.info(chalk.dim(`Signature: ${provenance.signatureDelegate}`))
+  logger.info(chalk.dim(`Block Number: ${provenance.blockNumberUpdated}`))
+}
+
+export const printProvenanceEvents = (
+  events: {
+    method: number
+    provId: string
+    did: string
+    agentId: string
+    activityId: string
+    relatedDid: string
+    agentInvolvedId: string
+    attributes: string
+    blockNumberUpdated: number
+  }[],
+  logger: Logger
+) => {
+  logger.info(chalk.dim(`# of Provenance events: ${events.length}`))
+  logger.info(chalk.dim(`--------------------------`))
+
+  events.map((e) => {
+    logger.info(chalk.dim(`\t Provenance Id: ${e.provId}`))
+    logger.info(chalk.dim(`\t Method: ${ProvenanceMethod[e.method]}`))
+    logger.info(chalk.dim(`\t DID: ${e.did}`))
+    logger.info(chalk.dim(`\t Related DID: ${e.relatedDid}`))
+    logger.info(chalk.dim(`\t Agent: ${e.agentId}`))
+    logger.info(chalk.dim(`\t Agent involved: ${e.agentInvolvedId}`))
+    logger.info(chalk.dim(`\t Activity: ${e.activityId}`))
+    logger.info(chalk.dim(`\t Attributes: ${e.attributes}`))
+    logger.info(chalk.dim(`\t Block Number: ${e.blockNumberUpdated}`))
+    logger.info(chalk.dim(`-----`))
+  })
 }
 
 export const printSearchResult = async (
