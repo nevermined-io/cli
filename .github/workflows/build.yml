@@ -9,16 +9,36 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
-          node-version: '12.x'
+          node-version: '12'
       - name: Install dependencies
         run: |
-          npm install -g jest
-          npm i
+          yarn install
       - name: Build
         run: |
-          npm run build
-      - name: Tests
+          yarn build
+          yarn lint
+      - name: Reclaim some disk space
+        run : |
+            docker system prune --all --volumes -f
+      - name: Run Nevermined Tools
         run: |
-          npm run test
+          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}          
+          sudo chmod go+r /etc/hosts
+          sudo echo "127.0.0.1  nevermined-metadata" | sudo tee -a /etc/hosts
+          git clone https://github.com/nevermined-io/tools
+          cd tools
+          export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
+          rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
+          ./start_nevermined.sh --latest --no-marketplace --spree-embedded-contracts &
+          cd ..          
+          ./scripts/wait-nevermined.sh
+      - name: Run integration tests
+        env:
+          MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
+          TOKEN_ADDRESS: "0x0"
+          NODE_URL: "http://localhost:8545"
+        run: |
+          sleep 10
+          yarn test

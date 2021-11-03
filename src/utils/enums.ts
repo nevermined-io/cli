@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk from 'chalk'
 
 export enum StatusCodes {
   UNKNOWN = -999,
@@ -11,9 +11,11 @@ export enum StatusCodes {
   INCONCLUSIVE,
   SELLER_NOT_OWNER,
   HOLDER_NOT_OWNER,
+  DID_NOT_FOUND
 }
 
 export const Constants = {
-  ZeroAddress: "0x0000000000000000000000000000000000000000",
-  ETHDecimals: 18,
-};
+  ZeroAddress: '0x0000000000000000000000000000000000000000',
+  ShortZeroAddress: '0x0',
+  ETHDecimals: 18
+}
