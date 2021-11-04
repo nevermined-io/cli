@@ -18,11 +18,15 @@ import {
   searchNft,
   showAgreement,
   showNft,
-  transferNft
+  transferNft,
+  registerProvenance,
+  provenanceHistory,
+  provenanceInspect
 } from './commands'
 import chalk from 'chalk'
 
 import { StatusCodes, getConfig, loadNevermined, logger } from '../src/utils'
+import { ProvenanceMethods } from './utils/enums'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
@@ -380,6 +384,87 @@ y.command(
             type: 'string'
           }),
         async (argv) => cmdHandler(showAgreement, argv)
+      ),
+  () => {
+    yargs.showHelp()
+    return process.exit()
+  }
+)
+
+y.command(
+  'provenance',
+  'Provenance functions',
+  (yargs) =>
+    yargs
+      .usage('usage: $0 provenance <command> parameters [options]')
+      .command(
+        'register did',
+        'Registers a provenance event associated to a DID',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'The asset did',
+              type: 'string'
+            })
+            .option('method', {
+              type: 'string',
+              choices: ProvenanceMethods,
+              description: 'The W3C Provenance event to report'
+            })
+            .option('agentId', {
+              type: 'string',
+              default: '',
+              description: 'The address of the agent doing the action/activity'
+            })
+            .option('activityId', {
+              type: 'string',
+              default: '',
+              description: 'The identifier of the activity to register'
+            })
+            .option('relatedDid', {
+              type: 'string',
+              default: '',
+              description:
+                'The additional DID related with the activity (if any)'
+            })
+            .option('agentInvolved', {
+              type: 'string',
+              default: '',
+              description:
+                'The address of the additional agent (if any) involved with the activity'
+            })
+            .option('signature', {
+              type: 'string',
+              default: '0x0',
+              description: 'The signature associated to the provenance event'
+            })
+            .option('attributes', {
+              type: 'string',
+              default: '',
+              description:
+                'Additional attributes to register associated with the activity'
+            }),
+        async (argv) => cmdHandler(registerProvenance, argv)
+      )
+      .command(
+        'history did',
+        'Given a DID it gets all the provenance history for that asset',
+        (yargs) =>
+          yargs.positional('did', {
+            describe: 'the did to list the provenance events',
+            type: 'string'
+          }),
+        async (argv) => cmdHandler(provenanceHistory, argv)
+      )
+      .command(
+        'inspect provenanceId',
+        'Fetch the on-chain information regarding a Provenance Id event',
+        (yargs) =>
+          yargs.positional('provenanceId', {
+            describe: 'the provenance id',
+            type: 'string'
+          }),
+        async (argv) => cmdHandler(provenanceInspect, argv)
       ),
   () => {
     yargs.showHelp()
