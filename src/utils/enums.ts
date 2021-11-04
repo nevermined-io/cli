@@ -1,5 +1,3 @@
-import chalk from 'chalk'
-
 export enum StatusCodes {
   UNKNOWN = -999,
   ERROR = -1,
@@ -19,3 +17,11 @@ export const Constants = {
   ShortZeroAddress: '0x0',
   ETHDecimals: 18
 }
+
+export const ProvenanceMethods = [
+  'wasGeneratedBy',
+  'used',
+  'wasDerivedFrom',
+  'wasAssociatedWith',
+  'ActedOnBehalf'
+]

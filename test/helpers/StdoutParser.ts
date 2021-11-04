@@ -16,6 +16,9 @@ export const commandRegex = {
   },
   agreements: {
     listAgreements: new RegExp('.*AgreementID: (.*)', 'gm')
+  },
+  provenance: {
+    register: new RegExp('.*Provenance Id: (.*)', 'gm')
   }
 }
 
@@ -61,6 +64,14 @@ export const parseNewAccount = (stdout: string): [string, string] => {
 
 export const parseListAgreements = (stdout: string): string => {
   const parsed = commandRegex.agreements.listAgreements.exec(stdout)
+  if (parsed != null) {
+    return parsed[1]
+  }
+  return ''
+}
+
+export const parseProvenanceId = (stdout: string): string => {
+  const parsed = commandRegex.provenance.register.exec(stdout)
   if (parsed != null) {
     return parsed[1]
   }

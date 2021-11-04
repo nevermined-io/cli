@@ -46,5 +46,10 @@ export const baseCommands = {
   agreements: {
     list: `${BASE_COMMAND} ${VERBOSE} agreements list `,
     show: `${BASE_COMMAND} ${VERBOSE} agreements show `
+  },
+  provenance: {
+    register: `${BASE_COMMAND} ${VERBOSE} provenance register `,
+    history: `${BASE_COMMAND} ${VERBOSE} provenance history `,
+    inspect: `${BASE_COMMAND} ${VERBOSE} provenance inspect `
   }
 }

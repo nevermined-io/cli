@@ -10,7 +10,6 @@ describe('Provenance e2e Testing', () => {
   let did = ''
 
   beforeAll(async () => {
-
     console.log(`Funding account: ${execOpts.accounts[0]}`)
     const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
@@ -26,11 +25,9 @@ describe('Provenance e2e Testing', () => {
     did = parseDIDFromNewAsset(registerStdout)
     console.log(`DID: ${did}`)
     expect(did === '' ? false : did.startsWith('did:nv:'))
-    
   })
 
   test('Register the "used" provenance event and inspect', async () => {
-
     const activityId = generateId()
     const registerCommand = `${baseCommands.provenance.register} ${did} --account "${execOpts.accounts[0]}" --method used --agentId "${execOpts.accounts[1]}" --activityId "${activityId}" `
     const registerStdout = execSync(registerCommand, execOpts)
@@ -47,18 +44,13 @@ describe('Provenance e2e Testing', () => {
     const inspectStdout = execSync(inspectCommand, execOpts)
     console.log(`Inspect: ${inspectStdout}`)
     expect(inspectStdout.includes(did))
-
   })
 
   test('Show all the provenance history of a DID ', async () => {
-
     const historyCommand = `${baseCommands.provenance.history} ${did}  `
     const historyStdout = execSync(historyCommand, execOpts)
 
     console.log(`Provenance History: ${historyStdout}`)
-    expect(historyStdout.includes('AgreementID:'))
-
+    expect(historyStdout.includes(did))
   })
-
-
 })
