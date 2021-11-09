@@ -20,10 +20,10 @@ export const searchNft = async (argv: any): Promise<number> => {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  const nft = loadNftContract(config)
-  if (verbose) {
-    await printNftTokenBanner(nft)
-  }
+  // const nft = loadNftContract(config)
+  // if (verbose) {
+  //   await printNftTokenBanner(nft)
+  // }
 
   const s = await nvm.assets.search(search)
 

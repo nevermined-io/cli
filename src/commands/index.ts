@@ -6,10 +6,11 @@ export * from './assets/orderAsset'
 export * from './assets/getAsset'
 export * from './assets/resolveDID'
 
-// nft
+// nfts (ERC-721 & ERC-1155)
 export * from './nfts/showNft'
 export * from './nfts/createNft'
 export * from './nfts/mintNft'
+export * from './nfts/burnNft'
 export * from './nfts/orderNft'
 export * from './nfts/transferNft'
 export * from './nfts/downloadNft'

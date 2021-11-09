@@ -24,7 +24,7 @@ export const downloadNft = async (argv: any): Promise<number> => {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  const nft = loadNftContract(config)
+  const nft = loadNftContract(config, argv.tokenAddress)
   if (verbose) {
     await printNftTokenBanner(nft)
   }

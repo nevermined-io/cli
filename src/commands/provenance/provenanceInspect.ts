@@ -10,7 +10,7 @@ export const provenanceInspect = async (
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, provenanceId } = argv
-  
+
   const { nvm } = await loadNevermined(config, network, verbose)
 
   if (!nvm.keeper) {

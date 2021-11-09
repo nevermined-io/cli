@@ -13,11 +13,26 @@ import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721URIStorage.json'
 import { Constants, StatusCodes } from './enums'
-import { ConfigEntry } from './config'
+import { ConfigEntry, getConfig, logger } from './config'
 import { AbiItem } from 'web3-utils'
 import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 import { Logger } from 'log4js'
+
+export const cmdHandler = async (cmd: Function, argv: any) => {
+  const { verbose, network } = argv
+
+  if (verbose) {
+    logger.level = 'debug'
+  }
+
+  logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
+  logger.info(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
+
+  const config = getConfig(network as string)
+
+  return process.exit(await cmd(argv, config, logger))
+}
 
 const loadContract = (
   config: Config,
@@ -33,9 +48,12 @@ const loadContract = (
   return contract
 }
 
-export const loadNftContract = (config: ConfigEntry): Contract =>
+export const loadNftContract = (
+  config: ConfigEntry,
+  nftTokenAddress: string
+): Contract =>
   // @ts-ignore
-  loadContract(config.nvm, ERC721, config.nftTokenAddress)
+  loadContract(config.nvm, ERC721, nftTokenAddress)
 
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 

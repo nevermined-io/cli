@@ -15,7 +15,7 @@ export const execOpts = {
   env: {
     ...process.env,
     NODE_URL: 'http://localhost:8545',
-    TOKEN_ADDRESS: '0x0',
+    TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
     MNEMONIC: process.env.MNEMONIC
   },
   accounts: [
@@ -36,6 +36,22 @@ export const baseCommands = {
     orderAsset: `${BASE_COMMAND} ${VERBOSE} assets order `,
     getAsset: `${BASE_COMMAND} ${VERBOSE} assets get `,
     resolveDID: `${BASE_COMMAND} ${VERBOSE} assets resolve `
+  },
+  nfts721: {
+    create: `${BASE_COMMAND} ${VERBOSE} nfts721 create `,
+    show: `${BASE_COMMAND} ${VERBOSE} nfts721 show `,
+    mint: `${BASE_COMMAND} ${VERBOSE} nfts721 mint `,
+    burn: `${BASE_COMMAND} ${VERBOSE} nfts721 burn `,
+    order: `${BASE_COMMAND} ${VERBOSE} nfts721 order `,
+    download: `${BASE_COMMAND} ${VERBOSE} nfts721 download `
+  },
+  nfts1155: {
+    create: `${BASE_COMMAND} ${VERBOSE} nfts1155 create `,
+    show: `${BASE_COMMAND} ${VERBOSE} nfts1155 show `,
+    mint: `${BASE_COMMAND} ${VERBOSE} nfts1155 mint `,
+    burn: `${BASE_COMMAND} ${VERBOSE} nfts1155 burn `,
+    order: `${BASE_COMMAND} ${VERBOSE} nfts1155 order `,
+    download: `${BASE_COMMAND} ${VERBOSE} nfts1155 download `
   },
   accounts: {
     list: `${BASE_COMMAND} ${VERBOSE} accounts list `,

@@ -18,7 +18,7 @@ export const accountsList = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, withInventory, account } = argv
+  const { verbose, network, nftTokenAddress, account } = argv
   const { nvm, token } = await loadNevermined(config, network, verbose)
   if (!nvm.keeper) {
     return StatusCodes.FAILED_TO_CONNECT
@@ -36,13 +36,11 @@ export const accountsList = async (
 
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
+  let withInventory = false
   let nft: Contract
-  if (withInventory) {
-    if (!config.nftTokenAddress) {
-      logger.error(`TOKEN_ADDRESS env variable not found`)
-      return StatusCodes.ERROR
-    }
-    nft = loadNftContract(config)
+  if (nftTokenAddress != '') {
+    withInventory = true
+    nft = loadNftContract(config, nftTokenAddress)
     if (verbose) {
       await printNftTokenBanner(nft)
     }
@@ -81,7 +79,7 @@ export const accountsList = async (
                   return {
                     block: l.blockNumber,
                     tokenId: utils.toHex(l.returnValues.tokenId),
-                    url: `${config.etherscanUrl}/token/${config.nftTokenAddress}?a=${l.returnValues.tokenId}#inventory`
+                    url: `${config.etherscanUrl}/token/${nftTokenAddress}?a=${l.returnValues.tokenId}#inventory`
                   }
                 }
               })
@@ -95,7 +93,7 @@ export const accountsList = async (
         ethBalance,
         tokenBalance,
         url: `${config.etherscanUrl}/address/${a.getId()}`,
-        nftTokenUrl: `${config.etherscanUrl}/token/${config.nftTokenAddress}`,
+        nftTokenUrl: `${config.etherscanUrl}/token/${nftTokenAddress}`,
         nftBalance: withInventory
           ? await nft.methods.balanceOf(a.getId()).call()
           : 0,

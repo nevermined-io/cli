@@ -8,6 +8,7 @@ import {
   downloadNft,
   listAgreements,
   mintNft,
+  burnNft,
   orderNft,
   registerAsset,
   resolveDID,
@@ -25,8 +26,9 @@ import {
 } from './commands'
 import chalk from 'chalk'
 
-import { StatusCodes, getConfig, loadNevermined, logger } from '../src/utils'
+import { getConfig, logger } from '../src/utils'
 import { ProvenanceMethods } from './utils/enums'
+import { getAccountsCLIOptions } from './commands/options/accountsOptions'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
@@ -77,7 +79,7 @@ y.command(
 
 y.command(
   'accounts',
-  'Accounts functions',
+  'Management of accounts and the funds associted to them',
   (yargs) =>
     yargs
       .usage('usage: $0 accounts <command> parameters [options]')
@@ -90,10 +92,10 @@ y.command(
               describe: 'the account to retrieve the balance',
               type: 'string'
             })
-            .option('with-inventory', {
-              type: 'boolean',
-              default: false,
-              description: 'Load NFT inventory as well'
+            .option('nftTokenAddress', {
+              type: 'string',
+              default: '',
+              description: 'Load NFT (ERC-721) inventory as well'
             }),
         async (argv) => cmdHandler(accountsList, argv)
       )
@@ -101,10 +103,10 @@ y.command(
         'balance account',
         'Get the balance of a specific account',
         (yargs) =>
-          yargs.option('with-inventory', {
-            type: 'boolean',
-            default: false,
-            description: 'Load NFT inventory as well'
+          yargs.option('nftTokenAddress', {
+            type: 'string',
+            default: '',
+            description: 'Load NFT (ERC-721) inventory as well'
           }),
         async (argv) => cmdHandler(accountsList, argv)
       )
@@ -139,7 +141,7 @@ y.command(
 
 y.command(
   'assets',
-  'Assets functions',
+  'Allows to register and manage assets in a Nevermined network',
   (yargs) =>
     yargs
       .usage('usage: $0 assets <command> parameters [options]')
@@ -170,7 +172,8 @@ y.command(
             .option('urls', {
               type: 'array',
               demandOption: true,
-              description: 'The asset urls'
+              description:
+                'The asset urls. It can be a comma separated list of urls for multiple files.'
             })
             .option('contentType', {
               type: 'string',
@@ -216,7 +219,8 @@ y.command(
             .option('urls', {
               type: 'array',
               demandOption: true,
-              description: 'The asset urls'
+              description:
+                'The asset urls. It can be a comma separated list of urls for multiple files.'
             })
             .option('contentType', {
               type: 'string',
@@ -361,7 +365,7 @@ y.command(
 
 y.command(
   'agreements',
-  'Agreements functions',
+  'Get information about the Service Execution Agreements',
   (yargs) =>
     yargs
       .usage('usage: $0 agreements <command> parameters [options]')
@@ -473,88 +477,327 @@ y.command(
 )
 
 y.command(
-  'nfts',
-  'NFTs functions',
+  'nfts721',
+  'Create and manage NFTs (ERC-721) attached to Nevermined assets',
   (yargs) =>
     yargs
       .usage('usage: $0 nfts <command> parameters [options]')
       .command(
-        'show did',
-        'Retrieves information about an NFT',
-        (yargs) =>
-          yargs.positional('did', {
-            describe: 'the did to retrieve',
-            type: 'string'
-          }),
-        async (argv) => cmdHandler(showNft, argv)
-      )
-      .command(
-        'create [creator] [metadata]',
-        'Creates an NFT',
+        'create [nftAddress]',
+        'Registers a new asset and associates a ERC-721 NFT to it',
         (yargs) =>
           yargs
-            .positional('creator', {
-              describe: 'the address of the author of the NFT',
+            .positional('nftAddress', {
+              type: 'string',
+              description: 'The address of the NFT (ERC-721) contract'
+            })
+            .option('metadata', {
+              describe: 'The path to the json file with the metadata',
+              default: '',
               type: 'string'
             })
-            .positional('metadata', {
-              describe: 'the json file with the metadata',
-              type: 'string'
+            .option('name', {
+              type: 'string',
+              default: '',
+              description: 'Asset name'
+            })
+            .option('author', {
+              type: 'string',
+              default: '',
+              description: 'The author of the file/s'
+            })
+            .option('urls', {
+              type: 'array',
+              default: '',
+              description:
+                'The asset urls. It can be a comma separated list of urls for multiple files.'
+            })
+            .option('license', {
+              type: 'string',
+              default: '',
+              description: 'When the file was created'
+            })
+            .option('price', {
+              type: 'number',
+              default: '',
+              description: 'The NFT price'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '721',
+              hidden: true,
+              description: 'The NFT type'
             }),
         async (argv) => cmdHandler(createNft, argv)
       )
+
       .command(
-        'mint did [minter] [uri]',
-        'Mints an NFT',
+        'show did',
+        'Retrieves information about a NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'the did to retrieve',
+              type: 'string'
+            })
+            .option('nftAddress', {
+              type: 'string',
+              default: '',
+              description: 'The address of the NFT (ERC-721) contract'
+            })
+            .option('show1155', {
+              type: 'boolean',
+              default: false,
+              description:
+                'Show the information about the NFT ERC-1155 attached to the DID'
+            }),
+        async (argv) => cmdHandler(showNft, argv)
+      )
+
+      .command(
+        'mint [did] [nftAddress]',
+        'Mints a ERC-721 NFT',
         (yargs) =>
           yargs
             .positional('did', {
               describe: 'the did to mint',
               type: 'string'
             })
-            .positional('minter', {
-              describe: 'the address of the minter of the NFT',
-              type: 'string'
+            .positional('nftAddress', {
+              type: 'string',
+              description: 'The address of the NFT (ERC-721) contract'
             })
-            .positional('uri', {
-              describe: 'the token uri for the Asset Metadata',
-              type: 'string'
+            .option('uri', {
+              type: 'string',
+              demandOption: true,
+              description: 'the token uri for the Asset Metadata'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '721',
+              hidden: true,
+              description: 'The NFT type'
             }),
         async (argv) => cmdHandler(mintNft, argv)
       )
+
       .command(
-        'order did [buyer]',
-        'Orders an NFT by paying for it to the escrow',
+        'order did',
+        'Orders an NFT (ERC-721) by paying for it to the escrow',
         (yargs) =>
           yargs
             .positional('did', {
               describe: 'the DID to retrieve',
               type: 'string'
             })
-            .positional('buyer', {
-              describe: 'the buyer address',
-              type: 'string'
+            .option('amount', {
+              type: 'number',
+              default: 1,
+              description: 'the number of NFTs to mint'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '721',
+              hidden: true,
+              description: 'The NFT type'
             }),
         async (argv) => cmdHandler(orderNft, argv)
       )
-      .command(
-        'transfer agreementId [seller]',
-        'Transfers the NFT to the buyer and the funds from the escrow to the seller',
-        (yargs) =>
-          yargs
-            .positional('agreementId', {
-              describe: 'the agreement id address',
-              type: 'string'
-            })
-            .positional('seller', {
-              describe: 'the seller address',
-              type: 'string'
-            }),
-        async (argv) => cmdHandler(transferNft, argv)
-      )
+
       .command(
         'download did [consumer] [destination]',
         'Downloads the data of an NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'the agreement id address',
+              type: 'string'
+            })
+            .positional('consumer', {
+              describe: 'the seller address',
+              type: 'string'
+            })
+            .positional('destination', {
+              describe: 'the destination of the files',
+              type: 'string'
+            }),
+        async (argv) => cmdHandler(downloadNft, argv)
+      )
+      .command(
+        'search [search]',
+        'Searches for NFTs',
+        (yargs) =>
+          yargs
+            .positional('search', {
+              describe: 'search string',
+              type: 'string'
+            })
+            .positional('consumer', {
+              describe: 'the seller address',
+              type: 'string'
+            }),
+        async (argv) => cmdHandler(searchNft, argv)
+      ),
+  () => {
+    yargs.showHelp()
+    return process.exit()
+  }
+)
+
+y.command(
+  'nfts1155',
+  'Create and manage NFTs (ERC-1155) attached to Nevermined assets',
+  (yargs) =>
+    yargs
+      .usage('usage: $0 nfts <command> parameters [options]')
+      .command(
+        'create',
+        'Registers a new asset and associates a NFT (ERC-1155) to it',
+        (yargs) =>
+          yargs
+            .option('metadata', {
+              describe: 'The path to the json file with the metadata',
+              default: '',
+              type: 'string'
+            })
+            .option('name', {
+              type: 'string',
+              default: '',
+              description: 'Asset name'
+            })
+            .option('author', {
+              type: 'string',
+              default: '',
+              description: 'The author of the file/s'
+            })
+            .option('urls', {
+              type: 'array',
+              default: '',
+              description:
+                'The asset urls. It can be a comma separated list of urls for multiple files.'
+            })
+            .option('license', {
+              type: 'string',
+              default: '',
+              description: 'When the file was created'
+            })
+            .option('price', {
+              type: 'number',
+              default: '',
+              description: 'The NFT price'
+            })
+            .option('cap', {
+              type: 'number',
+              default: 0,
+              description: 'The NFT minting cap (0 means uncapped)'
+            })
+            .option('royalties', {
+              type: 'number',
+              default: 0,
+              description:
+                'The royalties (between 0 and 100%) to reward to the original creator in the secondary market'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '1155',
+              hidden: true,
+              description: 'The NFT type'
+            }),
+        async (argv) => cmdHandler(createNft, argv)
+      )
+
+      .command(
+        'show did',
+        'Retrieves information about a NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'the did to retrieve',
+              type: 'string'
+            })
+            .option('nftAddress', {
+              type: 'string',
+              hidden: true,
+              default: '',
+              description: 'The address of the NFT (ERC-721) contract'
+            })
+            .option('show1155', {
+              type: 'boolean',
+              hidden: true,
+              default: true,
+              description:
+                'Show the information about the NFT ERC-1155 attached to the DID'
+            }),
+        async (argv) => cmdHandler(showNft, argv)
+      )
+
+      .command(
+        'mint [did]',
+        'It Mints a ERC-1155 NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'the did to mint',
+              type: 'string'
+            })
+            .option('amount', {
+              type: 'number',
+              default: 1,
+              description: 'the number of NFTs to mint'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '1155',
+              hidden: true,
+              description: 'The NFT type'
+            }),
+        async (argv) => cmdHandler(mintNft, argv)
+      )
+
+      .command(
+        'burn [did]',
+        'It Burns a ERC-1155 NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'the did to burn',
+              type: 'string'
+            })
+            .option('amount', {
+              type: 'number',
+              default: 1,
+              description: 'the number of NFTs to burn'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '1155',
+              hidden: true,
+              description: 'The NFT type'
+            }),
+        async (argv) => cmdHandler(burnNft, argv)
+      )
+
+      .command(
+        'order did',
+        'Orders an NFT (ERC-1155) by paying for it to the escrow',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'the DID to retrieve',
+              type: 'string'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '1155',
+              hidden: true,
+              description: 'The NFT type'
+            }),
+        async (argv) => cmdHandler(orderNft, argv)
+      )
+
+      .command(
+        'download did [consumer] [destination]',
+        'Downloads the data associated to a ERC-1155 NFT',
         (yargs) =>
           yargs
             .positional('did', {

@@ -8,6 +8,9 @@ export const commandRegex = {
     serviceAgreement: new RegExp('.*Agreement Id:.(.*)\n', 'g')
     //
   },
+  nfts: {
+    create: new RegExp('.*Created DID: (.{71}).*', 'gm')
+  },
   accounts: {
     newAccount: new RegExp(
       '.*Account address:.(.*)\nAccount private key: (.*)\n',
@@ -24,6 +27,14 @@ export const commandRegex = {
 
 export const parseDIDFromNewAsset = (stdout: string): string => {
   const did = commandRegex.assets.did.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+
+export const parseDIDFromNewNFT = (stdout: string): string => {
+  const did = commandRegex.nfts.create.exec(stdout)
   if (did != null) {
     return did[1]
   }

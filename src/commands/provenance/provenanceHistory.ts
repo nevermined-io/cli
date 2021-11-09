@@ -9,7 +9,6 @@ export const provenanceHistory = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-
   const { verbose, network, did } = argv
 
   const { nvm } = await loadNevermined(config, network, verbose)

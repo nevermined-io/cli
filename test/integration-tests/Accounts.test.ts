@@ -1,12 +1,5 @@
-import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
-import {
-  parseDIDFromNewAsset,
-  parseDownloadPath,
-  parseNewAccount,
-  parseNumberResultsFromSearch,
-  parseServiceAgreementId
-} from '../helpers/StdoutParser'
-import * as fs from 'fs'
+import { execOpts, baseCommands } from '../helpers/Config'
+import { parseNewAccount } from '../helpers/StdoutParser'
 const { execSync } = require('child_process')
 
 describe('Assets e2e Testing', () => {

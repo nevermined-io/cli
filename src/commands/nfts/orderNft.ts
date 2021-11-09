@@ -2,65 +2,61 @@ import {
   Constants,
   StatusCodes,
   findAccountOrFirst,
-  getConfig,
   loadNevermined,
-  loadNftContract,
-  printNftTokenBanner
+  ConfigEntry
 } from '../../utils'
 import chalk from 'chalk'
-import {
-  getAssetRewardsFromDDOByService,
-  zeroX
-} from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { Logger } from 'log4js'
 
-export const orderNft = async (argv: any): Promise<number> => {
-  const { verbose, network, did, buyer } = argv
+export const orderNft = async (
+  argv: any,
+  config: ConfigEntry,
+  logger: Logger
+): Promise<number> => {
+  const { verbose, network, did, account } = argv
 
-  console.log(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
+  logger.info(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
 
-  const config = getConfig(network as string)
   const { nvm, token } = await loadNevermined(config, network, verbose)
-
   if (!nvm.keeper) {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
   const accounts = await nvm.accounts.list()
-  const buyerAccount = findAccountOrFirst(accounts, buyer)
-
-  const nft = loadNftContract(config)
-  if (verbose) {
-    await printNftTokenBanner(nft)
-  }
+  const buyerAccount = findAccountOrFirst(accounts, account)
 
   const ddo = await nvm.assets.resolve(did)
 
-  if (verbose) {
-    console.log(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
-    console.log(
-      chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`)
-    )
-  }
+  logger.debug(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
+  logger.debug(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`))
 
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
-
-  const price =
-    getAssetRewardsFromDDOByService(ddo, 'nft721-sales').getTotalPrice() /
-    10 ** decimals
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  console.log(
+  const serviceInDDO = argv.nftType === '721' ? 'nft721-sales' : 'nft-sales'
+
+  const price =
+    getAssetRewardsFromDDOByService(ddo, serviceInDDO).getTotalPrice() /
+    10 ** decimals
+
+  logger.info(
     chalk.dim(`Price: ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)
   )
 
-  const agreementId = await nvm.nfts.order721(did, buyerAccount)
+  let agreementId = ''
+  if (argv.nftType === '721') {
+    agreementId = await nvm.nfts.order721(did, buyerAccount)
+  } else {
+    agreementId = await nvm.nfts.order(did, argv.amount, buyerAccount)
+  }
 
-  console.log(
+  logger.info(
     chalk.dim(
-      `Agreement '${chalk.whiteBright(
+      `NFT Agreement Created: ${chalk.whiteBright(
         agreementId
-      )}' for did '${chalk.whiteBright(ddo.id)}' created!`
+      )} for DID: ${chalk.whiteBright(ddo.id)} `
     )
   )
 

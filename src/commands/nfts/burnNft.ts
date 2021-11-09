@@ -10,7 +10,7 @@ import chalk from 'chalk'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 
-export const mintNft = async (
+export const burnNft = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -22,14 +22,14 @@ export const mintNft = async (
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  logger.info(chalk.dim(`Minting NFT: '${chalk.whiteBright(did)}'`))
+  logger.info(chalk.dim(`Burning NFT: '${chalk.whiteBright(did)}'`))
 
   const accounts = await nvm.accounts.list()
 
-  const minterAccount = findAccountOrFirst(accounts, account)
+  const burnerAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(
-    chalk.dim(`Using Minter: ${chalk.whiteBright(minterAccount.getId())}`)
+    chalk.dim(`Using Account: ${chalk.whiteBright(burnerAccount.getId())}`)
   )
 
   const ddo = await nvm.assets.resolve(did)
@@ -43,12 +43,12 @@ export const mintNft = async (
 
   logger.info(
     chalk.dim(
-      `Minting NFT with service Endpoint! ${chalk.whiteBright(register.url)}`
+      `Burning NFT with service Endpoint! ${chalk.whiteBright(register.url)}`
     )
   )
 
   if (argv.nftType === '721') {
-    // Minting NFT (ERC-721)
+    // Burning NFT (ERC-721)
 
     const nft = loadNftContract(config, argv.nftAddress)
     if (verbose) {
@@ -57,10 +57,10 @@ export const mintNft = async (
 
     const contractOwner: string = await nft.methods.owner().call()
 
-    if (contractOwner.toLowerCase() !== minterAccount.getId().toLowerCase()) {
+    if (contractOwner.toLowerCase() !== burnerAccount.getId().toLowerCase()) {
       logger.info(
         chalk.red(
-          `ERROR: Account '${minterAccount.getId()}' is not the owner of the contract but '${contractOwner}' is`
+          `ERROR: Account '${burnerAccount.getId()}' is not the owner of the contract but '${contractOwner}' is`
         )
       )
       return StatusCodes.MINTER_NOT_OWNER
@@ -77,31 +77,29 @@ export const mintNft = async (
     const to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
 
     await nft.methods
-      .mint(to, zeroX(ddo.shortId()), uri || register.url)
-      .send({ from: minterAccount.getId() })
+      .burn(zeroX(ddo.shortId()))
+      .send({ from: burnerAccount.getId() })
 
     logger.info(
       chalk.dim(
-        `Minted NFT (ERC-721) '${chalk.whiteBright(
+        `Burned NFT (ERC-721) '${chalk.whiteBright(
           ddo.id
         )}' to '${chalk.whiteBright(to)}'!`
       )
     )
   } else {
-    // Minting NFT (ERC-721)
+    // Burning NFT (ERC-1155)
 
-    if (argv.amount < 1 || argv.amount > register.mintCap) {
-      logger.error(
-        `Invalid number of ERC-1155 NFTs to mint. It should be >=1 and <cap`
-      )
+    if (argv.amount < 1) {
+      logger.error(`Invalid number of ERC-1155 NFTs to burn. It should be >1`)
       return StatusCodes.ERROR
     }
 
-    await nvm.keeper.didRegistry.mint(did, argv.amount, minterAccount.getId())
+    await nvm.keeper.didRegistry.burn(did, argv.amount, burnerAccount.getId())
 
     logger.info(
       chalk.dim(
-        `Minted  ${chalk.whiteBright(
+        `Burned  ${chalk.whiteBright(
           argv.amount
         )}' NFTs (ERC-1155) '${chalk.whiteBright(ddo.id)}'!`
       )
