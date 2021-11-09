@@ -27,7 +27,6 @@ import chalk from 'chalk'
 
 import { getConfig, logger } from '../src/utils'
 import { ProvenanceMethods } from './utils/enums'
-import { getAccountsCLIOptions } from './commands/options/accountsOptions'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv

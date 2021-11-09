@@ -109,6 +109,4 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
       expect(Path.extname(file) === '.md')
     })
   })
-
-
 })
