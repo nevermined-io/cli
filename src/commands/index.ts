@@ -14,7 +14,6 @@ export * from './nfts/burnNft'
 export * from './nfts/orderNft'
 export * from './nfts/transferNft'
 export * from './nfts/downloadNft'
-export * from './nfts/searchNft'
 
 // accounts
 export * from './accounts/new'

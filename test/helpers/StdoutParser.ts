@@ -9,7 +9,8 @@ export const commandRegex = {
     //
   },
   nfts: {
-    create: new RegExp('.*Created DID: (.{71}).*', 'gm')
+    create: new RegExp('.*Created DID: (.{71}).*', 'gm'),
+    order: new RegExp('.*NFT Agreement Created: (.{66}).*', 'gm')
   },
   accounts: {
     newAccount: new RegExp(
@@ -83,6 +84,14 @@ export const parseListAgreements = (stdout: string): string => {
 
 export const parseProvenanceId = (stdout: string): string => {
   const parsed = commandRegex.provenance.register.exec(stdout)
+  if (parsed != null) {
+    return parsed[1]
+  }
+  return ''
+}
+
+export const parseNFTOrderAgreementId = (stdout: string): string => {
+  const parsed = commandRegex.nfts.order.exec(stdout)
   if (parsed != null) {
     return parsed[1]
   }

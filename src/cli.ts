@@ -16,7 +16,6 @@ import {
   downloadAsset,
   orderAsset,
   getAsset,
-  searchNft,
   showAgreement,
   showNft,
   transferNft,
@@ -622,21 +621,6 @@ y.command(
               type: 'string'
             }),
         async (argv) => cmdHandler(downloadNft, argv)
-      )
-      .command(
-        'search [search]',
-        'Searches for NFTs',
-        (yargs) =>
-          yargs
-            .positional('search', {
-              describe: 'search string',
-              type: 'string'
-            })
-            .positional('consumer', {
-              describe: 'the seller address',
-              type: 'string'
-            }),
-        async (argv) => cmdHandler(searchNft, argv)
       ),
   () => {
     yargs.showHelp()
@@ -786,6 +770,11 @@ y.command(
               describe: 'the DID to retrieve',
               type: 'string'
             })
+            .option('amount', {
+              type: 'number',
+              default: 1,
+              description: 'the number of NFTs to order'
+            })
             .option('nftType', {
               type: 'string',
               default: '1155',
@@ -796,7 +785,30 @@ y.command(
       )
 
       .command(
-        'download did [consumer] [destination]',
+        'transfer agreementId',
+        'Orders an NFT (ERC-1155) by paying for it to the escrow',
+        (yargs) =>
+          yargs
+            .positional('agreementId', {
+              describe: 'the identifier of the agreement created by the buyer',
+              type: 'string'
+            })
+            .option('amount', {
+              type: 'number',
+              default: 1,
+              description: 'the number of NFTs to burn'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '1155',
+              hidden: true,
+              description: 'The NFT type'
+            }),
+        async (argv) => cmdHandler(transferNft, argv)
+      )
+
+      .command(
+        'download did',
         'Downloads the data associated to a ERC-1155 NFT',
         (yargs) =>
           yargs
@@ -804,30 +816,12 @@ y.command(
               describe: 'the agreement id address',
               type: 'string'
             })
-            .positional('consumer', {
-              describe: 'the seller address',
-              type: 'string'
-            })
-            .positional('destination', {
+            .option('destination', {
               describe: 'the destination of the files',
+              demandOption: true,
               type: 'string'
             }),
         async (argv) => cmdHandler(downloadNft, argv)
-      )
-      .command(
-        'search [search]',
-        'Searches for NFTs',
-        (yargs) =>
-          yargs
-            .positional('search', {
-              describe: 'search string',
-              type: 'string'
-            })
-            .positional('consumer', {
-              describe: 'the seller address',
-              type: 'string'
-            }),
-        async (argv) => cmdHandler(searchNft, argv)
       ),
   () => {
     yargs.showHelp()

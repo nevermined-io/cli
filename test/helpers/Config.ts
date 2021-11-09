@@ -43,6 +43,7 @@ export const baseCommands = {
     mint: `${BASE_COMMAND} ${VERBOSE} nfts721 mint `,
     burn: `${BASE_COMMAND} ${VERBOSE} nfts721 burn `,
     order: `${BASE_COMMAND} ${VERBOSE} nfts721 order `,
+    transfer: `${BASE_COMMAND} ${VERBOSE} nfts721 transfer `,
     download: `${BASE_COMMAND} ${VERBOSE} nfts721 download `
   },
   nfts1155: {
@@ -51,6 +52,7 @@ export const baseCommands = {
     mint: `${BASE_COMMAND} ${VERBOSE} nfts1155 mint `,
     burn: `${BASE_COMMAND} ${VERBOSE} nfts1155 burn `,
     order: `${BASE_COMMAND} ${VERBOSE} nfts1155 order `,
+    transfer: `${BASE_COMMAND} ${VERBOSE} nfts1155 transfer `,
     download: `${BASE_COMMAND} ${VERBOSE} nfts1155 download `
   },
   accounts: {

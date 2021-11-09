@@ -1,7 +1,7 @@
 import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
 import {
-  parseDIDFromNewAsset,
-  parseDIDFromNewNFT
+  parseDIDFromNewNFT,
+  parseNFTOrderAgreementId
 } from '../helpers/StdoutParser'
 import * as fs from 'fs'
 import * as Path from 'path'
@@ -11,6 +11,7 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
   let did = ''
   let nftCap = 10
   let nftRoyalties = 5
+  let orderAgreementId = ''
 
   beforeAll(async () => {
     console.log(`Funding account: ${execOpts.accounts[0]}`)
@@ -66,25 +67,48 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
   })
 
   test('Order a NFT (ERC-1155)', async () => {
-    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[0]}"  `
+    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const stdout = execSync(orderCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
+    orderAgreementId = parseNFTOrderAgreementId(stdout)
+    expect(orderAgreementId != '')
     expect(stdout.includes(did))
     expect(stdout.includes(`NFT Agreement Created`))
   })
 
-  // test('Transfer a NFT (ERC-1155)', async () => {
+  test('The seller transfer a NFT (ERC-1155)', async () => {
+    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}"  `
+    console.debug(`COMMAND: ${transferCommand}`)
 
-  // })
+    const stdout = execSync(transferCommand, execOpts)
 
-  // test('As NFT holder I can download the files associated to an asset', async () => {
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(did))
+    expect(stdout.includes(`Transferring NFT (ERC-1155)`))
+    expect(stdout.includes(`Transfer done!`))
+  })
 
-  // })
+  test('As NFT holder I can download the files associated to an asset', async () => {
+    const destination = `/tmp/nevemined/cli/test/nft`
+    const downloadCommand = `${baseCommands.nfts1155.download} "${did}" --destination "${destination}" --account "${execOpts.accounts[1]}"  `
+    console.debug(`COMMAND: ${downloadCommand}`)
 
-  // test('Search for a NFT', async () => {
+    const stdout = execSync(downloadCommand, execOpts)
 
-  // })
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(did))
+    expect(stdout.includes(`NFT Assets downloaded to: ${destination}`))
+
+    const files = fs.readdirSync(destination || '')
+    expect(files.length == 1)
+
+    files.forEach((file) => {
+      expect(Path.extname(file) === '.md')
+    })
+  })
+
+
 })
