@@ -1,12 +1,15 @@
-import { listAgreements } from '../../src/commands/agreements/listAgreements'
 export const commandRegex = {
   assets: {
-    //did: new RegExp('.*Registering DID.(.*)\n', 'g'),
     did: new RegExp('.*Created Asset.(.{71}).*', 'g'),
     totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\n', 'g'),
     downloadPath: new RegExp('.*Files downloaded to:.(.*)', 'gm'),
     serviceAgreement: new RegExp('.*Agreement Id:.(.*)\n', 'g')
     //
+  },
+  nfts: {
+    deploy: new RegExp('.*Contract deployed into address: (.{42}).*', 'gm'),
+    create: new RegExp('.*Created DID: (.{71}).*', 'gm'),
+    order: new RegExp('.*NFT Agreement Created: (.{66}).*', 'gm')
   },
   accounts: {
     newAccount: new RegExp(
@@ -24,6 +27,14 @@ export const commandRegex = {
 
 export const parseDIDFromNewAsset = (stdout: string): string => {
   const did = commandRegex.assets.did.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+
+export const parseDIDFromNewNFT = (stdout: string): string => {
+  const did = commandRegex.nfts.create.exec(stdout)
   if (did != null) {
     return did[1]
   }
@@ -72,6 +83,22 @@ export const parseListAgreements = (stdout: string): string => {
 
 export const parseProvenanceId = (stdout: string): string => {
   const parsed = commandRegex.provenance.register.exec(stdout)
+  if (parsed != null) {
+    return parsed[1]
+  }
+  return ''
+}
+
+export const parseNFTOrderAgreementId = (stdout: string): string => {
+  const parsed = commandRegex.nfts.order.exec(stdout)
+  if (parsed != null) {
+    return parsed[1]
+  }
+  return ''
+}
+
+export const parseAddressOfContractDeployed = (stdout: string): string => {
+  const parsed = commandRegex.nfts.deploy.exec(stdout)
   if (parsed != null) {
     return parsed[1]
   }

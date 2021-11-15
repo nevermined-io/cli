@@ -1,19 +1,23 @@
-import { StatusCodes, getConfig, loadNevermined } from '../../utils'
+import { StatusCodes, loadNevermined } from '../../utils'
 import chalk from 'chalk'
 import { printProvenanceEvents } from '../../utils/utils'
-import { logger } from '../../utils/config'
+import { ConfigEntry, logger } from '../../utils/config'
+import { Logger } from 'log4js'
 
-export const provenanceHistory = async (argv: any): Promise<number> => {
+export const provenanceHistory = async (
+  argv: any,
+  config: ConfigEntry,
+  logger: Logger
+): Promise<number> => {
   const { verbose, network, did } = argv
 
-  const config = getConfig(network as string)
   const { nvm } = await loadNevermined(config, network, verbose)
 
   if (!nvm.keeper) {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  console.info(
+  logger.info(
     chalk.dim(`Loading provenance history of: '${chalk.whiteBright(did)}'`)
   )
 

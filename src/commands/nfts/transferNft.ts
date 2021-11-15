@@ -2,65 +2,92 @@ import {
   Constants,
   StatusCodes,
   findAccountOrFirst,
-  getConfig,
-  loadNevermined
+  loadNevermined,
+  ConfigEntry
 } from '../../utils'
 import chalk from 'chalk'
 import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { Logger } from 'log4js'
+import { Account } from '@nevermined-io/nevermined-sdk-js'
 
-export const transferNft = async (argv: any): Promise<number> => {
-  const { verbose, network, agreementId, seller } = argv
+export const transferNft = async (
+  argv: any,
+  config: ConfigEntry,
+  logger: Logger
+): Promise<number> => {
+  const { verbose, network, agreementId, account } = argv
 
-  if (verbose) {
-    console.log(
-      chalk.dim(`Executing agreement: '${chalk.whiteBright(agreementId)}'`)
-    )
-  }
-
-  const config = getConfig(network as string)
   const { nvm, token } = await loadNevermined(config, network, verbose)
 
   if (!nvm.keeper) {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  const { agreementStoreManager } = nvm.keeper
+  logger.debug(
+    chalk.dim(`Executing agreement: '${chalk.whiteBright(agreementId)}'`)
+  )
 
-  const { did } = await agreementStoreManager.getAgreement(agreementId)
+  const { did, conditionIds } =
+    await nvm.keeper.agreementStoreManager.getAgreement(agreementId)
+  const { lastUpdatedBy } = await nvm.keeper.conditionStoreManager.getCondition(
+    conditionIds[0]
+  )
 
   const ddo = await nvm.assets.resolve(did)
 
   const accounts = await nvm.accounts.list()
+  const sellerAccount = findAccountOrFirst(accounts, account)
+  const buyerAccount = new Account(lastUpdatedBy)
 
-  const sellerAccount = findAccountOrFirst(accounts, seller)
-
-  if (verbose) {
-    console.log(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
-    console.log(chalk.dim(`AgreementId: '${chalk.whiteBright(agreementId)}'`))
-    console.log(
-      chalk.dim(`Seller: '${chalk.whiteBright(sellerAccount.getId())}'`)
-    )
-  }
+  logger.debug(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
+  logger.debug(chalk.dim(`AgreementId: '${chalk.whiteBright(agreementId)}'`))
+  logger.debug(
+    chalk.dim(`Seller: '${chalk.whiteBright(sellerAccount.getId())}'`)
+  )
 
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
 
-  const price =
-    getAssetRewardsFromDDOByService(ddo, 'nft721-sales').getTotalPrice() /
-    10 ** decimals
-
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  console.log(
+  const serviceInDDO = argv.nftType === '721' ? 'nft721-sales' : 'nft-sales'
+
+  const price =
+    getAssetRewardsFromDDOByService(ddo, serviceInDDO).getTotalPrice() /
+    10 ** decimals
+
+  logger.info(
     chalk.dim(`Price ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)
   )
 
-  console.log(chalk.dim(`Transferring NFT '${chalk.whiteBright(ddo.id)}' ...`))
-  await nvm.nfts.transfer721(agreementId, ddo.id, sellerAccount)
+  if (argv.nftType === '721') {
+    logger.info(
+      chalk.dim(`Transferring NFT (ERC-721) '${chalk.whiteBright(ddo.id)}' ...`)
+    )
+    await nvm.nfts.transfer721(agreementId, ddo.id, sellerAccount)
 
-  console.log(chalk.dim('Releasing rewards ...'))
-  await nvm.nfts.release721Rewards(agreementId, ddo.id, sellerAccount)
+    logger.info(chalk.dim('Releasing rewards ...'))
+    await nvm.nfts.release721Rewards(agreementId, ddo.id, sellerAccount)
+  } else {
+    // ERC-1155
 
-  console.log(chalk.dim('Transfer done!'))
+    logger.info(
+      chalk.dim(
+        `Transferring NFT (ERC-1155) '${chalk.whiteBright(ddo.id)}' ...`
+      )
+    )
+    await nvm.nfts.transfer(agreementId, ddo.id, argv.amount, sellerAccount)
+
+    logger.info(chalk.dim('Releasing rewards ...'))
+    await nvm.nfts.releaseRewards(
+      agreementId,
+      ddo.id,
+      argv.amount,
+      buyerAccount,
+      sellerAccount
+    )
+  }
+
+  logger.info(chalk.dim('Transfer done!'))
   return StatusCodes.OK
 }

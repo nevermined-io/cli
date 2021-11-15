@@ -64,10 +64,6 @@ const config: CliConfig = {
     } as Config,
     nativeToken: 'ETH',
     etherscanUrl: 'https://rinkeby.etherscan.io',
-    nftTokenAddress:
-      process.env.NFT_TOKEN_ADDRESS ||
-      // NFT Test Contract
-      '0xf0ff000512fC47ab52aC8e4f90E335a5Fe3dD024',
     erc20TokenAddress:
       process.env.TOKEN_ADDRESS ||
       // WETH
@@ -94,14 +90,10 @@ const config: CliConfig = {
     } as Config,
     nativeToken: 'ETH',
     etherscanUrl: 'https://spree.etherscan.io',
-    nftTokenAddress:
-      process.env.NFT_TOKEN_ADDRESS ||
-      // NFT Test Contract
-      '0xf0ff000512fC47ab52aC8e4f90E335a5Fe3dD024',
     erc20TokenAddress:
       process.env.TOKEN_ADDRESS ||
       // ETH
-      '0x0',
+      '0x0000000000000000000000000000000000000000',
     seed: process.env.MNEMONIC,
     buyerKeyfile: process.env.BUYER_KEYFILE,
     buyerPassword: process.env.BUYER_PASSWORD,

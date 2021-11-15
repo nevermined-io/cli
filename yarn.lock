@@ -796,10 +796,10 @@
   resolved "https://registry.yarnpkg.com/@nevermined-io/contracts/-/contracts-1.1.8.tgz#971dbf00d407f4456ad31c1152f7f6eaf174be43"
   integrity sha512-ZLXH66c1IrOxhEiz46xWTAxpXINcK0gs8p4et9ciq4dnSxtsNV+TE2xTv2kiQiYOyVpj8VPAKJhSMstuzTb2Yg==
 
-"@nevermined-io/nevermined-sdk-js@^0.13.16":
-  version "0.13.16"
-  resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.13.16.tgz#6cffc201fd2b4713ffb9778aa68a13d471c8df41"
-  integrity sha512-RjOj4FY2s1Gui+4YLpzMpASjIlq4TkMvX5sS1aMbhGAx1g0vcQkmhGuZ29FoKCRgt9dV63OdwdtmujW3qAS4Aw==
+"@nevermined-io/nevermined-sdk-js@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.14.0.tgz#48e20cb90db38d727b843dd1acad8328fc8908bf"
+  integrity sha512-rG3msr4H7Fg+x7VrvMiS5z9xjEkEiBOZYkcVXhxu+OSi+Q4i03nOD7MrBsJiMI1ZawYMy4I2LlHuDkn/foFiyw==
   dependencies:
     "@nevermined-io/contracts" "^1.1.8"
     "@nevermined-io/secret-store-client" "^0.0.16"
@@ -809,7 +809,7 @@
     deprecated-decorator "^0.1.6"
     ffjavascript "^0.2.38"
     ganache-cli "^6.12.2"
-    jose "^3.3.1"
+    jose "^4.1.1"
     node-fetch "^2.6.1"
     save-file "^2.3.1"
     snarkjs "^0.4.6"
@@ -4736,10 +4736,10 @@ jest@^27.2.5:
     import-local "^3.0.2"
     jest-cli "^27.2.5"
 
-jose@^3.3.1:
-  version "3.15.5"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-3.15.5.tgz#c253a39913d5c439a7a845d02cca1f9b778bba30"
-  integrity sha512-7ytNKAsyTBqBSrJNYePG0rwXq0+lxHIMdVvOnCi0B80Zmsy94XEkceX1PqAGWvT0Ko9XAIPhu7JyCF5L/9mfNQ==
+jose@^4.1.1:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.2.0.tgz#eb3dfe4926514a99f325ba604d32e41589394f6d"
+  integrity sha512-7nlU7qankWiES1WmZXAJl0jiGusoouXhjiGR12yc+0/SIDi+4uhEGzqcfONtDI7g66K4IyqA44botXGpi9EBWA==
 
 js-sha3@0.5.7, js-sha3@^0.5.7:
   version "0.5.7"

@@ -9,7 +9,8 @@ export enum StatusCodes {
   INCONCLUSIVE,
   SELLER_NOT_OWNER,
   HOLDER_NOT_OWNER,
-  DID_NOT_FOUND
+  DID_NOT_FOUND,
+  NOT_IMPLEMENTED
 }
 
 export const Constants = {

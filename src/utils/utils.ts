@@ -1,6 +1,9 @@
 import { Contract } from 'web3-eth-contract'
 import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
-import { noZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import {
+  findServiceConditionByName,
+  noZeroX
+} from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import {
   Account,
   Config,
@@ -11,15 +14,31 @@ import {
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
-import ERC721 from '../abis/ERC721URIStorage.json'
+import ERC721 from '../abis/ERC721.json'
 import { Constants, StatusCodes } from './enums'
-import { ConfigEntry } from './config'
+import { ConfigEntry, getConfig, logger } from './config'
 import { AbiItem } from 'web3-utils'
 import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 import { Logger } from 'log4js'
+import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 
-const loadContract = (
+export const cmdHandler = async (cmd: Function, argv: any) => {
+  const { verbose, network } = argv
+
+  if (verbose) {
+    logger.level = 'debug'
+  }
+
+  logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
+  logger.info(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
+
+  const config = getConfig(network as string)
+
+  return process.exit(await cmd(argv, config, logger))
+}
+
+export const loadContract = (
   config: Config,
   abi: AbiItem[] | AbiItem,
   address: string
@@ -28,14 +47,36 @@ const loadContract = (
   web3.setProvider(config.web3Provider)
 
   // @ts-ignore
-  const contract = new web3.eth.Contract(abi, address)
-
-  return contract
+  return new web3.eth.Contract(abi, address)
 }
 
-export const loadNftContract = (config: ConfigEntry): Contract =>
+export const loadNftContract = (
+  config: ConfigEntry,
+  nftTokenAddress: string
+): Contract => {
   // @ts-ignore
-  loadContract(config.nvm, ERC721, config.nftTokenAddress)
+  return loadContract(config.nvm, ERC721.abi, nftTokenAddress)
+}
+
+export const getNFTAddressFromInput = (
+  nftAddress: string,
+  ddo: DDO,
+  serviceType: ServiceType
+): string => {
+  if (nftAddress === '' || !nftAddress.startsWith('0x')) {
+    const salesService = ddo.findServiceByType(serviceType)
+
+    if (!salesService) throw new Error(`No NFT contract address found`)
+
+    const transfer = findServiceConditionByName(salesService, 'transferNFT')
+    const _contractParam = transfer.parameters.find(
+      (p) => p.name === '_contract'
+    )
+    return _contractParam?.value as string
+  } else {
+    return nftAddress
+  }
+}
 
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
@@ -62,18 +103,25 @@ export const findAccountOrFirst = (
 export const printNftTokenBanner = async (nftContract: Contract) => {
   const { address } = nftContract.options
 
-  const [name, symbol, owner] = await Promise.all([
-    nftContract.methods.name().call(),
-    nftContract.methods.symbol().call(),
-    nftContract.methods.owner().call()
-  ])
-
   console.log('\n')
   console.log(chalk.dim('===== NFT Contract ====='))
+
+  let owner = ''
+  try {
+    owner = await nftContract.methods.owner().call()
+    console.log(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
+  } catch {
+    console.log(`Owner: The NFT doesn't expose the owner`)
+  }
+
+  const [name, symbol] = await Promise.all([
+    nftContract.methods.name().call(),
+    nftContract.methods.symbol().call()
+  ])
+
   console.log(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
   console.log(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
   console.log(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
-  console.log(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
   console.log('\n')
 }
 

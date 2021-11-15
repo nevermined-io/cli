@@ -2,98 +2,73 @@ import {
   Constants,
   StatusCodes,
   findAccountOrFirst,
-  getConfig,
   loadNevermined,
   loadNftContract,
-  printNftTokenBanner
+  printNftTokenBanner,
+  ConfigEntry
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
-import readline from 'readline'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import fs from 'fs'
+import { Logger } from 'log4js'
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
+export const createNft = async (
+  argv: any,
+  config: ConfigEntry,
+  logger: Logger
+): Promise<number> => {
+  const { verbose, network, account, metadata } = argv
 
-export const createNft = async (argv: any): Promise<number> => {
-  const { verbose, network, creator, metadata } = argv
+  logger.info(chalk.dim('Creating NFT ...'))
 
-  console.log(chalk.dim('Creating NFT ...'))
-
-  const config = getConfig(network as string)
   const { nvm, token } = await loadNevermined(config, network, verbose)
 
   if (!nvm.keeper) {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  const nft = loadNftContract(config)
-  if (verbose) {
-    await printNftTokenBanner(nft)
-  }
-
   const accounts = await nvm.accounts.list()
-  const creatorAccount = findAccountOrFirst(accounts, creator)
+  const creatorAccount = findAccountOrFirst(accounts, account)
 
-  if (verbose) {
-    console.log(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
-  }
+  logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   let ddoMetadata
   let ddoPrice: number
   if (!metadata) {
-    const authorInput = await new Promise((resolve) =>
-      rl.question('Author Name: ', (author) => {
-        resolve(author)
-      })
-    )
-
-    const name = await new Promise((resolve) =>
-      rl.question('Asset Name: ', (name) => {
-        resolve(name)
-      })
-    )
-
-    const url = await new Promise((resolve) =>
-      rl.question('URL to the Asset: ', (url) => {
-        resolve(url)
-      })
-    )
-
-    const price: number = await new Promise((resolve) =>
-      rl.question('Price of the Asset: ', (price) => {
-        resolve(Number(price))
-      })
-    )
-
-    const license = await new Promise((resolve) =>
-      rl.question('License of the Asset: ', (license) => {
-        resolve(license)
-      })
-    )
+    if (argv.name === '' || argv.author === '' || argv.urls === '') {
+      logger.error(
+        `If not metadata file is provided, the following parameters need to be given: name, author, urls, price`
+      )
+      return StatusCodes.ERROR
+    }
 
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
 
-    ddoPrice = price * 10 ** decimals
+    ddoPrice = argv.price * 10 ** decimals
+
+    const _files: File[] = []
+    let _fileIndex = 0
+    argv.urls.forEach((_url: string) => {
+      _files.push({
+        index: _fileIndex,
+        url: _url,
+        contentType: argv.contentType
+      })
+      _fileIndex++
+    })
 
     ddoMetadata = {
       main: {
-        name,
+        name: argv.name,
         type: 'dataset',
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
-        author: authorInput,
-        license,
+        author: argv.author,
+        license: argv.license,
         price: ddoPrice.toString(),
-        files: [
-          {
-            url
-          } as File
-        ]
+        files: _files
       } as MetaDataMain
     }
   } else {
@@ -101,16 +76,38 @@ export const createNft = async (argv: any): Promise<number> => {
     ddoPrice = Number(ddoMetadata.main.price)
   }
 
-  console.log(chalk.dim('\nCreating Asset ...'))
+  logger.info(chalk.dim('\nCreating Asset ...'))
 
-  const ddo = await nvm.nfts.create721(
-    ddoMetadata,
-    creatorAccount,
-    // @ts-ignore
-    new AssetRewards(creatorAccount.getId(), ddoPrice),
-    config.nftTokenAddress,
-    token ? token.getAddress() : config.erc20TokenAddress
-  )
+  let ddo
+
+  if (argv.nftType === '721') {
+    const nft = loadNftContract(config, argv.nftAddress)
+
+    if (verbose) {
+      await printNftTokenBanner(nft)
+    }
+
+    ddo = await nvm.nfts.create721(
+      ddoMetadata,
+      creatorAccount,
+      // @ts-ignore
+      new AssetRewards(creatorAccount.getId(), ddoPrice),
+      argv.nftAddress,
+      token ? token.getAddress() : config.erc20TokenAddress
+    )
+  } else {
+    // erc-1155
+    ddo = await nvm.nfts.create(
+      ddoMetadata,
+      creatorAccount,
+      argv.cap,
+      argv.royalties,
+      // @ts-ignore
+      new AssetRewards(creatorAccount.getId(), ddoPrice),
+      undefined,
+      token ? token.getAddress() : config.erc20TokenAddress
+    )
+  }
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(
     zeroX(ddo.shortId())
@@ -119,15 +116,15 @@ export const createNft = async (argv: any): Promise<number> => {
     url: string
   }
 
-  console.log(
+  logger.info(
     chalk.dim(
-      `Created NFT '${chalk.whiteBright(
+      `Created DID: ${chalk.whiteBright(
         ddo.id
-      )} with service endpoint: ${chalk.whiteBright(register.url)}`
+      )} with NFT associated and endpoint: ${chalk.whiteBright(register.url)}`
     )
   )
 
-  console.log('Now please mint the token on the NFT Contract!')
+  logger.info('Now please mint the token on the NFT Contract!')
 
   return StatusCodes.OK
 }
