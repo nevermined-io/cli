@@ -5,3 +5,4 @@ yarn-error.log
 *.tgz
 coverage
 .vscode
+package-lock.json
