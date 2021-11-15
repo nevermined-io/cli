@@ -8,6 +8,7 @@ export * from './assets/resolveDID'
 
 // nfts (ERC-721 & ERC-1155)
 export * from './nfts/showNft'
+export * from './nfts/deployNft'
 export * from './nfts/createNft'
 export * from './nfts/mintNft'
 export * from './nfts/burnNft'

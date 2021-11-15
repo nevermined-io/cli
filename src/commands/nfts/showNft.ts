@@ -4,15 +4,20 @@ import {
   loadNevermined,
   loadNftContract,
   printNftTokenBanner,
-  ConfigEntry
+  ConfigEntry,
+  loadContract,
+  getNFTAddressFromInput
 } from '../../utils'
 import { Account, DDO } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import {
+  findServiceConditionByName,
   getAssetRewardsFromDDOByService,
   zeroX
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
+import * as fs from 'fs'
+import { Contract } from 'web3-eth-contract'
 
 export const showNft = async (
   argv: any,
@@ -74,26 +79,60 @@ export const showNft = async (
 
   logger.info('\n')
 
+  // TODO: Implement get `_contract` NFT address from DID/DDO
+
+  let nftAddress = ''
   // Showing ERC-721 NFT information
-  if (argv.nftAddress != '') {
-    const nft = loadNftContract(config, argv.nftAddress)
+  if (argv.is721) {
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft721-sales')
+
+    let nft: Contract
+
+    if (argv.abiPath != '') {
+      const content = fs.readFileSync(argv.abiPath)
+      const artifact = JSON.parse(content.toString())
+      nft = loadContract(config.nvm, artifact.abi, nftAddress)
+    } else {
+      nft = loadNftContract(config, nftAddress)
+    }
+
     if (verbose) {
       await printNftTokenBanner(nft)
     }
 
-    const [contractTokenUri, contractTokenOwner] = await Promise.all([
-      nft.methods.tokenURI(zeroX(ddo.shortId())).call(),
-      nft.methods.ownerOf(zeroX(ddo.shortId())).call()
-    ])
-
     logger.info(
-      chalk.dim(`====== ${chalk.whiteBright('NFT (ERC-721) Contract')} ======`)
+      chalk.dim(
+        `====== ${chalk.whiteBright(
+          `NFT (ERC-721) Contract: ${nftAddress}`
+        )} ======`
+      )
     )
     logger.info(
       chalk.dim(`====== ${chalk.whiteBright(zeroX(ddo.shortId()))} ======`)
     )
-    logger.info(chalk.dim(`Url: ${chalk.whiteBright(contractTokenUri)}`))
-    logger.info(chalk.dim(`Owner: ${chalk.whiteBright(contractTokenOwner)}`))
+
+    logger.info(JSON.stringify(nft.methods))
+
+    const accountBalance = await nft.methods
+      .balanceOf(userAccount.getId())
+      .call()
+    logger.info(
+      chalk.dim(`Account Balance: ${chalk.whiteBright(accountBalance)}`)
+    )
+
+    try {
+      const contractTokenUri = await nft.methods
+        .tokenURI(zeroX(ddo.shortId()))
+        .call()
+      logger.info(chalk.dim(`Url: ${chalk.whiteBright(contractTokenUri)}`))
+      const contractTokenOwner = await nft.methods
+        .ownerOf(zeroX(ddo.shortId()))
+        .call()
+      logger.info(chalk.dim(`Owner: ${chalk.whiteBright(contractTokenOwner)}`))
+    } catch {
+      logger.warn(`Token Id not found`)
+    }
+
     const price =
       getAssetRewardsFromDDOByService(ddo, 'nft721-sales').getTotalPrice() /
       10 ** decimals
@@ -152,7 +191,7 @@ export const showNft = async (
     )
   }
 
-  logger.debug(chalk.dim(DDO.serialize(ddo)))
+  // logger.debug(chalk.dim(DDO.serialize(ddo)))
 
   return StatusCodes.OK
 }

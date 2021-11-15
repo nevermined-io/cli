@@ -5,6 +5,7 @@ import {
   accountsNew,
   accountsList,
   createNft,
+  deployNft,
   downloadNft,
   listAgreements,
   mintNft,
@@ -480,6 +481,29 @@ y.command(
   (yargs) =>
     yargs
       .usage('usage: $0 nfts <command> parameters [options]')
+
+      .command(
+        'deploy abiPath',
+        'It deploys a new NFT (ERC-721) contract',
+        (yargs) =>
+          yargs
+            .positional('abiPath', {
+              describe: 'the path to the ABI representing the ERC-721 contract',
+              type: 'string'
+            })
+            .option('name', {
+              describe: 'The NFT name',
+              default: '',
+              type: 'string'
+            })
+            .option('symbol', {
+              describe: 'The NFT symbol',
+              default: '',
+              type: 'string'
+            }),
+        async (argv) => cmdHandler(deployNft, argv)
+      )
+
       .command(
         'create [nftAddress]',
         'Registers a new asset and associates a ERC-721 NFT to it',
@@ -543,11 +567,21 @@ y.command(
               default: '',
               description: 'The address of the NFT (ERC-721) contract'
             })
+            .option('abiPath', {
+              describe: 'the path to the ABI representing the ERC-721 contract',
+              default: '',
+              type: 'string'
+            })
+            .option('is721', {
+              type: 'boolean',
+              default: true,
+              hidden: true
+            })
             .option('show1155', {
               type: 'boolean',
               default: false,
               description:
-                'Show the information about the NFT ERC-1155 attached to the DID'
+                'Show if there are any NFT ERC-1155 attached to the DID'
             }),
         async (argv) => cmdHandler(showNft, argv)
       )
@@ -580,6 +614,28 @@ y.command(
       )
 
       .command(
+        'burn [did] [nftAddress]',
+        'It Burns a ERC-721 NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'the did to burn',
+              type: 'string'
+            })
+            .positional('nftAddress', {
+              type: 'string',
+              description: 'The address of the NFT (ERC-721) contract'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '721',
+              hidden: true,
+              description: 'The NFT type'
+            }),
+        async (argv) => cmdHandler(burnNft, argv)
+      )
+
+      .command(
         'order did',
         'Orders an NFT (ERC-721) by paying for it to the escrow',
         (yargs) =>
@@ -587,11 +643,6 @@ y.command(
             .positional('did', {
               describe: 'the DID to retrieve',
               type: 'string'
-            })
-            .option('amount', {
-              type: 'number',
-              default: 1,
-              description: 'the number of NFTs to mint'
             })
             .option('nftType', {
               type: 'string',
@@ -603,20 +654,35 @@ y.command(
       )
 
       .command(
-        'download did [consumer] [destination]',
+        'transfer agreementId',
+        'Orders an NFT (ERC-721) by paying for it to the escrow',
+        (yargs) =>
+          yargs
+            .positional('agreementId', {
+              describe: 'the identifier of the agreement created by the buyer',
+              type: 'string'
+            })
+            .option('nftType', {
+              type: 'string',
+              default: '721',
+              hidden: true,
+              description: 'The NFT type'
+            }),
+        async (argv) => cmdHandler(transferNft, argv)
+      )
+
+      .command(
+        'download [did]',
         'Downloads the data of an NFT',
         (yargs) =>
           yargs
             .positional('did', {
-              describe: 'the agreement id address',
+              describe: 'the asset identifier',
               type: 'string'
             })
-            .positional('consumer', {
-              describe: 'the seller address',
-              type: 'string'
-            })
-            .positional('destination', {
+            .option('destination', {
               describe: 'the destination of the files',
+              demandOption: true,
               type: 'string'
             }),
         async (argv) => cmdHandler(downloadNft, argv)

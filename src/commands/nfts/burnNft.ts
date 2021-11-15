@@ -4,7 +4,8 @@ import {
   loadNevermined,
   loadNftContract,
   printNftTokenBanner,
-  ConfigEntry
+  ConfigEntry,
+  getNFTAddressFromInput
 } from '../../utils'
 import chalk from 'chalk'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -50,20 +51,15 @@ export const burnNft = async (
   if (argv.nftType === '721') {
     // Burning NFT (ERC-721)
 
-    const nft = loadNftContract(config, argv.nftAddress)
+    const nftAddress = getNFTAddressFromInput(
+      argv.nftAddress,
+      ddo,
+      'nft721-sales'
+    )
+
+    const nft = loadNftContract(config, nftAddress)
     if (verbose) {
       await printNftTokenBanner(nft)
-    }
-
-    const contractOwner: string = await nft.methods.owner().call()
-
-    if (contractOwner.toLowerCase() !== burnerAccount.getId().toLowerCase()) {
-      logger.info(
-        chalk.red(
-          `ERROR: Account '${burnerAccount.getId()}' is not the owner of the contract but '${contractOwner}' is`
-        )
-      )
-      return StatusCodes.MINTER_NOT_OWNER
     }
 
     try {
@@ -75,6 +71,17 @@ export const burnNft = async (
     } catch {}
 
     const to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
+
+    // Some ERC-721 NFT contracts don't implement the burn function
+    // Se we are checking if it's already there
+    const burnAbiDefinition = nft.options.jsonInterface.filter(
+      (item) => item.name === 'burn'
+    )
+
+    if (burnAbiDefinition.length === 0) {
+      logger.warn(`The NFT contract doesn't expose a 'burn' method`)
+      return StatusCodes.OK
+    }
 
     await nft.methods
       .burn(zeroX(ddo.shortId()))

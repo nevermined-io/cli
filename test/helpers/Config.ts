@@ -38,6 +38,7 @@ export const baseCommands = {
     resolveDID: `${BASE_COMMAND} ${VERBOSE} assets resolve `
   },
   nfts721: {
+    deploy: `${BASE_COMMAND} ${VERBOSE} nfts721 deploy `,
     create: `${BASE_COMMAND} ${VERBOSE} nfts721 create `,
     show: `${BASE_COMMAND} ${VERBOSE} nfts721 show `,
     mint: `${BASE_COMMAND} ${VERBOSE} nfts721 mint `,

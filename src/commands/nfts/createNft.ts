@@ -81,7 +81,8 @@ export const createNft = async (
   let ddo
 
   if (argv.nftType === '721') {
-    const nft = loadNftContract(config, argv.nft721Address)
+    const nft = loadNftContract(config, argv.nftAddress)
+
     if (verbose) {
       await printNftTokenBanner(nft)
     }
@@ -91,7 +92,7 @@ export const createNft = async (
       creatorAccount,
       // @ts-ignore
       new AssetRewards(creatorAccount.getId(), ddoPrice),
-      config.nftTokenAddress,
+      argv.nftAddress,
       token ? token.getAddress() : config.erc20TokenAddress
     )
   } else {
