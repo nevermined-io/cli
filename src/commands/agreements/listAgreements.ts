@@ -1,11 +1,16 @@
-import { StatusCodes, getConfig, loadNevermined } from '../../utils'
+import { StatusCodes, getConfig, loadNevermined, ConfigEntry } from '../../utils'
 import { ConditionState } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
+import { Logger } from 'log4js'
 
-export const listAgreements = async (argv: any): Promise<number> => {
+export const listAgreements = async (
+  argv: any,
+  config: ConfigEntry,
+  logger: Logger
+): Promise<number> => {
+
   const { verbose, network, did } = argv
 
-  const config = getConfig(network as string)
   const { nvm } = await loadNevermined(config, network, verbose)
   const ddo = await nvm.assets.resolve(did)
 
@@ -13,14 +18,14 @@ export const listAgreements = async (argv: any): Promise<number> => {
     return StatusCodes.FAILED_TO_CONNECT
   }
 
-  console.info(
+  logger.info(
     chalk.dim(`Loading agreements for DID: '${chalk.whiteBright(ddo.id)}'\n`)
   )
 
   const agreements = await nvm.agreements.getAgreements(ddo.shortId())
 
   if (agreements.length === 0) {
-    console.info(chalk.dim(`No agreements for '${chalk.whiteBright(ddo.id)}'!`))
+    logger.info(chalk.dim(`No agreements for '${chalk.whiteBright(ddo.id)}'!`))
   }
 
   agreements.sort((a, b) => a.blockNumberUpdated - b.blockNumberUpdated)
@@ -28,7 +33,7 @@ export const listAgreements = async (argv: any): Promise<number> => {
   for (const agreement of agreements) {
     const status = await nvm.agreements.status(agreement.agreementId)
 
-    console.info(
+    logger.info(
       chalk.dim(
         `Template: ${chalk.whiteBright(
           await nvm.keeper.getTemplateByAddress(agreement.templateId)
@@ -37,7 +42,7 @@ export const listAgreements = async (argv: any): Promise<number> => {
       )
     )
 
-    console.info(
+    logger.info(
       chalk.dim(
         `Last updated: ${chalk.whiteBright(
           agreement.blockNumberUpdated
@@ -49,7 +54,7 @@ export const listAgreements = async (argv: any): Promise<number> => {
       )
     )
 
-    console.info('\n')
+    logger.info('\n')
   }
 
   return StatusCodes.OK
