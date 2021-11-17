@@ -45,7 +45,7 @@ configure({
 
 export const logger = getLogger()
 
-const config: CliConfig = {
+export const config: CliConfig = {
   rinkeby: {
     nvm: {
       // default nvm rinkeby faucet

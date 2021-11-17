@@ -1,25 +1,33 @@
 import yargs, { config } from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import {
+  // Accounts 
   accountsFund,
   accountsNew,
   accountsList,
+  // NFTs
   createNft,
   deployNft,
   downloadNft,
-  listAgreements,
   mintNft,
   burnNft,
   orderNft,
+  showNft,
+  transferNft,  
+  // Assets
   registerAsset,
   resolveDID,
   searchAsset,
   downloadAsset,
   orderAsset,
   getAsset,
+  // Status
+  networkStatus,
+  networkList,
+  // Agreements
+  listAgreements,  
   showAgreement,
-  showNft,
-  transferNft,
+  // Provenance
   registerProvenance,
   provenanceHistory,
   provenanceInspect
@@ -34,10 +42,10 @@ const cmdHandler = async (cmd: Function, argv: any) => {
 
   if (verbose) {
     logger.level = 'debug'
-  }
+  }  
 
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
-  logger.info(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
+  logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
 
   const config = getConfig(network as string)
 
@@ -71,6 +79,30 @@ y.command(
   false,
   () => {},
   (argv) => {
+    yargs.showHelp()
+    return process.exit()
+  }
+)
+
+y.command(
+  'network',
+  'Retrieve information about Nevermined deployments',
+  (yargs) =>
+    yargs
+      .usage('usage: $0 network <command> parameters [options]')
+      .command(
+        'list',
+        'List all the pre-configured Nevermined networks',
+        (yargs) => yargs,
+        async (argv) => cmdHandler(networkList, argv)
+      )      
+      .command(
+        'status',
+        'List all the information about a Nevermined deployment',
+        (yargs) => yargs,
+        async (argv) => cmdHandler(networkStatus, argv)
+      ),
+  () => {
     yargs.showHelp()
     return process.exit()
   }
