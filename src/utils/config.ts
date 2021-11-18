@@ -101,6 +101,58 @@ export const config: CliConfig = {
     creatorPassword: process.env.CREATOR_PASSWORD,
     minterKeyfile: process.env.MINTER_KEYFILE,
     minterPassword: process.env.MINTER_PASSWORD
+  } as ConfigEntry,
+  defiMumbai: {
+    nvm: {
+      faucetUri: process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
+      metadataUri:
+        process.env.METADATA_URL || 'https://metadata.mumbai.nevermined.rocks',
+      gatewayUri: process.env.GATEWAY_URL || 'https://gateway.mumbai.nevermined.rocks',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
+      nodeUri: `${process.env.NODE_URL}`,
+      verbose: LogLevel.Error
+    } as Config,
+    nativeToken: 'MATIC',
+    etherscanUrl: 'https://mumbai.etherscan.io',
+    erc20TokenAddress:
+      process.env.TOKEN_ADDRESS ||
+      // MATIC
+      '0x0000000000000000000000000000000000000000',
+    seed: process.env.MNEMONIC,
+    buyerKeyfile: process.env.BUYER_KEYFILE,
+    buyerPassword: process.env.BUYER_PASSWORD,
+    creatorKeyfile: process.env.CREATOR_KEYFILE,
+    creatorPassword: process.env.CREATOR_PASSWORD,
+    minterKeyfile: process.env.MINTER_KEYFILE,
+    minterPassword: process.env.MINTER_PASSWORD
+  } as ConfigEntry,
+  autonomiesMumbai: {
+    nvm: {
+      faucetUri: process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
+      metadataUri:
+        process.env.METADATA_URL || 'https://metadata.autonomies.mumbai.nevermined.rocks',
+      gatewayUri: process.env.GATEWAY_URL || 'https://gateway.autonomies.mumbai.nevermined.rocks',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b',
+      nodeUri: `${process.env.NODE_URL}`,
+      verbose: LogLevel.Error
+    } as Config,
+    nativeToken: 'MATIC',
+    etherscanUrl: 'https://mumbai.etherscan.io',
+    erc20TokenAddress:
+      process.env.TOKEN_ADDRESS ||
+      // MATIC
+      '0x0000000000000000000000000000000000000000',
+    seed: process.env.MNEMONIC,
+    buyerKeyfile: process.env.BUYER_KEYFILE,
+    buyerPassword: process.env.BUYER_PASSWORD,
+    creatorKeyfile: process.env.CREATOR_KEYFILE,
+    creatorPassword: process.env.CREATOR_PASSWORD,
+    minterKeyfile: process.env.MINTER_KEYFILE,
+    minterPassword: process.env.MINTER_PASSWORD
   } as ConfigEntry
 }
 
