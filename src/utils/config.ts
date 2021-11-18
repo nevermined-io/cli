@@ -19,12 +19,8 @@ export interface ConfigEntry {
   nftTokenAddress: string
   erc20TokenAddress: string
   seed?: string
-  buyerKeyfile?: string
-  buyerPassword?: string
-  creatorKeyfile?: string
-  creatorPassword?: string
-  minterKeyfile?: string
-  minterPassword?: string
+  keyfilePath?: string
+  keyfilePassword?: string
 }
 
 configure({
@@ -69,12 +65,8 @@ export const config: CliConfig = {
       // WETH
       '0xc778417E063141139Fce010982780140Aa0cD5Ab',
     seed: process.env.MNEMONIC,
-    buyerKeyfile: process.env.BUYER_KEYFILE,
-    buyerPassword: process.env.BUYER_PASSWORD,
-    creatorKeyfile: process.env.CREATOR_KEYFILE,
-    creatorPassword: process.env.CREATOR_PASSWORD,
-    minterKeyfile: process.env.MINTER_KEYFILE,
-    minterPassword: process.env.MINTER_PASSWORD
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD
   } as ConfigEntry,
   spree: {
     nvm: {
@@ -95,12 +87,8 @@ export const config: CliConfig = {
       // ETH
       '0x0000000000000000000000000000000000000000',
     seed: process.env.MNEMONIC,
-    buyerKeyfile: process.env.BUYER_KEYFILE,
-    buyerPassword: process.env.BUYER_PASSWORD,
-    creatorKeyfile: process.env.CREATOR_KEYFILE,
-    creatorPassword: process.env.CREATOR_PASSWORD,
-    minterKeyfile: process.env.MINTER_KEYFILE,
-    minterPassword: process.env.MINTER_PASSWORD
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD
   } as ConfigEntry,
   defiMumbai: {
     nvm: {
@@ -121,12 +109,8 @@ export const config: CliConfig = {
       // MATIC
       '0x0000000000000000000000000000000000000000',
     seed: process.env.MNEMONIC,
-    buyerKeyfile: process.env.BUYER_KEYFILE,
-    buyerPassword: process.env.BUYER_PASSWORD,
-    creatorKeyfile: process.env.CREATOR_KEYFILE,
-    creatorPassword: process.env.CREATOR_PASSWORD,
-    minterKeyfile: process.env.MINTER_KEYFILE,
-    minterPassword: process.env.MINTER_PASSWORD
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD
   } as ConfigEntry,
   autonomiesMumbai: {
     nvm: {
@@ -147,12 +131,8 @@ export const config: CliConfig = {
       // MATIC
       '0x0000000000000000000000000000000000000000',
     seed: process.env.MNEMONIC,
-    buyerKeyfile: process.env.BUYER_KEYFILE,
-    buyerPassword: process.env.BUYER_PASSWORD,
-    creatorKeyfile: process.env.CREATOR_KEYFILE,
-    creatorPassword: process.env.CREATOR_PASSWORD,
-    minterKeyfile: process.env.MINTER_KEYFILE,
-    minterPassword: process.env.MINTER_PASSWORD
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD
   } as ConfigEntry
 }
 
@@ -169,12 +149,8 @@ export function getConfig(network: string): ConfigEntry {
 
   if (!process.env.MNEMONIC) {
     if (
-      !process.env.CREATOR_KEYFILE ||
-      !process.env.CREATOR_PASSWORD ||
-      !process.env.BUYER_KEYFILE ||
-      !process.env.BUYER_PASSWORD ||
-      !process.env.MINTER_KEYFILE ||
-      !process.env.MINTER_PASSWORD
+      !process.env.KEYFILE_PATH ||
+      !process.env.KEYFILE_PASSWORD
     ) {
       throw new Error(
         "ERROR: 'MNEMONIC' or 'KEYFILE' not set in environment! Please see README.md for details."
@@ -185,16 +161,8 @@ export function getConfig(network: string): ConfigEntry {
   let hdWalletProvider: HDWalletProvider
   if (!process.env.MNEMONIC) {
     hdWalletProvider = new HDWalletProvider(
-      [
-        getPrivateKey(
-          process.env.CREATOR_KEYFILE!,
-          process.env.CREATOR_PASSWORD!
-        ),
-        getPrivateKey(
-          process.env.MINTER_KEYFILE!,
-          process.env.MINTER_PASSWORD!
-        ),
-        getPrivateKey(process.env.BUYER_KEYFILE!, process.env.BUYER_PASSWORD!)
+      [        
+        getPrivateKey(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!)
       ],
       config[network].nvm.nodeUri
     )
