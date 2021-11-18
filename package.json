@@ -17,7 +17,7 @@
     "test:watch": "jest --watch --rootDir test"
   },
   "bin": {
-    "nvm": "./dist/src/index.js"
+    "ncli": "./dist/src/index.js"
   },
   "dependencies": {
     "@nevermined-io/nevermined-sdk-js": "^0.14.1",

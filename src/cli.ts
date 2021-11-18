@@ -1,7 +1,7 @@
 import yargs, { config } from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import {
-  // Accounts 
+  // Accounts
   accountsFund,
   accountsNew,
   accountsList,
@@ -13,7 +13,7 @@ import {
   burnNft,
   orderNft,
   showNft,
-  transferNft,  
+  transferNft,
   // Assets
   registerAsset,
   resolveDID,
@@ -25,7 +25,7 @@ import {
   networkStatus,
   networkList,
   // Agreements
-  listAgreements,  
+  listAgreements,
   showAgreement,
   // Provenance
   registerProvenance,
@@ -42,7 +42,7 @@ const cmdHandler = async (cmd: Function, argv: any) => {
 
   if (verbose) {
     logger.level = 'debug'
-  }  
+  }
 
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
   logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
@@ -95,7 +95,7 @@ y.command(
         'List all the pre-configured Nevermined networks',
         (yargs) => yargs,
         async (argv) => cmdHandler(networkList, argv)
-      )      
+      )
       .command(
         'status',
         'List all the information about a Nevermined deployment',

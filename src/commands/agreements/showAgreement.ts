@@ -1,4 +1,9 @@
-import { StatusCodes, getConfig, loadNevermined, ConfigEntry } from '../../utils'
+import {
+  StatusCodes,
+  getConfig,
+  loadNevermined,
+  ConfigEntry
+} from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 
@@ -7,7 +12,6 @@ export const showAgreement = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-
   const { verbose, network, agreementId } = argv
 
   const { nvm } = await loadNevermined(config, network, verbose)

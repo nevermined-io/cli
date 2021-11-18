@@ -64,8 +64,8 @@ export const baseCommands = {
   },
   network: {
     status: `${BASE_COMMAND} ${VERBOSE} network status `,
-    list: `${BASE_COMMAND} ${VERBOSE} network list `,
-  },  
+    list: `${BASE_COMMAND} ${VERBOSE} network list `
+  },
   agreements: {
     list: `${BASE_COMMAND} ${VERBOSE} agreements list `,
     show: `${BASE_COMMAND} ${VERBOSE} agreements show `

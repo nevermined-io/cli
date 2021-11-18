@@ -7,17 +7,12 @@ export const networkList = async (
   configEntry: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-
   const { verbose, network } = argv
 
-  logger.info(
-    chalk.dim(
-      `Nevermined pre-configured networks:`
-    )
-  )
+  logger.info(chalk.dim(`Nevermined pre-configured networks:`))
 
   const networks = Object.keys(config)
-  networks.forEach((_key:string) => {
+  networks.forEach((_key: string) => {
     logger.info(chalk.dim(` ${chalk.whiteBright(_key)}:`))
     logger.info(chalk.dim(`   Gateway: ${config[_key].nvm.gatewayUri}`))
     logger.info(chalk.dim(`   Metadata API: ${config[_key].nvm.metadataUri}`))

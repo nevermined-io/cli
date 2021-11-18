@@ -6,17 +6,12 @@ import {
   printTokenBanner
 } from '../../utils'
 import chalk from 'chalk'
-import {
-  File,
-  MetaData,
-  MetaDataMain,
-  Nevermined
-} from '@nevermined-io/nevermined-sdk-js'
+import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import readline from 'readline'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import fs from 'fs'
-import { ConfigEntry, logger } from '../../utils/config'
+import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
 const rl = readline.createInterface({

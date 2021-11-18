@@ -1,16 +1,11 @@
 import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
-import {
-  parseDIDFromNewAsset,
-  parseListAgreements,
-  parseServiceAgreementId
-} from '../helpers/StdoutParser'
 const { execSync } = require('child_process')
 
 describe('Status e2e Testing', () => {
   let did = ''
   let stdoutList = ''
 
-  test('Get a list of the available pre-configured networks', async () => {    
+  test('Get a list of the available pre-configured networks', async () => {
     const command = `${baseCommands.network.list} `
     const stdout = execSync(command, execOpts)
 
@@ -28,5 +23,4 @@ describe('Status e2e Testing', () => {
     expect(stdout.includes(`Loading information from network ${network}`))
     expect(stdout.includes(`Status: Working`))
   })
-
 })
