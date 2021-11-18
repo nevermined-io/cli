@@ -2,11 +2,9 @@ import { StatusCodes, config, loadNevermined, ConfigEntry } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import {
-  PlatformTechStatus,
-  Versions
+  PlatformTechStatus
 } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Versions'
-import { generateIntantiableConfigFromConfig } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+
 
 export const networkStatus = async (
   argv: any,
@@ -17,7 +15,6 @@ export const networkStatus = async (
 
   const { nvm } = await loadNevermined(configEntry, network, verbose)
 
-  // const instance = await Nevermined.getInstance(configEntry.nvm)
   const platformVersions = await nvm.versions.get()
 
   if (!nvm.keeper) {
