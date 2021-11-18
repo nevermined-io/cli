@@ -1,6 +1,27 @@
-# Nevermined CLI
+[![banner](https://raw.githubusercontent.com/nevermined-io/assets/main/images/logo/banner_logo.png)](https://nevermined.io)
 
-Nevermined Command Line Interface
+# Nevermined Command Line Interface (CLI)
+
+> Command Line Interface for interacting with Nevermined ecosystems
+> [nevermined.io](https://nevermined.io)
+
+![CI Build](https://github.com/nevermined-io/cli/workflows/Build/badge.svg)
+
+---
+
+## Table of Contents
+
+   * [Nevermined Command Line Interface (CLI)](#nevermined-command-line-interface-cli)
+      * [Table of Contents](#table-of-contents)
+      * [Installation](#installation)
+      * [Usage](#usage)
+      * [Environment variables](#environment-variables)
+      * [Commands](#commands)
+      * [Networks](#networks)
+      * [License](#license)
+
+---
+
 
 ## Installation
 
@@ -10,6 +31,12 @@ npm install -g @nevermined-io/cli
 or
 
 yarn global add @nevermined-io/cli
+```
+
+After doing that you should have available in your system the `ncli` tool.
+
+```
+$ ncli --help
 ```
 
 ## Usage
@@ -25,14 +52,8 @@ export MNEMONIC="<your 12 words seed phrase>"
 - Option 2: Use keyfiles
 
 ```
-export CREATOR_KEYFILE="<path to keyfile>"
-export CREATOR_PASSWORD="<keyfile password>"
-
-export BUYER_KEYFILE="<path to keyfile>"
-export BUYER_PASSWORD="<keyfile password>"
-
-export MINTER_KEYFILE="<path to keyfile>"
-export MINTER_PASSWORD="<keyfile password>"
+export KEYFILE_PATH="<path to keyfile>"
+export KEYFILE_PASSWORD="<keyfile password>"
 ```
 
 ---
@@ -63,29 +84,78 @@ export TOKEN_ADDRESS=0x0
 
 
 ```
-$nvm --help
-
-usage: nvm <command>
+$ ncli
+usage: ncli <command>
 
 Commands:
-  nvm accounts                                                      Accounts functions
-  nvm accounts list                                                 List all accounts
-  nvm accounts fund account                                         Funds an account on a test net
-  nvm agreements                                                    Agreements functions
-  nvm agreements list did                                           Lists all agreements for given DID
-  nvm agreements show agreementId                                   Shows details about an agreement
-  nvm nfts                                                          NFTs functions
-  nvm nfts show did                                                 Retrieves information about an NFT
-  nvm nfts create [creator] [metadata]                              Creates an NFT
-  nvm nfts mint did [minter] [uri]                                  Mints an NFT
-  nvm nfts order did [buyer]                                        Orders an NFT by paying for it to the escrow
-  nvm nfts transfer agreementId [seller]                            Transfers the NFT to the buyer and the funds from the escrow to the seller
-  nvm nfts download did [consumer] [destination]                    Downloads the data of an NFT
-  nvm nfts search [search]                                          Searches for NFTs
+  ncli network     Retrieve information about Nevermined deployments
+  ncli accounts    Management of accounts and the funds associted to them
+  ncli assets      Allows to register and manage assets in a Nevermined network
+  ncli agreements  Get information about the Service Execution Agreements
+  ncli provenance  Provenance functions
+  ncli nfts721     Create and manage NFTs (ERC-721) attached to Nevermined assets
+  ncli nfts1155    Create and manage NFTs (ERC-1155) attached to Nevermined assets
 
 Options:
-      --help     Show help                                              [boolean]
-      --version  Show version number                                    [boolean]
-  -v, --verbose  Run with verbose logging                               [boolean]
-  -n, --network  the network to use                 [string] [default: "mainnet"]
+      --help     Show help                                                                                                                                                    [boolean]
+      --version  Show version number                                                                                                                                          [boolean]
+  -v, --verbose  Run with verbose logging                                                                                                                                     [boolean]
+  -n, --network  The network to use                                                                                                                         [string] [default: "spree"]
+  -a, --account  The account to use                                                                                                                              [string] [default: ""]
 ```
+
+## Networks
+
+The CLI has pre-configured some Nevermined environments. You can check what is pre-configured using the `network list` command:
+
+```
+$ ncli network list
+Nevermined pre-configured networks:
+ rinkeby:
+   Gateway: https://gateway.rinkeby.nevermined.rocks
+   Metadata API: https://metadata.rinkeby.nevermined.rocks
+   Faucet: https://faucet.rinkeby.nevermined.rocks
+
+
+ spree:
+   Gateway: http://localhost:8030
+   Metadata API: http://nevermined-metadata:5000
+   Faucet: http://localhost:3001
+
+
+ defiMumbai:
+   Gateway: https://gateway.mumbai.nevermined.rocks
+   Metadata API: https://metadata.mumbai.nevermined.rocks
+   Faucet: https://faucet.mumbai.nevermined.rocks
+
+
+ autonomiesMumbai:
+   Gateway: https://gateway.autonomies.mumbai.nevermined.rocks
+   Metadata API: https://metadata.autonomies.mumbai.nevermined.rocks
+   Faucet: https://faucet.mumbai.nevermined.rocks
+
+```
+
+A part of these networks you can connect to any other network using the environment variables described above.
+
+When you want to connect and interact with a different network of the default (`spree`), make sure you have exported the `NODE_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
+
+
+## License
+
+```
+Copyright 2021 Keyko GmbH
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+

@@ -19,12 +19,8 @@ export interface ConfigEntry {
   nftTokenAddress: string
   erc20TokenAddress: string
   seed?: string
-  buyerKeyfile?: string
-  buyerPassword?: string
-  creatorKeyfile?: string
-  creatorPassword?: string
-  minterKeyfile?: string
-  minterPassword?: string
+  keyfilePath?: string
+  keyfilePassword?: string
 }
 
 configure({
@@ -45,7 +41,7 @@ configure({
 
 export const logger = getLogger()
 
-const config: CliConfig = {
+export const config: CliConfig = {
   rinkeby: {
     nvm: {
       // default nvm rinkeby faucet
@@ -69,12 +65,8 @@ const config: CliConfig = {
       // WETH
       '0xc778417E063141139Fce010982780140Aa0cD5Ab',
     seed: process.env.MNEMONIC,
-    buyerKeyfile: process.env.BUYER_KEYFILE,
-    buyerPassword: process.env.BUYER_PASSWORD,
-    creatorKeyfile: process.env.CREATOR_KEYFILE,
-    creatorPassword: process.env.CREATOR_PASSWORD,
-    minterKeyfile: process.env.MINTER_KEYFILE,
-    minterPassword: process.env.MINTER_PASSWORD
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD
   } as ConfigEntry,
   spree: {
     nvm: {
@@ -95,12 +87,52 @@ const config: CliConfig = {
       // ETH
       '0x0000000000000000000000000000000000000000',
     seed: process.env.MNEMONIC,
-    buyerKeyfile: process.env.BUYER_KEYFILE,
-    buyerPassword: process.env.BUYER_PASSWORD,
-    creatorKeyfile: process.env.CREATOR_KEYFILE,
-    creatorPassword: process.env.CREATOR_PASSWORD,
-    minterKeyfile: process.env.MINTER_KEYFILE,
-    minterPassword: process.env.MINTER_PASSWORD
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD
+  } as ConfigEntry,
+  defiMumbai: {
+    nvm: {
+      faucetUri: process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
+      metadataUri:
+        process.env.METADATA_URL || 'https://metadata.mumbai.nevermined.rocks',
+      gatewayUri: process.env.GATEWAY_URL || 'https://gateway.mumbai.nevermined.rocks',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
+      nodeUri: `${process.env.NODE_URL}`,
+      verbose: LogLevel.Error
+    } as Config,
+    nativeToken: 'MATIC',
+    etherscanUrl: 'https://mumbai.etherscan.io',
+    erc20TokenAddress:
+      process.env.TOKEN_ADDRESS ||
+      // MATIC
+      '0x0000000000000000000000000000000000000000',
+    seed: process.env.MNEMONIC,
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD
+  } as ConfigEntry,
+  autonomiesMumbai: {
+    nvm: {
+      faucetUri: process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
+      metadataUri:
+        process.env.METADATA_URL || 'https://metadata.autonomies.mumbai.nevermined.rocks',
+      gatewayUri: process.env.GATEWAY_URL || 'https://gateway.autonomies.mumbai.nevermined.rocks',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b',
+      nodeUri: `${process.env.NODE_URL}`,
+      verbose: LogLevel.Error
+    } as Config,
+    nativeToken: 'MATIC',
+    etherscanUrl: 'https://mumbai.etherscan.io',
+    erc20TokenAddress:
+      process.env.TOKEN_ADDRESS ||
+      // MATIC
+      '0x0000000000000000000000000000000000000000',
+    seed: process.env.MNEMONIC,
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD
   } as ConfigEntry
 }
 
@@ -117,12 +149,8 @@ export function getConfig(network: string): ConfigEntry {
 
   if (!process.env.MNEMONIC) {
     if (
-      !process.env.CREATOR_KEYFILE ||
-      !process.env.CREATOR_PASSWORD ||
-      !process.env.BUYER_KEYFILE ||
-      !process.env.BUYER_PASSWORD ||
-      !process.env.MINTER_KEYFILE ||
-      !process.env.MINTER_PASSWORD
+      !process.env.KEYFILE_PATH ||
+      !process.env.KEYFILE_PASSWORD
     ) {
       throw new Error(
         "ERROR: 'MNEMONIC' or 'KEYFILE' not set in environment! Please see README.md for details."
@@ -133,16 +161,8 @@ export function getConfig(network: string): ConfigEntry {
   let hdWalletProvider: HDWalletProvider
   if (!process.env.MNEMONIC) {
     hdWalletProvider = new HDWalletProvider(
-      [
-        getPrivateKey(
-          process.env.CREATOR_KEYFILE!,
-          process.env.CREATOR_PASSWORD!
-        ),
-        getPrivateKey(
-          process.env.MINTER_KEYFILE!,
-          process.env.MINTER_PASSWORD!
-        ),
-        getPrivateKey(process.env.BUYER_KEYFILE!, process.env.BUYER_PASSWORD!)
+      [        
+        getPrivateKey(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!)
       ],
       config[network].nvm.nodeUri
     )

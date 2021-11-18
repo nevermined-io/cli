@@ -25,6 +25,10 @@ export * from './accounts/fund'
 export * from './agreements/showAgreement'
 export * from './agreements/listAgreements'
 
+// network
+export * from './network/networkStatus'
+export * from './network/networkList'
+
 // provenance
 export * from './provenance/provenanceHistory'
 export * from './provenance/provenanceInspect'
