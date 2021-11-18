@@ -1,26 +1,17 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, findAccountOrFirst, loadNevermined } from '../../utils'
 import chalk from 'chalk'
-import readline from 'readline'
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
 export const registerProvenance = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, account, method } = argv
-  const { nvm } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
 
   logger.info(chalk.dim(`Registering provenance activity (${method}) ...`))
 

@@ -34,8 +34,8 @@ import {
 } from './commands'
 import chalk from 'chalk'
 
-import { getConfig, logger } from '../src/utils'
-import { ProvenanceMethods } from './utils/enums'
+import { getConfig, loadNevermined, logger } from '../src/utils'
+import { ProvenanceMethods, StatusCodes } from './utils/enums'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
@@ -48,8 +48,11 @@ const cmdHandler = async (cmd: Function, argv: any) => {
   logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
 
   const config = getConfig(network as string)
+  const nvm = await loadNevermined(config, network, verbose)
 
-  return process.exit(await cmd(argv, config, logger))
+  if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
+
+  return process.exit(await cmd(nvm, argv, config, logger))
 }
 
 const y = yargs(hideBin(process.argv))

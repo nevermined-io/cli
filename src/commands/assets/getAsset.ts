@@ -1,3 +1,4 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, loadNevermined, findAccountOrFirst } from '../../utils'
 import chalk from 'chalk'
 
@@ -11,15 +12,12 @@ const rl = readline.createInterface({
 })
 
 export const getAsset = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, did, account } = argv
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
 
   let agreementId
   const accounts = await nvm.accounts.list()

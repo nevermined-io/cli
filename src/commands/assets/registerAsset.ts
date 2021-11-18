@@ -1,35 +1,28 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
   findAccountOrFirst,
   loadNevermined,
-  printTokenBanner
+  printTokenBanner,
+  loadToken
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
-import readline from 'readline'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import fs from 'fs'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
 export const registerAsset = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, account, metadata, assetType } = argv
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
+  const token = await loadToken(nvm, config, verbose)
 
   if (verbose) {
     printTokenBanner(token)

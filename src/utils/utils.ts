@@ -247,7 +247,7 @@ export const loadNevermined = async (
   config: ConfigEntry,
   network: string,
   verbose = false
-): Promise<{ token: Token | null; nvm: Nevermined }> => {
+): Promise<Nevermined> => {
   const nvm = await Nevermined.getInstance({
     ...config.nvm,
     verbose: verbose ? verbose : config.nvm.verbose
@@ -259,6 +259,14 @@ export const loadNevermined = async (
     )
   }
 
+  return nvm
+}
+
+export const loadToken = async (
+  nvm: Nevermined,
+  config: ConfigEntry,
+  verbose: boolean
+): Promise<Token | null> => {
   // default to no token
   let token: Token | null = null
 
@@ -302,9 +310,5 @@ export const loadNevermined = async (
       await printErc20TokenBanner(token)
     }
   }
-
-  return {
-    nvm,
-    token
-  }
+  return token
 }

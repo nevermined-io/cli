@@ -1,13 +1,10 @@
-import {
-  StatusCodes,
-  findAccountOrFirst,
-  loadNevermined,
-  ConfigEntry
-} from '../../utils'
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { StatusCodes, findAccountOrFirst, ConfigEntry } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 
 export const downloadNft = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -18,12 +15,6 @@ export const downloadNft = async (
     chalk.dim(`Downloading NFT associated to ${chalk.whiteBright(did)}`)
   )
   logger.info(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
-
-  const { nvm } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
 
   const accounts = await nvm.accounts.list()
   const consumerAccount = findAccountOrFirst(accounts, account)

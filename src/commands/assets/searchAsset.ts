@@ -1,25 +1,16 @@
-import { StatusCodes, loadNevermined, printSearchResult } from '../../utils'
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { StatusCodes, printSearchResult } from '../../utils'
 import chalk from 'chalk'
-
-import readline from 'readline'
-import { ConfigEntry, logger } from '../../utils/config'
+import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
 export const searchAsset = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, query } = argv
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
 
   logger.info(chalk.dim(`Search using query: ${query}`))
 
