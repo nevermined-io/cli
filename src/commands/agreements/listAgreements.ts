@@ -12,11 +12,10 @@ export const listAgreements = async (
 ): Promise<number> => {
   const { verbose, network, did } = argv
 
-  const ddo = await nvm.assets.resolve(did)
-
   logger.info(
-    chalk.dim(`Loading agreements for DID: '${chalk.whiteBright(ddo.id)}'\n`)
+    chalk.dim(`Loading agreements for DID: '${chalk.whiteBright(did)}'\n`)
   )
+  const ddo = await nvm.assets.resolve(did)
 
   const agreements = await nvm.agreements.getAgreements(ddo.shortId())
 
