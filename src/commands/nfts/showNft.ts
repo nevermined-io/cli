@@ -148,7 +148,7 @@ export const showNft = async (
     const storedDIDRegister: any = await nvm.keeper.didRegistry.getDIDRegister(
       did
     )
-    const erc1155Balance = await nvm.keeper.didRegistry.balance(
+    const erc1155Balance = await nvm.keeper.nftUpgradeable.balance(
       userAccount.getId(),
       did
     )

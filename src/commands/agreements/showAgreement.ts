@@ -30,7 +30,10 @@ export const showAgreement = async (
 
   const ddo = await nvm.assets.resolve(agreementData.did)
 
-  const contractName = await getContractNameFromAddress(nvm, agreementData.templateId)
+  const contractName = await getContractNameFromAddress(
+    nvm,
+    agreementData.templateId
+  )
 
   logger.info(chalk.dim(`DID: ${chalk.whiteBright(ddo.id)}`))
 
@@ -44,32 +47,55 @@ export const showAgreement = async (
     chalk.dim(`Access Provider: ${chalk.whiteBright(accessProvider)}`)
   )
   logger.info(
-    chalk.dim(`Template Id: ${chalk.whiteBright(contractName + ' - ' + agreementData.templateId)}`)
+    chalk.dim(
+      `Template Id: ${chalk.whiteBright(
+        contractName + ' - ' + agreementData.templateId
+      )}`
+    )
   )
   logger.info(
-    chalk.dim(`Last Updated By: ${chalk.whiteBright(agreementData.lastUpdatedBy)}`)
+    chalk.dim(
+      `Last Updated By: ${chalk.whiteBright(agreementData.lastUpdatedBy)}`
+    )
   )
   logger.info(
-    chalk.dim(`In which block number was updated: ${chalk.whiteBright(agreementData.blockNumberUpdated)}`)
+    chalk.dim(
+      `In which block number was updated: ${chalk.whiteBright(
+        agreementData.blockNumberUpdated
+      )}`
+    )
   )
 
   if (contractName === 'NFTAccessTemplate')
-    await nvm.keeper.templates.nftAccessTemplate.printAgreementStatus(agreementId)
+    await nvm.keeper.templates.nftAccessTemplate.printAgreementStatus(
+      agreementId
+    )
   else if (contractName === 'NFTSalesTemplate')
-    await nvm.keeper.templates.nftSalesTemplate.printAgreementStatus(agreementId)
+    await nvm.keeper.templates.nftSalesTemplate.printAgreementStatus(
+      agreementId
+    )
   else if (contractName === 'AccessTemplate')
     await nvm.keeper.templates.accessTemplate.printAgreementStatus(agreementId)
   else if (contractName === 'AccessProofTemplate')
-    await nvm.keeper.templates.accessProofTemplate.printAgreementStatus(agreementId)
+    await nvm.keeper.templates.accessProofTemplate.printAgreementStatus(
+      agreementId
+    )
   else if (contractName === 'DIDSalesTemplate')
-    await nvm.keeper.templates.didSalesTemplate.printAgreementStatus(agreementId)
+    await nvm.keeper.templates.didSalesTemplate.printAgreementStatus(
+      agreementId
+    )
   else if (contractName === 'EscrowComputeExecutionTemplate')
-    await nvm.keeper.templates.escrowComputeExecutionTemplate.printAgreementStatus(agreementId)
+    await nvm.keeper.templates.escrowComputeExecutionTemplate.printAgreementStatus(
+      agreementId
+    )
   else if (contractName === 'NFT721AccessTemplate')
-    await nvm.keeper.templates.nft721AccessTemplate.printAgreementStatus(agreementId)
+    await nvm.keeper.templates.nft721AccessTemplate.printAgreementStatus(
+      agreementId
+    )
   else if (contractName === 'NFT721SalesTemplate')
-    await nvm.keeper.templates.nft721SalesTemplate.printAgreementStatus(agreementId)
-
+    await nvm.keeper.templates.nft721SalesTemplate.printAgreementStatus(
+      agreementId
+    )
 
   logger.info('\n')
 

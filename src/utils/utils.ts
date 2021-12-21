@@ -243,22 +243,23 @@ export const printErc20TokenBanner = async (token: Token) => {
   )
 }
 
-
-export const getContractNameFromAddress = async(
-  nvm: Nevermined, 
-  contractAddress: string): Promise<string | undefined> => {
-
+export const getContractNameFromAddress = async (
+  nvm: Nevermined,
+  contractAddress: string
+): Promise<string | undefined> => {
   const platformVersions = await nvm.versions.get()
-  
+
   let contractName = undefined
   Object.keys(platformVersions.sdk.contracts || {}).forEach((_name) => {
-    if (contractAddress.toLowerCase() === platformVersions.sdk.contracts![_name].toLowerCase())    {
+    if (
+      contractAddress.toLowerCase() ===
+      platformVersions.sdk.contracts![_name].toLowerCase()
+    ) {
       contractName = _name
-    }      
-  }) 
+    }
+  })
   return contractName
 }
-
 
 export const loadNevermined = async (
   config: ConfigEntry,
