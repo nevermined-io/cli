@@ -21,8 +21,8 @@ export interface ConfigEntry {
   seed?: string
   keyfilePath?: string
   keyfilePassword?: string
-  gasMultipler?: number
-  gasPriceMultipler?: number
+  gasMultiplier?: number
+  gasPriceMultiplier?: number
 }
 
 configure({
@@ -69,8 +69,8 @@ export const config: CliConfig = {
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
     keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultipler: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultipler: process.env.GAS_PRICE || 0
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry,
   spree: {
     nvm: {
@@ -93,8 +93,8 @@ export const config: CliConfig = {
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
     keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultipler: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultipler: process.env.GAS_PRICE || 0
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry,
   defiMumbai: {
     nvm: {
@@ -119,8 +119,8 @@ export const config: CliConfig = {
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
     keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultipler: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultipler: process.env.GAS_PRICE || 0
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry,
   autonomiesMumbai: {
     nvm: {
@@ -139,7 +139,7 @@ export const config: CliConfig = {
       verbose: LogLevel.Error
     } as Config,
     nativeToken: 'MATIC',
-    etherscanUrl: 'https://explorer-mumbai.maticvigil.com',
+    etherscanUrl: 'https://explorer-mumbai.maticvigil.com/',
     erc20TokenAddress:
       process.env.TOKEN_ADDRESS ||
       // MATIC
@@ -147,8 +147,8 @@ export const config: CliConfig = {
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
     keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultipler: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultipler: process.env.GAS_PRICE || 0
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry
 }
 

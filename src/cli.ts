@@ -44,11 +44,14 @@ const cmdHandler = async (cmd: Function, argv: any) => {
     logger.level = 'debug'
   }
 
-  logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
-  logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
-
   const config = getConfig(network as string)
   const nvm = await loadNevermined(config, network, verbose)
+
+  logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
+  logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
+  
+  logger.debug(chalk.dim(`Gas Multiplier: '${chalk.whiteBright(config.gasMultiplier)}'\n`))
+  logger.debug(chalk.dim(`Gas Price Multiplier: '${chalk.whiteBright(config.gasPriceMultiplier)}'\n`))
 
   if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
 
