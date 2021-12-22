@@ -1,4 +1,5 @@
 
+import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
@@ -54,7 +55,4 @@ describe('Provenance e2e Testing', () => {
     expect(historyStdout.includes(did))
   })
 })
-function generateId() {
-  throw new Error('Function not implemented.')
-}
 
