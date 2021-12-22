@@ -1,7 +1,7 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   findAccountOrFirst,
-  loadNevermined,
   loadNftContract,
   printNftTokenBanner,
   ConfigEntry,
@@ -12,16 +12,12 @@ import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 
 export const mintNft = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, did, account, uri } = argv
-  const { nvm } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
 
   logger.info(chalk.dim(`Minting NFT: '${chalk.whiteBright(did)}'`))
 

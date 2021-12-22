@@ -1,3 +1,4 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   findAccountOrFirst,
@@ -11,6 +12,7 @@ import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3
 import * as fs from 'fs'
 
 export const deployNft = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -18,12 +20,6 @@ export const deployNft = async (
   const { verbose, network, account, abiPath } = argv
 
   logger.info(chalk.dim('Deploying NFT (ERC-721) contract...'))
-
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
 
   const web3 = Web3Provider.getWeb3(config.nvm)
 

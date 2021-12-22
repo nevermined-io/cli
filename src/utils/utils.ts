@@ -243,28 +243,29 @@ export const printErc20TokenBanner = async (token: Token) => {
   )
 }
 
-
-export const getContractNameFromAddress = async(
-  nvm: Nevermined, 
-  contractAddress: string): Promise<string | undefined> => {
-
+export const getContractNameFromAddress = async (
+  nvm: Nevermined,
+  contractAddress: string
+): Promise<string | undefined> => {
   const platformVersions = await nvm.versions.get()
-  
+
   let contractName = undefined
   Object.keys(platformVersions.sdk.contracts || {}).forEach((_name) => {
-    if (contractAddress.toLowerCase() === platformVersions.sdk.contracts![_name].toLowerCase())    {
+    if (
+      contractAddress.toLowerCase() ===
+      platformVersions.sdk.contracts![_name].toLowerCase()
+    ) {
       contractName = _name
-    }      
-  }) 
+    }
+  })
   return contractName
 }
-
 
 export const loadNevermined = async (
   config: ConfigEntry,
   network: string,
   verbose = false
-): Promise<{ token: Token | null; nvm: Nevermined }> => {
+): Promise<Nevermined> => {
   const nvm = await Nevermined.getInstance({
     ...config.nvm,
     verbose: verbose ? verbose : config.nvm.verbose
@@ -275,7 +276,15 @@ export const loadNevermined = async (
       chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
     )
   }
+  
+  return nvm
+}
 
+export const loadToken = async (
+  nvm: Nevermined,
+  config: ConfigEntry,
+  verbose: boolean
+): Promise<Token | null> => {
   // default to no token
   let token: Token | null = null
 
@@ -319,9 +328,5 @@ export const loadNevermined = async (
       await printErc20TokenBanner(token)
     }
   }
-
-  return {
-    nvm,
-    token
-  }
+  return token
 }

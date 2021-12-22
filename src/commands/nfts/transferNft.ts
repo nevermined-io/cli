@@ -1,9 +1,10 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
   findAccountOrFirst,
-  loadNevermined,
-  ConfigEntry
+  ConfigEntry,
+  loadToken
 } from '../../utils'
 import chalk from 'chalk'
 import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -11,17 +12,14 @@ import { Logger } from 'log4js'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
 
 export const transferNft = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, agreementId, account } = argv
 
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
+  const token = await loadToken(nvm, config, verbose)
 
   logger.debug(
     chalk.dim(`Executing agreement: '${chalk.whiteBright(agreementId)}'`)
@@ -70,7 +68,6 @@ export const transferNft = async (
     await nvm.nfts.release721Rewards(agreementId, ddo.id, sellerAccount)
   } else {
     // ERC-1155
-
     logger.info(
       chalk.dim(
         `Transferring NFT (ERC-1155) '${chalk.whiteBright(ddo.id)}' ...`

@@ -1,4 +1,4 @@
-import { Account } from '@nevermined-io/nevermined-sdk-js'
+import { Nevermined, Account } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { Contract } from 'web3-eth-contract'
@@ -9,20 +9,20 @@ import {
   Constants,
   loadNevermined,
   loadNftContract,
+  loadToken,
   printNftTokenBanner,
   StatusCodes
 } from '../../utils'
 
 export const accountsList = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, nftTokenAddress, account } = argv
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
+
+  const token = await loadToken(nvm, config, verbose)
 
   logger.debug(chalk.dim('Loading account/s ...'))
 

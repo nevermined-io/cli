@@ -1,25 +1,18 @@
-import { StatusCodes, config, loadNevermined, ConfigEntry } from '../../utils'
-import chalk from 'chalk'
+import { StatusCodes, ConfigEntry } from '../../utils'
 import { Logger } from 'log4js'
-import {
-  PlatformTechStatus
-} from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Versions'
-
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { PlatformTechStatus } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Versions'
+import chalk from 'chalk'
 
 export const networkStatus = async (
+  nvm: Nevermined,
   argv: any,
   configEntry: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network } = argv
 
-  const { nvm } = await loadNevermined(configEntry, network, verbose)
-
   const platformVersions = await nvm.versions.get()
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
 
   logger.info(
     chalk.dim(

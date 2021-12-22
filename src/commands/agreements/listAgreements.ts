@@ -1,25 +1,16 @@
-import {
-  StatusCodes,
-  getConfig,
-  loadNevermined,
-  ConfigEntry
-} from '../../utils'
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { StatusCodes, ConfigEntry } from '../../utils'
 import { ConditionState } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 
 export const listAgreements = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, did } = argv
-
-  const { nvm } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
 
   logger.info(
     chalk.dim(`Loading agreements for DID: '${chalk.whiteBright(did)}'\n`)

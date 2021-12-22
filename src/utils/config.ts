@@ -21,6 +21,8 @@ export interface ConfigEntry {
   seed?: string
   keyfilePath?: string
   keyfilePassword?: string
+  gasMultiplier?: number
+  gasPriceMultiplier?: number
 }
 
 configure({
@@ -66,7 +68,9 @@ export const config: CliConfig = {
       '0xc778417E063141139Fce010982780140Aa0cD5Ab',
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD
+    keyfilePassword: process.env.KEYFILE_PASSWORD,
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry,
   spree: {
     nvm: {
@@ -88,14 +92,18 @@ export const config: CliConfig = {
       '0x0000000000000000000000000000000000000000',
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD
+    keyfilePassword: process.env.KEYFILE_PASSWORD,
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry,
   defiMumbai: {
     nvm: {
-      faucetUri: process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
+      faucetUri:
+        process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
       metadataUri:
         process.env.METADATA_URL || 'https://metadata.mumbai.nevermined.rocks',
-      gatewayUri: process.env.GATEWAY_URL || 'https://gateway.mumbai.nevermined.rocks',
+      gatewayUri:
+        process.env.GATEWAY_URL || 'https://gateway.mumbai.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
@@ -103,21 +111,27 @@ export const config: CliConfig = {
       verbose: LogLevel.Error
     } as Config,
     nativeToken: 'MATIC',
-    etherscanUrl: 'https://mumbai.etherscan.io',
+    etherscanUrl: 'https://explorer-mumbai.maticvigil.com',
     erc20TokenAddress:
       process.env.TOKEN_ADDRESS ||
       // MATIC
       '0x0000000000000000000000000000000000000000',
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD
+    keyfilePassword: process.env.KEYFILE_PASSWORD,
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry,
   autonomiesMumbai: {
     nvm: {
-      faucetUri: process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
+      faucetUri:
+        process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
       metadataUri:
-        process.env.METADATA_URL || 'https://metadata.autonomies.mumbai.nevermined.rocks',
-      gatewayUri: process.env.GATEWAY_URL || 'https://gateway.autonomies.mumbai.nevermined.rocks',
+        process.env.METADATA_URL ||
+        'https://metadata.autonomies.mumbai.nevermined.rocks',
+      gatewayUri:
+        process.env.GATEWAY_URL ||
+        'https://gateway.autonomies.mumbai.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b',
@@ -125,14 +139,16 @@ export const config: CliConfig = {
       verbose: LogLevel.Error
     } as Config,
     nativeToken: 'MATIC',
-    etherscanUrl: 'https://mumbai.etherscan.io',
+    etherscanUrl: 'https://explorer-mumbai.maticvigil.com/',
     erc20TokenAddress:
       process.env.TOKEN_ADDRESS ||
       // MATIC
       '0x0000000000000000000000000000000000000000',
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD
+    keyfilePassword: process.env.KEYFILE_PASSWORD,
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry
 }
 
@@ -148,10 +164,7 @@ export function getConfig(network: string): ConfigEntry {
   }
 
   if (!process.env.MNEMONIC) {
-    if (
-      !process.env.KEYFILE_PATH ||
-      !process.env.KEYFILE_PASSWORD
-    ) {
+    if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
       throw new Error(
         "ERROR: 'MNEMONIC' or 'KEYFILE' not set in environment! Please see README.md for details."
       )
@@ -161,9 +174,7 @@ export function getConfig(network: string): ConfigEntry {
   let hdWalletProvider: HDWalletProvider
   if (!process.env.MNEMONIC) {
     hdWalletProvider = new HDWalletProvider(
-      [        
-        getPrivateKey(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!)
-      ],
+      [getPrivateKey(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!)],
       config[network].nvm.nodeUri
     )
   } else {

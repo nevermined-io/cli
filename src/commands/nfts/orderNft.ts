@@ -1,15 +1,17 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
   findAccountOrFirst,
-  loadNevermined,
-  ConfigEntry
+  ConfigEntry,
+  loadToken
 } from '../../utils'
 import chalk from 'chalk'
 import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 
 export const orderNft = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -18,10 +20,7 @@ export const orderNft = async (
 
   logger.info(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
 
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
+  const token = await loadToken(nvm, config, verbose)
 
   const accounts = await nvm.accounts.list()
   const buyerAccount = findAccountOrFirst(accounts, account)

@@ -78,6 +78,7 @@ export TOKEN_ADDRESS=0x0
 * `METADATA_URL` - The url of the metadata api to use. If not given the default url is: `http://localhost:5000`
 * `FAUCET_URL` - The url of the faucet to use. If not given the default url is: `http://localhost:3001`
 * `GATEWAY_ADDRESS` - The public address of the gateway. If not given the default address is: `0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0`
+* `GAS_MULTIPLIER` - For networks with some congestion, this parameter can help to increase the gas spent and speed up the transactions. If not given the default is `0`. 
 
 
 ## Commands

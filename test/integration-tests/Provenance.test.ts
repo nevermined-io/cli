@@ -1,3 +1,4 @@
+
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
 import {
@@ -54,3 +55,4 @@ describe('Provenance e2e Testing', () => {
     expect(historyStdout.includes(did))
   })
 })
+

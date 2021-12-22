@@ -2,6 +2,7 @@
 yarn-error.log
 /dist/
 .env
+.env_*
 *.tgz
 coverage
 .vscode

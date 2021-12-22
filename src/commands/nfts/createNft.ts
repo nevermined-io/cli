@@ -1,11 +1,12 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
   findAccountOrFirst,
-  loadNevermined,
   loadNftContract,
   printNftTokenBanner,
-  ConfigEntry
+  ConfigEntry,
+  loadToken
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
@@ -15,6 +16,7 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 
 export const createNft = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -23,11 +25,7 @@ export const createNft = async (
 
   logger.info(chalk.dim('Creating NFT ...'))
 
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
+  const token = await loadToken(nvm, config, verbose)
 
   const accounts = await nvm.accounts.list()
   const creatorAccount = findAccountOrFirst(accounts, account)

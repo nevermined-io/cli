@@ -1,17 +1,17 @@
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
-  loadNevermined,
   loadNftContract,
   printNftTokenBanner,
   ConfigEntry,
   loadContract,
-  getNFTAddressFromInput
+  getNFTAddressFromInput,
+  loadToken
 } from '../../utils'
-import { Account, DDO } from '@nevermined-io/nevermined-sdk-js'
+import { Account } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import {
-  findServiceConditionByName,
   getAssetRewardsFromDDOByService,
   zeroX
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -20,17 +20,14 @@ import * as fs from 'fs'
 import { Contract } from 'web3-eth-contract'
 
 export const showNft = async (
+  nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network, did, account } = argv
 
-  const { nvm, token } = await loadNevermined(config, network, verbose)
-
-  if (!nvm.keeper) {
-    return StatusCodes.FAILED_TO_CONNECT
-  }
+  const token = await loadToken(nvm, config, verbose)
 
   console.log(
     chalk.dim(
@@ -151,7 +148,7 @@ export const showNft = async (
     const storedDIDRegister: any = await nvm.keeper.didRegistry.getDIDRegister(
       did
     )
-    const erc1155Balance = await nvm.keeper.didRegistry.balance(
+    const erc1155Balance = await nvm.keeper.nftUpgradeable.balance(
       userAccount.getId(),
       did
     )
