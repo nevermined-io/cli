@@ -111,7 +111,7 @@ export const config: CliConfig = {
       verbose: LogLevel.Error
     } as Config,
     nativeToken: 'MATIC',
-    etherscanUrl: 'https://mumbai.etherscan.io',
+    etherscanUrl: 'https://explorer-mumbai.maticvigil.com',
     erc20TokenAddress:
       process.env.TOKEN_ADDRESS ||
       // MATIC
@@ -139,7 +139,7 @@ export const config: CliConfig = {
       verbose: LogLevel.Error
     } as Config,
     nativeToken: 'MATIC',
-    etherscanUrl: 'https://mumbai.etherscan.io',
+    etherscanUrl: 'https://explorer-mumbai.maticvigil.com',
     erc20TokenAddress:
       process.env.TOKEN_ADDRESS ||
       // MATIC
