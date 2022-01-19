@@ -7,7 +7,7 @@ import { NFTMetadata } from '../../models/NFTMetadata'
 export const publishNftMetadata = async (
   nvm: Nevermined,
   argv: any,
-  configEntry: ConfigEntry,
+  config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
   const { verbose, network } = argv

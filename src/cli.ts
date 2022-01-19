@@ -42,13 +42,9 @@ import { ProvenanceMethods, StatusCodes } from './utils/enums'
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
 
-  console.log(` ----- LLEGAMOS AQUI!!!!!!`)
-
   if (verbose) {
     logger.level = 'debug'
   }
-
-  console.debug(`Debug mode ${logger.level}`)
 
   const config = getConfig(network as string)
   const nvm = await loadNevermined(config, network, verbose)
@@ -969,11 +965,12 @@ y.command(
   'utils',
   'Utility commands to faciliate files management and similar',
   (yargs) =>
-    yargs.usage('usage: $0 utils <command> parameters [options]').command(
-      'nft-metadata',
-      'It publish the metadata associated to a NFT into external storage',
-      (yargs) =>
-        yargs
+    yargs
+      .usage('usage: $0 utils <command> parameters [options]')
+      .command(
+        'nft-metadata',
+        'It publish the metadata associated to a NFT into external storage',
+        (yargs) => yargs
           .option('image', {
             describe: 'URL to the image of the item',
             demandOption: true,
@@ -985,7 +982,7 @@ y.command(
             type: 'string'
           })
           .option('description', {
-            describe: 'Description of the item. Markdown is supported',
+            describe: 'Desyarbncription of the item. Markdown is supported',
             default: '',
             type: 'string'
           })

@@ -29,4 +29,4 @@ describe('Utils e2e Testing', () => {
     expect(stdout.includes(imageUrl))
     expect(stdout.includes('jdiawsjdiasjifdsa'))
   })
-})
+         })
