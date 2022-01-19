@@ -74,5 +74,8 @@ export const baseCommands = {
     register: `${BASE_COMMAND} ${VERBOSE} provenance register `,
     history: `${BASE_COMMAND} ${VERBOSE} provenance history `,
     inspect: `${BASE_COMMAND} ${VERBOSE} provenance inspect `
+  },
+  utils: {
+    publishNftMetadata: `${BASE_COMMAND} ${VERBOSE} utils nft-metadata `
   }
 }
