@@ -552,7 +552,13 @@ y.command(
               description: 'The address of the NFT (ERC-721) contract'
             })
             .option('metadata', {
-              describe: 'The path to the json file with the metadata',
+              describe: 'The path to the json file describing the NFT metadata',
+              default: '',
+              type: 'string'
+            })
+            .option('nftMetadata', {
+              describe:
+                'The url (HTTP, IPFS, etc) including the NFT Metadata required by some marketplaces like OpenSea',
               default: '',
               type: 'string'
             })
@@ -582,6 +588,12 @@ y.command(
               default: '',
               description: 'The NFT price'
             })
+            .option('royalties', {
+              type: 'number',
+              default: '0',
+              description:
+                'The royalties (between 0 and 100%) to reward to the original creator in the secondary market'
+            })            
             .option('nftType', {
               type: 'string',
               default: '721',
@@ -743,7 +755,14 @@ y.command(
         (yargs) =>
           yargs
             .option('metadata', {
-              describe: 'The path to the json file with the metadata',
+              describe:
+                'The path to the json file with the metadata describing the asset',
+              default: '',
+              type: 'string'
+            })
+            .option('nftMetadata', {
+              describe:
+                'The url (HTTP, IPFS, etc) including the NFT Metadata required by some marketplaces like OpenSea',
               default: '',
               type: 'string'
             })
@@ -775,12 +794,12 @@ y.command(
             })
             .option('cap', {
               type: 'number',
-              default: 0,
+              default: '0',
               description: 'The NFT minting cap (0 means uncapped)'
             })
             .option('royalties', {
               type: 'number',
-              default: 0,
+              default: '0',
               description:
                 'The royalties (between 0 and 100%) to reward to the original creator in the secondary market'
             })
