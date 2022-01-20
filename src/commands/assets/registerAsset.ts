@@ -15,13 +15,17 @@ import fs from 'fs'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
+import KeyTransfer from '@nevermined-io/nevermined-sdk-js/dist/node/utils/KeyTransfer'
+
+const keytransfer = new KeyTransfer()
+
 export const registerAsset = async (
   nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, account, metadata, assetType } = argv
+  const { verbose, network, account, metadata, assetType, password, encrypt } = argv
   const token = await loadToken(nvm, config, verbose)
 
   if (verbose) {
@@ -47,8 +51,22 @@ export const registerAsset = async (
 
     logger.debug(`Using Price ${argv.price}`)
 
+    // TODO: read provider key from gateway
+    const providerKey = {
+      x: '0x2e3133fbdaeb5486b665ba78c0e7e749700a5c32b1998ae14f7d1532972602bb',
+      y: '0x0b932f02e59f90cdd761d9d5e7c15c8e620efce4ce018bf54015d68d9cb35561'
+  }
+
     const _files: File[] = []
     let _fileIndex = 0
+    if (password) {
+      _files.push({
+        index: _fileIndex,
+        url: Buffer.from(password).toString('hex'),
+        contentType: 'text/plain'
+      })
+      _fileIndex++
+    }
     argv.urls.forEach((_url: string) => {
       _files.push({
         index: _fileIndex,
@@ -68,6 +86,12 @@ export const registerAsset = async (
         price: ddoPrice.toString(),
         files: _files
       } as MetaDataMain
+    }
+    if (password) {
+      ddoMetadata.additionalInformation = {
+        poseidonHash: keytransfer.hashKey(Buffer.from(password)),
+        providerKey,
+      }
     }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')
@@ -95,7 +119,8 @@ export const registerAsset = async (
     ddoMetadata,
     creatorAccount,
     // @ts-ignore
-    new AssetRewards(creatorAccount.getId(), ddoPrice)
+    new AssetRewards(creatorAccount.getId(), ddoPrice),
+    encrypt || password ? ['access-proof'] : undefined
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

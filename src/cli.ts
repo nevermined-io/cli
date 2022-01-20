@@ -251,6 +251,10 @@ y.command(
               default: 'undefined',
               description: 'Asset license'
             })
+            .option('password', {
+              type: 'string',
+              description: 'Password for encrypted files'
+            })
             .option('assetType', {
               type: 'string',
               default: 'dataset',
@@ -329,6 +333,10 @@ y.command(
           yargs.positional('metadata', {
             describe: 'The metadata file',
             type: 'string'
+          }).option('encrypt', {
+            type: 'boolean',
+            default: false,
+            description: 'Use encrypted service endpoint'
           }),
         async (argv) => cmdHandler(registerAsset, argv)
       )
@@ -382,6 +390,10 @@ y.command(
           yargs.positional('did', {
             describe: 'The asset did',
             type: 'string'
+          })
+          .option('password', {
+            type: 'string',
+            description: 'Password for receiving encrypted files'
           }),
         async (argv) => cmdHandler(orderAsset, argv)
       )
@@ -404,6 +416,10 @@ y.command(
               type: 'number',
               default: -1,
               description: 'The index of the file in the DDO'
+            })
+            .option('password', {
+              type: 'string',
+              description: 'Password for receiving encrypted files'
             })
             .option('path', {
               type: 'string',

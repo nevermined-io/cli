@@ -10,7 +10,6 @@ export const uploadFile = async (
   logger: Logger
 ): Promise<number> => {
   const { file, encrypt } = argv
-  console.log(argv)
   const stream = fs.createReadStream(file)
   const {url, password} = await nvm.files.uploadFilecoin(stream, encrypt)
   console.log(`URL: ${url}`)
