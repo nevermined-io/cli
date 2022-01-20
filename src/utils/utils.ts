@@ -15,6 +15,7 @@ import {
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721.json'
+import NFTUpgradeable from '@nevermined-io/contracts/artifacts/NFTUpgradeable.spree.json'
 import { Constants, StatusCodes } from './enums'
 import { ConfigEntry, getConfig, logger } from './config'
 import { AbiItem } from 'web3-utils'
@@ -58,6 +59,14 @@ export const loadNftContract = (
   return loadContract(config.nvm, ERC721.abi, nftTokenAddress)
 }
 
+export const loadNft1155Contract = (
+  config: ConfigEntry,
+  nftTokenAddress: string
+): Contract => {
+  // @ts-ignore
+  return loadContract(config.nvm, NFTUpgradeable.abi, nftTokenAddress)
+}
+
 export const getNFTAddressFromInput = (
   nftAddress: string,
   ddo: DDO,
@@ -77,6 +86,8 @@ export const getNFTAddressFromInput = (
     return nftAddress
   }
 }
+
+export const getDidHash = (did: string): string => did.replace('did:nv:', '')
 
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 

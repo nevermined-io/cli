@@ -8,4 +8,9 @@ export default class IpfsHelper {
     const addResult = await ipfs.add(content)
     return addResult[0].hash
   }
+
+  public static async get(cid: string): Promise<string> {
+    const ipfs = IpfsHttpClientLite(IPFS_GATEWAY)
+    return await ipfs.cat(cid.replace('cid://', ''))
+  }
 }

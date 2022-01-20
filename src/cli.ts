@@ -32,7 +32,8 @@ import {
   provenanceHistory,
   provenanceInspect,
   // Utils
-  publishNftMetadata
+  publishNftMetadata,
+  getNftMetadata
 } from './commands'
 import chalk from 'chalk'
 
@@ -965,54 +966,72 @@ y.command(
   'utils',
   'Utility commands to faciliate files management, encryption, etc',
   (yargs) =>
-    yargs.usage('usage: $0 utils <command> parameters [options]').command(
-      'publish-nft-metadata',
-      'It publish the metadata associated to a NFT into external storage',
-      (yargs) =>
-        yargs
-          .option('image', {
-            describe: 'URL to the image of the item',
-            demandOption: true,
-            type: 'string'
-          })
-          .option('name', {
-            describe: 'Name/title of the item',
-            demandOption: true,
-            type: 'string'
-          })
-          .option('description', {
-            describe: 'Desyarbncription of the item. Markdown is supported',
-            default: '',
-            type: 'string'
-          })
-          .option('externalUrl', {
-            describe: 'URL to the asset in a Nevermined ecosystem',
-            default: '',
-            type: 'string'
-          })
-          .option('animationUrl', {
-            describe: 'A URL to a multi-media attachment for the item',
-            default: '',
-            type: 'string'
-          })
-          .option('youtubeUrl', {
-            describe: 'A URL to a YouTube video',
-            default: '',
-            type: 'string'
-          })
-          .option('royalties', {
-            describe:
-              'Royalties for selling the NFT through a marketplace out of Nevermined (i.e OpenSea)',
-            default: '',
-            type: 'number'
-          })
-          .option('royaltiesReceiver', {
-            describe: 'Address of the user receiving the royalties',
-            default: '',
-            type: 'string'
-          }),
-      async (argv) => cmdHandler(publishNftMetadata, argv)
-    ),
+    yargs
+      .usage('usage: $0 utils <command> parameters [options]')
+      .command(
+        'publish-nft-metadata',
+        'It publish the metadata associated to a NFT into external storage',
+        (yargs) =>
+          yargs
+            .option('image', {
+              describe: 'URL to the image of the item',
+              demandOption: true,
+              type: 'string'
+            })
+            .option('name', {
+              describe: 'Name/title of the item',
+              demandOption: true,
+              type: 'string'
+            })
+            .option('description', {
+              describe: 'Desyarbncription of the item. Markdown is supported',
+              default: '',
+              type: 'string'
+            })
+            .option('externalUrl', {
+              describe: 'URL to the asset in a Nevermined ecosystem',
+              default: '',
+              type: 'string'
+            })
+            .option('animationUrl', {
+              describe: 'A URL to a multi-media attachment for the item',
+              default: '',
+              type: 'string'
+            })
+            .option('youtubeUrl', {
+              describe: 'A URL to a YouTube video',
+              default: '',
+              type: 'string'
+            })
+            .option('royalties', {
+              describe:
+                'Royalties for selling the NFT through a marketplace out of Nevermined (i.e OpenSea)',
+              default: '',
+              type: 'number'
+            })
+            .option('royaltiesReceiver', {
+              describe: 'Address of the user receiving the royalties',
+              default: '',
+              type: 'string'
+            }),
+        async (argv) => cmdHandler(publishNftMetadata, argv)
+      )
+      .command(
+        'get-nft-metadata did',
+        'Downloads the metadata associated to NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'The id of the asset',
+              type: 'string'
+            })
+            .option('nftAddress', {
+              type: 'string',
+              default: '',
+              description: 'The address of the NFT contract'
+            }),
+        async (argv) => cmdHandler(getNftMetadata, argv)
+      ),
   () => {
     yargs.showHelp()
     return process.exit()

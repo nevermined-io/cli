@@ -9,7 +9,7 @@ export const commandRegex = {
   nfts: {
     deploy: new RegExp('.*Contract deployed into address: (.{42}).*', 'gm'),
     create: new RegExp('.*Created DID: (.{71}).*', 'gm'),
-    publishMetadata: new RegExp('.*NFT Metadata Created: (.*)', 'gm'),    
+    publishMetadata: new RegExp('.*NFT Metadata Created: (.*)', 'gm'),
     order: new RegExp('.*NFT Agreement Created: (.{66}).*', 'gm')
   },
   accounts: {
@@ -49,7 +49,6 @@ export const parseCIDFromNFTMetadata = (stdout: string): string => {
   }
   return ''
 }
-
 
 export const parseNumberResultsFromSearch = (stdout: string): string | null => {
   const totalResults = commandRegex.assets.totalResultsQuery.exec(stdout)

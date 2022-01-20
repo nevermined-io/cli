@@ -36,3 +36,4 @@ export * from './provenance/registerProvenance'
 
 //utils
 export * from './utils/publishNftMetadata'
+export * from './utils/getNftMetadata'

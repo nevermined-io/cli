@@ -1,12 +1,14 @@
-import { execOpts, baseCommands } from '../helpers/Config'
+import { execOpts, baseCommands, metadataConfig } from '../helpers/Config'
 import {
-  parseCIDFromNFTMetadata
+  parseCIDFromNFTMetadata,
+  parseDIDFromNewNFT
 } from '../helpers/StdoutParser'
 const { execSync } = require('child_process')
 
 describe('Utils e2e Testing', () => {
-
   let cid = ''
+  let did = ''
+
   // NFT Metadata info
   const imageUrl =
     'https://www.artribune.com/wp-content/uploads/2013/09/2_Francisco-Goya-Saturno-devorando-a-su-hijos-1819-1823.jpg'
@@ -35,6 +37,28 @@ describe('Utils e2e Testing', () => {
 
     cid = parseCIDFromNFTMetadata(stdout)
     console.log(`CID: ${cid}`)
-    expect(cid === '' ? false : cid.startsWith('cid://'))    
+    expect(cid === '' ? false : cid.startsWith('cid://'))
+  })
+
+  test('Register a NFT with IPFS Metadata and get access to it', async () => {
+    const registerCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType text/text --cap 10 --royalties 5 --nftMetadata "${cid}" `
+    console.debug(`COMMAND: ${registerCommand}`)
+
+    const registerStdout = execSync(registerCommand, execOpts)
+
+    console.debug(`STDOUT: ${registerStdout}`)
+    did = parseDIDFromNewNFT(registerStdout)
+    console.debug(`DID: ${did}`)
+    expect(did === '' ? false : did.startsWith('did:nv:'))
+
+    const getCommand = `${baseCommands.utils.getMetadata} "${did}" `
+    console.debug(`COMMAND: ${getCommand}`)
+
+    const stdout = execSync(getCommand, execOpts).toString()
+
+    console.log(`STDOUT: ${stdout}`)
+
+    expect(stdout).toContain(cid)
+    expect(stdout).toContain(imageUrl)
   })
 })
