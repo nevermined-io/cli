@@ -276,7 +276,7 @@ export const loadNevermined = async (
       chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
     )
   }
-  
+
   return nvm
 }
 

@@ -30,7 +30,9 @@ import {
   // Provenance
   registerProvenance,
   provenanceHistory,
-  provenanceInspect
+  provenanceInspect,
+  // Utils
+  publishNftMetadata
 } from './commands'
 import chalk from 'chalk'
 
@@ -49,9 +51,17 @@ const cmdHandler = async (cmd: Function, argv: any) => {
 
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
   logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
-  
-  logger.debug(chalk.dim(`Gas Multiplier: '${chalk.whiteBright(config.gasMultiplier)}'\n`))
-  logger.debug(chalk.dim(`Gas Price Multiplier: '${chalk.whiteBright(config.gasPriceMultiplier)}'\n`))
+
+  logger.debug(
+    chalk.dim(`Gas Multiplier: '${chalk.whiteBright(config.gasMultiplier)}'\n`)
+  )
+  logger.debug(
+    chalk.dim(
+      `Gas Price Multiplier: '${chalk.whiteBright(
+        config.gasPriceMultiplier
+      )}'\n`
+    )
+  )
 
   if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
 
@@ -593,7 +603,7 @@ y.command(
               default: '0',
               description:
                 'The royalties (between 0 and 100%) to reward to the original creator in the secondary market'
-            })            
+            })
             .option('nftType', {
               type: 'string',
               default: '721',
@@ -945,6 +955,64 @@ y.command(
             }),
         async (argv) => cmdHandler(downloadNft, argv)
       ),
+  () => {
+    yargs.showHelp()
+    return process.exit()
+  }
+)
+
+y.command(
+  'utils',
+  'Utility commands to faciliate files management, encryption, etc',
+  (yargs) =>
+    yargs.usage('usage: $0 utils <command> parameters [options]').command(
+      'publish-nft-metadata',
+      'It publish the metadata associated to a NFT into external storage',
+      (yargs) =>
+        yargs
+          .option('image', {
+            describe: 'URL to the image of the item',
+            demandOption: true,
+            type: 'string'
+          })
+          .option('name', {
+            describe: 'Name/title of the item',
+            demandOption: true,
+            type: 'string'
+          })
+          .option('description', {
+            describe: 'Desyarbncription of the item. Markdown is supported',
+            default: '',
+            type: 'string'
+          })
+          .option('externalUrl', {
+            describe: 'URL to the asset in a Nevermined ecosystem',
+            default: '',
+            type: 'string'
+          })
+          .option('animationUrl', {
+            describe: 'A URL to a multi-media attachment for the item',
+            default: '',
+            type: 'string'
+          })
+          .option('youtubeUrl', {
+            describe: 'A URL to a YouTube video',
+            default: '',
+            type: 'string'
+          })
+          .option('royalties', {
+            describe:
+              'Royalties for selling the NFT through a marketplace out of Nevermined (i.e OpenSea)',
+            default: '',
+            type: 'number'
+          })
+          .option('royaltiesReceiver', {
+            describe: 'Address of the user receiving the royalties',
+            default: '',
+            type: 'string'
+          }),
+      async (argv) => cmdHandler(publishNftMetadata, argv)
+    ),
   () => {
     yargs.showHelp()
     return process.exit()

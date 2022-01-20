@@ -14,7 +14,7 @@ jobs:
           node-version: '12'
       - name: Install dependencies
         run: |
-          yarn install
+          yarn install --ignore-engines
       - name: Build
         run: |
           yarn build
