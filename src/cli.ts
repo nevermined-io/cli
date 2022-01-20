@@ -36,6 +36,7 @@ import chalk from 'chalk'
 
 import { getConfig, loadNevermined, logger } from '../src/utils'
 import { ProvenanceMethods, StatusCodes } from './utils/enums'
+import { uploadFile } from './commands/utils/upload'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
@@ -107,6 +108,34 @@ y.command(
         'List all the information about a Nevermined deployment',
         (yargs) => yargs,
         async (argv) => cmdHandler(networkStatus, argv)
+      ),
+  () => {
+    yargs.showHelp()
+    return process.exit()
+  }
+)
+
+y.command(
+  'utils',
+  'Various utils',
+  (yargs) => 
+    yargs
+      .usage('usage: $0 utils <command> parameters [options]')
+      .command(
+        'upload file',
+        'Upload file to filecoin',
+        (yargs) =>
+          yargs
+            .positional('file', {
+              describe: 'the file to upload',
+              type: 'string'
+            })
+            .option('encrypt', {
+              type: 'boolean',
+              default: false,
+              description: 'Encrypt the file with AES and return password'
+            }),
+        async (argv) => cmdHandler(uploadFile, argv)
       ),
   () => {
     yargs.showHelp()
