@@ -2,18 +2,13 @@ import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   ConfigEntry,
-  config,
   getNFTAddressFromInput,
   loadNftContract
 } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
-import { NFTMetadata } from '../../models/NFTMetadata'
 import IpfsHelper from '../../utils/IpfsHelper'
-import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
-import { getDidHash, loadNft1155Contract } from '../../utils/utils'
-import { NFTUpgradeable } from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/conditions/NFTs/NFTUpgradable'
-import { abi } from '@nevermined-io/contracts/artifacts/NeverminedToken.development.json'
+import { getDidHash } from '../../utils/utils'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 export const getNftMetadata = async (
@@ -65,8 +60,9 @@ export const getNftMetadata = async (
   // logger.info(JSON.stringify(nftContract.methods))
   const didHash = didZeroX(getDidHash(did))
   if (is1155) {
-    const nftContract = loadNft1155Contract(config, nftAddress)
-    metadataUrl = await nftContract.methods.uri(didHash).call()
+    
+    metadataUrl = await nvm.keeper.nftUpgradeable.uri(did)
+
   } else {
     const nftContract = loadNftContract(config, nftAddress)
     metadataUrl = await nftContract.methods.tokenURI(didHash).call()

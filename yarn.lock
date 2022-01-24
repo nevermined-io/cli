@@ -835,10 +835,10 @@
     "@gnosis.pm/safe-core-sdk" "^1.0.0"
     "@gnosis.pm/safe-deployments" "^1.4.0"
 
-"@nevermined-io/nevermined-sdk-js@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.18.0.tgz#a476d07a5981c67709726d74f6f556c80cc1558e"
-  integrity sha512-Qb1x5kBRElTUSrRbHffrmWuWsvXlFyqGuRxjylXAAAqOBy+IlsS3D6ofbsi/U+8HJDiLv+xnuNBEj6pWBY3M7g==
+"@nevermined-io/nevermined-sdk-js@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.18.1.tgz#8c35254a9963b833ed15e178b85d53df5ab55cb6"
+  integrity sha512-rG+l9daTziUI7g1jMYKcd1zFnf3+3MoYw/y2P63l/gSoTdii5ZDIKDYH1ETQzRSPN5UHg/UoCXiBiENGoOB25Q==
   dependencies:
     "@nevermined-io/contracts" "^1.3.3"
     "@nevermined-io/secret-store-client" "^0.0.16"
@@ -5589,11 +5589,6 @@ nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
-
-node-abort-controller@~3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/node-abort-controller/-/node-abort-controller-3.0.1.tgz#f91fa50b1dee3f909afabb7e261b1e1d6b0cb74e"
-  integrity sha512-/ujIVxthRs+7q6hsdjHMaj8hRG9NuWmwrz+JdRwZ14jdFoKSkm+vDsCbF9PLpnSqjaWQJuTmVtcWHNLr+vrOFw==
 
 node-addon-api@^2.0.0:
   version "2.0.2"
