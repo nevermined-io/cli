@@ -78,6 +78,8 @@ export const getNFTAddressFromInput = (
   }
 }
 
+export const getDidHash = (did: string): string => did.replace('did:nv:', '')
+
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
 export const findAccountOrFirst = (
@@ -276,7 +278,7 @@ export const loadNevermined = async (
       chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
     )
   }
-  
+
   return nvm
 }
 

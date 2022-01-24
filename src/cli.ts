@@ -30,7 +30,10 @@ import {
   // Provenance
   registerProvenance,
   provenanceHistory,
-  provenanceInspect
+  provenanceInspect,
+  // Utils
+  publishNftMetadata,
+  getNftMetadata
 } from './commands'
 import chalk from 'chalk'
 
@@ -49,9 +52,17 @@ const cmdHandler = async (cmd: Function, argv: any) => {
 
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
   logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
-  
-  logger.debug(chalk.dim(`Gas Multiplier: '${chalk.whiteBright(config.gasMultiplier)}'\n`))
-  logger.debug(chalk.dim(`Gas Price Multiplier: '${chalk.whiteBright(config.gasPriceMultiplier)}'\n`))
+
+  logger.debug(
+    chalk.dim(`Gas Multiplier: '${chalk.whiteBright(config.gasMultiplier)}'\n`)
+  )
+  logger.debug(
+    chalk.dim(
+      `Gas Price Multiplier: '${chalk.whiteBright(
+        config.gasPriceMultiplier
+      )}'\n`
+    )
+  )
 
   if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
 
@@ -552,7 +563,13 @@ y.command(
               description: 'The address of the NFT (ERC-721) contract'
             })
             .option('metadata', {
-              describe: 'The path to the json file with the metadata',
+              describe: 'The path to the json file describing the NFT metadata',
+              default: '',
+              type: 'string'
+            })
+            .option('nftMetadata', {
+              describe:
+                'The url (HTTP, IPFS, etc) including the NFT Metadata required by some marketplaces like OpenSea',
               default: '',
               type: 'string'
             })
@@ -581,6 +598,12 @@ y.command(
               type: 'number',
               default: '',
               description: 'The NFT price'
+            })
+            .option('royalties', {
+              type: 'number',
+              default: '0',
+              description:
+                'The royalties (between 0 and 100%) to reward to the original creator in the secondary market'
             })
             .option('nftType', {
               type: 'string',
@@ -743,7 +766,14 @@ y.command(
         (yargs) =>
           yargs
             .option('metadata', {
-              describe: 'The path to the json file with the metadata',
+              describe:
+                'The path to the json file with the metadata describing the asset',
+              default: '',
+              type: 'string'
+            })
+            .option('nftMetadata', {
+              describe:
+                'The url (HTTP, IPFS, etc) including the NFT Metadata required by some marketplaces like OpenSea',
               default: '',
               type: 'string'
             })
@@ -775,12 +805,12 @@ y.command(
             })
             .option('cap', {
               type: 'number',
-              default: 0,
+              default: '0',
               description: 'The NFT minting cap (0 means uncapped)'
             })
             .option('royalties', {
               type: 'number',
-              default: 0,
+              default: '0',
               description:
                 'The royalties (between 0 and 100%) to reward to the original creator in the secondary market'
             })
@@ -925,6 +955,82 @@ y.command(
               type: 'string'
             }),
         async (argv) => cmdHandler(downloadNft, argv)
+      ),
+  () => {
+    yargs.showHelp()
+    return process.exit()
+  }
+)
+
+y.command(
+  'utils',
+  'Utility commands to faciliate files management, encryption, etc',
+  (yargs) =>
+    yargs
+      .usage('usage: $0 utils <command> parameters [options]')
+      .command(
+        'publish-nft-metadata',
+        'It publish the metadata associated to a NFT into external storage',
+        (yargs) =>
+          yargs
+            .option('image', {
+              describe: 'URL to the image of the item',
+              demandOption: true,
+              type: 'string'
+            })
+            .option('name', {
+              describe: 'Name/title of the item',
+              demandOption: true,
+              type: 'string'
+            })
+            .option('description', {
+              describe: 'Desyarbncription of the item. Markdown is supported',
+              default: '',
+              type: 'string'
+            })
+            .option('externalUrl', {
+              describe: 'URL to the asset in a Nevermined ecosystem',
+              default: '',
+              type: 'string'
+            })
+            .option('animationUrl', {
+              describe: 'A URL to a multi-media attachment for the item',
+              default: '',
+              type: 'string'
+            })
+            .option('youtubeUrl', {
+              describe: 'A URL to a YouTube video',
+              default: '',
+              type: 'string'
+            })
+            .option('royalties', {
+              describe:
+                'Royalties for selling the NFT through a marketplace out of Nevermined (i.e OpenSea)',
+              default: '',
+              type: 'number'
+            })
+            .option('royaltiesReceiver', {
+              describe: 'Address of the user receiving the royalties',
+              default: '',
+              type: 'string'
+            }),
+        async (argv) => cmdHandler(publishNftMetadata, argv)
+      )
+      .command(
+        'get-nft-metadata did',
+        'Downloads the metadata associated to NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'The id of the asset',
+              type: 'string'
+            })
+            .option('nftAddress', {
+              type: 'string',
+              default: '',
+              description: 'The address of the NFT contract'
+            }),
+        async (argv) => cmdHandler(getNftMetadata, argv)
       ),
   () => {
     yargs.showHelp()
