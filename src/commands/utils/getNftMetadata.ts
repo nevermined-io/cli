@@ -60,9 +60,7 @@ export const getNftMetadata = async (
   // logger.info(JSON.stringify(nftContract.methods))
   const didHash = didZeroX(getDidHash(did))
   if (is1155) {
-    
     metadataUrl = await nvm.keeper.nftUpgradeable.uri(did)
-
   } else {
     const nftContract = loadNftContract(config, nftAddress)
     metadataUrl = await nftContract.methods.tokenURI(didHash).call()
