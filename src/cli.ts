@@ -30,13 +30,14 @@ import {
   // Provenance
   registerProvenance,
   provenanceHistory,
-  provenanceInspect
+  provenanceInspect,
+  decryptFile,
+  uploadFile
 } from './commands'
 import chalk from 'chalk'
 
 import { getConfig, loadNevermined, logger } from '../src/utils'
 import { ProvenanceMethods, StatusCodes } from './utils/enums'
-import { uploadFile } from './commands/utils/upload'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
@@ -136,6 +137,22 @@ y.command(
               description: 'Encrypt the file with AES and return password'
             }),
         async (argv) => cmdHandler(uploadFile, argv)
+      )
+      .command(
+        'decrypt file',
+        'Decrypt file',
+        (yargs) =>
+          yargs
+            .positional('file', {
+              describe: 'the file to decrypt',
+              type: 'string'
+            })
+            .option('password', {
+              type: 'string',
+              default: false,
+              description: 'Encrypt the file with AES and return password'
+            }),
+        async (argv) => cmdHandler(decryptFile, argv)
       ),
   () => {
     yargs.showHelp()

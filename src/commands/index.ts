@@ -33,3 +33,6 @@ export * from './network/networkList'
 export * from './provenance/provenanceHistory'
 export * from './provenance/provenanceInspect'
 export * from './provenance/registerProvenance'
+
+export * from './utils/decrypt'
+export * from './utils/upload'

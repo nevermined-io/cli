@@ -91,7 +91,9 @@ export const registerAsset = async (
       ddoMetadata.additionalInformation = {
         poseidonHash: keytransfer.hashKey(Buffer.from(password)),
         providerKey,
+        links: argv.urls
       }
+      console.log(ddoMetadata.additionalInformation)
     }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')
