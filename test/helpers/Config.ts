@@ -77,6 +77,8 @@ export const baseCommands = {
     inspect: `${BASE_COMMAND} ${VERBOSE} provenance inspect `
   },
   utils: {
+    upload: `${BASE_COMMAND} ${VERBOSE} utils upload `,
+    decrypt: `${BASE_COMMAND} ${VERBOSE} utils decrypt `,
     publishMetadata: `${BASE_COMMAND} ${VERBOSE} utils publish-nft-metadata `,
     getMetadata: `${BASE_COMMAND} ${VERBOSE} utils get-nft-metadata `
   }

@@ -129,7 +129,7 @@ y.command(
 
 y.command(
   'accounts',
-  'Management of accounts and the funds associted to them',
+  'Management of accounts and the funds associated to them',
   (yargs) =>
     yargs
       .usage('usage: $0 accounts <command> parameters [options]')

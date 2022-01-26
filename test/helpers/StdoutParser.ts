@@ -23,6 +23,9 @@ export const commandRegex = {
   },
   provenance: {
     register: new RegExp('.*Provenance Id: (.*)', 'gm')
+  },
+  utils: {
+    upload: new RegExp('URL: (.*)\nPassword: (.*)\n', 'gm')
   }
 }
 
@@ -32,6 +35,15 @@ export const parseDIDFromNewAsset = (stdout: string): string => {
     return did[1]
   }
   return ''
+}
+
+export const parseUrlAndPassword = (stdout: string): any => {
+  const parts = commandRegex.utils.upload.exec(stdout)
+  console.log('parts', parts)
+  if (parts != null) {
+    return {url: parts[1], password: parts[2]}
+  }
+  return {url: '', password: ''}
 }
 
 export const parseDIDFromNewNFT = (stdout: string): string => {
