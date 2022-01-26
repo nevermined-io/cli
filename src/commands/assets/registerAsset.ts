@@ -121,7 +121,7 @@ export const registerAsset = async (
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(
-    zeroX(ddo.shortId()),    
+    zeroX(ddo.shortId())
   )) as {
     owner: string
     url: string

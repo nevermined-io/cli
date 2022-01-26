@@ -5,10 +5,11 @@ export const metadataConfig = {
   name: 'CLI Testing Dataset #',
   author: 'Nevermined CLI',
   price: 1,
-  url: 'https://raw.githubusercontent.com/nevermined-io/docs/master/README.md',
+  url: 'https://gist.githubusercontent.com/aaitor/c22337687603cfe0cb09e527110df61c/raw/8242ee5fe0d32726109118cc19ce6681d84474d9/ASLv2',
   contentType: 'text/plain',
   metadataFile: 'test/resources/example-1.json',
-  metadataFileWorkflow: 'test/resources/metadata_workflow_coordinator.json'
+  metadataFileWorkflow: 'test/resources/metadata_workflow_coordinator.json',
+  metadataNFT: 'cid://QmVT3wfySvZJqAvkBCyxoz3EvD3yeLqf3cvAssFDpFFXNm'
 }
 
 export const execOpts = {
@@ -74,5 +75,9 @@ export const baseCommands = {
     register: `${BASE_COMMAND} ${VERBOSE} provenance register `,
     history: `${BASE_COMMAND} ${VERBOSE} provenance history `,
     inspect: `${BASE_COMMAND} ${VERBOSE} provenance inspect `
+  },
+  utils: {
+    publishMetadata: `${BASE_COMMAND} ${VERBOSE} utils publish-nft-metadata `,
+    getMetadata: `${BASE_COMMAND} ${VERBOSE} utils get-nft-metadata `
   }
 }

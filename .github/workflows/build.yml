@@ -14,10 +14,9 @@ jobs:
           node-version: '12'
       - name: Install dependencies
         run: |
-          yarn install
-      - name: Build
+          yarn install --ignore-engines
+      - name: Lint
         run: |
-          yarn build
           yarn lint
       - name: Reclaim some disk space
         run : |
@@ -41,4 +40,5 @@ jobs:
           NODE_URL: "http://localhost:8545"
         run: |
           sleep 10
+          yarn build
           yarn test

@@ -9,6 +9,7 @@ export const commandRegex = {
   nfts: {
     deploy: new RegExp('.*Contract deployed into address: (.{42}).*', 'gm'),
     create: new RegExp('.*Created DID: (.{71}).*', 'gm'),
+    publishMetadata: new RegExp('.*NFT Metadata Created: (.*)', 'gm'),
     order: new RegExp('.*NFT Agreement Created: (.{66}).*', 'gm')
   },
   accounts: {
@@ -37,6 +38,14 @@ export const parseDIDFromNewNFT = (stdout: string): string => {
   const did = commandRegex.nfts.create.exec(stdout)
   if (did != null) {
     return did[1]
+  }
+  return ''
+}
+
+export const parseCIDFromNFTMetadata = (stdout: string): string => {
+  const cid = commandRegex.nfts.publishMetadata.exec(stdout)
+  if (cid != null) {
+    return cid[1]
   }
   return ''
 }

@@ -25,6 +25,11 @@ export const createNft = async (
 
   logger.info(chalk.dim('Creating NFT ...'))
 
+  if (argv.royalties < 0 || argv.royalties > 100) {
+    logger.error('Royalties must be between 0 and 100%')
+    return StatusCodes.ERROR
+  }
+
   const token = await loadToken(nvm, config, verbose)
 
   const accounts = await nvm.accounts.list()
@@ -91,7 +96,9 @@ export const createNft = async (
       // @ts-ignore
       new AssetRewards(creatorAccount.getId(), ddoPrice),
       argv.nftAddress,
-      token ? token.getAddress() : config.erc20TokenAddress
+      token ? token.getAddress() : config.erc20TokenAddress,
+      argv.royalties,
+      argv.nftMetadata
     )
   } else {
     // erc-1155
@@ -103,7 +110,9 @@ export const createNft = async (
       // @ts-ignore
       new AssetRewards(creatorAccount.getId(), ddoPrice),
       undefined,
-      token ? token.getAddress() : config.erc20TokenAddress
+      token ? token.getAddress() : config.erc20TokenAddress,
+      false, // we don't pre-mint here
+      argv.nftMetadata
     )
   }
 
