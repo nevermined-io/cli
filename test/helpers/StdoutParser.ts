@@ -1,6 +1,7 @@
 export const commandRegex = {
   assets: {
     did: new RegExp('.*Created Asset.(.{71}).*', 'g'),
+    password: new RegExp('.*Got password (.{32}).*', 'g'),
     totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\n', 'g'),
     downloadPath: new RegExp('.*Files downloaded to:.(.*)', 'gm'),
     serviceAgreement: new RegExp('.*Agreement Id:.(.*)\n', 'g')
@@ -44,6 +45,15 @@ export const parseUrlAndPassword = (stdout: string): any => {
     return {url: parts[1], password: parts[2]}
   }
   return {url: '', password: ''}
+}
+
+export const parsePasswordFromOrder = (stdout: string): any => {
+  const parts = commandRegex.assets.password.exec(stdout)
+  console.log('parts', parts)
+  if (parts != null) {
+    return parts[1]
+  }
+  return ''
 }
 
 export const parseDIDFromNewNFT = (stdout: string): string => {

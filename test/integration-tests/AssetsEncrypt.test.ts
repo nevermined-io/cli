@@ -1,13 +1,9 @@
-import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
+import { execOpts, baseCommands } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
-  parseDownloadPath,
-  parseNumberResultsFromSearch,
-  parseServiceAgreementId,
+  parsePasswordFromOrder,
   parseUrlAndPassword
 } from '../helpers/StdoutParser'
-import * as fs from 'fs'
-import * as Path from 'path'
 const { execSync } = require('child_process')
 
 describe('Assets e2e Testing', () => {
@@ -61,6 +57,10 @@ describe('Assets e2e Testing', () => {
 
     const getStdout = execSync(getCommand, execOpts)
     console.log(`STDOUT: ${getStdout}`)
+
+    const pass = parsePasswordFromOrder(getStdout)
+    console.log(`Password: ${pass}`)
+    expect(pass).toEqual(password)
 
   })
 })
