@@ -128,50 +128,6 @@ y.command(
 )
 
 y.command(
-  'utils',
-  'Various utils',
-  (yargs) => 
-    yargs
-      .usage('usage: $0 utils <command> parameters [options]')
-      .command(
-        'upload file',
-        'Upload file to filecoin',
-        (yargs) =>
-          yargs
-            .positional('file', {
-              describe: 'the file to upload',
-              type: 'string'
-            })
-            .option('encrypt', {
-              type: 'boolean',
-              default: false,
-              description: 'Encrypt the file with AES and return password'
-            }),
-        async (argv) => cmdHandler(uploadFile, argv)
-      )
-      .command(
-        'decrypt file',
-        'Decrypt file',
-        (yargs) =>
-          yargs
-            .positional('file', {
-              describe: 'the file to decrypt',
-              type: 'string'
-            })
-            .option('password', {
-              type: 'string',
-              default: false,
-              description: 'Encrypt the file with AES and return password'
-            }),
-        async (argv) => cmdHandler(decryptFile, argv)
-      ),
-  () => {
-    yargs.showHelp()
-    return process.exit()
-  }
-)
-
-y.command(
   'accounts',
   'Management of accounts and the funds associted to them',
   (yargs) =>
@@ -1030,6 +986,38 @@ y.command(
   (yargs) =>
     yargs
       .usage('usage: $0 utils <command> parameters [options]')
+      .command(
+        'upload file',
+        'Upload file to filecoin',
+        (yargs) =>
+          yargs
+            .positional('file', {
+              describe: 'the file to upload',
+              type: 'string'
+            })
+            .option('encrypt', {
+              type: 'boolean',
+              default: false,
+              description: 'Encrypt the file with AES and return password'
+            }),
+        async (argv) => cmdHandler(uploadFile, argv)
+      )
+      .command(
+        'decrypt file',
+        'Decrypt file',
+        (yargs) =>
+          yargs
+            .positional('file', {
+              describe: 'the file to decrypt',
+              type: 'string'
+            })
+            .option('password', {
+              type: 'string',
+              default: false,
+              description: 'Encrypt the file with AES and return password'
+            }),
+        async (argv) => cmdHandler(decryptFile, argv)
+      )
       .command(
         'publish-nft-metadata',
         'It publish the metadata associated to a NFT into external storage',
