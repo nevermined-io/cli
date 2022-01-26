@@ -76,8 +76,7 @@ export const config: CliConfig = {
     nvm: {
       faucetUri: process.env.FAUCET_URL || 'http://localhost:3001',
       metadataUri:
-//      process.env.METADATA_URL || 'http://172.17.0.1:5000',
-      process.env.METADATA_URL || 'http://localhost:5000',
+      process.env.METADATA_URL || 'http://172.17.0.1:5000',
       gatewayUri: process.env.GATEWAY_URL || 'http://localhost:8030',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||

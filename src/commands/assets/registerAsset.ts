@@ -51,11 +51,7 @@ export const registerAsset = async (
 
     logger.debug(`Using Price ${argv.price}`)
 
-    // TODO: read provider key from gateway
-    const providerKey = {
-      x: '0x2e3133fbdaeb5486b665ba78c0e7e749700a5c32b1998ae14f7d1532972602bb',
-      y: '0x0b932f02e59f90cdd761d9d5e7c15c8e620efce4ce018bf54015d68d9cb35561'
-  }
+    const providerKey = await nvm.gateway.getBabyjubPublicKey()
 
     const _files: File[] = []
     let _fileIndex = 0
@@ -91,9 +87,8 @@ export const registerAsset = async (
       ddoMetadata.additionalInformation = {
         poseidonHash: keytransfer.hashKey(Buffer.from(password)),
         providerKey,
-        links: argv.urls
+        links: argv.urls.map((url:string) => ({name: 'public url', url}))
       }
-      console.log(ddoMetadata.additionalInformation)
     }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')
