@@ -42,13 +42,15 @@ import { ProvenanceMethods, StatusCodes } from './utils/enums'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
-
-  if (verbose) {
-    logger.level = 'debug'
-  }
-
+  
   const config = getConfig(network as string)
   const nvm = await loadNevermined(config, network, verbose)
+
+  if (verbose)  {
+    logger.level = 'debug'
+  } else {
+    logger.level = 'info'
+  }  
 
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
   logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
@@ -74,6 +76,7 @@ const y = yargs(hideBin(process.argv))
   .usage('usage: $0 <command>')
   .option('verbose', {
     alias: 'v',
+    default: false,
     type: 'boolean',
     description: 'Run with verbose logging'
   })

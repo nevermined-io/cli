@@ -58,7 +58,7 @@ export const config: CliConfig = {
         '0xF8D50e0e0F47c5dbE943AeD661cCF25c3468c44f',
       // default infura rinkeby endpoint
       nodeUri: `${process.env.NODE_URL}`,
-      verbose: LogLevel.Error
+      verbose: false
     } as Config,
     nativeToken: 'ETH',
     etherscanUrl: 'https://rinkeby.etherscan.io',
@@ -82,7 +82,7 @@ export const config: CliConfig = {
         process.env.GATEWAY_ADDRESS ||
         '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0',
       nodeUri: `${process.env.NODE_URL}`,
-      verbose: LogLevel.Error
+      verbose: true
     } as Config,
     nativeToken: 'ETH',
     etherscanUrl: 'https://spree.etherscan.io',
@@ -108,7 +108,7 @@ export const config: CliConfig = {
         process.env.GATEWAY_ADDRESS ||
         '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
       nodeUri: `${process.env.NODE_URL}`,
-      verbose: LogLevel.Error
+      verbose: false
     } as Config,
     nativeToken: 'MATIC',
     etherscanUrl: 'https://explorer-mumbai.maticvigil.com',
@@ -136,7 +136,7 @@ export const config: CliConfig = {
         process.env.GATEWAY_ADDRESS ||
         '0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b',
       nodeUri: `${process.env.NODE_URL}`,
-      verbose: LogLevel.Error
+      verbose: false
     } as Config,
     nativeToken: 'MATIC',
     etherscanUrl: 'https://explorer-mumbai.maticvigil.com/',
