@@ -40,7 +40,6 @@ export const parseDIDFromNewAsset = (stdout: string): string => {
 
 export const parseUrlAndPassword = (stdout: string): any => {
   const parts = commandRegex.utils.upload.exec(stdout)
-  console.log('parts', parts)
   if (parts != null) {
     return {url: parts[1], password: parts[2]}
   }
@@ -49,7 +48,6 @@ export const parseUrlAndPassword = (stdout: string): any => {
 
 export const parsePasswordFromOrder = (stdout: string): any => {
   const parts = commandRegex.assets.password.exec(stdout)
-  console.log('parts', parts)
   if (parts != null) {
     return parts[1]
   }

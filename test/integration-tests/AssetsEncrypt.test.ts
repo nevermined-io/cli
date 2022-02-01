@@ -34,7 +34,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Registering a new dataset and resolve the DID', async () => {
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name a --author b --price 1 --urls ${url} --password "${password}" --contentType text/plain`
+    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name a --author b --price 1 --urls ${url} --password '${password}' --contentType text/plain`
     console.debug(`COMMAND: ${registerDatasetCommand}`)
 
     const registerStdout = execSync(registerDatasetCommand, execOpts)
