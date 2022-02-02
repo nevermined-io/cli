@@ -15,13 +15,17 @@ import fs from 'fs'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
+import KeyTransfer from '@nevermined-io/nevermined-sdk-js/dist/node/utils/KeyTransfer'
+
+const keytransfer = new KeyTransfer()
+
 export const registerAsset = async (
   nvm: Nevermined,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, account, metadata, assetType } = argv
+  const { verbose, network, account, metadata, assetType, password, encrypt } = argv
   const token = await loadToken(nvm, config, verbose)
 
   if (verbose) {
@@ -47,8 +51,18 @@ export const registerAsset = async (
 
     logger.debug(`Using Price ${argv.price}`)
 
+    const providerKey = await nvm.gateway.getBabyjubPublicKey()
+
     const _files: File[] = []
     let _fileIndex = 0
+    if (password) {
+      _files.push({
+        index: _fileIndex,
+        url: Buffer.from(password).toString('hex'),
+        contentType: 'text/plain'
+      })
+      _fileIndex++
+    }
     argv.urls.forEach((_url: string) => {
       _files.push({
         index: _fileIndex,
@@ -68,6 +82,13 @@ export const registerAsset = async (
         price: ddoPrice.toString(),
         files: _files
       } as MetaDataMain
+    }
+    if (password) {
+      ddoMetadata.additionalInformation = {
+        poseidonHash: keytransfer.hashKey(Buffer.from(password)),
+        providerKey,
+        links: argv.urls.map((url:string) => ({name: 'public url', url}))
+      }
     }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')
@@ -95,7 +116,8 @@ export const registerAsset = async (
     ddoMetadata,
     creatorAccount,
     // @ts-ignore
-    new AssetRewards(creatorAccount.getId(), ddoPrice)
+    new AssetRewards(creatorAccount.getId(), ddoPrice),
+    encrypt || password ? ['access-proof'] : undefined
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

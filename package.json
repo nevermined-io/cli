@@ -20,14 +20,14 @@
     "ncli": "./dist/src/index.js"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "^0.18.1",
+    "@nevermined-io/nevermined-sdk-js": "^0.18.9",
     "@truffle/hdwallet-provider": "^1.4.1",
     "chalk": "^4.1.2",
     "cli-docs-generator": "^1.0.7",
     "dotenv": "^10.0.0",
+    "ipfs-http-client-lite": "~0.3.0",
     "log4js": "^6.3.0",
-    "yargs": "^17.0.1",
-    "ipfs-http-client-lite": "~0.3.0"
+    "yargs": "^17.0.1"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",

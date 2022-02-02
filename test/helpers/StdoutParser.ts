@@ -1,6 +1,7 @@
 export const commandRegex = {
   assets: {
     did: new RegExp('.*Created Asset.(.{71}).*', 'g'),
+    password: new RegExp('.*Got password (.{32}).*', 'g'),
     totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\n', 'g'),
     downloadPath: new RegExp('.*Files downloaded to:.(.*)', 'gm'),
     serviceAgreement: new RegExp('.*Agreement Id:.(.*)\n', 'g')
@@ -23,6 +24,9 @@ export const commandRegex = {
   },
   provenance: {
     register: new RegExp('.*Provenance Id: (.*)', 'gm')
+  },
+  utils: {
+    upload: new RegExp('URL: (.*)\nPassword: (.*)\n', 'gm')
   }
 }
 
@@ -30,6 +34,22 @@ export const parseDIDFromNewAsset = (stdout: string): string => {
   const did = commandRegex.assets.did.exec(stdout)
   if (did != null) {
     return did[1]
+  }
+  return ''
+}
+
+export const parseUrlAndPassword = (stdout: string): any => {
+  const parts = commandRegex.utils.upload.exec(stdout)
+  if (parts != null) {
+    return {url: parts[1], password: parts[2]}
+  }
+  return {url: '', password: ''}
+}
+
+export const parsePasswordFromOrder = (stdout: string): any => {
+  const parts = commandRegex.assets.password.exec(stdout)
+  if (parts != null) {
+    return parts[1]
   }
   return ''
 }

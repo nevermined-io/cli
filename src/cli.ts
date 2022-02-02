@@ -32,6 +32,8 @@ import {
   provenanceHistory,
   provenanceInspect,
   // Utils
+  decryptFile,
+  uploadFile,
   publishNftMetadata,
   getNftMetadata
 } from './commands'
@@ -130,7 +132,7 @@ y.command(
 
 y.command(
   'accounts',
-  'Management of accounts and the funds associted to them',
+  'Management of accounts and the funds associated to them',
   (yargs) =>
     yargs
       .usage('usage: $0 accounts <command> parameters [options]')
@@ -236,6 +238,10 @@ y.command(
               default: 'undefined',
               description: 'Asset license'
             })
+            .option('password', {
+              type: 'string',
+              description: 'Password for encrypted files'
+            })
             .option('assetType', {
               type: 'string',
               default: 'dataset',
@@ -314,6 +320,10 @@ y.command(
           yargs.positional('metadata', {
             describe: 'The metadata file',
             type: 'string'
+          }).option('encrypt', {
+            type: 'boolean',
+            default: false,
+            description: 'Use encrypted service endpoint'
           }),
         async (argv) => cmdHandler(registerAsset, argv)
       )
@@ -367,6 +377,10 @@ y.command(
           yargs.positional('did', {
             describe: 'The asset did',
             type: 'string'
+          })
+          .option('password', {
+            type: 'string',
+            description: 'Password for receiving encrypted files'
           }),
         async (argv) => cmdHandler(orderAsset, argv)
       )
@@ -389,6 +403,10 @@ y.command(
               type: 'number',
               default: -1,
               description: 'The index of the file in the DDO'
+            })
+            .option('password', {
+              type: 'string',
+              description: 'Password for receiving encrypted files'
             })
             .option('path', {
               type: 'string',
@@ -971,6 +989,38 @@ y.command(
   (yargs) =>
     yargs
       .usage('usage: $0 utils <command> parameters [options]')
+      .command(
+        'upload file',
+        'Upload file to filecoin',
+        (yargs) =>
+          yargs
+            .positional('file', {
+              describe: 'the file to upload',
+              type: 'string'
+            })
+            .option('encrypt', {
+              type: 'boolean',
+              default: false,
+              description: 'Encrypt the file with AES and return password'
+            }),
+        async (argv) => cmdHandler(uploadFile, argv)
+      )
+      .command(
+        'decrypt file',
+        'Decrypt file',
+        (yargs) =>
+          yargs
+            .positional('file', {
+              describe: 'the file to decrypt',
+              type: 'string'
+            })
+            .option('password', {
+              type: 'string',
+              default: false,
+              description: 'Encrypt the file with AES and return password'
+            }),
+        async (argv) => cmdHandler(decryptFile, argv)
+      )
       .command(
         'publish-nft-metadata',
         'It publish the metadata associated to a NFT into external storage',
