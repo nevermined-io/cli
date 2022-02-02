@@ -5,7 +5,7 @@ export const metadataConfig = {
   name: 'CLI Testing Dataset #',
   author: 'Nevermined CLI',
   price: 1,
-  url: 'https://gist.githubusercontent.com/aaitor/c22337687603cfe0cb09e527110df61c/raw/8242ee5fe0d32726109118cc19ce6681d84474d9/ASLv2',
+  url: 'https://www.apache.org/licenses/LICENSE-2.0',
   contentType: 'text/plain',
   metadataFile: 'test/resources/example-1.json',
   metadataFileWorkflow: 'test/resources/metadata_workflow_coordinator.json',
