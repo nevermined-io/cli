@@ -44,15 +44,15 @@ import { ProvenanceMethods, StatusCodes } from './utils/enums'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
-  
+
   const config = getConfig(network as string)
   const nvm = await loadNevermined(config, network, verbose)
 
-  if (verbose)  {
+  if (verbose) {
     logger.level = 'debug'
   } else {
     logger.level = 'info'
-  }  
+  }
 
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
   logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
@@ -317,14 +317,16 @@ y.command(
         'import',
         'Import an asset using the metadata in JSON format',
         (yargs) =>
-          yargs.positional('metadata', {
-            describe: 'The metadata file',
-            type: 'string'
-          }).option('encrypt', {
-            type: 'boolean',
-            default: false,
-            description: 'Use encrypted service endpoint'
-          }),
+          yargs
+            .positional('metadata', {
+              describe: 'The metadata file',
+              type: 'string'
+            })
+            .option('encrypt', {
+              type: 'boolean',
+              default: false,
+              description: 'Use encrypted service endpoint'
+            }),
         async (argv) => cmdHandler(registerAsset, argv)
       )
       .command(
@@ -374,14 +376,15 @@ y.command(
         'order did',
         'Order an asset given a DID',
         (yargs) =>
-          yargs.positional('did', {
-            describe: 'The asset did',
-            type: 'string'
-          })
-          .option('password', {
-            type: 'string',
-            description: 'Password for receiving encrypted files'
-          }),
+          yargs
+            .positional('did', {
+              describe: 'The asset did',
+              type: 'string'
+            })
+            .option('password', {
+              type: 'string',
+              description: 'Password for receiving encrypted files'
+            }),
         async (argv) => cmdHandler(orderAsset, argv)
       )
       .command(
