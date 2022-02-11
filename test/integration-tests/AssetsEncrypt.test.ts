@@ -13,14 +13,13 @@ describe('Assets e2e Testing', () => {
 
   beforeAll(async () => {
     console.log('pwd', execSync('pwd', execOpts).toString())
-  
+
     console.log(`Funding account: ${execOpts.accounts[0]}`)
     const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
     const stdout = execSync(fundCommand, execOpts)
     console.log(stdout.toString())
-
   })
 
   test('Upload a file', async () => {
@@ -28,9 +27,8 @@ describe('Assets e2e Testing', () => {
     console.debug(`COMMAND: ${uploadCommand}`)
 
     const uploadStdout = execSync(uploadCommand, execOpts)
-    const res = parseUrlAndPassword(uploadStdout)
-    url = res.url
-    password = res.password
+
+    ;({ url, password } = parseUrlAndPassword(uploadStdout))
   })
 
   test('Registering a new dataset and resolve the DID', async () => {
@@ -61,6 +59,5 @@ describe('Assets e2e Testing', () => {
     const pass = parsePasswordFromOrder(getStdout)
     console.log(`Password: ${pass}`)
     expect(pass).toEqual(password)
-
   })
 })

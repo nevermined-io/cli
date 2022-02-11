@@ -25,7 +25,8 @@ export const registerAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, account, metadata, assetType, password, encrypt } = argv
+  const { verbose, network, account, metadata, assetType, password, encrypt } =
+    argv
   const token = await loadToken(nvm, config, verbose)
 
   if (verbose) {
@@ -87,7 +88,7 @@ export const registerAsset = async (
       ddoMetadata.additionalInformation = {
         poseidonHash: keytransfer.hashKey(Buffer.from(password)),
         providerKey,
-        links: argv.urls.map((url:string) => ({name: 'public url', url}))
+        links: argv.urls.map((url: string) => ({ name: 'public url', url }))
       }
     }
     if (assetType === 'algorithm') {

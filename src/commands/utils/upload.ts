@@ -11,11 +11,10 @@ export const uploadFile = async (
 ): Promise<number> => {
   const { file, encrypt } = argv
   const stream = fs.createReadStream(file)
-  const {url, password} = await nvm.files.uploadFilecoin(stream, encrypt)
+  const { url, password } = await nvm.files.uploadFilecoin(stream, encrypt)
   console.log(`URL: ${url}`)
   if (password) {
-      console.log(`Password: ${password}`)
+    console.log(`Password: ${password}`)
   }
   return 0
 }
-

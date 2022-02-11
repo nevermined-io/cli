@@ -50,15 +50,10 @@ export const getAsset = async (
   )
 
   if (password) {
-    const key = await nvm.assets.consumeProof(
-      agreementId,
-      did,
-      userAccount
-    )
+    const key = await nvm.assets.consumeProof(agreementId, did, userAccount)
     console.log(`Got password ${Buffer.from(key as any, 'hex').toString()}`)
-
   } else {
-      const path = await nvm.assets.consume(
+    const path = await nvm.assets.consume(
       agreementId,
       did,
       userAccount,
