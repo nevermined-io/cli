@@ -1,6 +1,5 @@
 const IpfsHttpClientLite = require('ipfs-http-client-lite')
-
-const IPFS_GATEWAY = process.env.IPFS_GATEWAY || 'https://ipfs.infura.io:5001'
+const IPFS_GATEWAY = process.env.IPFS_GATEWAY || 'https://gateway.ipfs.io'
 
 export default class IpfsHelper {
   public static async add(content: any): Promise<string> {
