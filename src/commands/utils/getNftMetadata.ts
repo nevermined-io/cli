@@ -71,23 +71,21 @@ export const getNftMetadata = async (
     chalk.dim(`NFT Metadata URL: ${chalk.yellowBright(metadataUrl)}\n`)
   )
 
+  let metadataContent = '{}'
   if (metadataUrl.startsWith('cid://')) {
-    const metadataContent = await IpfsHelper.get(metadataUrl)
-    logger.info(
-      `NFT Metadata: \n${JSON.stringify(
-        JSON.parse(metadataContent),
-        null,
-        2
-      )}\n`
-    )
+    const metadata = await IpfsHelper.get(metadataUrl)
+    metadataContent = await metadata.text()
   } else if (metadataUrl.startsWith('http')) {
-    const metadataContent = await fetch(metadataUrl)
-    logger.info(`NFT Metadata: \n${metadataContent}\n`)
+    const metadata = await fetch(metadataUrl)
+    metadataContent = await metadata.text()
   } else {
     logger.warn('Unable to understand URL format')
+    return StatusCodes.ERROR
   }
 
-  // Print the metadata
+  logger.info(
+    `NFT Metadata: \n${JSON.stringify(JSON.parse(metadataContent), null, 2)}\n`
+  )
 
   return StatusCodes.OK
 }

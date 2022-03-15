@@ -97,6 +97,7 @@ Commands:
   ncli provenance  Provenance functions
   ncli nfts721     Create and manage NFTs (ERC-721) attached to Nevermined assets
   ncli nfts1155    Create and manage NFTs (ERC-1155) attached to Nevermined assets
+  ncli utils       Utility commands to faciliate files management, encryption, etc
 
 Options:
       --help     Show help                                                                                                                                                    [boolean]
@@ -146,7 +147,7 @@ When you want to connect and interact with a different network of the default (`
 ## License
 
 ```
-Copyright 2021 Keyko GmbH
+Copyright 2022 Nevermined AG
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
