@@ -254,8 +254,9 @@ export const getContractNameFromAddress = async (
   let contractName = undefined
   Object.keys(platformVersions.sdk.contracts || {}).forEach((_name) => {
     if (
+      platformVersions.sdk.contracts![_name] &&
       contractAddress.toLowerCase() ===
-      platformVersions.sdk.contracts![_name].toLowerCase()
+        platformVersions.sdk.contracts![_name].toLowerCase()
     ) {
       contractName = _name
     }
