@@ -98,15 +98,19 @@ export const config: CliConfig = {
   celoAlfajores: {
     nvm: {
       faucetUri:
-        process.env.FAUCET_URL || 'https://faucet.alfajores.celo.nevermined.rocks/',
+        process.env.FAUCET_URL ||
+        'https://faucet.alfajores.celo.nevermined.rocks/',
       metadataUri:
-        process.env.METADATA_URL || 'https://gateway.alfajores.celo.nevermined.rocks',
+        process.env.METADATA_URL ||
+        'https://gateway.alfajores.celo.nevermined.rocks',
       gatewayUri:
-        process.env.GATEWAY_URL || 'https://gateway.alfajores.nevermined.rocks/',
+        process.env.GATEWAY_URL ||
+        'https://gateway.alfajores.nevermined.rocks/',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
-      nodeUri: `${process.env.NODE_URL}` || 'https://alfajores-forno.celo-testnet.org',
+      nodeUri:
+        `${process.env.NODE_URL}` || 'https://alfajores-forno.celo-testnet.org',
       verbose: false
     } as Config,
     nativeToken: 'CELO',
@@ -124,11 +128,14 @@ export const config: CliConfig = {
   celoMainnet: {
     nvm: {
       faucetUri:
-        process.env.FAUCET_URL || 'https://faucet.alities.celo.nevermined.rocks/',
+        process.env.FAUCET_URL ||
+        'https://faucet.alities.celo.nevermined.rocks/',
       metadataUri:
-        process.env.METADATA_URL || 'https://metadata.alities.celo.nevermined.rocks',
+        process.env.METADATA_URL ||
+        'https://metadata.alities.celo.nevermined.rocks',
       gatewayUri:
-        process.env.GATEWAY_URL || 'https://gateway.alities.celo.nevermined.rocks',
+        process.env.GATEWAY_URL ||
+        'https://gateway.alities.celo.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x7f3661d22E89Ad3549c7fC034D94B53da731D36A',
