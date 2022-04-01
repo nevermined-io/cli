@@ -95,6 +95,65 @@ export const config: CliConfig = {
     gasMultiplier: process.env.GAS_MULTIPLIER || 0,
     gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry,
+  celoAlfajores: {
+    nvm: {
+      faucetUri:
+        process.env.FAUCET_URL ||
+        'https://faucet.alfajores.celo.nevermined.rocks/',
+      metadataUri:
+        process.env.METADATA_URL ||
+        'https://gateway.alfajores.celo.nevermined.rocks',
+      gatewayUri:
+        process.env.GATEWAY_URL ||
+        'https://gateway.alfajores.nevermined.rocks/',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
+      nodeUri:
+        `${process.env.NODE_URL}` || 'https://alfajores-forno.celo-testnet.org',
+      verbose: false
+    } as Config,
+    nativeToken: 'CELO',
+    etherscanUrl: 'https://explorer.celo.org',
+    erc20TokenAddress:
+      process.env.TOKEN_ADDRESS ||
+      // MATIC
+      '0x0000000000000000000000000000000000000000',
+    seed: process.env.MNEMONIC,
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD,
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
+  } as ConfigEntry,
+  celoMainnet: {
+    nvm: {
+      faucetUri:
+        process.env.FAUCET_URL ||
+        'https://faucet.alities.celo.nevermined.rocks/',
+      metadataUri:
+        process.env.METADATA_URL ||
+        'https://metadata.alities.celo.nevermined.rocks',
+      gatewayUri:
+        process.env.GATEWAY_URL ||
+        'https://gateway.alities.celo.nevermined.rocks',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0x7f3661d22E89Ad3549c7fC034D94B53da731D36A',
+      nodeUri: `${process.env.NODE_URL}` || 'https://forno.celo.org',
+      verbose: false
+    } as Config,
+    nativeToken: 'CELO',
+    etherscanUrl: 'https://explorer.celo.org',
+    erc20TokenAddress:
+      process.env.TOKEN_ADDRESS ||
+      // CELO
+      '0x0000000000000000000000000000000000000000',
+    seed: process.env.MNEMONIC,
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD,
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
+  } as ConfigEntry,
   defiMumbai: {
     nvm: {
       faucetUri:
