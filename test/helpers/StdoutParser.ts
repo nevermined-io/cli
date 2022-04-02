@@ -15,7 +15,7 @@ export const commandRegex = {
   },
   accounts: {
     newAccount: new RegExp(
-      '.*Account address:.(.*)\nAccount private key: (.*)\n',
+      '.*Wallet address:.(.*)\nWallet public key: (.*)\n',
       'g'
     )
   },

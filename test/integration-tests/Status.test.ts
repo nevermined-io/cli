@@ -14,13 +14,12 @@ describe('Status e2e Testing', () => {
     expect(stdout.includes('rinkeby'))
   })
 
-  test('Get status information of a local network (spree)', async () => {
-    const network = 'spree'
-    const command = `${baseCommands.network.status} --network ${network} `
+  test('Get status information of a local network', async () => {
+    const command = `${baseCommands.network.status} `
     const stdout = execSync(command, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    expect(stdout.includes(`Loading information from network ${network}`))
+    expect(stdout.includes(`Loading information from network`))
     expect(stdout.includes(`Status: Working`))
   })
 })
