@@ -306,11 +306,15 @@ export const loadToken = async (
   } else {
     // if the token address is not zero try to load it
     token = nvm.keeper.token // eslint-disable-line
+    const nvmTokenAddress = token.address || ''
+    console.debug(
+      `Loading ERC20 Token ${config.erc20TokenAddress.toLowerCase()}`
+    )
+    console.debug(`Nevermined Token Address ${nvmTokenAddress}`)
 
     // check if we have a different token configured
     if (
-      config.erc20TokenAddress.toLowerCase() !==
-      (token && nvm.keeper.token.address.toLowerCase())
+      config.erc20TokenAddress.toLowerCase() !== nvmTokenAddress.toLowerCase()
     ) {
       token = await CustomToken.getInstanceByAddress(
         {

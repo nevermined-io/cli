@@ -99,13 +99,12 @@ export const config: CliConfig = {
     nvm: {
       faucetUri:
         process.env.FAUCET_URL ||
-        'https://faucet.alfajores.celo.nevermined.rocks/',
+        'https://faucet.alfajores.nevermined.rocks',
       metadataUri:
         process.env.METADATA_URL ||
-        'https://gateway.alfajores.celo.nevermined.rocks',
+        'https://metadata.alfajores.nevermined.rocks',
       gatewayUri:
-        process.env.GATEWAY_URL ||
-        'https://gateway.alfajores.nevermined.rocks/',
+        process.env.GATEWAY_URL || 'https://gateway.alfajores.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
@@ -114,11 +113,10 @@ export const config: CliConfig = {
       verbose: false
     } as Config,
     nativeToken: 'CELO',
-    etherscanUrl: 'https://explorer.celo.org',
+    etherscanUrl: 'https://alfajores-blockscout.celo-testnet.org',
     erc20TokenAddress:
-      process.env.TOKEN_ADDRESS ||
-      // MATIC
-      '0x0000000000000000000000000000000000000000',
+      process.env.TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000', // CELO
+    // process.env.TOKEN_ADDRESS || '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1', // cUSD
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
     keyfilePassword: process.env.KEYFILE_PASSWORD,
@@ -129,7 +127,7 @@ export const config: CliConfig = {
     nvm: {
       faucetUri:
         process.env.FAUCET_URL ||
-        'https://faucet.alities.celo.nevermined.rocks/',
+        'https://faucet.alities.celo.nevermined.rocks',
       metadataUri:
         process.env.METADATA_URL ||
         'https://metadata.alities.celo.nevermined.rocks',

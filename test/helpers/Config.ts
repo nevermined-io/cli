@@ -1,4 +1,6 @@
-const BASE_COMMAND = 'yarn start'
+// const NETWORK = '' // Spree
+const NETWORK = ' -n celoAlfajores '
+const BASE_COMMAND = `yarn start ${NETWORK}`
 const VERBOSE = '-v'
 
 export const metadataConfig = {
