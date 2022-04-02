@@ -17,7 +17,9 @@ export const execOpts = {
   env: {
     ...process.env,
     NODE_URL: `${process.env.NODE_URL}` || 'http://localhost:8545',
-    TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000',
+    TOKEN_ADDRESS:
+      `${process.env.TOKEN_ADDRESS}` ||
+      '0x0000000000000000000000000000000000000000',
     MNEMONIC: process.env.MNEMONIC
   },
   accounts: [
