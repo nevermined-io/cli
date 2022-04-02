@@ -1,6 +1,5 @@
-// const NETWORK = '' // Spree
-const NETWORK = ' -n celoAlfajores ' // Alfajores
-const BASE_COMMAND = `yarn start ${NETWORK}`
+const NETWORK = process.env.NETWORK || 'spree'
+const BASE_COMMAND = `yarn start -n ${NETWORK}`
 const VERBOSE = '-v'
 
 export const metadataConfig = {
