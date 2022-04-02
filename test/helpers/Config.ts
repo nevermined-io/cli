@@ -1,5 +1,5 @@
-// const NETWORK = '' // Spree
-const NETWORK = ' -n celoAlfajores '
+const NETWORK = '' // Spree
+// const NETWORK = ' -n celoAlfajores ' // Alfajores
 const BASE_COMMAND = `yarn start ${NETWORK}`
 const VERBOSE = '-v'
 
