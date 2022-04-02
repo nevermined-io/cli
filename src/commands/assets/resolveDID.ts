@@ -13,6 +13,11 @@ export const resolveDID = async (
   const { verbose, network, did } = argv
 
   logger.info(chalk.dim(`Resolving the asset: ${did}`))
+ 
+  logger.info(chalk.dim(`Using DIDRegistry: ${await nvm.keeper.didRegistry.getAddress()}`))
+  const onchainInfo = await nvm.keeper.didRegistry.getDIDRegister(did)
+
+  logger.info(JSON.stringify(onchainInfo))
 
   const ddo = await nvm.assets.resolve(did)
 
