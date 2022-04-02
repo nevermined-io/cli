@@ -22,7 +22,36 @@ export const resolveDID = async (
   }
 
   logger.info(chalk.dim('DID found and DDOresolved'))
-  logger.debug(ddo)
+  logger.info(ddo)
 
+  // Get Gateway address
+  // const gatewayAddress = config.nvm.gatewayAddress
+  
+
+  // Check if Gateway is a provider
+  const isProvider = await nvm.keeper.didRegistry.isDIDProvider(
+    ddo.id,
+    config.nvm.gatewayAddress || ''
+  )
+
+  if (!isProvider) {
+    logger.warn(
+      chalk.dim(
+        ` ${chalk.bgRed('WARNING :')} The Gateway with address ${
+          config.nvm.gatewayAddress
+        } ${chalk.bgRed(
+          'is not listed as a provider'
+        )} of this asset. This could cause problems during the purchase process\n\n`
+      )
+    )
+  } else {
+    logger.info(
+      chalk.dim(
+        `${chalk.bgGreen('✅')} The Gateway with address ${
+          config.nvm.gatewayAddress
+        } is a provider of the asset\n\n`
+      )
+    )
+  }
   return StatusCodes.OK
 }
