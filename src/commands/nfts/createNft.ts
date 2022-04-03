@@ -114,6 +114,19 @@ export const createNft = async (
       false, // we don't pre-mint here
       argv.nftMetadata
     )
+
+    const isApproved = await nvm.keeper.nftUpgradeable.isApprovedForAll(
+      creatorAccount.getId(),
+      config.nvm.gatewayAddress!
+    )
+    if (!isApproved) {
+      const receipt = await nvm.nfts.setApprovalForAll(
+        config.nvm.gatewayAddress!,
+        true,
+        creatorAccount
+      )
+      logger.info('Approval receipt:', receipt)
+    }
   }
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

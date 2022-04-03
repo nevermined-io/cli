@@ -98,8 +98,7 @@ export const config: CliConfig = {
   celoAlfajores: {
     nvm: {
       faucetUri:
-        process.env.FAUCET_URL ||
-        'https://faucet.alfajores.nevermined.rocks',
+        process.env.FAUCET_URL || 'https://faucet.alfajores.nevermined.rocks',
       metadataUri:
         process.env.METADATA_URL ||
         'https://metadata.alfajores.nevermined.rocks',

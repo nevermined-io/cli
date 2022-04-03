@@ -45,14 +45,14 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
   })
 
   test('It mints a NFT (ERC-1155)', async () => {
-    const mintCommand = `${baseCommands.nfts1155.mint} "${did}" --amount 2 --account "${execOpts.accounts[0]}"  `
+    const mintCommand = `${baseCommands.nfts1155.mint} "${did}" --amount 10 --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${mintCommand}`)
 
     const stdout = execSync(mintCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
-    expect(stdout.includes(`Minted 2 NFTs (ERC-1155)`))
+    expect(stdout.includes(`Minted 20 NFTs (ERC-1155)`))
   })
 
   test('It burns a NFT (ERC-1155)', async () => {
@@ -79,7 +79,34 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
     expect(stdout.includes(`NFT Agreement Created`))
   })
 
-  test('The seller transfer a NFT (ERC-1155)', async () => {
+  test('The buyer can get access to the files through the gateway', async () => {
+    const destination = `/tmp/nevemined/cli/test-gateway/access`
+    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --seller "${execOpts.accounts[0]}" --account "${execOpts.accounts[1]}"  `
+    console.debug(`COMMAND: ${downloadCommand}`)
+
+    const stdout = execSync(downloadCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(did))
+    expect(stdout.includes(`NFT Assets downloaded`))
+
+    const files = fs.readdirSync(destination || '')
+    expect(files.length == 1)
+
+    files.forEach((file) => {
+      expect(Path.extname(file) === '.md')
+    })
+  })
+
+  test('The buyer order and the seller transfer a NFT (ERC-1155)', async () => {
+    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[1]}"  `
+    console.debug(`COMMAND: ${orderCommand}`)
+
+    const orderStdout = execSync(orderCommand, execOpts)
+
+    console.debug(`STDOUT: ${orderStdout}`)
+    orderAgreementId = parseNFTOrderAgreementId(orderStdout)
+
     const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${transferCommand}`)
 

@@ -9,7 +9,7 @@ export const downloadNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, did, destination, account } = argv
+  const { verbose, network, did, destination, account, agreementId } = argv
 
   logger.info(
     chalk.dim(`Downloading NFT associated to ${chalk.whiteBright(did)}`)
@@ -21,7 +21,7 @@ export const downloadNft = async (
 
   console.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
 
-  await nvm.nfts.access(did, consumerAccount, destination)
+  await nvm.nfts.access(did, consumerAccount, destination, agreementId)
 
   logger.info(
     chalk.dim(`NFT Assets downloaded to: ${chalk.whiteBright(destination)}`)

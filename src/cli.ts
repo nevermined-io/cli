@@ -14,6 +14,7 @@ import {
   orderNft,
   showNft,
   transferNft,
+  accessNft,
   // Assets
   registerAsset,
   resolveDID,
@@ -953,7 +954,7 @@ y.command(
             .option('amount', {
               type: 'number',
               default: 1,
-              description: 'the number of NFTs to burn'
+              description: 'the number of NFTs to transfer'
             })
             .option('nftType', {
               type: 'string',
@@ -963,7 +964,31 @@ y.command(
             }),
         async (argv) => cmdHandler(transferNft, argv)
       )
-
+      .command(
+        'access did agreementId',
+        'Downloads the data associated to a ERC-1155 NFT',
+        (yargs) =>
+          yargs
+            .positional('did', {
+              describe: 'the DID of the asset',
+              type: 'string'
+            })
+            .positional('agreementId', {
+              describe: 'the agreement id address',
+              type: 'string'
+            })
+            .option('seller', {
+              describe: 'the account selling the nft',
+              demandOption: true,
+              type: 'string'
+            })
+            .option('destination', {
+              describe: 'the destination of the files',
+              demandOption: true,
+              type: 'string'
+            }),
+        async (argv) => cmdHandler(accessNft, argv)
+      )
       .command(
         'download did',
         'Downloads the data associated to a ERC-1155 NFT',

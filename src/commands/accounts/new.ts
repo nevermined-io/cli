@@ -44,4 +44,3 @@ export const accountsNew = async (
 
   return StatusCodes.OK
 }
-
