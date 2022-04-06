@@ -1304,10 +1304,10 @@
     "@gnosis.pm/safe-core-sdk" "^1.0.0"
     "@gnosis.pm/safe-deployments" "^1.4.0"
 
-"@nevermined-io/nevermined-sdk-js@0.19.17":
-  version "0.19.17"
-  resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.19.17.tgz#b90934db5e2f233a65e8fd8dd78a13cf890d3055"
-  integrity sha512-RCP7vToKqzhji/cXJGtylhJ/86qmN2eiJolrmhMXEstgRb6bLPrFzeFgaZ6P3DvokHPH7wF2B/jqm5zY3gK6Ag==
+"@nevermined-io/nevermined-sdk-js@0.19.19":
+  version "0.19.19"
+  resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.19.19.tgz#06d352d24146ae6e45372b5d9d67bdff67a1a19d"
+  integrity sha512-45foPV2WOT4qnpvlgiEfRZy2CW3OSC+H9Xtub7ccZ/zvScAlkYXw4fOEuGZnZp8A0Q2E/UnTeZ0t0q+IWdx9cQ==
   dependencies:
     "@nevermined-io/contracts" "1.3.12"
     "@nevermined-io/secret-store-client" "^0.0.16"

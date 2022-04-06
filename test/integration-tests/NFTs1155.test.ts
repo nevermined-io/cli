@@ -14,11 +14,13 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
   let orderAgreementId = ''
 
   beforeAll(async () => {
+    
     console.log(`Funding account: ${execOpts.accounts[0]}`)
     const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
     const stdout = execSync(fundCommand, execOpts)
+
   })
 
   test('Register an asset with a NFT (ERC-1155) attached to it', async () => {
@@ -66,20 +68,18 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
     expect(stdout.includes(`Burned 1 NFTs (ERC-1155)`))
   })
 
-  test('Order a NFT (ERC-1155)', async () => {
+  test('The buyer can order and get access to the files (through the gateway)', async () => {
     const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
-    const stdout = execSync(orderCommand, execOpts)
+    const orderStdout = execSync(orderCommand, execOpts)
 
-    console.debug(`STDOUT: ${stdout}`)
-    orderAgreementId = parseNFTOrderAgreementId(stdout)
+    console.debug(`STDOUT: ${orderStdout}`)
+    orderAgreementId = parseNFTOrderAgreementId(orderStdout)
     expect(orderAgreementId != '')
-    expect(stdout.includes(did))
-    expect(stdout.includes(`NFT Agreement Created`))
-  })
+    expect(orderStdout.includes(did))
+    expect(orderStdout.includes(`NFT Agreement Created`))
 
-  test('The buyer can get access to the files through the gateway', async () => {
     const destination = `/tmp/nevemined/cli/test-gateway/access`
     const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --seller "${execOpts.accounts[0]}" --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${downloadCommand}`)
@@ -98,14 +98,14 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
     })
   })
 
-  test('The buyer order and the seller transfer a NFT (ERC-1155)', async () => {
+  test('The buyer order and the seller transfer a NFT (directly)', async () => {
     const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execSync(orderCommand, execOpts)
 
     console.debug(`STDOUT: ${orderStdout}`)
-    orderAgreementId = parseNFTOrderAgreementId(orderStdout)
+    const orderAgreementId = parseNFTOrderAgreementId(orderStdout)
 
     const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${transferCommand}`)

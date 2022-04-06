@@ -57,6 +57,9 @@ const cmdHandler = async (cmd: Function, argv: any) => {
 
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
   logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
+  logger.debug(
+    chalk.dim(`Using node url: '${chalk.whiteBright(config.nvm.nodeUri)}'\n`)
+  )
 
   logger.debug(
     chalk.dim(`Gas Multiplier: '${chalk.whiteBright(config.gasMultiplier)}'\n`)

@@ -9,7 +9,8 @@ export const accessNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, did, destination, account, agreementId, seller } = argv
+  const { verbose, network, did, destination, account, agreementId, seller } =
+    argv
 
   logger.info(
     chalk.dim(`Access & download NFT associated to ${chalk.whiteBright(did)}`)
@@ -27,12 +28,32 @@ export const accessNft = async (
   logger.debug(`NFT Holder: ${seller}`)
   logger.debug(`NFT Receiver: ${consumerAccount.getId()}`)
 
-  const isSuccessful = await nvm.nfts.transferForDelegate(
+  const isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
     agreementId,
     seller,
     consumerAccount.getId(),
     1
   )
+
+  if (!isSuccessfulTransfer) {
+    logger.warn(
+      chalk.dim(`Problem executing 'transferForDelegate' through the gateway`)
+    )
+    return StatusCodes.ERROR
+  }
+
+  logger.info(`NFT Access request through the gateway sucessfully`)
+
+  //                   await nvm.nfts.access(did, consumerAccount, destination, undefined, agreementId)
+  const isSuccessful = await nvm.nfts.access(did, consumerAccount, destination, undefined, agreementId)
+
+  // const isSuccessful = await nvm.nfts.access(
+  //   agreementId,
+  //   consumerAccount,
+  //   destination,
+  //   undefined,
+  //   agreementId
+  // )
 
   if (isSuccessful) {
     logger.info(

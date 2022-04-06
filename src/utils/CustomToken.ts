@@ -11,6 +11,8 @@ export default class CustomToken extends Token {
 
     token.setInstanceConfig(config)
 
+    console.log(`CustomToken with address ${address}`)
+
     const code = await token.web3.eth.getCode(address)
     if (code === '0x0') {
       // no code in the blockchain dude

@@ -7,6 +7,7 @@ import {
   printTokenBanner,
   loadToken
 } from '../../utils'
+import web3Utils from 'web3-utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
@@ -16,6 +17,7 @@ import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
 import KeyTransfer from '@nevermined-io/nevermined-sdk-js/dist/node/utils/KeyTransfer'
+import BigNumber from 'bignumber.js'
 
 const keytransfer = new KeyTransfer()
 
@@ -43,12 +45,13 @@ export const registerAsset = async (
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   let ddoMetadata: MetaData
-  let ddoPrice: number
+  let ddoPrice: BigNumber
   if (!metadata) {
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
 
-    ddoPrice = argv.price * 10 ** decimals
+    ddoPrice = new BigNumber(argv.price).multipliedBy(
+      new BigNumber(10).exponentiatedBy(decimals))
 
     logger.debug(`Using Price ${argv.price}`)
 
@@ -107,8 +110,9 @@ export const registerAsset = async (
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
+
     ddoPrice =
-      Number(ddoMetadata.main.price) > 0 ? Number(ddoMetadata.main.price) : 0
+      new BigNumber(ddoMetadata.main.price).isGreaterThan(0) ? new BigNumber(ddoMetadata.main.price) : new BigNumber(0)
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))

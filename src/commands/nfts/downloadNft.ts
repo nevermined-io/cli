@@ -21,7 +21,7 @@ export const downloadNft = async (
 
   console.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
 
-  await nvm.nfts.access(did, consumerAccount, destination, agreementId)
+  await nvm.nfts.access(did, consumerAccount, destination, undefined, agreementId)
 
   logger.info(
     chalk.dim(`NFT Assets downloaded to: ${chalk.whiteBright(destination)}`)

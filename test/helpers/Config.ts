@@ -1,3 +1,6 @@
+import { NeverminedToken } from "@nevermined-io/nevermined-sdk-js/dist/node/subgraphs"
+import { ConfigEntry } from "../../src/utils"
+
 const NETWORK = process.env.NETWORK || 'spree'
 const BASE_COMMAND = `yarn start -n ${NETWORK}`
 const VERBOSE = '-v'
@@ -18,18 +21,17 @@ export const execOpts = {
     ...process.env,
     NODE_URL: `${process.env.NODE_URL}` || 'http://localhost:8545',
     TOKEN_ADDRESS:
-      `${process.env.TOKEN_ADDRESS}` ||
-      '0x0000000000000000000000000000000000000000',
+      process.env.TOKEN_ADDRESS,
     MNEMONIC: process.env.MNEMONIC
   },
   accounts: [
-    // '0xe2DD09d719Da89e5a3D0F2549c7E24566e947260', // alfajores or spree
-    // '0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e',
-    // '0xA78deb2Fa79463945C247991075E2a0e98Ba7A09'
-    '0x45f6945539C92E0de522f82Ddb009b31511fEc2E', // celo mainnet
-    '0x50a40DA158e73D9EFc929E42aAF5c866750cA059',
-    '0x0541b7383bc60Bd24433D5d3aD3ce284D026F1C7'
-  ]
+    '0xe2DD09d719Da89e5a3D0F2549c7E24566e947260', // alfajores or spree
+    '0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e',
+    '0xA78deb2Fa79463945C247991075E2a0e98Ba7A09'
+    // '0x45f6945539C92E0de522f82Ddb009b31511fEc2E', // celo mainnet
+    // '0x50a40DA158e73D9EFc929E42aAF5c866750cA059',
+    // '0x0541b7383bc60Bd24433D5d3aD3ce284D026F1C7'
+  ]  
 }
 
 export const baseCommands = {

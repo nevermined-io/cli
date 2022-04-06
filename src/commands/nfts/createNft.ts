@@ -14,6 +14,7 @@ import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/Asse
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import fs from 'fs'
 import { Logger } from 'log4js'
+import BigNumber from 'bignumber.js'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -38,7 +39,7 @@ export const createNft = async (
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   let ddoMetadata
-  let ddoPrice: number
+  let ddoPrice: BigNumber
   if (!metadata) {
     if (argv.name === '' || argv.author === '' || argv.urls === '') {
       logger.error(
@@ -49,8 +50,9 @@ export const createNft = async (
 
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
-
-    ddoPrice = argv.price * 10 ** decimals
+    
+    ddoPrice = new BigNumber(argv.price).multipliedBy(
+      new BigNumber(10).exponentiatedBy(decimals))
 
     const _files: File[] = []
     let _fileIndex = 0
@@ -76,7 +78,7 @@ export const createNft = async (
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
-    ddoPrice = Number(ddoMetadata.main.price)
+    ddoPrice = new BigNumber(ddoMetadata.main.price)
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))

@@ -57,7 +57,7 @@ export const showAgreement = async (
     chalk.dim(
       `Last Updated By: ${chalk.whiteBright(agreementData.lastUpdatedBy)}`
     )
-  )
+  )  
   logger.info(
     chalk.dim(
       `In which block number was updated: ${chalk.whiteBright(
@@ -65,6 +65,10 @@ export const showAgreement = async (
       )}`
     )
   )
+  logger.info(chalk.dim(`Condition Ids:`))
+  agreementData.conditionIds.forEach((_conditionId, _index) => {
+    logger.info(chalk.dim(`\tCondition Id[${_index}]= ${_conditionId}`))
+  })
 
   if (contractName === 'NFTAccessTemplate')
     await nvm.keeper.templates.nftAccessTemplate.printAgreementStatus(
