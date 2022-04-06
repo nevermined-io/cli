@@ -14,15 +14,20 @@ export const resolveDID = async (
 
   logger.info(chalk.dim(`Resolving the asset: ${did}`))
 
-  const ddo = await nvm.assets.resolve(did)
+  let ddo
+  try {
+    ddo = await nvm.assets.resolve(did)
+    if (!ddo || ddo.id! !== did) {
+      logger.warn('Asset not found')
+      return StatusCodes.DID_NOT_FOUND
+    }
 
-  if (!ddo) {
+    logger.info(chalk.dim('DID found and DDO resolved'))
+    logger.debug(ddo)
+  } catch {
     logger.warn('Asset not found')
     return StatusCodes.DID_NOT_FOUND
   }
-
-  logger.info(chalk.dim('DID found and DDOresolved'))
-  logger.debug(ddo)
 
   return StatusCodes.OK
 }

@@ -17,6 +17,7 @@ import {
   // Assets
   registerAsset,
   resolveDID,
+  retireDID,
   searchAsset,
   downloadAsset,
   orderAsset,
@@ -428,6 +429,16 @@ y.command(
             type: 'string'
           }),
         async (argv) => cmdHandler(resolveDID, argv)
+      )
+      .command(
+        'retire did',
+        'Retire an asset using a given DID',
+        (yargs) =>
+          yargs.positional('did', {
+            describe: 'The asset did',
+            type: 'string'
+          }),
+        async (argv) => cmdHandler(retireDID, argv)
       ),
   () => {
     yargs.showHelp()
