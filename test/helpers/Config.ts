@@ -16,7 +16,10 @@ export const metadataConfig = {
   metadataNFT: 'cid://QmVT3wfySvZJqAvkBCyxoz3EvD3yeLqf3cvAssFDpFFXNm'
 }
 
+// { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
 export const execOpts = {
+  encoding: 'utf8',
+  maxBuffer: 50 * 1024 * 1024,
   env: {
     ...process.env,
     NODE_URL: `${process.env.NODE_URL}` || 'http://localhost:8545',

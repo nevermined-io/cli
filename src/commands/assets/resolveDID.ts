@@ -14,25 +14,27 @@ export const resolveDID = async (
 
   logger.info(chalk.dim(`Resolving the asset: ${did}`))
 
+
   logger.info(
     chalk.dim(`Using DIDRegistry: ${await nvm.keeper.didRegistry.getAddress()}`)
   )
   const onchainInfo = await nvm.keeper.didRegistry.getDIDRegister(did)
 
   logger.info(JSON.stringify(onchainInfo))
-
-  const ddo = await nvm.assets.resolve(did)
-
-  if (!ddo) {
+  
+  let ddo
+  try {
+    ddo = await nvm.assets.resolve(did)
+    if (!ddo || ddo.id! !== did) {
+      logger.warn('Asset not found')
+      return StatusCodes.DID_NOT_FOUND
+    }
+    logger.info(chalk.dim('DID found and DDO resolved'))
+    logger.debug(ddo)
+  } catch {
     logger.warn('Asset not found')
     return StatusCodes.DID_NOT_FOUND
   }
-
-  logger.info(chalk.dim('DID found and DDOresolved'))
-  logger.info(ddo)
-
-  // Get Gateway address
-  // const gatewayAddress = config.nvm.gatewayAddress
 
   // Check if Gateway is a provider
   const isProvider = await nvm.keeper.didRegistry.isDIDProvider(
@@ -59,5 +61,6 @@ export const resolveDID = async (
       )
     )
   }
+
   return StatusCodes.OK
 }

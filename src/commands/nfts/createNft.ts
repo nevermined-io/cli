@@ -113,7 +113,7 @@ export const createNft = async (
       new AssetRewards(creatorAccount.getId(), ddoPrice),
       undefined,
       token ? token.getAddress() : config.erc20TokenAddress,
-      false, // we don't pre-mint here
+      argv.preMint,
       argv.nftMetadata
     )
 

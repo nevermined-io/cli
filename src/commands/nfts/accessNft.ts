@@ -44,16 +44,12 @@ export const accessNft = async (
 
   logger.info(`NFT Access request through the gateway sucessfully`)
 
-  //                   await nvm.nfts.access(did, consumerAccount, destination, undefined, agreementId)
-  const isSuccessful = await nvm.nfts.access(did, consumerAccount, destination, undefined, agreementId)
-
-  // const isSuccessful = await nvm.nfts.access(
-  //   agreementId,
-  //   consumerAccount,
-  //   destination,
-  //   undefined,
-  //   agreementId
-  // )
+  const isSuccessful = await nvm.nfts.access(
+    did,
+    consumerAccount,
+    destination,
+    undefined
+  )
 
   if (isSuccessful) {
     logger.info(

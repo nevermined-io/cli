@@ -11,7 +11,9 @@ export const commandRegex = {
     deploy: new RegExp('.*Contract deployed into address: (.{42}).*', 'gm'),
     create: new RegExp('.*Created DID: (.{71}).*', 'gm'),
     publishMetadata: new RegExp('.*NFT Metadata Created: (.*)', 'gm'),
-    order: new RegExp('.*NFT Agreement Created: (.{66}).*', 'gm')
+    order: new RegExp('.*NFT Agreement Created: (.{66})', 'g')
+    //order: new RegExp('(0x[a-fA-F|\d]{64})', 'g')
+    // .*NFT Agreement Created:\s(0x[a-fA-F|\d]{64})
   },
   accounts: {
     newAccount: new RegExp(
@@ -120,6 +122,7 @@ export const parseProvenanceId = (stdout: string): string => {
 
 export const parseNFTOrderAgreementId = (stdout: string): string => {
   const parsed = commandRegex.nfts.order.exec(stdout)
+  console.log(`PARSED ${JSON.stringify(parsed)}`)
   if (parsed != null) {
     return parsed[1]
   }

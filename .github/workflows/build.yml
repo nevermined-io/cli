@@ -30,7 +30,7 @@ jobs:
           cd tools
           export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
           export KEEPER_VERSION=v1.3.9
-          export GATEWAY_VERSION=v0.12.6
+          export GATEWAY_VERSION=v0.12.8
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
           ./start_nevermined.sh --latest --no-marketplace --spree-embedded-contracts &
           cd ..          
