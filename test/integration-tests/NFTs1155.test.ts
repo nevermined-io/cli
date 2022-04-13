@@ -7,7 +7,7 @@ import * as fs from 'fs'
 import * as Path from 'path'
 const { execSync } = require('child_process')
 
-describe('NFTs (ERC-1155) e2e Testing', () => {
+describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
   let did = ''
   let nftCap = 10
   let nftRoyalties = 5
@@ -19,6 +19,9 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
     console.debug(`COMMAND: ${fundCommand}`)
 
     const stdout = execSync(fundCommand, execOpts)
+    execSync(`${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`, execOpts)
+    execSync(`${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`, execOpts)
+
   })
 
   test('Register an asset with a NFT (ERC-1155) attached to it', async () => {
@@ -45,14 +48,14 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
   })
 
   test('It mints a NFT (ERC-1155)', async () => {
-    const mintCommand = `${baseCommands.nfts1155.mint} "${did}" --amount 2 --account "${execOpts.accounts[0]}"  `
+    const mintCommand = `${baseCommands.nfts1155.mint} "${did}" --amount 10 --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${mintCommand}`)
 
     const stdout = execSync(mintCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
-    expect(stdout.includes(`Minted 2 NFTs (ERC-1155)`))
+    expect(stdout.includes(`Minted 20 NFTs (ERC-1155)`))
   })
 
   test('It burns a NFT (ERC-1155)', async () => {
@@ -66,41 +69,27 @@ describe('NFTs (ERC-1155) e2e Testing', () => {
     expect(stdout.includes(`Burned 1 NFTs (ERC-1155)`))
   })
 
-  test('Order a NFT (ERC-1155)', async () => {
+  test('The buyer can order and get access to the files (through the gateway)', async () => {
     const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
-    const stdout = execSync(orderCommand, execOpts)
+    const orderStdout = execSync(orderCommand, execOpts)
 
-    console.debug(`STDOUT: ${stdout}`)
-    orderAgreementId = parseNFTOrderAgreementId(stdout)
+    console.debug(`STDOUT: ${orderStdout}`)
+    orderAgreementId = parseNFTOrderAgreementId(orderStdout)
     expect(orderAgreementId != '')
-    expect(stdout.includes(did))
-    expect(stdout.includes(`NFT Agreement Created`))
-  })
+    expect(orderStdout.includes(did))
+    expect(orderStdout.includes(`NFT Agreement Created`))
 
-  test('The seller transfer a NFT (ERC-1155)', async () => {
-    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}"  `
-    console.debug(`COMMAND: ${transferCommand}`)
-
-    const stdout = execSync(transferCommand, execOpts)
-
-    console.debug(`STDOUT: ${stdout}`)
-    expect(stdout.includes(did))
-    expect(stdout.includes(`Transferring NFT (ERC-1155)`))
-    expect(stdout.includes(`Transfer done!`))
-  })
-
-  test('As NFT holder I can download the files associated to an asset', async () => {
-    const destination = `/tmp/nevemined/cli/test/nft`
-    const downloadCommand = `${baseCommands.nfts1155.download} "${did}" --destination "${destination}" --account "${execOpts.accounts[1]}"  `
+    const destination = `/tmp/nevemined/cli/test-gateway/access`
+    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --seller "${execOpts.accounts[0]}" --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const stdout = execSync(downloadCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
-    expect(stdout.includes(`NFT Assets downloaded to: ${destination}`))
+    expect(stdout.includes(`NFT Assets downloaded`))
 
     const files = fs.readdirSync(destination || '')
     expect(files.length == 1)

@@ -1,4 +1,4 @@
-import { Config } from '@nevermined-io/nevermined-sdk-js'
+import { Config, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import HDWalletProvider from '@truffle/hdwallet-provider'
 import dotenv from 'dotenv'
 import { LogLevel } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -44,6 +44,26 @@ configure({
 export const logger = getLogger()
 
 export const config: CliConfig = {
+  spree: {
+    nvm: {
+      faucetUri: process.env.FAUCET_URL || 'http://localhost:3001',
+      metadataUri: process.env.METADATA_URL || 'http://172.17.0.1:5000',
+      gatewayUri: process.env.GATEWAY_URL || 'http://localhost:8030',
+      gatewayAddress:
+        process.env.GATEWAY_ADDRESS ||
+        '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0',
+      nodeUri: process.env.NODE_URL || 'http://localhost:8545',
+      verbose: true
+    } as Config,
+    nativeToken: 'ETH',
+    etherscanUrl: 'https://spree.etherscan.io',
+    erc20TokenAddress: process.env.TOKEN_ADDRESS || '',
+    seed: process.env.MNEMONIC,
+    keyfilePath: process.env.KEYFILE_PATH,
+    keyfilePassword: process.env.KEYFILE_PASSWORD,
+    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
+    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
+  } as ConfigEntry,
   rinkeby: {
     nvm: {
       // default nvm rinkeby faucet
@@ -58,7 +78,7 @@ export const config: CliConfig = {
         '0xF8D50e0e0F47c5dbE943AeD661cCF25c3468c44f',
       // default infura rinkeby endpoint
       nodeUri: `${process.env.NODE_URL}`,
-      verbose: false
+      verbose: true
     } as Config,
     nativeToken: 'ETH',
     etherscanUrl: 'https://rinkeby.etherscan.io',
@@ -72,53 +92,27 @@ export const config: CliConfig = {
     gasMultiplier: process.env.GAS_MULTIPLIER || 0,
     gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
   } as ConfigEntry,
-  spree: {
-    nvm: {
-      faucetUri: process.env.FAUCET_URL || 'http://localhost:3001',
-      metadataUri: process.env.METADATA_URL || 'http://172.17.0.1:5000',
-      gatewayUri: process.env.GATEWAY_URL || 'http://localhost:8030',
-      gatewayAddress:
-        process.env.GATEWAY_ADDRESS ||
-        '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0',
-      nodeUri: `${process.env.NODE_URL}`,
-      verbose: true
-    } as Config,
-    nativeToken: 'ETH',
-    etherscanUrl: 'https://spree.etherscan.io',
-    erc20TokenAddress:
-      process.env.TOKEN_ADDRESS ||
-      // ETH
-      '0x0000000000000000000000000000000000000000',
-    seed: process.env.MNEMONIC,
-    keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
-  } as ConfigEntry,
   celoAlfajores: {
     nvm: {
       faucetUri:
-        process.env.FAUCET_URL ||
-        'https://faucet.alfajores.celo.nevermined.rocks/',
+        process.env.FAUCET_URL || 'https://faucet.alfajores.nevermined.rocks',
       metadataUri:
         process.env.METADATA_URL ||
-        'https://gateway.alfajores.celo.nevermined.rocks',
+        'https://metadata.alfajores.nevermined.rocks',
       gatewayUri:
-        process.env.GATEWAY_URL ||
-        'https://gateway.alfajores.nevermined.rocks/',
+        process.env.GATEWAY_URL || 'https://gateway.alfajores.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
       nodeUri:
-        `${process.env.NODE_URL}` || 'https://alfajores-forno.celo-testnet.org',
-      verbose: false
+        process.env.NODE_URL || 'https://alfajores-forno.celo-testnet.org',
+      verbose: true
     } as Config,
     nativeToken: 'CELO',
-    etherscanUrl: 'https://explorer.celo.org',
+    etherscanUrl: 'https://alfajores-blockscout.celo-testnet.org',
     erc20TokenAddress:
-      process.env.TOKEN_ADDRESS ||
-      // MATIC
-      '0x0000000000000000000000000000000000000000',
+      process.env.TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000', // CELO
+    // process.env.TOKEN_ADDRESS || '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1', // cUSD
     seed: process.env.MNEMONIC,
     keyfilePath: process.env.KEYFILE_PATH,
     keyfilePassword: process.env.KEYFILE_PASSWORD,
@@ -129,7 +123,7 @@ export const config: CliConfig = {
     nvm: {
       faucetUri:
         process.env.FAUCET_URL ||
-        'https://faucet.alities.celo.nevermined.rocks/',
+        'https://faucet.alities.celo.nevermined.rocks',
       metadataUri:
         process.env.METADATA_URL ||
         'https://metadata.alities.celo.nevermined.rocks',
@@ -140,7 +134,7 @@ export const config: CliConfig = {
         process.env.GATEWAY_ADDRESS ||
         '0x7f3661d22E89Ad3549c7fC034D94B53da731D36A',
       nodeUri: `${process.env.NODE_URL}` || 'https://forno.celo.org',
-      verbose: false
+      verbose: true
     } as Config,
     nativeToken: 'CELO',
     etherscanUrl: 'https://explorer.celo.org',
@@ -166,7 +160,7 @@ export const config: CliConfig = {
         process.env.GATEWAY_ADDRESS ||
         '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
       nodeUri: `${process.env.NODE_URL}`,
-      verbose: false
+      verbose: true
     } as Config,
     nativeToken: 'MATIC',
     etherscanUrl: 'https://explorer-mumbai.maticvigil.com',
@@ -194,7 +188,7 @@ export const config: CliConfig = {
         process.env.GATEWAY_ADDRESS ||
         '0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b',
       nodeUri: `${process.env.NODE_URL}`,
-      verbose: false
+      verbose: true
     } as Config,
     nativeToken: 'MATIC',
     etherscanUrl: 'https://explorer-mumbai.maticvigil.com/',

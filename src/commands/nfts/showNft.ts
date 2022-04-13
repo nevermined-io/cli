@@ -130,9 +130,10 @@ export const showNft = async (
       logger.warn(`Token Id not found`)
     }
 
-    const price =
-      getAssetRewardsFromDDOByService(ddo, 'nft721-sales').getTotalPrice() /
-      10 ** decimals
+    const price = getAssetRewardsFromDDOByService(ddo, 'nft721-sales')
+      .getTotalPrice()
+      .div(10)
+      .multipliedBy(decimals)
 
     logger.info(
       chalk.dim(
@@ -177,9 +178,10 @@ export const showNft = async (
       )
     )
 
-    const price =
-      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice() /
-      10 ** decimals
+    const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
+      .getTotalPrice()
+      .div(10)
+      .multipliedBy(decimals)
 
     logger.info(
       chalk.dim(

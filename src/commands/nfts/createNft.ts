@@ -14,6 +14,7 @@ import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/Asse
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import fs from 'fs'
 import { Logger } from 'log4js'
+import BigNumber from 'bignumber.js'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -38,7 +39,7 @@ export const createNft = async (
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   let ddoMetadata
-  let ddoPrice: number
+  let ddoPrice: BigNumber
   if (!metadata) {
     if (argv.name === '' || argv.author === '' || argv.urls === '') {
       logger.error(
@@ -49,8 +50,13 @@ export const createNft = async (
 
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
+    
+    ddoPrice = new BigNumber(argv.price).multipliedBy(
+      new BigNumber(10).exponentiatedBy(decimals))
 
-    ddoPrice = argv.price * 10 ** decimals
+    console.log(`new BigNumber ${new BigNumber(argv.price)}`)
+    console.log(`DDO Price: ${ddoPrice}`)
+    console.log(`to Fixed: ${ddoPrice.toFixed()}`)
 
     const _files: File[] = []
     let _fileIndex = 0
@@ -70,13 +76,13 @@ export const createNft = async (
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
-        price: ddoPrice.toString(),
+        price: ddoPrice.toFixed(),
         files: _files
       } as MetaDataMain
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
-    ddoPrice = Number(ddoMetadata.main.price)
+    ddoPrice = new BigNumber(ddoMetadata.main.price)
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))
@@ -111,9 +117,22 @@ export const createNft = async (
       new AssetRewards(creatorAccount.getId(), ddoPrice),
       undefined,
       token ? token.getAddress() : config.erc20TokenAddress,
-      false, // we don't pre-mint here
+      argv.preMint,
       argv.nftMetadata
     )
+
+    const isApproved = await nvm.keeper.nftUpgradeable.isApprovedForAll(
+      creatorAccount.getId(),
+      config.nvm.gatewayAddress!
+    )
+    if (!isApproved) {
+      const receipt = await nvm.nfts.setApprovalForAll(
+        config.nvm.gatewayAddress!,
+        true,
+        creatorAccount
+      )
+      logger.info('Approval receipt:', receipt)
+    }
   }
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

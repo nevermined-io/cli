@@ -50,9 +50,10 @@ export const transferNft = async (
 
   const serviceInDDO = argv.nftType === '721' ? 'nft721-sales' : 'nft-sales'
 
-  const price =
-    getAssetRewardsFromDDOByService(ddo, serviceInDDO).getTotalPrice() /
-    10 ** decimals
+  const price = getAssetRewardsFromDDOByService(ddo, serviceInDDO)
+    .getTotalPrice()
+    .div(10)
+    .multipliedBy(decimals)
 
   logger.info(
     chalk.dim(`Price ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)

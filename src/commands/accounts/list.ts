@@ -3,6 +3,7 @@ import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { Contract } from 'web3-eth-contract'
 import utils from 'web3-utils'
+import BigNumber from 'bignumber.js'
 
 import {
   ConfigEntry,
@@ -53,8 +54,14 @@ export const accountsList = async (
         'ether'
       )
 
-      const tokenBalance =
-        (token ? await token.balanceOf(a.getId()) : 0) / 10 ** decimals
+      // const tokenBalance = token
+      //   ? await token.balanceOf(a.getId())
+      //   : new BigNumber(0)
+      const tokenBalance = (
+        token ? await token.balanceOf(a.getId()) : new BigNumber(0)
+      )
+        .div(10)
+        .multipliedBy(decimals)
 
       const inventory = withInventory
         ? (

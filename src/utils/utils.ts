@@ -297,35 +297,46 @@ export const loadToken = async (
     config.erc20TokenAddress.toLowerCase() ===
       Constants.ShortZeroAddress.toLowerCase()
   ) {
-    if (verbose)
-      console.debug(
-        chalk.yellow(
-          'INFO: Using native token (ETH, MATIC, etc) for payments!\n'
-        )
-      )
+
+    console.debug(
+      chalk.yellow('INFO: Using native token (ETH, MATIC, etc) for payments!\n')
+    )
   } else {
+    const web3 = Web3Provider.getWeb3(config)
+
     // if the token address is not zero try to load it
     token = nvm.keeper.token // eslint-disable-line
+    const nvmTokenAddress = token.getAddress() || ''
+    console.debug(
+      `Loading ERC20 Token ${config.erc20TokenAddress.toLowerCase()}`
+    )
+    console.debug(`ERC20 Token Address ${config.erc20TokenAddress}`)
 
-    // check if we have a different token configured
+    // check if we have a different token configured    
     if (
-      config.erc20TokenAddress.toLowerCase() !==
-      (token && nvm.keeper.token.address.toLowerCase())
+      config.erc20TokenAddress.toLowerCase() !== nvmTokenAddress.toLowerCase()
     ) {
+      let tokenAddress
+      try {
+        tokenAddress = web3.utils.toChecksumAddress(config.erc20TokenAddress)
+      } catch {
+        tokenAddress = nvmTokenAddress
+      }
+
       token = await CustomToken.getInstanceByAddress(
         {
           nevermined: nvm,
           web3: Web3Provider.getWeb3(config.nvm)
         },
-        config.erc20TokenAddress
+        web3.utils.toChecksumAddress(tokenAddress)
       )
+      config.erc20TokenAddress = tokenAddress
     } else {
       console.debug(
-        chalk.yellow(
-          `WARNING: Using Nevermined token '${config.erc20TokenAddress}'!\n`
-        )
+        chalk.yellow(`WARNING: Using Nevermined token '${token.address}'!\n`)
       )
     }
+    console.debug(`Using Token Address: ${token.address}`)
 
     if (verbose) {
       await printErc20TokenBanner(token)
