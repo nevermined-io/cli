@@ -32,6 +32,10 @@ export const commandRegex = {
   }
 }
 
+export const sleep = (ms: number): any => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export const parseDIDFromNewAsset = (stdout: string): string => {
   const did = commandRegex.assets.did.exec(stdout)
   if (did != null) {

@@ -1,12 +1,11 @@
-import { NeverminedToken } from "@nevermined-io/nevermined-sdk-js/dist/node/subgraphs"
-import { ConfigEntry } from "../../src/utils"
+import { generateId } from "@nevermined-io/nevermined-sdk-js/dist/node/utils/GeneratorHelpers"
 
 const NETWORK = process.env.NETWORK || 'spree'
 const BASE_COMMAND = `yarn start -n ${NETWORK}`
 const VERBOSE = '-v'
 
 export const metadataConfig = {
-  name: 'CLI Testing Dataset #',
+  name: 'CLI Testing Dataset #' + generateId(),
   author: 'Nevermined CLI',
   price: 1,
   url: 'https://www.apache.org/licenses/LICENSE-2.0',
@@ -16,15 +15,13 @@ export const metadataConfig = {
   metadataNFT: 'cid://QmVT3wfySvZJqAvkBCyxoz3EvD3yeLqf3cvAssFDpFFXNm'
 }
 
-// { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
 export const execOpts = {
   encoding: 'utf8',
   maxBuffer: 50 * 1024 * 1024,
   env: {
     ...process.env,
     NODE_URL: `${process.env.NODE_URL}` || 'http://localhost:8545',
-    TOKEN_ADDRESS:
-      process.env.TOKEN_ADDRESS,
+    TOKEN_ADDRESS: process.env.TOKEN_ADDRESS,
     MNEMONIC: process.env.MNEMONIC
   },
   accounts: [

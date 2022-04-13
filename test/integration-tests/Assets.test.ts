@@ -3,7 +3,8 @@ import {
   parseDIDFromNewAsset,
   parseDownloadPath,
   parseNumberResultsFromSearch,
-  parseServiceAgreementId
+  parseServiceAgreementId,
+  sleep
 } from '../helpers/StdoutParser'
 import * as fs from 'fs'
 import * as Path from 'path'
@@ -123,3 +124,4 @@ describe('Assets e2e Testing', () => {
     })
   })
 })
+

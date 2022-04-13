@@ -54,6 +54,10 @@ export const createNft = async (
     ddoPrice = new BigNumber(argv.price).multipliedBy(
       new BigNumber(10).exponentiatedBy(decimals))
 
+    console.log(`new BigNumber ${new BigNumber(argv.price)}`)
+    console.log(`DDO Price: ${ddoPrice}`)
+    console.log(`to Fixed: ${ddoPrice.toFixed()}`)
+
     const _files: File[] = []
     let _fileIndex = 0
     argv.urls.forEach((_url: string) => {
@@ -72,7 +76,7 @@ export const createNft = async (
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
-        price: ddoPrice.toString(),
+        price: ddoPrice.toFixed(),
         files: _files
       } as MetaDataMain
     }
