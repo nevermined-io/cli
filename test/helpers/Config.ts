@@ -1,4 +1,4 @@
-import { generateId } from "@nevermined-io/nevermined-sdk-js/dist/node/utils/GeneratorHelpers"
+import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils/GeneratorHelpers'
 
 const NETWORK = process.env.NETWORK || 'spree'
 const BASE_COMMAND = `yarn start -n ${NETWORK}`
@@ -31,7 +31,7 @@ export const execOpts = {
     // '0x45f6945539C92E0de522f82Ddb009b31511fEc2E', // celo mainnet
     // '0x50a40DA158e73D9EFc929E42aAF5c866750cA059',
     // '0x0541b7383bc60Bd24433D5d3aD3ce284D026F1C7'
-  ]  
+  ]
 }
 
 export const baseCommands = {

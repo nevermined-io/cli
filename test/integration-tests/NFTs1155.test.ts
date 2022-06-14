@@ -19,9 +19,14 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     console.debug(`COMMAND: ${fundCommand}`)
 
     const stdout = execSync(fundCommand, execOpts)
-    execSync(`${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`, execOpts)
-    execSync(`${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`, execOpts)
-
+    execSync(
+      `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`,
+      execOpts
+    )
+    execSync(
+      `${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`,
+      execOpts
+    )
   })
 
   test('Register an asset with a NFT (ERC-1155) attached to it', async () => {

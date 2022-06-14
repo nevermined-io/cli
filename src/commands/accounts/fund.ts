@@ -12,12 +12,16 @@ export const accountsFund = async (
 ): Promise<number> => {
   const { verbose, token } = argv
 
-  logger.info(chalk.dim(`Funding account: '${chalk.whiteBright(account.getId())}'`))
+  logger.info(
+    chalk.dim(`Funding account: '${chalk.whiteBright(account.getId())}'`)
+  )
 
   if (token === 'both' || token === 'native') {
     try {
       await nvm.faucet.requestEth(account.getId())
-      console.log(chalk.dim(`Funded ETH to ${chalk.whiteBright(account.getId())}`))
+      console.log(
+        chalk.dim(`Funded ETH to ${chalk.whiteBright(account.getId())}`)
+      )
     } catch (err) {
       console.log(
         chalk.red(
@@ -36,7 +40,9 @@ export const accountsFund = async (
   if (token === 'erc20' || token === 'native') {
     try {
       await nvm.keeper.dispenser.requestTokens(100, account.getId())
-      console.log(chalk.dim(`Funded Tokens to ${chalk.whiteBright(account.getId())}`))
+      console.log(
+        chalk.dim(`Funded Tokens to ${chalk.whiteBright(account.getId())}`)
+      )
     } catch (err) {
       console.log(
         chalk.red(

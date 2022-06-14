@@ -55,11 +55,13 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Registering an asset using metadata from a JSON', async () => {
-    let jsonImported = JSON.parse(fs.readFileSync(metadataConfig.metadataFile).toString())
+    let jsonImported = JSON.parse(
+      fs.readFileSync(metadataConfig.metadataFile).toString()
+    )
     jsonImported.main.author = jsonImported.main.author + generateId()
     const tempDir = mkdtempSync('/tmp/cli_test_')
     const randomMetadataFile = `${tempDir}/random_metadata.json`
-    fs.writeFileSync(randomMetadataFile,  JSON.stringify(jsonImported, null, 4))
+    fs.writeFileSync(randomMetadataFile, JSON.stringify(jsonImported, null, 4))
 
     const importCommand = `${baseCommands.assets.importMetadata} --metadata ${randomMetadataFile}`
     console.debug(`COMMAND: ${importCommand}`)
@@ -132,4 +134,3 @@ describe('Assets e2e Testing', () => {
     })
   })
 })
-

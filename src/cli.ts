@@ -41,7 +41,13 @@ import {
 } from './commands'
 import chalk from 'chalk'
 
-import { findAccountOrFirst, getConfig, loadNevermined, logger, loginMarketplaceApi } from '../src/utils'
+import {
+  findAccountOrFirst,
+  getConfig,
+  loadNevermined,
+  logger,
+  loginMarketplaceApi
+} from '../src/utils'
 import { ProvenanceMethods, StatusCodes } from './utils/enums'
 
 const cmdHandler = async (cmd: Function, argv: any) => {

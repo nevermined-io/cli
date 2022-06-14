@@ -77,7 +77,9 @@ export const networkStatus = async (
   // Metadata API
   logger.info('')
   logger.info(chalk.dim(`${chalk.whiteBright('Metadata API')}:`))
-  logger.info(chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.marketplaceUri)}`))
+  logger.info(
+    chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.marketplaceUri)}`)
+  )
   if (platformVersions.metadata.status === PlatformTechStatus.Working)
     logger.info(
       chalk.dim(`  Status: ${chalk.bgGreen(platformVersions.metadata.status)}`)

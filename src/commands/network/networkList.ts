@@ -18,7 +18,9 @@ export const networkList = async (
   networks.forEach((_key: string) => {
     logger.info(chalk.dim(` ${chalk.whiteBright(_key)}:`))
     logger.info(chalk.dim(`   Gateway: ${config[_key].nvm.gatewayUri}`))
-    logger.info(chalk.dim(`   Marketplace API: ${config[_key].nvm.marketplaceUri}`))
+    logger.info(
+      chalk.dim(`   Marketplace API: ${config[_key].nvm.marketplaceUri}`)
+    )
     logger.info(chalk.dim(`   Faucet: ${config[_key].nvm.faucetUri}`))
     logger.info('\n')
   })

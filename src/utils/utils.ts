@@ -35,10 +35,9 @@ export const cmdHandler = async (cmd: Function, argv: any) => {
   logger.info(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
 
   const config = getConfig(network as string)
-  
+
   return process.exit(await cmd(argv, config, logger))
 }
-
 
 export const loadNevermined = async (
   config: ConfigEntry,
@@ -320,7 +319,6 @@ export const loadToken = async (
     config.erc20TokenAddress!.toLowerCase() ===
       Constants.ShortZeroAddress.toLowerCase()
   ) {
-
     console.debug(
       chalk.yellow('INFO: Using native token (ETH, MATIC, etc) for payments!\n')
     )
@@ -335,7 +333,7 @@ export const loadToken = async (
     )
     console.debug(`ERC20 Token Address ${config.erc20TokenAddress}`)
 
-    // check if we have a different token configured    
+    // check if we have a different token configured
     if (
       config.erc20TokenAddress.toLowerCase() !== nvmTokenAddress.toLowerCase()
     ) {

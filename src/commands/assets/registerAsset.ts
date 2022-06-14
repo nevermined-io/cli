@@ -47,7 +47,8 @@ export const registerAsset = async (
       token !== null ? await token.decimals() : Constants.ETHDecimals
 
     ddoPrice = new BigNumber(argv.price).multipliedBy(
-      new BigNumber(10).exponentiatedBy(decimals))
+      new BigNumber(10).exponentiatedBy(decimals)
+    )
 
     logger.debug(`Using Price ${argv.price}`)
 

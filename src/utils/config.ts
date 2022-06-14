@@ -73,7 +73,8 @@ export const config: CliConfig = {
     nvm: {
       nodeUri: `${process.env.NODE_URL}`, // default infura rinkeby endpoint
       marketplaceUri:
-        process.env.MARKETPLACE_API_URL || 'https://marketplace-api.rinkeby.nevermined.rocks',
+        process.env.MARKETPLACE_API_URL ||
+        'https://marketplace-api.rinkeby.nevermined.rocks',
       faucetUri:
         process.env.FAUCET_URL || 'https://faucet.rinkeby.nevermined.rocks',
       graphHttpUri: `${process.env.GRAPH_URL}`,
@@ -158,7 +159,8 @@ export const config: CliConfig = {
     nvm: {
       nodeUri: `${process.env.NODE_URL}`,
       marketplaceUri:
-        process.env.MARKETPLACE_API_URL || 'https://marketplace-api.mumbai.nevermined.rocks',
+        process.env.MARKETPLACE_API_URL ||
+        'https://marketplace-api.mumbai.nevermined.rocks',
       graphHttpUri:
         process.env.GRAPH_URL || 'https://graph.mumbai.nevermined.rocks',
       faucetUri:

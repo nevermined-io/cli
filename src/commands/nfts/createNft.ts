@@ -48,9 +48,10 @@ export const createNft = async (
 
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
-    
+
     ddoPrice = new BigNumber(argv.price).multipliedBy(
-      new BigNumber(10).exponentiatedBy(decimals))
+      new BigNumber(10).exponentiatedBy(decimals)
+    )
 
     console.log(`new BigNumber ${new BigNumber(argv.price)}`)
     console.log(`DDO Price: ${ddoPrice}`)

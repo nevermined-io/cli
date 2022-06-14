@@ -28,7 +28,9 @@ export const transferNft = async (
 
   let agreementData
   try {
-    agreementData = await nvm.keeper.agreementStoreManager.getAgreement(agreementId)
+    agreementData = await nvm.keeper.agreementStoreManager.getAgreement(
+      agreementId
+    )
   } catch (err) {
     console.log(
       chalk.red(
@@ -39,17 +41,24 @@ export const transferNft = async (
     )
     return StatusCodes.ERROR
   }
-  logger.trace(chalk.dim(`Agreement Data: '${chalk.whiteBright(JSON.stringify(agreementData))}'`))
+  logger.trace(
+    chalk.dim(
+      `Agreement Data: '${chalk.whiteBright(JSON.stringify(agreementData))}'`
+    )
+  )
 
   const { lastUpdatedBy } = await nvm.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
   )
-  
+
   const conditionData = await nvm.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
   )
-  logger.trace(chalk.dim(`Lock Condition Id: '${chalk.whiteBright(JSON.stringify(conditionData))}'`))
-
+  logger.trace(
+    chalk.dim(
+      `Lock Condition Id: '${chalk.whiteBright(JSON.stringify(conditionData))}'`
+    )
+  )
 
   const ddo = await nvm.assets.resolve(agreementData.did)
   const buyerAccount = new Account(argv.buyerAccount)
@@ -59,9 +68,7 @@ export const transferNft = async (
   logger.debug(
     chalk.dim(`Seller: '${chalk.whiteBright(sellerAccount.getId())}'`)
   )
-  logger.debug(
-    chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`)
-  )
+  logger.debug(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`))
 
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
