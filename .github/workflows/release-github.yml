@@ -1,21 +1,38 @@
-name: Github Release
+name: GitHub Release
 
 on:
   push:
     tags:
-      - 'v*.*'
+      - "v*.*.*"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/checkout@v3
         with:
-          files: |
-            target/*.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          token: ${{ secrets.API_TOKEN_GITHUB }}
+
+      # Build process
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "14.x"
+
+      - name: Update CHANGELOG.md
+        id: changelog
+        run: |
+          npm install auto-changelog
+          npx auto-changelog
+      - name: Commit CHANGELOG.md
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Automated CHANGELOG.md update
+          commit_options: "--no-verify --signoff"
+          file_pattern: CHANGELOG.md
+          branch: main
+
+      - name: Publish Github Release
+        uses: softprops/action-gh-release@v1
