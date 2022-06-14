@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
@@ -37,10 +37,6 @@ export const showNft = async (
       )}'`
     )
   )
-
-  // let userAccount
-  // if (account) userAccount = new Account(account)
-  // else [userAccount] = await nvm.accounts.list()
 
   const ddo = await nvm.assets.resolve(did)
 
@@ -191,7 +187,7 @@ export const showNft = async (
     )
   }
 
-  // logger.debug(chalk.dim(DDO.serialize(ddo)))
+  logger.trace(chalk.dim(DDO.serialize(ddo)))
 
   return StatusCodes.OK
 }

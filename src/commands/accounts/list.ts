@@ -28,9 +28,6 @@ export const accountsList = async (
 
   logger.debug(chalk.dim('Loading account/s ...'))
 
-  // let accounts
-  // if (account) accounts = [account]
-  // else accounts = await nvm.accounts.list()
   const accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
@@ -56,9 +53,6 @@ export const accountsList = async (
         'ether'
       )
 
-      // const tokenBalance = token
-      //   ? await token.balanceOf(a.getId())
-      //   : new BigNumber(0)
       const tokenBalance = (
         token ? await token.balanceOf(a.getId()) : new BigNumber(0)
       )

@@ -24,8 +24,6 @@ export const listAgreements = async (
     logger.info(chalk.dim(`No agreements for '${chalk.whiteBright(ddo.id)}'!`))
   }
 
-  // agreements.sort((a, b) => a.blockNumberUpdated - b.blockNumberUpdated)
-
   for (const agreement of agreements) {
     const status = await nvm.agreements.status(agreement.agreementId)
 
