@@ -21,11 +21,12 @@ import { Contract } from 'web3-eth-contract'
 
 export const showNft = async (
   nvm: Nevermined,
+  userAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, did, account } = argv
+  const { verbose, network, did } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
@@ -37,9 +38,9 @@ export const showNft = async (
     )
   )
 
-  let userAccount
-  if (account) userAccount = new Account(account)
-  else [userAccount] = await nvm.accounts.list()
+  // let userAccount
+  // if (account) userAccount = new Account(account)
+  // else [userAccount] = await nvm.accounts.list()
 
   const ddo = await nvm.assets.resolve(did)
 

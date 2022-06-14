@@ -13,11 +13,12 @@ import { Account } from '@nevermined-io/nevermined-sdk-js'
 
 export const transferNft = async (
   nvm: Nevermined,
+  sellerAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, agreementId, account } = argv
+  const { verbose, network, agreementId } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
@@ -25,22 +26,41 @@ export const transferNft = async (
     chalk.dim(`Executing agreement: '${chalk.whiteBright(agreementId)}'`)
   )
 
-  const { did, conditionIds } =
-    await nvm.keeper.agreementStoreManager.getAgreement(agreementId)
+  let agreementData
+  try {
+    agreementData = await nvm.keeper.agreementStoreManager.getAgreement(agreementId)
+  } catch (err) {
+    console.log(
+      chalk.red(
+        `Unable to load Agreement with Id ${chalk.whiteBright(agreementId)}: ${
+          (err as Error).message
+        }`
+      )
+    )
+    return StatusCodes.ERROR
+  }
+  logger.trace(chalk.dim(`Agreement Data: '${chalk.whiteBright(JSON.stringify(agreementData))}'`))
+
   const { lastUpdatedBy } = await nvm.keeper.conditionStoreManager.getCondition(
-    conditionIds[0]
+    agreementData.conditionIds[0]
   )
+  
+  const conditionData = await nvm.keeper.conditionStoreManager.getCondition(
+    agreementData.conditionIds[0]
+  )
+  logger.trace(chalk.dim(`Lock Condition Id: '${chalk.whiteBright(JSON.stringify(conditionData))}'`))
 
-  const ddo = await nvm.assets.resolve(did)
 
-  const accounts = await nvm.accounts.list()
-  const sellerAccount = findAccountOrFirst(accounts, account)
-  const buyerAccount = new Account(lastUpdatedBy)
+  const ddo = await nvm.assets.resolve(agreementData.did)
+  const buyerAccount = new Account(argv.buyerAccount)
 
   logger.debug(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
   logger.debug(chalk.dim(`AgreementId: '${chalk.whiteBright(agreementId)}'`))
   logger.debug(
     chalk.dim(`Seller: '${chalk.whiteBright(sellerAccount.getId())}'`)
+  )
+  logger.debug(
+    chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`)
   )
 
   const decimals =
@@ -66,7 +86,12 @@ export const transferNft = async (
     await nvm.nfts.transfer721(agreementId, ddo.id, sellerAccount)
 
     logger.info(chalk.dim('Releasing rewards ...'))
-    await nvm.nfts.release721Rewards(agreementId, ddo.id, sellerAccount)
+    await nvm.nfts.release721Rewards(
+      agreementId,
+      ddo.id,
+      buyerAccount,
+      sellerAccount
+    )
   } else {
     // ERC-1155
     logger.info(

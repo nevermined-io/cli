@@ -1,12 +1,10 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, loadNevermined, findAccountOrFirst } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
-import KeyTransfer from '@nevermined-io/nevermined-sdk-js/dist/node/utils/KeyTransfer'
-
-const keytransfer = new KeyTransfer()
+import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -15,31 +13,32 @@ const rl = readline.createInterface({
 
 export const getAsset = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, did, account, password } = argv
+  const { verbose, network, did, password } = argv
+
+  const keyTransfer = await makeKeyTransfer()
 
   let agreementId
-  const accounts = await nvm.accounts.list()
-  const userAccount = findAccountOrFirst(accounts, account)
 
   if (password) {
-    const key = keytransfer.secretToPublic(keytransfer.makeKey(password))
-    userAccount.babyX = key.x
-    userAccount.babyY = key.y
-    userAccount.babySecret = password
+    const key = await keyTransfer.secretToPublic(keyTransfer.makeKey(password))
+    account.babyX = key.x
+    account.babyY = key.y
+    account.babySecret = password
   }
 
-  logger.debug(chalk.dim(`Using account: '${userAccount.getId()}'`))
+  logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
   if (argv.agreementId === '') {
     logger.info(chalk.dim(`Ordering asset: ${did}`))
     if (password) {
-      agreementId = await nvm.assets.order(did, 'access-proof', userAccount)
+      agreementId = await nvm.assets.order(did, 'access-proof', account)
     } else {
-      agreementId = await nvm.assets.order(did, 'access', userAccount)
+      agreementId = await nvm.assets.order(did, 'access', account)
     }
   } else {
     ;({ agreementId } = argv)
@@ -50,13 +49,13 @@ export const getAsset = async (
   )
 
   if (password) {
-    const key = await nvm.assets.consumeProof(agreementId, did, userAccount)
+    const key = await nvm.assets.consumeProof(agreementId, did, account)
     console.log(`Got password ${Buffer.from(key as any, 'hex').toString()}`)
   } else {
     const path = await nvm.assets.consume(
       agreementId,
       did,
-      userAccount,
+      account,
       argv.path,
       argv.fileIndex
     )

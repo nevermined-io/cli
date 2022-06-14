@@ -1,35 +1,34 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
-  findAccountOrFirst,
-  loadNevermined,
   printTokenBanner,
   loadToken
 } from '../../utils'
-import web3Utils from 'web3-utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
-import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import {
+  makeKeyTransfer,
+  zeroX
+} from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import fs from 'fs'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
-import KeyTransfer from '@nevermined-io/nevermined-sdk-js/dist/node/utils/KeyTransfer'
 import BigNumber from 'bignumber.js'
-
-const keytransfer = new KeyTransfer()
 
 export const registerAsset = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, account, metadata, assetType, password, encrypt } =
-    argv
+  const { verbose, network, metadata, assetType, password, encrypt } = argv
   const token = await loadToken(nvm, config, verbose)
+
+  const keyTransfer = await makeKeyTransfer()
 
   if (verbose) {
     printTokenBanner(token)
@@ -39,10 +38,7 @@ export const registerAsset = async (
 
   logger.info(JSON.stringify(argv))
 
-  const accounts = await nvm.accounts.list()
-  const creatorAccount = findAccountOrFirst(accounts, account)
-
-  logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
+  logger.debug(chalk.dim(`Using creator: '${account.getId()}'\n`))
 
   let ddoMetadata: MetaData
   let ddoPrice: BigNumber
@@ -89,7 +85,7 @@ export const registerAsset = async (
     }
     if (password) {
       ddoMetadata.additionalInformation = {
-        poseidonHash: keytransfer.hashKey(Buffer.from(password)),
+        poseidonHash: await keyTransfer.hashKey(Buffer.from(password)),
         providerKey,
         links: argv.urls.map((url: string) => ({ name: 'public url', url }))
       }
@@ -111,17 +107,18 @@ export const registerAsset = async (
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
 
-    ddoPrice =
-      new BigNumber(ddoMetadata.main.price).isGreaterThan(0) ? new BigNumber(ddoMetadata.main.price) : new BigNumber(0)
+    ddoPrice = new BigNumber(ddoMetadata.main.price).isGreaterThan(0)
+      ? new BigNumber(ddoMetadata.main.price)
+      : new BigNumber(0)
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))
 
   const ddo = await nvm.assets.create(
     ddoMetadata,
-    creatorAccount,
+    account,
     // @ts-ignore
-    new AssetRewards(creatorAccount.getId(), ddoPrice),
+    new AssetRewards(account.getId(), ddoPrice),
     encrypt || password ? ['access-proof'] : undefined
   )
 

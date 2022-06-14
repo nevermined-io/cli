@@ -1,10 +1,11 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import fs from 'fs'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
 export const uploadFile = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger

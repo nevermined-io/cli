@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   ConfigEntry,
@@ -9,6 +9,7 @@ import { Logger } from 'log4js'
 
 export const showAgreement = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -53,18 +54,7 @@ export const showAgreement = async (
       )}`
     )
   )
-  logger.info(
-    chalk.dim(
-      `Last Updated By: ${chalk.whiteBright(agreementData.lastUpdatedBy)}`
-    )
-  )  
-  logger.info(
-    chalk.dim(
-      `In which block number was updated: ${chalk.whiteBright(
-        agreementData.blockNumberUpdated
-      )}`
-    )
-  )
+
   logger.info(chalk.dim(`Condition Ids:`))
   agreementData.conditionIds.forEach((_conditionId, _index) => {
     logger.info(chalk.dim(`\tCondition Id[${_index}]= ${_conditionId}`))

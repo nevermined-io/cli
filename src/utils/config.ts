@@ -46,13 +46,18 @@ export const logger = getLogger()
 export const config: CliConfig = {
   spree: {
     nvm: {
+      nodeUri: process.env.NODE_URL || 'http://localhost:8545',
+      marketplaceUri:
+        process.env.MARKETPLACE_API_URL || 'http://172.17.0.1:3100',
       faucetUri: process.env.FAUCET_URL || 'http://localhost:3001',
-      metadataUri: process.env.METADATA_URL || 'http://172.17.0.1:5000',
+      graphHttpUri: undefined,
+      // graphHttpUri:
+      //   process.env.GRAPH_URL ||
+      //   'http://localhost:9000/subgraphs/name/neverminedio',
       gatewayUri: process.env.GATEWAY_URL || 'http://localhost:8030',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0',
-      nodeUri: process.env.NODE_URL || 'http://localhost:8545',
       verbose: true
     } as Config,
     nativeToken: 'ETH',
@@ -66,18 +71,17 @@ export const config: CliConfig = {
   } as ConfigEntry,
   rinkeby: {
     nvm: {
-      // default nvm rinkeby faucet
+      nodeUri: `${process.env.NODE_URL}`, // default infura rinkeby endpoint
+      marketplaceUri:
+        process.env.MARKETPLACE_API_URL || 'https://marketplace-api.rinkeby.nevermined.rocks',
       faucetUri:
         process.env.FAUCET_URL || 'https://faucet.rinkeby.nevermined.rocks',
-      metadataUri:
-        process.env.METADATA_URL || 'https://metadata.rinkeby.nevermined.rocks',
+      graphHttpUri: `${process.env.GRAPH_URL}`,
       gatewayUri:
         process.env.GATEWAY_URL || 'https://gateway.rinkeby.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0xF8D50e0e0F47c5dbE943AeD661cCF25c3468c44f',
-      // default infura rinkeby endpoint
-      nodeUri: `${process.env.NODE_URL}`,
       verbose: true
     } as Config,
     nativeToken: 'ETH',
@@ -94,18 +98,19 @@ export const config: CliConfig = {
   } as ConfigEntry,
   celoAlfajores: {
     nvm: {
+      nodeUri:
+        process.env.NODE_URL || 'https://alfajores-forno.celo-testnet.org',
+      marketplaceUri:
+        process.env.MARKETPLACE_API_URL ||
+        'https://marketplace-api.alfajores.nevermined.rocks',
       faucetUri:
         process.env.FAUCET_URL || 'https://faucet.alfajores.nevermined.rocks',
-      metadataUri:
-        process.env.METADATA_URL ||
-        'https://metadata.alfajores.nevermined.rocks',
+      graphHttpUri: `${process.env.GRAPH_URL}`,
       gatewayUri:
         process.env.GATEWAY_URL || 'https://gateway.alfajores.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
-      nodeUri:
-        process.env.NODE_URL || 'https://alfajores-forno.celo-testnet.org',
       verbose: true
     } as Config,
     nativeToken: 'CELO',
@@ -121,19 +126,20 @@ export const config: CliConfig = {
   } as ConfigEntry,
   celoMainnet: {
     nvm: {
+      nodeUri: `${process.env.NODE_URL}` || 'https://forno.celo.org',
+      marketplaceUri:
+        process.env.MARKETPLACE_API_URL ||
+        'https://marketplace-api.alities.celo.nevermined.rocks',
       faucetUri:
         process.env.FAUCET_URL ||
         'https://faucet.alities.celo.nevermined.rocks',
-      metadataUri:
-        process.env.METADATA_URL ||
-        'https://metadata.alities.celo.nevermined.rocks',
+      graphHttpUri: `${process.env.GRAPH_URL}`,
       gatewayUri:
         process.env.GATEWAY_URL ||
         'https://gateway.alities.celo.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x7f3661d22E89Ad3549c7fC034D94B53da731D36A',
-      nodeUri: `${process.env.NODE_URL}` || 'https://forno.celo.org',
       verbose: true
     } as Config,
     nativeToken: 'CELO',
@@ -150,16 +156,18 @@ export const config: CliConfig = {
   } as ConfigEntry,
   defiMumbai: {
     nvm: {
+      nodeUri: `${process.env.NODE_URL}`,
+      marketplaceUri:
+        process.env.MARKETPLACE_API_URL || 'https://marketplace-api.mumbai.nevermined.rocks',
+      graphHttpUri:
+        process.env.GRAPH_URL || 'https://graph.mumbai.nevermined.rocks',
       faucetUri:
         process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
-      metadataUri:
-        process.env.METADATA_URL || 'https://metadata.mumbai.nevermined.rocks',
       gatewayUri:
         process.env.GATEWAY_URL || 'https://gateway.mumbai.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
-      nodeUri: `${process.env.NODE_URL}`,
       verbose: true
     } as Config,
     nativeToken: 'MATIC',
@@ -176,18 +184,20 @@ export const config: CliConfig = {
   } as ConfigEntry,
   autonomiesMumbai: {
     nvm: {
+      nodeUri: `${process.env.NODE_URL}`,
       faucetUri:
         process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
-      metadataUri:
-        process.env.METADATA_URL ||
-        'https://metadata.autonomies.mumbai.nevermined.rocks',
+      marketplaceUri:
+        process.env.MARKETPLACE_API_URL ||
+        'https://marketplace-api.autonomies.mumbai.nevermined.rocks',
+      graphHttpUri:
+        process.env.GRAPH_URL || 'https://graph.mumbai.nevermined.rocks',
       gatewayUri:
         process.env.GATEWAY_URL ||
         'https://gateway.autonomies.mumbai.nevermined.rocks',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
         '0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b',
-      nodeUri: `${process.env.NODE_URL}`,
       verbose: true
     } as Config,
     nativeToken: 'MATIC',

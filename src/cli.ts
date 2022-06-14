@@ -41,7 +41,7 @@ import {
 } from './commands'
 import chalk from 'chalk'
 
-import { getConfig, loadNevermined, logger } from '../src/utils'
+import { findAccountOrFirst, getConfig, loadNevermined, logger, loginMarketplaceApi } from '../src/utils'
 import { ProvenanceMethods, StatusCodes } from './utils/enums'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
@@ -75,7 +75,12 @@ const cmdHandler = async (cmd: Function, argv: any) => {
 
   if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
 
-  return process.exit(await cmd(nvm, argv, config, logger))
+  const accounts = await nvm.accounts.list()
+  const userAccount = findAccountOrFirst(accounts, argv.account)
+
+  await loginMarketplaceApi(nvm, userAccount)
+
+  return process.exit(await cmd(nvm, userAccount, argv, config, logger))
 }
 
 const y = yargs(hideBin(process.argv))
@@ -762,6 +767,11 @@ y.command(
               describe: 'the identifier of the agreement created by the buyer',
               type: 'string'
             })
+            .option('buyerAccount', {
+              type: 'string',
+              demandOption: true,
+              description: 'The address of the buyer'
+            })
             .option('nftType', {
               type: 'string',
               default: '721',
@@ -974,6 +984,11 @@ y.command(
               type: 'number',
               default: 1,
               description: 'the number of NFTs to transfer'
+            })
+            .option('buyerAccount', {
+              type: 'string',
+              demandOption: true,
+              description: 'The address of the buyer'
             })
             .option('nftType', {
               type: 'string',

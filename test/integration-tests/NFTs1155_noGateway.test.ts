@@ -45,7 +45,7 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
     expect(orderAgreementId.length > 0)
 
-    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}"  `
+    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}" --buyerAccount "${execOpts.accounts[2]}" `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execSync(transferCommand, execOpts)

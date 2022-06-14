@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
@@ -18,11 +18,12 @@ import BigNumber from 'bignumber.js'
 
 export const createNft = async (
   nvm: Nevermined,
+  creatorAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, account, metadata } = argv
+  const { verbose, network, metadata } = argv
 
   logger.info(chalk.dim('Creating NFT ...'))
 
@@ -32,9 +33,6 @@ export const createNft = async (
   }
 
   const token = await loadToken(nvm, config, verbose)
-
-  const accounts = await nvm.accounts.list()
-  const creatorAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 

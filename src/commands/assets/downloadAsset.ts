@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, findAccountOrFirst } from '../../utils'
 import chalk from 'chalk'
 
@@ -13,22 +13,20 @@ const rl = readline.createInterface({
 
 export const downloadAsset = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, did, account } = argv
+  const { verbose, network, did } = argv
 
   logger.info(chalk.dim(`Downloading asset: ${did}`))
 
-  const accounts = await nvm.accounts.list()
-  const userAccount = findAccountOrFirst(accounts, account)
-
-  logger.debug(chalk.dim(`Using account: '${userAccount.getId()}'`))
+  logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
   const path = await nvm.assets.download(
     did,
-    userAccount,
+    account,
     argv.path,
     argv.fileIndex,
     false

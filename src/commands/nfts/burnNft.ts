@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   findAccountOrFirst,
@@ -13,17 +13,14 @@ import { Logger } from 'log4js'
 
 export const burnNft = async (
   nvm: Nevermined,
+  burnerAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, did, account, uri } = argv
+  const { verbose, network, did, uri } = argv
 
   logger.info(chalk.dim(`Burning NFT: '${chalk.whiteBright(did)}'`))
-
-  const accounts = await nvm.accounts.list()
-
-  const burnerAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(
     chalk.dim(`Using Account: ${chalk.whiteBright(burnerAccount.getId())}`)

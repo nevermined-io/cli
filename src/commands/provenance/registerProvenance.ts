@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, findAccountOrFirst, loadNevermined } from '../../utils'
 import chalk from 'chalk'
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
@@ -7,16 +7,14 @@ import { Logger } from 'log4js'
 
 export const registerProvenance = async (
   nvm: Nevermined,
+  creatorAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, account, method } = argv
+  const { verbose, network, method } = argv
 
   logger.info(chalk.dim(`Registering provenance activity (${method}) ...`))
-
-  const accounts = await nvm.accounts.list()
-  const creatorAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(chalk.dim(`Using account: '${creatorAccount.getId()}'\n`))
 

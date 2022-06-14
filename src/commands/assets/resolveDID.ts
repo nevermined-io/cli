@@ -1,11 +1,12 @@
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
 export const resolveDID = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -14,14 +15,13 @@ export const resolveDID = async (
 
   logger.info(chalk.dim(`Resolving the asset: ${did}`))
 
-
   logger.info(
     chalk.dim(`Using DIDRegistry: ${await nvm.keeper.didRegistry.getAddress()}`)
   )
   const onchainInfo = await nvm.keeper.didRegistry.getDIDRegister(did)
 
   logger.info(JSON.stringify(onchainInfo))
-  
+
   let ddo
   try {
     ddo = await nvm.assets.resolve(did)

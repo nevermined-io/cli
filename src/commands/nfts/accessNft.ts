@@ -1,24 +1,22 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, findAccountOrFirst, ConfigEntry } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 
 export const accessNft = async (
   nvm: Nevermined,
+  consumerAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, did, destination, account, agreementId, seller } =
+  const { verbose, network, did, destination, agreementId, seller } =
     argv
 
   logger.info(
     chalk.dim(`Access & download NFT associated to ${chalk.whiteBright(did)}`)
   )
   logger.info(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
-
-  const accounts = await nvm.accounts.list()
-  const consumerAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
 

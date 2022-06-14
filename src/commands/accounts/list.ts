@@ -17,19 +17,21 @@ import {
 
 export const accountsList = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, nftTokenAddress, account } = argv
+  const { verbose, network, nftTokenAddress } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
   logger.debug(chalk.dim('Loading account/s ...'))
 
-  let accounts
-  if (account) accounts = [new Account(account)]
-  else accounts = await nvm.accounts.list()
+  // let accounts
+  // if (account) accounts = [account]
+  // else accounts = await nvm.accounts.list()
+  const accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =

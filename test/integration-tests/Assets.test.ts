@@ -7,7 +7,9 @@ import {
   sleep
 } from '../helpers/StdoutParser'
 import * as fs from 'fs'
+import { mkdtempSync, writeFileSync } from 'fs'
 import * as Path from 'path'
+import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 const { execSync } = require('child_process')
 
 describe('Assets e2e Testing', () => {
@@ -53,7 +55,13 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Registering an asset using metadata from a JSON', async () => {
-    const importCommand = `${baseCommands.assets.importMetadata} --metadata ${metadataConfig.metadataFile}`
+    let jsonImported = JSON.parse(fs.readFileSync(metadataConfig.metadataFile).toString())
+    jsonImported.main.author = jsonImported.main.author + generateId()
+    const tempDir = mkdtempSync('/tmp/cli_test_')
+    const randomMetadataFile = `${tempDir}/random_metadata.json`
+    fs.writeFileSync(randomMetadataFile,  JSON.stringify(jsonImported, null, 4))
+
+    const importCommand = `${baseCommands.assets.importMetadata} --metadata ${randomMetadataFile}`
     console.debug(`COMMAND: ${importCommand}`)
 
     const stdout = execSync(importCommand, execOpts)

@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   ConfigEntry,
@@ -13,6 +13,7 @@ import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 export const getNftMetadata = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger

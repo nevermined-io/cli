@@ -22,9 +22,10 @@ import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 import { Logger } from 'log4js'
 import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
+import { ethers } from 'ethers'
 
 export const cmdHandler = async (cmd: Function, argv: any) => {
-  const { verbose, network } = argv
+  const { verbose, network, account } = argv
 
   if (verbose) {
     logger.level = 'debug'
@@ -34,8 +35,37 @@ export const cmdHandler = async (cmd: Function, argv: any) => {
   logger.info(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
 
   const config = getConfig(network as string)
-
+  
   return process.exit(await cmd(argv, config, logger))
+}
+
+
+export const loadNevermined = async (
+  config: ConfigEntry,
+  network: string,
+  verbose = false
+): Promise<Nevermined> => {
+  const nvm = await Nevermined.getInstance({
+    ...config.nvm,
+    verbose: verbose ? verbose : config.nvm.verbose
+  })
+
+  if (!nvm.keeper) {
+    console.log(
+      chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
+    )
+  }
+
+  return nvm
+}
+
+export const loginMarketplaceApi = async (
+  nvm: Nevermined,
+  account: Account
+): Promise<boolean> => {
+  const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)
+  await nvm.marketplace.login(clientAssertion)
+  return true
 }
 
 export const loadContract = (
@@ -86,20 +116,32 @@ export const findAccountOrFirst = (
   accounts: Account[],
   address: string
 ): Account => {
-  let account: Account | undefined = accounts[0]!
+  let account
 
-  if (address) {
+  if (ethers.utils.isAddress(address)) {
     account = accounts.find(
       (a: Account) => a.getId().toLowerCase() === address.toLowerCase()
     )
 
     if (!account) {
-      console.log(chalk.red(`ERROR: '${address}' is not an account!\n`))
-      throw new Error(`${StatusCodes[StatusCodes.ADDRESS_NOT_AN_ACCOUNT]}`)
+      console.debug(
+        chalk.dim(
+          `Account provided not found, using : ${chalk.redBright(accounts[0])}`
+        )
+      )
+    } else {
+      return account
     }
+  } else {
+    console.debug(
+      chalk.dim(
+        `Account address not valid, using : ${chalk.redBright(account)}`
+      )
+    )
+    // throw new Error(`${StatusCodes[StatusCodes.ADDRESS_NOT_AN_ACCOUNT]}`)
   }
 
-  return account
+  return accounts[0]
 }
 
 export const printNftTokenBanner = async (nftContract: Contract) => {
@@ -264,25 +306,6 @@ export const getContractNameFromAddress = async (
   return contractName
 }
 
-export const loadNevermined = async (
-  config: ConfigEntry,
-  network: string,
-  verbose = false
-): Promise<Nevermined> => {
-  const nvm = await Nevermined.getInstance({
-    ...config.nvm,
-    verbose: verbose ? verbose : config.nvm.verbose
-  })
-
-  if (!nvm.keeper) {
-    console.log(
-      chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
-    )
-  }
-
-  return nvm
-}
-
 export const loadToken = async (
   nvm: Nevermined,
   config: ConfigEntry,
@@ -292,9 +315,9 @@ export const loadToken = async (
   let token: Token | null = null
 
   if (
-    config.erc20TokenAddress.toLowerCase() ===
+    config.erc20TokenAddress!.toLowerCase() ===
       Constants.ZeroAddress.toLowerCase() ||
-    config.erc20TokenAddress.toLowerCase() ===
+    config.erc20TokenAddress!.toLowerCase() ===
       Constants.ShortZeroAddress.toLowerCase()
   ) {
 

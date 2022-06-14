@@ -1,14 +1,11 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, loadNevermined, findAccountOrFirst } from '../../utils'
 import chalk from 'chalk'
 
 import readline from 'readline'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
-
-import KeyTransfer from '@nevermined-io/nevermined-sdk-js/dist/node/utils/KeyTransfer'
-
-const keytransfer = new KeyTransfer()
+import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -17,28 +14,28 @@ const rl = readline.createInterface({
 
 export const orderAsset = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<number> => {
-  const { verbose, network, did, account, password } = argv
+  const { verbose, network, did, password } = argv
+
+  const keyTransfer = await makeKeyTransfer()
 
   logger.info(chalk.dim(`Ordering asset: ${did}`))
 
-  const accounts = await nvm.accounts.list()
-  const userAccount = findAccountOrFirst(accounts, account)
-
-  logger.debug(chalk.dim(`Using account: '${userAccount.getId()}'`))
+  logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
   let agreementId
   if (password) {
-    const key = keytransfer.secretToPublic(keytransfer.makeKey(password))
-    userAccount.babyX = key.x
-    userAccount.babyY = key.y
-    userAccount.babySecret = password
-    agreementId = await nvm.assets.order(did, 'access-proof', userAccount)
+    const key = await keyTransfer.secretToPublic(keyTransfer.makeKey(password))
+    account.babyX = key.x
+    account.babyY = key.y
+    account.babySecret = password
+    agreementId = await nvm.assets.order(did, 'access-proof', account)
   } else {
-    agreementId = await nvm.assets.order(did, 'access', userAccount)
+    agreementId = await nvm.assets.order(did, 'access', account)
   }
 
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))

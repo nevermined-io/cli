@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, loadNevermined } from '../../utils'
 import chalk from 'chalk'
 import { printProvenanceEvents } from '../../utils/utils'
@@ -7,6 +7,7 @@ import { Logger } from 'log4js'
 
 export const provenanceHistory = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger

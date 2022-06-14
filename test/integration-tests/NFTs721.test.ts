@@ -84,7 +84,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('The seller transfer a NFT (ERC-721)', async () => {
-    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" --account "${execOpts.accounts[0]}"  `
+    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" --account "${execOpts.accounts[0]}" --buyerAccount "${execOpts.accounts[1]}" `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execSync(transferCommand, execOpts)

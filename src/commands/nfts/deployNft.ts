@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   findAccountOrFirst,
@@ -13,6 +13,7 @@ import * as fs from 'fs'
 
 export const deployNft = async (
   nvm: Nevermined,
+  creatorAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -22,9 +23,6 @@ export const deployNft = async (
   logger.info(chalk.dim('Deploying NFT (ERC-721) contract...'))
 
   const web3 = Web3Provider.getWeb3(config.nvm)
-
-  const accounts = await nvm.accounts.list()
-  const creatorAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
