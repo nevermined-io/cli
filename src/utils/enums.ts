@@ -1,7 +1,6 @@
 export enum StatusCodes {
-  UNKNOWN = -999,
-  ERROR = -1,
   OK = 0,
+  ERROR,
   FAILED_TO_CONNECT,
   MINTER_NOT_OWNER,
   ADDRESS_NOT_AN_ACCOUNT,
@@ -10,7 +9,8 @@ export enum StatusCodes {
   SELLER_NOT_OWNER,
   HOLDER_NOT_OWNER,
   DID_NOT_FOUND,
-  NOT_IMPLEMENTED
+  NOT_IMPLEMENTED,
+  UNKNOWN = 999
 }
 
 export const Constants = {

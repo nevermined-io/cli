@@ -103,20 +103,26 @@ const cmdHandler = async (cmd: Function, argv: any) => {
 
   await loginMarketplaceApi(nvm, userAccount)
 
-  // return process.exit(await cmd(nvm, userAccount, argv, config, logger))
-  const executionOutput: ExecutionOutput = await cmd(
-    nvm,
-    userAccount,
-    argv,
-    config,
-    logger
-  )
-  if (argv.json) {
-    logger.mark(JSON.stringify(executionOutput))
-  }
-  if (executionOutput.status > 0) logger.error(executionOutput.errorMessage)
+  try {
+    const executionOutput: ExecutionOutput = await cmd(
+      nvm,
+      userAccount,
+      argv,
+      config,
+      logger
+    )
+    if (argv.json) {
+      logger.mark(JSON.stringify(executionOutput))
+    }
+    if (executionOutput.status > 0) {
+      logger.error(`Command error: ${executionOutput.errorMessage}`)
+    }
 
-  return process.exit(executionOutput.status)
+    return process.exit(executionOutput.status)
+  } catch (err) {
+    logger.error(`Command failed: ${(err as Error).message}`)
+    return process.exit(StatusCodes.ERROR)
+  }
 }
 
 const y = yargs(hideBin(process.argv))
