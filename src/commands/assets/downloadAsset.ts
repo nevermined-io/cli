@@ -5,6 +5,7 @@ import chalk from 'chalk'
 import readline from 'readline'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -17,7 +18,7 @@ export const downloadAsset = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did } = argv
 
   logger.info(chalk.dim(`Downloading asset: ${did}`))
@@ -34,5 +35,8 @@ export const downloadAsset = async (
 
   logger.info(chalk.dim(`Files downloaded to: ${path}`))
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify({ path })
+  }
 }

@@ -3,6 +3,7 @@ import { StatusCodes, ConfigEntry } from '../../utils'
 import { ConditionState } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 export const listAgreements = async (
   nvm: Nevermined,
@@ -10,7 +11,7 @@ export const listAgreements = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did } = argv
 
   logger.info(
@@ -49,5 +50,8 @@ export const listAgreements = async (
     logger.info('\n')
   }
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify(agreements.map(a => a.agreementId))
+  }
 }

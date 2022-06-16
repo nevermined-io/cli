@@ -1,5 +1,6 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, findAccountOrFirst, ConfigEntry } from '../../utils'
+import { StatusCodes, ConfigEntry } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 
@@ -9,7 +10,7 @@ export const accessNft = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did, destination, agreementId, seller } = argv
 
   logger.info(
@@ -33,10 +34,10 @@ export const accessNft = async (
   )
 
   if (!isSuccessfulTransfer) {
-    logger.warn(
-      chalk.dim(`Problem executing 'transferForDelegate' through the gateway`)
-    )
-    return StatusCodes.ERROR
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Problem executing 'transferForDelegate' through the gateway`
+    }
   }
 
   logger.info(`NFT Access request through the gateway sucessfully`)
@@ -52,8 +53,16 @@ export const accessNft = async (
     logger.info(
       chalk.dim(`NFT Assets downloaded to: ${chalk.whiteBright(destination)}`)
     )
-    return StatusCodes.OK
+    return {
+      status: StatusCodes.OK,
+      results: JSON.stringify({
+        destination
+      })
+    }
   }
-  logger.warn(chalk.dim(`Unable to download assets`))
-  return StatusCodes.ERROR
+
+  return {
+    status: StatusCodes.ERROR,
+    errorMessage: `Unable to download assets`
+  }
 }

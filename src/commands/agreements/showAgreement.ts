@@ -6,6 +6,7 @@ import {
 } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 export const showAgreement = async (
   nvm: Nevermined,
@@ -13,7 +14,7 @@ export const showAgreement = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, agreementId } = argv
 
   logger.info(
@@ -93,5 +94,16 @@ export const showAgreement = async (
 
   logger.info('\n')
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results:
+      JSON.stringify({
+        did: ddo.id,
+        didOwner: agreementData.didOwner,
+        accessConsumer,
+        accessProvider,
+        templateId: agreementData.templateId,
+        contractName
+      })
+  }
 }

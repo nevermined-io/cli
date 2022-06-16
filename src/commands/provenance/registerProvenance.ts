@@ -1,9 +1,10 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, findAccountOrFirst, loadNevermined } from '../../utils'
-import chalk from 'chalk'
+import { StatusCodes } from '../../utils'
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
+import chalk from 'chalk'
 
 export const registerProvenance = async (
   nvm: Nevermined,
@@ -11,7 +12,7 @@ export const registerProvenance = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, method } = argv
 
   logger.info(chalk.dim(`Registering provenance activity (${method}) ...`))
@@ -28,7 +29,7 @@ export const registerProvenance = async (
         `The 'wasGeneratedBy' event is reported automatically during the asset registration`
       )
     )
-    return StatusCodes.OK
+    return { status: StatusCodes.OK }
   } else if (method === 'used') {
     await nvm.provenance.used(
       provenanceId,
@@ -70,8 +71,10 @@ export const registerProvenance = async (
       creatorAccount
     )
   } else {
-    logger.error(chalk.dim(`W3C Method (${method}) not recognized`))
-    return StatusCodes.ERROR
+    return {
+      status: StatusCodes.NOT_IMPLEMENTED,
+      errorMessage: `W3C Method (${method}) not recognized`
+    }
   }
 
   logger.info(
@@ -80,5 +83,10 @@ export const registerProvenance = async (
     )
   )
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify({
+      provenanceId
+    })
+  }
 }

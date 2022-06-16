@@ -9,6 +9,7 @@ import {
 } from '../../utils'
 import chalk from 'chalk'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
 
 export const burnNft = async (
@@ -17,7 +18,7 @@ export const burnNft = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did, uri } = argv
 
   logger.info(chalk.dim(`Burning NFT: '${chalk.whiteBright(did)}'`))
@@ -57,10 +58,10 @@ export const burnNft = async (
 
     try {
       const oldOwner = await nft.methods.ownerOf(ddo.shortId()).call()
-      logger.info(
-        chalk.red(`ERROR: NFT already existing and owned by: '${oldOwner}'`)
-      )
-      return StatusCodes.NFT_ALREADY_OWNED
+      return {
+        status: StatusCodes.NFT_ALREADY_OWNED,
+        errorMessage: `ERROR: NFT already existing and owned by: '${oldOwner}'`
+      }
     } catch {}
 
     const to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
@@ -72,8 +73,10 @@ export const burnNft = async (
     )
 
     if (burnAbiDefinition.length === 0) {
-      logger.warn(`The NFT contract doesn't expose a 'burn' method`)
-      return StatusCodes.OK
+      return {
+        status: StatusCodes.OK,
+        errorMessage: `The NFT contract doesn't expose a 'burn' method`
+      }
     }
 
     await nft.methods
@@ -91,8 +94,10 @@ export const burnNft = async (
     // Burning NFT (ERC-1155)
 
     if (argv.amount < 1) {
-      logger.error(`Invalid number of ERC-1155 NFTs to burn. It should be >1`)
-      return StatusCodes.ERROR
+      return {
+        status: StatusCodes.ERROR,
+        errorMessage: `Invalid number of ERC-1155 NFTs to burn. It should be >1`
+      }
     }
 
     await nvm.keeper.didRegistry.burn(did, argv.amount, burnerAccount.getId())
@@ -106,5 +111,7 @@ export const burnNft = async (
     )
   }
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK
+  }
 }

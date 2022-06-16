@@ -25,22 +25,6 @@ export interface ConfigEntry {
   gasPriceMultiplier?: number
 }
 
-configure({
-  appenders: {
-    out: {
-      type: 'stdout',
-      level: 'info',
-      layout: {
-        type: 'pattern',
-        pattern: '%m'
-      }
-    }
-  },
-  categories: {
-    default: { appenders: ['out'], level: 'info' }
-  }
-})
-
 export const logger = getLogger()
 
 export const config: CliConfig = {

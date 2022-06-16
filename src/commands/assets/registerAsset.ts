@@ -12,10 +12,10 @@ import {
   makeKeyTransfer,
   zeroX
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
-
 import BigNumber from 'bignumber.js'
 
 export const registerAsset = async (
@@ -24,7 +24,7 @@ export const registerAsset = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, metadata, assetType, password, encrypt } = argv
   const token = await loadToken(nvm, config, verbose)
 
@@ -134,5 +134,11 @@ export const registerAsset = async (
     chalk.dim(`Created Asset ${ddo.id} with service endpoint: ${register.url}`)
   )
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify({
+      did: ddo.id,
+      url: register.url
+    })
+  }
 }

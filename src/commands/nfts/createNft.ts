@@ -12,6 +12,7 @@ import chalk from 'chalk'
 import { File, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
 import BigNumber from 'bignumber.js'
@@ -22,14 +23,16 @@ export const createNft = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, metadata } = argv
 
   logger.info(chalk.dim('Creating NFT ...'))
 
   if (argv.royalties < 0 || argv.royalties > 100) {
-    logger.error('Royalties must be between 0 and 100%')
-    return StatusCodes.ERROR
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Royalties must be between 0 and 100%`
+    }
   }
 
   const token = await loadToken(nvm, config, verbose)
@@ -40,10 +43,10 @@ export const createNft = async (
   let ddoPrice: BigNumber
   if (!metadata) {
     if (argv.name === '' || argv.author === '' || argv.urls === '') {
-      logger.error(
-        `If not metadata file is provided, the following parameters need to be given: name, author, urls, price`
-      )
-      return StatusCodes.ERROR
+      return {
+        status: StatusCodes.ERROR,
+        errorMessage: `If not metadata file is provided, the following parameters need to be given: name, author, urls, price`
+      }
     }
 
     const decimals =
@@ -151,5 +154,7 @@ export const createNft = async (
 
   logger.info('Now please mint the token on the NFT Contract!')
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK
+  }
 }

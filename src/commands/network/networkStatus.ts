@@ -1,6 +1,7 @@
 import { StatusCodes, ConfigEntry } from '../../utils'
 import { Logger } from 'log4js'
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { PlatformTechStatus } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Versions'
 import chalk from 'chalk'
 
@@ -10,7 +11,7 @@ export const networkStatus = async (
   argv: any,
   configEntry: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network } = argv
 
   const platformVersions = await nvm.versions.get()
@@ -175,5 +176,8 @@ export const networkStatus = async (
 
   logger.info('\n')
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify(platformVersions)
+  }
 }

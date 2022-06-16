@@ -38,16 +38,10 @@ jobs:
           git clone https://github.com/nevermined-io/tools
           cd tools
           
-          export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
-          export KEEPER_VERSION=latest
-          export GATEWAY_VERSION=develop
-          export COMPUTE_API_VERSION=latest
-          export MARKETPLACE_API_VERSION=latest
-          export SUBGRAPH_VERSION=v0.3.0-rc4
-          
+          export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"         
 
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
-          ./start_nevermined.sh --marketplace-api --no-marketplace ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
+          ./start_nevermined.sh --latest ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
           cd ..          
           ./scripts/wait-nevermined.sh
           ./scripts/wait-subgraphs.sh

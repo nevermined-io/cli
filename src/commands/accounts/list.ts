@@ -14,6 +14,7 @@ import {
   printNftTokenBanner,
   StatusCodes
 } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 export const accountsList = async (
   nvm: Nevermined,
@@ -21,7 +22,7 @@ export const accountsList = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, nftTokenAddress } = argv
 
   const token = await loadToken(nvm, config, verbose)
@@ -138,5 +139,8 @@ export const accountsList = async (
     logger.info('\n')
   }
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify(loadedAccounts.map(a => a.address))
+  }
 }

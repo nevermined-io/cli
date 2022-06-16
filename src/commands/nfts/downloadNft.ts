@@ -1,5 +1,6 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, findAccountOrFirst, ConfigEntry } from '../../utils'
+import { StatusCodes, ConfigEntry } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 
@@ -9,7 +10,7 @@ export const downloadNft = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did, destination, agreementId } = argv
 
   logger.info(
@@ -31,5 +32,7 @@ export const downloadNft = async (
     chalk.dim(`NFT Assets downloaded to: ${chalk.whiteBright(destination)}`)
   )
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK
+  }
 }

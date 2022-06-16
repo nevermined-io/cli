@@ -1,9 +1,10 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, ConfigEntry, config } from '../../utils'
-import chalk from 'chalk'
-import { Logger } from 'log4js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { NFTMetadata } from '../../models/NFTMetadata'
 import IpfsHelper from '../../utils/IpfsHelper'
+import chalk from 'chalk'
+import { Logger } from 'log4js'
 
 export const publishNftMetadata = async (
   nvm: Nevermined,
@@ -11,7 +12,7 @@ export const publishNftMetadata = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network } = argv
 
   logger.info(chalk.dim(`Uploading NFT Metadata:`))
@@ -24,8 +25,10 @@ export const publishNftMetadata = async (
 
   if (argv.royalties != '') {
     if (argv.royalties < 0 || argv.royalties > 100) {
-      logger.error('Royalties must be between 0 and 100%')
-      return StatusCodes.ERROR
+      return {
+        status: StatusCodes.ERROR,
+        errorMessage: 'Royalties must be between 0 and 100%'
+      }
     }
     nftMetadata.seller_fee_basis_points = argv.royalties * 100
   }
@@ -46,15 +49,19 @@ export const publishNftMetadata = async (
     logger.info(
       chalk.dim(`NFT Metadata Created: ${chalk.yellowBright(cidHash)}\n`)
     )
+    return {
+      status: StatusCodes.OK,
+      results: JSON.stringify({
+        hash,
+        cidHash
+      })
+    }
   } catch (err) {
-    logger.error('Unable to add files')
-    logger.error(
-      `Unable to create the Metadata file into IPFS. Error: ${
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Unable to create the Metadata file into IPFS. Error: ${
         (err as Error).message
       }`
-    )
-    return StatusCodes.ERROR
+    }
   }
-
-  return StatusCodes.OK
 }
