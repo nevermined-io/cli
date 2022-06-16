@@ -27,7 +27,7 @@ export const accountsFund = async (
       )
       results.push('native')
     } catch (err) {
-      errorMessage = `Funding ETH to ${chalk.whiteBright(
+      errorMessage = `Funding Native token to ${chalk.whiteBright(
         account.getId()
       )} failed! ${(err as Error).message}`
       console.log(chalk.red(errorMessage))
