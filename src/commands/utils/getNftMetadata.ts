@@ -5,11 +5,13 @@ import {
   getNFTAddressFromInput,
   loadNftContract
 } from '../../utils'
-import chalk from 'chalk'
-import { Logger } from 'log4js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import IpfsHelper from '../../utils/IpfsHelper'
 import { getDidHash } from '../../utils/utils'
 import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import chalk from 'chalk'
+import { Logger } from 'log4js'
+
 
 export const getNftMetadata = async (
   nvm: Nevermined,
@@ -17,7 +19,7 @@ export const getNftMetadata = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did } = argv
 
   let nftAddress
@@ -28,8 +30,10 @@ export const getNftMetadata = async (
   const ddo = await nvm.assets.resolve(did)
 
   if (!ddo) {
-    logger.error('Asset not found')
-    return StatusCodes.DID_NOT_FOUND
+    return {
+      status: StatusCodes.DID_NOT_FOUND,
+      errorMessage: `Asset not found`
+    }
   }
 
   // Check if the NFT is 721 or 1155
@@ -53,8 +57,10 @@ export const getNftMetadata = async (
       `The DID has a ERC-721 NFT attached with address ${nftAddress}`
     )
   } else {
-    logger.error('Unable to identify if the asset has a ERC-1155 or 721 NFT')
-    return StatusCodes.ERROR
+    return {
+      status: StatusCodes.DID_NOT_FOUND,
+      errorMessage: 'Unable to identify if the asset has a ERC-1155 or 721 NFT'
+    }
   }
 
   // Return the Metadata url
@@ -80,13 +86,17 @@ export const getNftMetadata = async (
     const metadata = await fetch(metadataUrl)
     metadataContent = await metadata.text()
   } else {
-    logger.warn('Unable to understand URL format')
-    return StatusCodes.ERROR
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: 'Unable to understand URL format'
+    }
   }
 
   logger.info(
     `NFT Metadata: \n${JSON.stringify(JSON.parse(metadataContent), null, 2)}\n`
   )
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK
+  }
 }

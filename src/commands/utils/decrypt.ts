@@ -1,8 +1,10 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 import crypto from 'crypto'
+import { StatusCodes } from '../../utils'
 
 export const decryptFile = async (
   nvm: Nevermined,
@@ -10,7 +12,7 @@ export const decryptFile = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { file, password } = argv
   const encrypted = fs.readFileSync(file).toString('binary')
 
@@ -26,7 +28,12 @@ export const decryptFile = async (
   let decrypted = decipher.update(encrypted.substring(16), 'binary', 'binary')
   decrypted += decipher.final()
 
-  console.log(decrypted)
+  logger.info(decrypted)
 
-  return 0
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify({
+      decrypted
+    })
+  }
 }

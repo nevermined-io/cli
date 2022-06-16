@@ -1,15 +1,10 @@
 import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import {
-  Constants,
-  StatusCodes,
-  findAccountOrFirst,
-  ConfigEntry,
-  loadToken
-} from '../../utils'
+import { Constants, StatusCodes, ConfigEntry, loadToken } from '../../utils'
 import chalk from 'chalk'
 import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 export const transferNft = async (
   nvm: Nevermined,
@@ -17,7 +12,7 @@ export const transferNft = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, agreementId } = argv
 
   const token = await loadToken(nvm, config, verbose)
@@ -32,14 +27,12 @@ export const transferNft = async (
       agreementId
     )
   } catch (err) {
-    console.log(
-      chalk.red(
-        `Unable to load Agreement with Id ${chalk.whiteBright(agreementId)}: ${
-          (err as Error).message
-        }`
-      )
-    )
-    return StatusCodes.ERROR
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Unable to load Agreement with Id ${agreementId}: ${
+        (err as Error).message
+      }`
+    }
   }
   logger.trace(
     chalk.dim(
@@ -119,5 +112,5 @@ export const transferNft = async (
   }
 
   logger.info(chalk.dim('Transfer done!'))
-  return StatusCodes.OK
+  return { status: StatusCodes.OK }
 }

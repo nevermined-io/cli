@@ -9,6 +9,7 @@ import {
   getNFTAddressFromInput,
   loadToken
 } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import {
@@ -25,7 +26,7 @@ export const showNft = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did } = argv
 
   const token = await loadToken(nvm, config, verbose)
@@ -189,5 +190,5 @@ export const showNft = async (
 
   logger.trace(chalk.dim(DDO.serialize(ddo)))
 
-  return StatusCodes.OK
+  return { status: StatusCodes.OK }
 }

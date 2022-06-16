@@ -44,11 +44,15 @@ import chalk from 'chalk'
 import {
   findAccountOrFirst,
   getConfig,
+  getDefaultLoggerConfig,
+  getJsonLoggerConfig,
   loadNevermined,
   logger,
   loginMarketplaceApi
 } from '../src/utils'
 import { ProvenanceMethods, StatusCodes } from './utils/enums'
+import { configure, getLogger, addLayout } from 'log4js'
+import { ExecutionOutput } from './models/ExecutionOutput'
 
 const cmdHandler = async (cmd: Function, argv: any) => {
   const { verbose, network } = argv
@@ -56,10 +60,23 @@ const cmdHandler = async (cmd: Function, argv: any) => {
   const config = getConfig(network as string)
   const nvm = await loadNevermined(config, network, verbose)
 
-  if (verbose) {
-    logger.level = 'debug'
+  if (argv.json) {
+    // The `--json` parameter was given so we setup logs in json format
+    addLayout('json', function (config) {
+      return function (logEvent) {
+        return JSON.stringify(logEvent) + config.separator
+      }
+    })
+    configure(getJsonLoggerConfig())    
+    logger.level = 'mark' // we disable regular login
+    chalk.level = 0 // we disable chalk colors to facilitate readability
   } else {
-    logger.level = 'info'
+    configure(getDefaultLoggerConfig())
+    if (verbose) {
+      logger.level = 'debug'
+    } else {
+      logger.level = 'info'
+    }
   }
 
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
@@ -86,7 +103,20 @@ const cmdHandler = async (cmd: Function, argv: any) => {
 
   await loginMarketplaceApi(nvm, userAccount)
 
-  return process.exit(await cmd(nvm, userAccount, argv, config, logger))
+  // return process.exit(await cmd(nvm, userAccount, argv, config, logger))
+  const executionOutput: ExecutionOutput = await cmd(
+    nvm,
+    userAccount,
+    argv,
+    config,
+    logger
+  )
+  if (argv.json) {
+    logger.mark(JSON.stringify(executionOutput))
+  }
+  if (executionOutput.status > 0) logger.error(executionOutput.errorMessage)
+
+  return process.exit(executionOutput.status)
 }
 
 const y = yargs(hideBin(process.argv))
@@ -109,6 +139,11 @@ const y = yargs(hideBin(process.argv))
     type: 'string',
     default: '',
     description: 'The account to use'
+  })
+  .option('json', {
+    type: 'boolean',
+    default: false,
+    description: 'If provided all the output will be in JSON format'
   })
 
 // hidden default command to display the help when used without parameters

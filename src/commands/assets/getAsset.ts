@@ -5,6 +5,7 @@ import readline from 'readline'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -17,7 +18,7 @@ export const getAsset = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did, password } = argv
 
   const keyTransfer = await makeKeyTransfer()
@@ -48,9 +49,11 @@ export const getAsset = async (
     chalk.dim(`Downloading asset: ${did} with agreement id: ${agreementId}`)
   )
 
+  let results
   if (password) {
     const key = await nvm.assets.consumeProof(agreementId, did, account)
-    console.log(`Got password ${Buffer.from(key as any, 'hex').toString()}`)
+    results = Buffer.from(key as any, 'hex').toString()
+    console.log(`Got password ${results}`)
   } else {
     const path = await nvm.assets.consume(
       agreementId,
@@ -60,7 +63,11 @@ export const getAsset = async (
       argv.fileIndex
     )
     logger.info(chalk.dim(`Files downloaded to: ${path}`))
+    results = path
   }
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results
+  }
 }

@@ -20,7 +20,7 @@ import { ConfigEntry, getConfig, logger } from './config'
 import { AbiItem } from 'web3-utils'
 import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
-import { Logger } from 'log4js'
+import { Configuration, Logger } from 'log4js'
 import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 import { ethers } from 'ethers'
 
@@ -50,7 +50,7 @@ export const loadNevermined = async (
   })
 
   if (!nvm.keeper) {
-    console.log(
+    logger.error(
       chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
     )
   }
@@ -123,7 +123,7 @@ export const findAccountOrFirst = (
     )
 
     if (!account) {
-      console.debug(
+      logger.debug(
         chalk.dim(
           `Account provided not found, using : ${chalk.redBright(accounts[0])}`
         )
@@ -132,7 +132,7 @@ export const findAccountOrFirst = (
       return account
     }
   } else {
-    console.debug(
+    logger.debug(
       chalk.dim(
         `Account address not valid, using : ${chalk.redBright(account)}`
       )
@@ -146,15 +146,15 @@ export const findAccountOrFirst = (
 export const printNftTokenBanner = async (nftContract: Contract) => {
   const { address } = nftContract.options
 
-  console.log('\n')
-  console.log(chalk.dim('===== NFT Contract ====='))
+  logger.info('\n')
+  logger.info(chalk.dim('===== NFT Contract ====='))
 
   let owner = ''
   try {
     owner = await nftContract.methods.owner().call()
-    console.log(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
+    logger.info(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
   } catch {
-    console.log(`Owner: The NFT doesn't expose the owner`)
+    logger.info(`Owner: The NFT doesn't expose the owner`)
   }
 
   const [name, symbol] = await Promise.all([
@@ -162,10 +162,9 @@ export const printNftTokenBanner = async (nftContract: Contract) => {
     nftContract.methods.symbol().call()
   ])
 
-  console.log(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
-  console.log(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
-  console.log(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
-  console.log('\n')
+  logger.info(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
+  logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
+  logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}\n`))
 }
 
 export const printTokenBanner = async (token: Token | null) => {
@@ -256,9 +255,8 @@ export const printSearchResult = async (
 }
 
 export const printNativeTokenBanner = async () => {
-  console.log('\n')
-  console.log(chalk.dim('===== Native Token (ETH, MATIC, etc) ====='))
-  console.log(
+  logger.info(chalk.dim('\n===== Native Token (ETH, MATIC, etc) ====='))
+  logger.info(
     chalk.dim(`Decimals: ${chalk.whiteBright(Constants.ETHDecimals)}\n`)
   )
 }
@@ -273,13 +271,12 @@ export const printErc20TokenBanner = async (token: Token) => {
     token.totalSupply()
   ])
 
-  console.log('\n')
-  console.log(chalk.dim('===== ERC20 Contract ====='))
-  console.log(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
-  console.log(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
-  console.log(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
-  console.log(chalk.dim(`Decimals: ${chalk.whiteBright(decimals)}`))
-  console.log(
+  logger.info(chalk.dim('\n===== ERC20 Contract ====='))
+  logger.info(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
+  logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
+  logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
+  logger.info(chalk.dim(`Decimals: ${chalk.whiteBright(decimals)}`))
+  logger.info(
     chalk.dim(
       `Total Supply: ${chalk.whiteBright(totalSupply / 10 ** decimals)}`
     )
@@ -319,7 +316,7 @@ export const loadToken = async (
     config.erc20TokenAddress!.toLowerCase() ===
       Constants.ShortZeroAddress.toLowerCase()
   ) {
-    console.debug(
+    logger.debug(
       chalk.yellow('INFO: Using native token (ETH, MATIC, etc) for payments!\n')
     )
   } else {
@@ -328,10 +325,10 @@ export const loadToken = async (
     // if the token address is not zero try to load it
     token = nvm.keeper.token // eslint-disable-line
     const nvmTokenAddress = token.getAddress() || ''
-    console.debug(
+    logger.debug(
       `Loading ERC20 Token ${config.erc20TokenAddress.toLowerCase()}`
     )
-    console.debug(`ERC20 Token Address ${config.erc20TokenAddress}`)
+    logger.debug(`ERC20 Token Address ${config.erc20TokenAddress}`)
 
     // check if we have a different token configured
     if (
@@ -353,15 +350,51 @@ export const loadToken = async (
       )
       config.erc20TokenAddress = tokenAddress
     } else {
-      console.debug(
+      logger.debug(
         chalk.yellow(`WARNING: Using Nevermined token '${token.address}'!\n`)
       )
     }
-    console.debug(`Using Token Address: ${token.address}`)
+    logger.debug(`Using Token Address: ${token.address}`)
 
     if (verbose) {
       await printErc20TokenBanner(token)
     }
   }
   return token
+}
+
+export const getDefaultLoggerConfig = (): Configuration => {
+  return {
+    appenders: {
+      out: {
+        type: 'stdout',
+        level: 'info',
+        layout: {
+          type: 'pattern',
+          pattern: '%m'
+        }
+      }
+    },
+    categories: {
+      default: { appenders: ['out'], level: 'info' }
+    }
+  }
+}
+
+export const getJsonLoggerConfig = (): Configuration => {
+  return {
+    appenders: {
+      json: {
+        type: 'stdout',
+        level: 'mark',
+        layout: {
+          type: 'json',
+          separator: ','
+        }
+      }
+    },
+    categories: {
+      default: { appenders: ['json'], level: 'mark' }
+    }
+  }
 }

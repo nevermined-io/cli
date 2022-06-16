@@ -1,11 +1,10 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
-  findAccountOrFirst,
-  loadNevermined,
   ConfigEntry,
   printNftTokenBanner
 } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
@@ -17,7 +16,7 @@ export const deployNft = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, account, abiPath } = argv
 
   logger.info(chalk.dim('Deploying NFT (ERC-721) contract...'))
@@ -70,5 +69,7 @@ export const deployNft = async (
     `Contract deployed into address: ${contractInstance.options.address}\n`
   )
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK
+  }
 }

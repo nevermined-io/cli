@@ -6,6 +6,7 @@ import readline from 'readline'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -18,7 +19,7 @@ export const orderAsset = async (
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did, password } = argv
 
   const keyTransfer = await makeKeyTransfer()
@@ -40,5 +41,8 @@ export const orderAsset = async (
 
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify({ agreementId })
+  }
 }
