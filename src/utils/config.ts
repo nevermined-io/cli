@@ -34,10 +34,10 @@ export const config: CliConfig = {
       marketplaceUri:
         process.env.MARKETPLACE_API_URL || 'http://172.17.0.1:3100',
       faucetUri: process.env.FAUCET_URL || 'http://localhost:3001',
-      // graphHttpUri: undefined,
-      graphHttpUri:
-        process.env.GRAPH_URL ||
-        'http://localhost:9000/subgraphs/name/neverminedio',
+      graphHttpUri: undefined,
+      // graphHttpUri:
+      //   process.env.GRAPH_URL ||
+      //   'http://localhost:9000/subgraphs/name/neverminedio',
       gatewayUri: process.env.GATEWAY_URL || 'http://localhost:8030',
       gatewayAddress:
         process.env.GATEWAY_ADDRESS ||
