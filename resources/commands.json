@@ -1,0 +1,348 @@
+{
+	"generalOptions": [{
+			"name": "verbose",
+			"alias": "v",
+			"default": false,
+			"type": "boolean",
+			"description": "Run with verbose logging"
+		},
+		{
+			"name": "network",
+			"alias": "n",
+			"default": "spree",
+			"type": "string",
+			"description": "The network to use"
+		},
+		{
+			"name": "account",
+			"alias": "a",
+			"default": "",
+			"type": "string",
+			"description": "The account to use"
+		},
+		{
+			"name": "json",
+			"default": false,
+			"type": "boolean",
+			"description": "If provided all the output will be in JSON format"
+		}
+	],
+	"commands": [{
+		"name": "network",
+		"description": "Retrieve information about Nevermined deployments",
+		"usage": "usage: $0 network <command> parameters [options]",
+		"subcommands": [{
+			"name": "list",
+			"description": "List all the pre-configured Nevermined networks",
+			"commandHandler": "networkList"
+		}, {
+			"name": "status",
+			"description": "List all the information about a Nevermined deployment",
+			"commandHandler": "networkStatus"
+		}]
+	}, {
+		"name": "accounts",
+		"description": "Management of accounts and the funds associated to them",
+		"usage": "usage: $0 accounts <command> parameters [options]",
+		"subcommands": [{
+			"name": "list",
+			"description": "List all accounts",
+			"commandHandler": "accountsList",
+			"positionalArguments": [{
+				"name": "account",
+				"type": "string",
+				"description": "the account to retrieve the balance"
+			}],
+			"optionalArguments": [{
+				"name": "nftTokenAddress",
+				"type": "string",
+				"default": "",
+				"description": "Load NFT (ERC-721) inventory as well"
+			}]
+		}, {
+			"name": "balance account",
+			"description": "Get the balance of a specific account",
+			"commandHandler": "accountsList",
+			"positionalArguments": [{
+				"name": "account",
+				"type": "string",
+				"description": "The account to retrieve the balance"
+			}],
+			"optionalArguments": [{
+				"name": "nftTokenAddress",
+				"type": "string",
+				"default": "",
+				"description": "Load NFT (ERC-721) inventory as well"
+			}]
+		}, {
+			"name": "fund account",
+			"description": "Funds an account on a testnet",
+			"commandHandler": "accountsFund",
+			"positionalArguments": [{
+				"name": "account",
+				"type": "string",
+				"description": "The account to fund"
+			}],
+			"optionalArguments": [{
+				"name": "token",
+				"type": "string",
+				"default": "both",
+				"description": "What kind of tokens you want to fund the account (native, erc20 or both)"
+			}]
+		}]
+	}, {
+		"name": "assets",
+		"description": "Allows to register and manage assets in a Nevermined network",
+		"usage": "usage: $0 assets <command> parameters [options]",
+		"subcommands": [{
+			"name": "register-dataset",
+			"description": "Register a new dataset",
+			"commandHandler": "registerAsset",
+			"optionalArguments": [{
+					"name": "name",
+					"type": "string",
+					"demandOption": true,
+					"description": "The asset name"
+				},
+				{
+					"name": "author",
+					"type": "string",
+					"demandOption": true,
+					"description": "The author of the asset"
+				},
+				{
+					"name": "dateCreated",
+					"type": "string",
+					"description": "When the asset was created"
+				},
+				{
+					"name": "price",
+					"type": "number",
+					"demandOption": true,
+					"description": "The asset price"
+				},
+				{
+					"name": "urls",
+					"type": "array",
+					"demandOption": true,
+					"description": "The asset urls. It can be a comma separated list of urls for multiple files"
+				},
+				{
+					"name": "contentType",
+					"type": "string",
+					"demandOption": true,
+					"description": "Files content type. Example: application/csv"
+				},
+				{
+					"name": "license",
+					"type": "string",
+					"default": "undefined",
+					"description": "The asset license"
+				},
+				{
+					"name": "password",
+					"type": "string",
+					"description": "The password for encrypted files"
+				},
+				{
+					"name": "assetType",
+					"type": "string",
+					"default": "dataset",
+					"hidden": true,
+					"description": "The type of the asset to register"
+				}
+			]
+		}, {
+			"name": "register-algorithm",
+			"description": "Register a new algorithm",
+			"commandHandler": "registerAsset",
+			"optionalArguments": [{
+					"name": "name",
+					"type": "string",
+					"demandOption": true,
+					"description": "The asset name"
+				},
+				{
+					"name": "author",
+					"type": "string",
+					"demandOption": true,
+					"description": "The author of the asset"
+				},
+				{
+					"name": "dateCreated",
+					"type": "string",
+					"description": "When the asset was created"
+				},
+				{
+					"name": "price",
+					"type": "number",
+					"demandOption": true,
+					"description": "The asset price"
+				},
+				{
+					"name": "urls",
+					"type": "array",
+					"demandOption": true,
+					"description": "The asset urls. It can be a comma separated list of urls for multiple files"
+				},
+				{
+					"name": "contentType",
+					"type": "string",
+					"demandOption": true,
+					"description": "Files content type. Example: application/csv"
+				},
+				{
+					"name": "license",
+					"type": "string",
+					"default": "undefined",
+					"description": "The asset license"
+				},
+				{
+					"name": "language",
+					"type": "string",
+					"demandOption": true,
+					"description": "The programing language of the algorithm"
+				},
+				{
+					"name": "entrypoint",
+					"type": "string",
+					"demandOption": true,
+					"description": "The entrypoint for running the algorithm. Example: python word_count.py"
+				},
+				{
+					"name": "container",
+					"type": "string",
+					"demandOption": true,
+					"description": "The docker container where the algorithm can be executed. Example: python:3.8-alpine"
+				},
+				{
+					"name": "assetType",
+					"type": "string",
+					"default": "algorithm",
+					"hidden": true,
+					"description": "The type of the asset to register"
+				}
+			]
+		}, {
+			"name": "import",
+			"description": "Import an asset using the metadata in JSON format",
+			"commandHandler": "registerAsset",
+			"positionalArguments": [{
+				"name": "metadata",
+				"type": "string",
+				"description": "The path to the JSON file including the asset metadata"
+			}],
+			"optionalArguments": [{
+				"name": "encrypt",
+				"type": "boolean",
+				"default": false,
+				"description": "Use encrypted service endpoint"
+			}]
+		}, {
+			"name": "search query",
+			"description": "Searching for assets in a Nevermined environment",
+			"commandHandler": "searchAsset",
+			"positionalArguments": [{
+				"name": "query",
+				"type": "string",
+				"description": "The search query"
+			}],
+			"optionalArguments": [{
+				"name": "offset",
+				"type": "number",
+				"default": "10",
+				"description": "The number of elements to obtain from the search query"
+			}, {
+				"name": "page",
+				"type": "number",
+				"default": "1",
+				"description": "The page to show"
+			}]
+		}, {
+			"name": "download did",
+			"description": "Download an asset owned by me",
+			"commandHandler": "downloadAsset",
+			"positionalArguments": [{
+				"name": "did",
+				"type": "string",
+				"description": "The asset DID"
+			}],
+			"optionalArguments": [{
+				"name": "fileIndex",
+				"type": "number",
+				"default": "-1",
+				"description": "The index of the file to retrieve in the DDO"
+			}, {
+				"name": "path",
+				"type": "string",
+				"default": ".",
+				"description": "Local path where the asset files will be downloaded"
+			}]
+		}, {
+			"name": "order did",
+			"description": "Order an asset given a DID. This method makes the payment and retrieve a serviceAgreementId that can be used later on to download the files attached to the asset",
+			"commandHandler": "orderAsset",
+			"positionalArguments": [{
+				"name": "did",
+				"type": "string",
+				"description": "The asset DID"
+			}],
+			"optionalArguments": [{
+				"name": "password",
+				"type": "string",
+				"description": "Password for receiving encrypted files"
+			}]
+		}, {
+			"name": "get did",
+			"description": "Order & download or download directly a previously purchased asset",
+			"commandHandler": "getAsset",
+			"positionalArguments": [{
+				"name": "did",
+				"type": "string",
+				"description": "The asset DID"
+			}],
+			"optionalArguments": [{
+					"name": "agreementId",
+					"type": "string",
+					"default": "",
+					"description": "Agreement Id of a previously purchased asset. If not given a new purchase will be executed"
+				},
+				{
+					"name": "fileIndex",
+					"type": "number",
+					"default": "-1",
+					"description": "The index of the file to retrieve in the DDO"
+				},
+				{
+					"name": "password",
+					"type": "string",
+					"description": "Password for receiving encrypted files"
+				},
+				{
+					"name": "path",
+					"type": "string",
+					"default": ".",
+					"description": "Local path where the asset files will be downloaded"
+				}
+			]
+		}, {
+			"name": "resolve did",
+			"description": "Resolve an asset metadata using a given DID",
+			"commandHandler": "resolveDID",
+			"positionalArguments": [{
+				"name": "did",
+				"type": "string",
+				"description": "The asset DID"
+			}]
+		}, {
+			"name": "retire did",
+			"description": "Retire an asset using a given DID",
+			"commandHandler": "retireDID",
+			"positionalArguments": [{
+				"name": "did",
+				"type": "string",
+				"description": "The asset DID"
+			}]
+		}]
+	}]
+}
