@@ -11,6 +11,7 @@ const { execSync } = require('child_process')
 
 describe('NFTs (ERC-721) e2e Testing', () => {
   const abiPath = 'test/resources/nfts/TestERC721.json'
+  const abiPath2 = 'test/resources/nfts/NFT721SubscriptionUpgradeable.json'
   let did = ''
   let orderAgreementId = ''
   let nftAddress = ''
@@ -24,7 +25,14 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const stdout = execSync(fundCommand, execOpts)
   })
 
-  test('Deploy a new NFT (ERC-721) contract', async () => {
+  test('Deploy a new NFT (ERC-721) contract with parameters', async () => {
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath2} --account "${execOpts.accounts[0]}" --params "Token Name" --params Symbol `
+    console.debug(`COMMAND: ${deployCommand}`)
+
+    const stdout = execSync(deployCommand, execOpts)
+  })
+
+  test('Deploy a new NFT (ERC-721) contract without params', async () => {
     const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath} --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${deployCommand}`)
 

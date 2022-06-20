@@ -466,16 +466,9 @@
 					"description": "The path to the ABI representing the ERC-721 contract"
 				}],
 				"optionalArguments": [{
-						"name": "name",
-						"type": "string",
-						"default": "NVM NFT ERC721",
-						"description": "The NFT name"
-					},
-					{
-						"name": "symbol",
-						"type": "string",
-						"default": "NVM",
-						"description": "The NFT token symbol"
+						"name": "params",
+						"type": "array",
+						"description": "A list of parameters to be given during the contract initialization"
 					}
 				]
 			}, {
