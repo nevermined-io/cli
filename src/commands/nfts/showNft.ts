@@ -176,16 +176,32 @@ export const showNft = async (
       )
     )
 
-    const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
-      .getTotalPrice()
-      .div(10)
-      .multipliedBy(decimals)
+    try {
+      const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
+        .getTotalPrice()
+        .div(10)
+        .multipliedBy(decimals)
 
-    logger.info(
-      chalk.dim(
-        `Price: ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
+      logger.info(
+        chalk.dim(
+          `Price (NFT-1155): ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
+        )
       )
-    )
+    } catch {}
+
+    try {
+      const price = getAssetRewardsFromDDOByService(ddo, 'nft721-sales')
+        .getTotalPrice()
+        .div(10)
+        .multipliedBy(decimals)
+
+      logger.info(
+        chalk.dim(
+          `Price (NFT-721): ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
+        )
+      )
+    } catch {}
+
   }
 
   logger.trace(chalk.dim(DDO.serialize(ddo)))
