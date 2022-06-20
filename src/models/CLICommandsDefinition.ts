@@ -34,7 +34,7 @@ export interface OptionalArgument {
   type: PositionalOptionsType | undefined
   default: string | undefined
   description: string | undefined
-  demandOption?: boolean 
+  demandOption?: boolean
   hidden?: boolean
 }
 

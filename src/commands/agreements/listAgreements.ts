@@ -52,6 +52,6 @@ export const listAgreements = async (
 
   return {
     status: StatusCodes.OK,
-    results: JSON.stringify(agreements.map(a => a.agreementId))
+    results: JSON.stringify(agreements.map((a) => a.agreementId))
   }
 }

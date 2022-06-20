@@ -96,14 +96,13 @@ export const showAgreement = async (
 
   return {
     status: StatusCodes.OK,
-    results:
-      JSON.stringify({
-        did: ddo.id,
-        didOwner: agreementData.didOwner,
-        accessConsumer,
-        accessProvider,
-        templateId: agreementData.templateId,
-        contractName
-      })
+    results: JSON.stringify({
+      did: ddo.id,
+      didOwner: agreementData.didOwner,
+      accessConsumer,
+      accessProvider,
+      templateId: agreementData.templateId,
+      contractName
+    })
   }
 }

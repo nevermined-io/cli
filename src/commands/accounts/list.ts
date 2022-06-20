@@ -141,6 +141,6 @@ export const accountsList = async (
 
   return {
     status: StatusCodes.OK,
-    results: JSON.stringify(loadedAccounts.map(a => a.address))
+    results: JSON.stringify(loadedAccounts.map((a) => a.address))
   }
 }
