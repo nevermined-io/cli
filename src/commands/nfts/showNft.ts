@@ -184,7 +184,9 @@ export const showNft = async (
 
       logger.info(
         chalk.dim(
-          `Price (NFT-1155): ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
+          `Price (NFT-1155): ${chalk.whiteBright(price)} ${chalk.whiteBright(
+            symbol
+          )}`
         )
       )
     } catch {}
@@ -197,11 +199,12 @@ export const showNft = async (
 
       logger.info(
         chalk.dim(
-          `Price (NFT-721): ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
+          `Price (NFT-721): ${chalk.whiteBright(price)} ${chalk.whiteBright(
+            symbol
+          )}`
         )
       )
     } catch {}
-
   }
 
   logger.trace(chalk.dim(DDO.serialize(ddo)))

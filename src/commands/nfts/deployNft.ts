@@ -27,7 +27,9 @@ export const deployNft = async (
   const contract = new web3.eth.Contract(artifact.abi)
   const isZos = !!contract.methods.initialize
 
-  let args: string[] = argv.params.filter((_key: string) => _key !== '' && _key !== undefined)
+  let args: string[] = argv.params.filter(
+    (_key: string) => _key !== '' && _key !== undefined
+  )
 
   if (args.length > 0) logger.info(`Using Params: ${JSON.stringify(args)}`)
 

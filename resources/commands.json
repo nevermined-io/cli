@@ -391,12 +391,12 @@
 				"optionalArguments": [{
 						"name": "method",
 						"type": "string",
-						"default": "",
-						"description": "The W3C Provenance event to report"
+						"demandOption": true,
+						"description": "The W3C Provenance event to report (wasGeneratedBy, used, wasDerivedFrom, wasAssociatedWith, ActedOnBehalf)"
 					},
 					{
 						"name": "agentId",
-						"type": "number",
+						"type": "string",
 						"default": "",
 						"description": "The address of the agent doing the action/activity"
 					},

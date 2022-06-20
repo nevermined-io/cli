@@ -181,7 +181,8 @@ commandsParser.commands.map((_cmd) => {
                 default: a.default,
                 demandOption: a.demandOption,
                 hidden: a.hidden,
-                type: a.type
+                type: a.type,
+                choices: a.choices
               })
             })
           },

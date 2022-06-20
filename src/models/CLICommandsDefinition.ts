@@ -1,4 +1,4 @@
-import { PositionalOptionsType } from 'yargs'
+import { Choices, Options, PositionalOptionsType } from 'yargs'
 import * as CliCommands from '../commands'
 type CliCommands = typeof CliCommands
 
@@ -36,6 +36,7 @@ export interface OptionalArgument {
   description: string | undefined
   demandOption?: boolean
   hidden?: boolean
+  choices?: Choices | undefined
 }
 
 export interface GeneralOption {
