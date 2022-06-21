@@ -1,44 +1,5 @@
-import yargs, { config } from 'yargs'
+import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import {
-  // Accounts
-  accountsFund,
-  accountsNew,
-  accountsList,
-  // NFTs
-  createNft,
-  deployNft,
-  downloadNft,
-  mintNft,
-  burnNft,
-  orderNft,
-  showNft,
-  transferNft,
-  accessNft,
-  // Assets
-  registerAsset,
-  resolveDID,
-  retireDID,
-  searchAsset,
-  downloadAsset,
-  orderAsset,
-  getAsset,
-  // Status
-  networkStatus,
-  networkList,
-  // Agreements
-  listAgreements,
-  showAgreement,
-  // Provenance
-  registerProvenance,
-  provenanceHistory,
-  provenanceInspect,
-  // Utils
-  decryptFile,
-  uploadFile,
-  publishNftMetadata,
-  getNftMetadata
-} from './commands'
 import chalk from 'chalk'
 
 import {
@@ -50,8 +11,8 @@ import {
   logger,
   loginMarketplaceApi
 } from '../src/utils'
-import { ProvenanceMethods, StatusCodes } from './utils/enums'
-import { configure, getLogger, addLayout } from 'log4js'
+import { StatusCodes } from './utils/enums'
+import { configure, addLayout } from 'log4js'
 import { ExecutionOutput } from './models/ExecutionOutput'
 import fs from 'fs'
 import * as CliCommands from './commands'
@@ -155,9 +116,6 @@ commandsParser.generalOptions.map((generalOption) => {
     description: generalOption.description
   })
 })
-
-// TODO: Add `choices`
-// choices: ProvenanceMethods,
 
 commandsParser.commands.map((_cmd) => {
   y.command(_cmd.name, _cmd.description, (yargs) => {

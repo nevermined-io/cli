@@ -1,0 +1,66 @@
+# Nevermined Command Line Interface (CLI) Commands
+
+The Nevermined CLI (aka `ncli`) offers multiple options to facilitate the interaction of a user with a Nevermined network.
+
+
+## CLI General Options
+
+This are the optional parameters that apply to all `ncli` commands:
+
+| Name of the Argument | Type | Is required? | Default value | Description |
+|----------------------|------|-------------:|--------------:|-------------|
+<% it.generalOptions.forEach(function(argument){ %>
+| **<%= argument.name %>** | `<%= argument.type %>` | <% if(argument.demandOption === true) { %> &#x2611; <% } else if(argument.demandOption === false) { %> &#x2612; <% } %> | <% if(argument.default !== undefined && argument.default !== "") { %> `<%= argument.default %>` <% } else { %>  <% } %> | <%= argument.description %> |
+<% }) %>
+
+
+<% it.commands.forEach(function(cmd){ %>
+
+
+## Module: <%= cmd.name %>
+
+<%= cmd.description %><br/>
+
+<%= cmd.usage.replace('usage', '**Usage**') %><br/>
+
+Commands:
+
+<% cmd.subcommands.forEach(function(sc){ %>
+### <%= sc.name %>
+
+<%= sc.description %><br/>
+
+<%= sc.details %><br/>
+
+#### Positional Arguments
+
+| Name of the Argument | Type | Is required? | Default value | Description |
+|----------------------|------|-------------:|--------------:|-------------|
+<% sc.positionalArguments?.forEach(function(argument){ %>
+| **<%= argument.name %>** | `<%= argument.type %>` | <% if(argument.demandOption === true) { %> &#x2611; <% } else if(argument.demandOption === false) { %> &#x2612; <% } %> | <% if(argument.default !== undefined && argument.default !== "") { %> `<%= argument.default %>` <% } else { %>  <% } %> | <%= argument.description %> |
+<% }) %>
+
+
+#### Optional Arguments
+
+| Name of the Argument | Type | Is required? | Default value | Description |
+|----------------------|------|-------------:|--------------:|-------------|
+<% sc.optionalArguments?.forEach(function(argument){ %>
+| **<%= argument.name %>** | `<%= argument.type %>` | <% if(argument.demandOption === true) { %> &#x2611; <% } else if(argument.demandOption === false) { %> &#x2612; <% } %> | <% if(argument.default !== undefined && argument.default !== "") { %> `<%= argument.default %>` <% } else { %>  <% } %> | <%= argument.description %> |
+<% }) %>
+
+#### Example/s
+
+<% sc.examples?.forEach(function(example){ %>
+
+```bash
+<%= example.replaceAll("'", '"') %>
+
+```
+
+<% }) %>
+
+
+<% }) %>
+
+<% }) %>

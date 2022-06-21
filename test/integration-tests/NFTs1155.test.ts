@@ -30,10 +30,10 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
   })
 
   test('Register an asset with a NFT (ERC-1155) attached to it', async () => {
-    const registerDatasetCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerDatasetCommand, execOpts)
+    const registerStdout = execSync(registerAssetCommand, execOpts)
 
     console.debug(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewNFT(registerStdout)

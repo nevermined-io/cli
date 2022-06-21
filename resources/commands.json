@@ -34,10 +34,14 @@
 			"subcommands": [{
 				"name": "list",
 				"description": "List all the pre-configured Nevermined networks",
+				"details": "The `ncli` has a pre-configured list of Nevermined environments in different networks. This command list some basic information about all of these available Nevermined environments.",
+				"examples": ["ncli network list"],
 				"commandHandler": "networkList"
 			}, {
 				"name": "status",
 				"description": "List all the information about a Nevermined deployment",
+				"details": "If the `ncli` is connected to a Nevermined network correctly this command will return information about that network. This will include information about the contracts (version, addresses, etc), Gateway, Marketplace API.",
+				"examples": ["ncli network status"],
 				"commandHandler": "networkStatus"
 			}]
 		}, {
@@ -47,12 +51,16 @@
 			"subcommands": [{
 				"name": "new",
 				"description": "Creates a new account locally",
+				"details": "Nevermined interact with EVM compatible blockchain networks. To interact with them a user needs to have some local credentials compatible (BIP-44). This command creates a local wallet Etherum compatible that can be used to interact with a Ethereum like network and by extension with Nevermined contracts.",
+				"examples": ["ncli accounts new"],
 				"commandHandler": "accountsNew",
 				"positionalArguments": [],
 				"optionalArguments": []
 			}, {
 				"name": "list",
 				"description": "List all accounts",
+				"details": "To work prorperly the `ncli` needs to use a wallet to interact with the blockchain network where the Nevermined Smart Contracts are deployed. This wallet is given to the `ncli` with the **seed phrase** exported into the `MNEMONIC` environment variable. This command list some of the accounts derived from the mnemonic given by the user.",
+				"examples": ["ncli accounts list"],
 				"commandHandler": "accountsList",
 				"positionalArguments": [{
 					"name": "account",
@@ -68,6 +76,8 @@
 			}, {
 				"name": "balance [account]",
 				"description": "Get the balance of a specific account",
+				"details": "Given the public address of an account, this command gets the balance of the Native token where the `ncli` is connected. This is typically `ETH` in Ethereum networks, `MATIC` in Polygon networks, etc.",
+				"examples": ["ncli accounts balance 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
 				"commandHandler": "accountsList",
 				"positionalArguments": [{
 					"name": "account",
@@ -83,6 +93,8 @@
 			}, {
 				"name": "fund [account]",
 				"description": "Funds an account on a testnet",
+				"details": "In the test environments all the tokens are not having a real value. Typically in Nevermined you need to use different type of tokens. The Native token (`ETH`, `MATIC`, etc) to pay for the gas resulting to write into a blockchain network, and optionally with a `ERC20` token to do some payments. This command allows to get some funds in a testnet environment allowing to a user to play in a testnet. Obviously this command will not work in a production environments where the tokens have a real value.",
+				"examples": ["ncli accounts fund 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
 				"commandHandler": "accountsFund",
 				"positionalArguments": [{
 					"name": "account",
@@ -101,8 +113,10 @@
 			"description": "Allows to register and manage assets in a Nevermined network",
 			"usage": "usage: $0 assets <command> parameters [options]",
 			"subcommands": [{
-				"name": "register-dataset",
-				"description": "Register a new dataset",
+				"name": "register-asset",
+				"description": "Register a new asset",
+				"details": "This command allows to register a new asset into a Nevermined network. This asset registered will have attached an access service, allowing to the users paying for the price defined by the user to get access to the files attached to the asset.",
+				"examples": ["ncli assets register-asset --name 'My cool artwork' --author 'John Doe' --price '1' --urls https://www.diarioel9dejulio.com.ar/wp-content/uploads/2014/03/Francisco_de_Goya_Saturno_devorando_a_su_hijo_1819-1823.jpg --contentType text/plain"],
 				"commandHandler": "registerAsset",
 				"optionalArguments": [{
 						"name": "name",
@@ -161,6 +175,8 @@
 			}, {
 				"name": "register-algorithm",
 				"description": "Register a new algorithm",
+				"details": "This command allows to register a new algorithm into a Nevermined network. The algorithm can be the representation of a Notebook, python script, etc. This asset registered will have attached an access service, allowing to the users paying for the price defined by the user to get access to the files attached to the asset.",
+				"examples": ["ncli assets register-algorithm --name 'Test Algorithm' --author 'John Doe' --price 0 --language python --entrypoint 'python word_count.py' --container python:3.8-alpine --urls https://www.apache.org/licenses/LICENSE-2.0 --contentType text/plain"],
 				"commandHandler": "registerAsset",
 				"optionalArguments": [{
 						"name": "name",
@@ -232,6 +248,8 @@
 			}, {
 				"name": "import [metadata]",
 				"description": "Import an asset using the metadata in JSON format",
+				"details": "An asset in a Nevermined network can be described by different level of metadata (title, description, tags, etc). This command allows to register a new asset importing all this metadata from a JSON file, instead of adding all the information in the command line. ",
+				"examples": ["ncli assets import --metadata ./my_artwork_metadata.json"],
 				"commandHandler": "registerAsset",
 				"positionalArguments": [{
 					"name": "metadata",
@@ -247,6 +265,8 @@
 			}, {
 				"name": "search [query]",
 				"description": "Searching for assets in a Nevermined environment",
+				"details": "All the metadata given by the users registering assets into Nevermined can be used to search and discover that data later. Typically different assets can be organized in independent Marketplaces grouped by topic or domain. This command allows to query one of the Marketplace environments searching for some data using a query provided by the user.",
+				"examples": ["ncli assets search 'some text'"],
 				"commandHandler": "searchAsset",
 				"positionalArguments": [{
 					"name": "query",
@@ -267,6 +287,8 @@
 			}, {
 				"name": "download [did]",
 				"description": "Download an asset owned by me",
+				"details": "When a user publishes some content into Nevermined this command allows to download the files attached to that asset without going through the service agreements (paying).",
+				"examples": ["ncli assets download  did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --path /tmp"],
 				"commandHandler": "downloadAsset",
 				"positionalArguments": [{
 					"name": "did",
@@ -286,7 +308,9 @@
 				}]
 			}, {
 				"name": "order [did]",
-				"description": "Order an asset given a DID. This method makes the payment and retrieve a serviceAgreementId that can be used later on to download the files attached to the asset",
+				"description": "Order an asset given a DID",
+				"details": "This method makes the payment and retrieve a serviceAgreementId that can be used later on to download the files attached to the asset",
+				"examples": ["ncli assets order did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f"],
 				"commandHandler": "orderAsset",
 				"positionalArguments": [{
 					"name": "did",
@@ -301,6 +325,8 @@
 			}, {
 				"name": "get [did]",
 				"description": "Order & download or download directly a previously purchased asset",
+				"details": "This commands is the best entry point to get access to the files attached to a Nevermined asset. Depending on the parameters provided, it allows to order and download the files of an asset, or if this was already purchased, provide the service agreement to download them.",
+				"examples": ["ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --path /tmp", "ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --agreementId 0x412dceaa0c5506095daa6b221be93c680e8a49bfd5b63ce54522d85d2b0e1384 --path /tmp"],
 				"commandHandler": "getAsset",
 				"positionalArguments": [{
 					"name": "did",
@@ -334,6 +360,8 @@
 			}, {
 				"name": "resolve [did]",
 				"description": "Resolve an asset metadata using a given DID",
+				"details": "An asset registered into Nevermined is represented by 2 parts. Some metadata stored in a Marketplace and the reference to this into the Smart Contract. The key to resolve this metadata in a specific marketplace uses a unique Decentralize Identifier (DID) for the asset. This command uses that DID to resolve the Metadata in a Marketplace associated to the asset.",
+				"examples": ["ncli assets resolve did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f"],
 				"commandHandler": "resolveDID",
 				"positionalArguments": [{
 					"name": "did",
@@ -343,6 +371,8 @@
 			}, {
 				"name": "retire [did]",
 				"description": "Retire an asset using a given DID",
+				"details": "This command allows to retire an asset from a Marketplace. Only the owner of the asset has the grants to execute this sucessfully.",
+				"examples": ["ncli assets retire did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f"],
 				"commandHandler": "retireDID",
 				"positionalArguments": [{
 					"name": "did",
@@ -357,6 +387,8 @@
 			"subcommands": [{
 				"name": "list [did]",
 				"description": "Lists all agreements for given DID",
+				"details": "For an asset published in Nevermined, this command returns all the agreements created as a result of different users interacting with the asset. Typically this will include the purchases made by the users.",
+				"examples": ["ncli agreements list did:nv:0cb9c5c66266af85b7fd9af4e14dd95f3a6edc11e503d11e15b189a35ae7ad06"],
 				"commandHandler": "listAgreements",
 				"positionalArguments": [{
 					"name": "did",
@@ -367,6 +399,8 @@
 			}, {
 				"name": "show [agreementId]",
 				"description": "Shows details about an agreement",
+				"details": "An agreement in Nevermined keep track of the state of the different conditions that need to be fulfilled in order to facilitate some service (access, download, computation, etc). Given a `serviceAgreementId` this command return all the on-chain information referring to the state of that agreement. The conditions associated to it and the general and invididual status of them.",
+				"examples": ["ncli agreements show 0xf29bebaeacf865b4f57373aeb84635cc68c7719761607aec2802f1ad87213777"],
 				"commandHandler": "showAgreement",
 				"positionalArguments": [{
 					"name": "agreementId",
@@ -382,6 +416,8 @@
 			"subcommands": [{
 				"name": "register [did]",
 				"description": "Registers a provenance event associated to a DID",
+				"details": "The Nevermined provenance record allows to keep track of all the individual events happening in the assets registered in a Nevermined network. This command allows to register a new event in that track record.",
+				"examples": ["ncli provenance register did:nv:020283aed6525d815a4bc3f4b5970a7aaa03752d1e3755d7604185ecbc5f7aa5 --account 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260 --method used --agentId 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e --activityId 73492af5abe94333a648dd42e1f1675c9cad5ba4f0614f1283093448cd03d300"],
 				"commandHandler": "registerProvenance",
 				"positionalArguments": [{
 					"name": "did",
@@ -434,6 +470,8 @@
 			}, {
 				"name": "history [did]",
 				"description": "Given a DID it gets all the provenance history for that asset",
+				"details": "An asset can have associated multiple provenance events associated with it. This will relate to how that asset was used and by who in a Nevermined network. This command fetches that information from the on-chain provenance track record.",
+				"examples": ["ncli provenance history did:nv:020283aed6525d815a4bc3f4b5970a7aaa03752d1e3755d7604185ecbc5f7aa5"],
 				"commandHandler": "provenanceHistory",
 				"positionalArguments": [{
 					"name": "did",
@@ -444,6 +482,8 @@
 			}, {
 				"name": "inspect [provenanceId]",
 				"description": "It fetches the on-chain information regarding a Provenance Id event",
+				"details": "A `provenanceId` represents a unique event referring to a DID. This command obtain all the existing information of that event.",
+				"examples": ["ncli provenance inspect 4770be8cb69d4a06bbf5dbf442d1c9afcad1bd82130349faaa56572c0773761f"],
 				"commandHandler": "provenanceInspect",
 				"positionalArguments": [{
 					"name": "provenanceId",
@@ -459,6 +499,8 @@
 			"subcommands": [{
 				"name": "deploy [abiPath]",
 				"description": "It deploys a new NFT (ERC-721) contract",
+				"details": "A Smart Contract is represented by an ABI file that includes the definition of it interfaces and the bytecode of the contract. Having that file, this command allows to deploy a new instance of a ERC-721 contract in the network where the `ncli` is connected. As a result the `ncli` will return the address where the contract was deployed allowing further interaction with it.",
+				"examples": ["ncli nfts721 deploy test/resources/nfts/TestERC721.json", "ncli nfts721 deploy test/resources/nfts/NFT721SubscriptionUpgradeable.json --params 'Token Name' --params 'SYMBOL'"],
 				"commandHandler": "deployNft",
 				"positionalArguments": [{
 					"name": "abiPath",
@@ -466,14 +508,15 @@
 					"description": "The path to the ABI representing the ERC-721 contract"
 				}],
 				"optionalArguments": [{
-						"name": "params",
-						"type": "array",
-						"description": "A list of parameters to be given during the contract initialization"
-					}
-				]
+					"name": "params",
+					"type": "array",
+					"description": "A list of parameters to be given during the contract initialization"
+				}]
 			}, {
 				"name": "create [nftAddress]",
 				"description": "Registers a new asset and associates a ERC-721 NFT to it",
+				"details": "Having a previously deployed ERC-721 NFT contract, this command registers a new asset that allows the publisher to provide access to some exclusive contents when users purchase the price of that NFT.",
+				"examples": ["ncli nfts721 create 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041 --name 'My NFT' --author 'John Doe' --price 1 --urls https://www.apache.org/licenses/LICENSE-2.0 --contentType text/plain"],
 				"commandHandler": "createNft",
 				"positionalArguments": [{
 					"name": "nftAddress",
@@ -539,6 +582,8 @@
 			}, {
 				"name": "show [did]",
 				"description": "Retrieves information about a NFT",
+				"details": "For a given DID and NFT (ERC-721) this command displays some information about it ",
+				"examples": ["ncli nfts721 show did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --nftAddress 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041"],
 				"commandHandler": "showNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -574,6 +619,8 @@
 			}, {
 				"name": "mint [did]",
 				"description": "Mints a ERC-721 NFT",
+				"details": "This command allows to the owner of an asset to mint a ERC-721 based NFT",
+				"examples": ["ncli nfts721 mint did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041 --uri http://nevermined.io/mynft.json"],
 				"commandHandler": "mintNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -603,6 +650,8 @@
 			}, {
 				"name": "burn [did] [nftAddress]",
 				"description": "It Burns a ERC-721 NFT",
+				"details": "It allows to a ERC-721 NFT owner to burn it",
+				"examples": ["ncli nfts721 burn did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041"],
 				"commandHandler": "burnNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -623,6 +672,8 @@
 			}, {
 				"name": "order [did]",
 				"description": "Orders an NFT (ERC-721) by paying for it to the escrow",
+				"details": "When a user orders for an asset attached to a NFT, this command purchases that NFT and get it transferred to the wallet making that purchase. This will allow later on to get access to the exclusive contents attached to the asset demonstrating the possesion of that NFT.",
+				"examples": ["ncli nfts721 order did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
 				"commandHandler": "orderNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -638,7 +689,9 @@
 				}]
 			}, {
 				"name": "transfer [agreementId]",
-				"description": "Orders an NFT (ERC-721) by paying for it to the escrow",
+				"description": "It allows to transfer a NFT (ERC-721) to the account of the buyer",
+				"details": "This command requires a valid `serviceAgreementId` created by the `buyerAccount` that demonstrates that an asset was payed. Having that this command will allow to transfer the asset to the buyer account.",
+				"examples": ["ncli nfts721 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --buyerAccount 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
 				"commandHandler": "transferNft",
 				"positionalArguments": [{
 					"name": "agreementId",
@@ -660,6 +713,8 @@
 			}, {
 				"name": "download [did]",
 				"description": "As NFT holder this allows to download the files associated to a NFT",
+				"details": "This command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+				"examples": ["ncli nfts721 download  did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --destination /tmp/nevemined/"],
 				"commandHandler": "downloadNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -680,6 +735,8 @@
 			"subcommands": [{
 				"name": "create",
 				"description": "Registers a new asset and associates a NFT (ERC-1155) to it",
+				"details": "This command registers a new asset that allows the publisher to provide access to some exclusive contents when users purchase the price of that NFT.",
+				"examples": ["ncli nfts1155 create 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041 --name 'My NFT 1155' --author 'John Doe' --price 1 --urls https://www.apache.org/licenses/LICENSE-2.0 --contentType text/plain --cap 10 --royalties 5 --nftMetadata cid://QmVT3wfySvZJqAvkBCyxoz3EvD3yeLqf3cvAssFDpFFXNm"],
 				"commandHandler": "createNft",
 				"positionalArguments": [],
 				"optionalArguments": [{
@@ -751,6 +808,8 @@
 			}, {
 				"name": "show [did]",
 				"description": "Retrieves information about a NFT",
+				"details": "For a given DID and NFT (ERC-1155) this command displays some information about it ",
+				"examples": ["ncli nfts1155 show did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
 				"commandHandler": "showNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -773,6 +832,8 @@
 			}, {
 				"name": "mint [did]",
 				"description": "Mints a ERC-1155 NFT",
+				"details": "This command allows to the owner of an asset to mint a ERC-1155 based NFT",
+				"examples": ["ncli nfts1155 mint did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --amount 10"],
 				"commandHandler": "mintNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -796,6 +857,8 @@
 			}, {
 				"name": "burn [did]",
 				"description": "It Burns a ERC-1155 NFT",
+				"details": "It allows to a ERC-1155 NFT owner to burn it",
+				"examples": ["ncli nfts1155 burn did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --amount 2"],
 				"commandHandler": "burnNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -819,6 +882,8 @@
 			}, {
 				"name": "order [did]",
 				"description": "Orders an NFT (ERC-1155) by paying for it to the escrow",
+				"details": "When a user orders for an asset attached to a NFT, this command purchases that NFT and get it transferred to the wallet making that purchase. This will allow later on to get access to the exclusive contents attached to the asset demonstrating the possesion of that NFT.",
+				"examples": ["ncli nfts1155 order did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --amount 1"],
 				"commandHandler": "orderNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -841,7 +906,9 @@
 				]
 			}, {
 				"name": "transfer [agreementId]",
-				"description": "Orders an NFT (ERC-1155) by paying for it to the escrow",
+				"description": "It allows to transfer a NFT (ERC-1155) to the account of the buyer",
+				"details": "This command requires a valid `serviceAgreementId` created by the `buyerAccount` that demonstrates that an asset was payed. Having that this command will allow to transfer the asset to the buyer account.",
+				"examples": ["ncli nfts1155 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --amount 1 --buyerAccount 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
 				"commandHandler": "transferNft",
 				"positionalArguments": [{
 					"name": "agreementId",
@@ -867,7 +934,9 @@
 				}]
 			}, {
 				"name": "access [did] [agreementId]",
-				"description": "Downloads the data associated to a ERC-1155 NFT",
+				"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-1155 NFT",
+				"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+				"examples": ["ncli nfts1155 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
 				"commandHandler": "accessNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -892,6 +961,8 @@
 			}, {
 				"name": "download [did]",
 				"description": "As NFT holder this allows to download the files associated to a NFT",
+				"details": "This command will allow to purchase a NFT and download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+				"examples": ["ncli nfts1155 download did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --destination /tmp/nevemined/"],
 				"commandHandler": "downloadNft",
 				"positionalArguments": [{
 					"name": "did",
@@ -912,6 +983,8 @@
 			"subcommands": [{
 				"name": "upload [file]",
 				"description": "Upload file to Filecoin",
+				"details": "It uploads a local file to the decentralized storage network Filecoin. It returns a `CID` identifying that file into the storage network. If the `--password` flag is provided, it will encrypts the file before uploading it and will return the password used.",
+				"examples": ["ncli utils upload README.md"],
 				"commandHandler": "uploadFile",
 				"positionalArguments": [{
 					"name": "file",
@@ -927,6 +1000,8 @@
 			}, {
 				"name": "decrypt [file]",
 				"description": "Decrypt a file",
+				"details": "It decrypts a previously encrypted file using the password provided.",
+				"examples": ["ncli utils decrypt README.md --password 12345678"],
 				"commandHandler": "decryptFile",
 				"positionalArguments": [{
 					"name": "file",
@@ -942,6 +1017,8 @@
 			}, {
 				"name": "publish-nft-metadata",
 				"description": "It publish the metadata associated to a NFT into external storage",
+				"details": "The NFTs use some basic metadata allowing to some external Marketplaces to discover them and provide some additional information. This command allows to publish NFT metadata in the regular format supported by most popular marketplaces.",
+				"examples": ["ncli utils publish-nft-metadata --image https://www.artribune.com/wp-content/uploads/2013/09/2_Francisco-Goya-Saturno-devorando-a-su-hijos-1819-1823.jpg --name 'Saturn NFTs' --description 'Sturn eating his son' --externalUrl https://www.franciscogoya.com/saturn-devouring-his-son.jsp --animationUrl 'https://i1.wp.com/hyperallergic.com/wp-content/uploads/2016/04/goya-saturn-pigeons.gif?resize=470%2C470&quality=100' --royalties 1 --royaltiesReceiver 0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0"],
 				"commandHandler": "publishNftMetadata",
 				"positionalArguments": [],
 				"optionalArguments": [{
@@ -987,6 +1064,8 @@
 			}, {
 				"name": "get-nft-metadata [did]",
 				"description": "Downloads the metadata associated to NFT",
+				"details": "The NFT Metadata is associated to the DID during the publication. This command allows to retrieve the url of that metadata and the content of it.",
+				"examples": ["ncli utils get-nft-metadata did:nv:3fc08573160370d81ee075c80b800ae90d87eb5dd458b96febd11a0dac02baf5"],
 				"commandHandler": "getNftMetadata",
 				"positionalArguments": [{
 					"name": "did",

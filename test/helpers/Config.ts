@@ -36,7 +36,7 @@ export const execOpts = {
 
 export const baseCommands = {
   assets: {
-    registerDataset: `${BASE_COMMAND} ${VERBOSE} assets register-dataset `,
+    registerAsset: `${BASE_COMMAND} ${VERBOSE} assets register-asset `,
     registerAlgorithm: `${BASE_COMMAND} ${VERBOSE} assets register-algorithm `,
     registerWorkflow: `${BASE_COMMAND} ${VERBOSE} assets register-workflow `,
     importMetadata: `${BASE_COMMAND} ${VERBOSE} assets import `,

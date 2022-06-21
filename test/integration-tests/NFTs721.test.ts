@@ -46,10 +46,10 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Register an asset with a NFT (ERC-721) attached to it', async () => {
-    const registerDatasetCommand = `${baseCommands.nfts721.create} ${nftAddress} --account "${execOpts.accounts[0]}" --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress} --account "${execOpts.accounts[0]}" --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerDatasetCommand, execOpts)
+    const registerStdout = execSync(registerAssetCommand, execOpts)
 
     console.debug(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewNFT(registerStdout)

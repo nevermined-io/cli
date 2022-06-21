@@ -1,4 +1,4 @@
-import { Choices, Options, PositionalOptionsType } from 'yargs'
+import { Choices, PositionalOptionsType } from 'yargs'
 import * as CliCommands from '../commands'
 type CliCommands = typeof CliCommands
 
@@ -20,6 +20,8 @@ export interface SubcommandDefinition {
   commandHandler: keyof CliCommands
   positionalArguments?: PositionalArgument[]
   optionalArguments?: OptionalArgument[]
+  details?: string
+  examples?: string[]
 }
 
 export interface PositionalArgument {
