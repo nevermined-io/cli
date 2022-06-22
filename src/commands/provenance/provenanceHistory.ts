@@ -23,7 +23,7 @@ export const provenanceHistory = async (
 
   printProvenanceEvents(events, logger)
 
-  return { 
+  return {
     status: StatusCodes.OK,
     results: JSON.stringify(events)
   }

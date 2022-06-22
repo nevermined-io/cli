@@ -13,6 +13,7 @@
     "clean": "rm -rf ./dist/ ./doc/ ./.nyc_output",
     "build:watch": "npm build --watch",
     "start": "ts-node src/index.ts",
+    "generate-doc": "ts-node src/generateDoc.ts",
     "test": "jest --coverage --rootDir test",
     "test:watch": "jest --watch --rootDir test"
   },
@@ -28,6 +29,7 @@
     "ethers": "~5.6.2",
     "ipfs-http-client-lite": "~0.3.0",
     "log4js": "^6.5.2",
+    "eta": "1.12.3",
     "yargs": "^17.0.1"
   },
   "devDependencies": {

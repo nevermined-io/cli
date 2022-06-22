@@ -28,7 +28,7 @@ export const resolveDID = async (
     ddo = await nvm.assets.resolve(did)
     if (!ddo || ddo.id! !== did) {
       logger.warn('Asset not found')
-      return { 
+      return {
         status: StatusCodes.DID_NOT_FOUND,
         errorMessage: 'Asset not found'
       }
@@ -37,7 +37,7 @@ export const resolveDID = async (
     logger.debug(ddo)
   } catch {
     logger.warn('Asset not found')
-    return { 
+    return {
       status: StatusCodes.DID_NOT_FOUND,
       errorMessage: 'Asset not found'
     }

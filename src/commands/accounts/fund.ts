@@ -23,7 +23,9 @@ export const accountsFund = async (
     try {
       await nvm.faucet.requestEth(account.getId())
       console.log(
-        chalk.dim(`Funded Native token to ${chalk.whiteBright(account.getId())}`)
+        chalk.dim(
+          `Funded Native token to ${chalk.whiteBright(account.getId())}`
+        )
       )
       results.push('native')
     } catch (err) {

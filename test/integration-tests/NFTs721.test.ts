@@ -11,6 +11,7 @@ const { execSync } = require('child_process')
 
 describe('NFTs (ERC-721) e2e Testing', () => {
   const abiPath = 'test/resources/nfts/TestERC721.json'
+  const abiPath2 = 'test/resources/nfts/NFT721SubscriptionUpgradeable.json'
   let did = ''
   let orderAgreementId = ''
   let nftAddress = ''
@@ -24,7 +25,14 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const stdout = execSync(fundCommand, execOpts)
   })
 
-  test('Deploy a new NFT (ERC-721) contract', async () => {
+  test('Deploy a new NFT (ERC-721) contract with parameters', async () => {
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath2} --account "${execOpts.accounts[0]}" --params "Token Name" --params Symbol `
+    console.debug(`COMMAND: ${deployCommand}`)
+
+    const stdout = execSync(deployCommand, execOpts)
+  })
+
+  test('Deploy a new NFT (ERC-721) contract without params', async () => {
     const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath} --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${deployCommand}`)
 
@@ -38,10 +46,10 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Register an asset with a NFT (ERC-721) attached to it', async () => {
-    const registerDatasetCommand = `${baseCommands.nfts721.create} ${nftAddress} --account "${execOpts.accounts[0]}" --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress} --account "${execOpts.accounts[0]}" --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerDatasetCommand, execOpts)
+    const registerStdout = execSync(registerAssetCommand, execOpts)
 
     console.debug(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewNFT(registerStdout)

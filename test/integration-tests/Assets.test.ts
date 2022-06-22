@@ -22,10 +22,10 @@ describe('Assets e2e Testing', () => {
 
     const stdout = execSync(fundCommand, execOpts)
 
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerDatasetCommand, execOpts)
+    const registerStdout = execSync(registerAssetCommand, execOpts)
 
     console.log(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewAsset(registerStdout)
@@ -75,10 +75,10 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Search for an asset', async () => {
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --name "searching test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --name "searching test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const stdout = execSync(registerDatasetCommand, execOpts)
+    const stdout = execSync(registerAssetCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
     const didSearch = parseDIDFromNewAsset(stdout)
