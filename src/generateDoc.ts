@@ -16,11 +16,9 @@ mdContent.then((content) => {
   fs.writeFileSync(`docs/cli_commands.md`, content)
 })
 
-
 async function generateDocumentation(
   commandsDefinition: CLICommandsDefinition
 ): Promise<string> {
-
   Eta.configure({
     views: path.join(__dirname, '../resources')
   })

@@ -1078,6 +1078,33 @@
 					"default": "",
 					"description": "The address of the NFT contract"
 				}]
+			}, {
+				"name": "download-artifacts [contractsVersion]",
+				"description": "Downloads the Nevermined Contracts artifacts",
+				"details": "Nevermined exposes the Smart Contracts artifacts with their definition. Also Nevermined record all the different versions of these contracts deployed in different networks ready to be downloaded. Depending on the parameters provided, this command allows to download them.",
+				"examples": ["ncli utils download-artifacts 2.0.0 --destination /tmp", "ncli utils download-artifacts v2.0.0 --networkId 8001 --tag common --destination /tmp"],
+				"commandHandler": "downloadArtifacts",
+				"positionalArguments": [{
+					"name": "contractsVersion",
+					"type": "string",
+                    "demandOption": true,
+					"description": "Version of the artifacts to download"
+				}],
+				"optionalArguments": [{
+					"name": "networkId",
+					"type": "string",					
+					"description": "The networkId of the network where Nevermined contracts are deployed and we want to download the artifacts"
+				}, {
+					"name": "tag",
+					"type": "string",
+                    "default": "common",
+					"description": "The tag name of the contracts artifacts to download"
+				}, {
+					"name": "destination",
+					"type": "string",
+					"demandOption": true,
+					"description": "The destination folder for the artifacts to download"
+				}]
 			}]
 		}
 

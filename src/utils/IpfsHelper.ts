@@ -1,5 +1,5 @@
 const IpfsHttpClientLite = require('ipfs-http-client-lite')
-const fetch = require('node-fetch')
+import fetch from 'cross-fetch'
 
 const IPFS_GATEWAY = process.env.IPFS_GATEWAY || 'https://ipfs.infura.io:5001'
 

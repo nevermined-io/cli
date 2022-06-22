@@ -36,8 +36,9 @@ export * from './provenance/provenanceHistory'
 export * from './provenance/provenanceInspect'
 export * from './provenance/registerProvenance'
 
+//utils
 export * from './utils/decrypt'
 export * from './utils/upload'
-//utils
 export * from './utils/publishNftMetadata'
 export * from './utils/getNftMetadata'
+export * from './utils/downloadArtifacts'

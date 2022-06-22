@@ -15,7 +15,7 @@ import {
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721.json'
-import { Constants, StatusCodes } from './enums'
+import { Constants } from './enums'
 import { ConfigEntry, getConfig, logger } from './config'
 import { AbiItem } from 'web3-utils'
 import CustomToken from './CustomToken'

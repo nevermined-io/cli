@@ -1,10 +1,9 @@
-import { Config, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Config } from '@nevermined-io/nevermined-sdk-js'
 import HDWalletProvider from '@truffle/hdwallet-provider'
 import dotenv from 'dotenv'
-import { LogLevel } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import Web3 from 'web3'
 import fs from 'fs'
-import { configure, getLogger } from 'log4js'
+import { getLogger } from 'log4js'
 
 dotenv.config()
 
@@ -26,6 +25,10 @@ export interface ConfigEntry {
 }
 
 export const logger = getLogger()
+
+export const ARTIFACTS_REPOSITORY =
+  process.env.ARTIFACTS_REPO ||
+  'https://artifacts-nevermined-rocks.s3.amazonaws.com'
 
 export const config: CliConfig = {
   spree: {
