@@ -209,25 +209,25 @@ export const printProvenanceEvents = (
     activityId: string
     relatedDid: string
     agentInvolvedId: string
-    attributes: string
+    attributes?: string
     blockNumberUpdated: number
   }[],
   logger: Logger
 ) => {
-  logger.info(chalk.dim(`# of Provenance events: ${events.length}`))
-  logger.info(chalk.dim(`--------------------------`))
+  logger.info(`# of Provenance events: ${chalk.bgBlue(events.length)}`)
+  logger.info(`--------------------------`)
 
   events.map((e) => {
-    logger.info(chalk.dim(`\t Provenance Id: ${e.provId}`))
-    logger.info(chalk.dim(`\t Method: ${ProvenanceMethod[e.method]}`))
-    logger.info(chalk.dim(`\t DID: ${e.did}`))
-    logger.info(chalk.dim(`\t Related DID: ${e.relatedDid}`))
-    logger.info(chalk.dim(`\t Agent: ${e.agentId}`))
-    logger.info(chalk.dim(`\t Agent involved: ${e.agentInvolvedId}`))
-    logger.info(chalk.dim(`\t Activity: ${e.activityId}`))
-    logger.info(chalk.dim(`\t Attributes: ${e.attributes}`))
-    logger.info(chalk.dim(`\t Block Number: ${e.blockNumberUpdated}`))
-    logger.info(chalk.dim(`-----`))
+    logger.info(`\t Provenance Id: ${chalk.yellowBright(e.provId)}`)
+    logger.info(`\t Method: ${chalk.yellowBright(ProvenanceMethod[e.method])}`)
+    logger.info(`\t DID: ${e.did}`)
+    logger.info(`\t Related DID: ${e.relatedDid}`)
+    logger.info(`\t Agent: ${e.agentId}`)
+    logger.info(`\t Agent involved: ${e.agentInvolvedId}`)
+    logger.info(`\t Activity: ${e.activityId}`)
+    logger.info(`\t Attributes: ${e.attributes}`)
+    logger.info(`\t Block Number: ${chalk.bgRed(e.blockNumberUpdated)})`)
+    logger.info(`-----`)
   })
 }
 

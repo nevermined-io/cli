@@ -7,7 +7,6 @@ import chalk from 'chalk'
 import { writeFileSync, mkdirSync } from 'fs'
 import { x } from 'tar'
 import fetch from 'cross-fetch'
-import { findServiceConditionByName } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 export const downloadArtifacts = async (
   nvm: Nevermined,

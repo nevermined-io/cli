@@ -1342,10 +1342,10 @@
   dependencies:
     "@openzeppelin/contracts-upgradeable" "^4.6.0"
 
-"@nevermined-io/nevermined-sdk-js@0.20.1":
-  version "0.20.1"
-  resolved "https://registry.npmjs.org/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.20.1.tgz"
-  integrity sha512-IQaSUImdlhGh3cEBHYG2yxMbCG4qCNk52j9BSuFrO/rUr0QiFF/HuWOCS0NIDnaXLh08gsCNaoxlKtRSocrdyQ==
+"@nevermined-io/nevermined-sdk-js@0.20.2":
+  version "0.20.2"
+  resolved "https://registry.yarnpkg.com/@nevermined-io/nevermined-sdk-js/-/nevermined-sdk-js-0.20.2.tgz#6257b2a41293c8597f2535bcd4f208bcb535c6d4"
+  integrity sha512-tugZpgIt3UXn4tSuWfbMCG3vbBQuF0Yr7hZt2OL2/i4e9CdYWpj0A31nATfAdnyZ3MCgldYi7F1Qnf0jrd0pCQ==
   dependencies:
     "@nevermined-io/contracts" "^2.0.0"
     "@nevermined-io/secret-store-client" "^0.0.16"
