@@ -1,16 +1,18 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, loadNevermined } from '../../utils'
-import chalk from 'chalk'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { StatusCodes } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { printProvenanceEntry } from '../../utils/utils'
-import { ConfigEntry, logger } from '../../utils/config'
+import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
+import chalk from 'chalk'
 
 export const provenanceInspect = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, provenanceId } = argv
 
   logger.info(
@@ -22,5 +24,8 @@ export const provenanceInspect = async (
   const provenance = await nvm.provenance.getProvenanceEntry(provenanceId)
   printProvenanceEntry(provenanceId, provenance, logger)
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify(provenance)
+  }
 }

@@ -14,22 +14,22 @@ import {
   printNftTokenBanner,
   StatusCodes
 } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 export const accountsList = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
-  const { verbose, network, nftTokenAddress, account } = argv
+): Promise<ExecutionOutput> => {
+  const { verbose, network, nftTokenAddress } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
   logger.debug(chalk.dim('Loading account/s ...'))
 
-  let accounts
-  if (account) accounts = [new Account(account)]
-  else accounts = await nvm.accounts.list()
+  const accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
@@ -54,9 +54,6 @@ export const accountsList = async (
         'ether'
       )
 
-      // const tokenBalance = token
-      //   ? await token.balanceOf(a.getId())
-      //   : new BigNumber(0)
       const tokenBalance = (
         token ? await token.balanceOf(a.getId()) : new BigNumber(0)
       )
@@ -142,5 +139,8 @@ export const accountsList = async (
     logger.info('\n')
   }
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify(loadedAccounts.map((a) => a.address))
+  }
 }

@@ -19,16 +19,21 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
     console.debug(`COMMAND: ${fundCommand}`)
 
     const stdout = execSync(fundCommand, execOpts)
-    execSync(`${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`, execOpts)
-    execSync(`${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`, execOpts)
-
+    execSync(
+      `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`,
+      execOpts
+    )
+    execSync(
+      `${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`,
+      execOpts
+    )
   })
 
   test('The buyer order and the seller transfer a NFT (directly)', async () => {
-    const registerDatasetCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --preMint true --name " NFTs 1155 test2 ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --preMint true --name " NFTs 1155 test2 ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerDatasetCommand, execOpts)
+    const registerStdout = execSync(registerAssetCommand, execOpts)
 
     console.debug(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewNFT(registerStdout)
@@ -45,7 +50,7 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
     expect(orderAgreementId.length > 0)
 
-    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}"  `
+    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}" --buyerAccount "${execOpts.accounts[2]}" `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execSync(transferCommand, execOpts)

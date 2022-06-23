@@ -1,15 +1,17 @@
 import { StatusCodes, ConfigEntry } from '../../utils'
 import { Logger } from 'log4js'
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { PlatformTechStatus } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Versions'
 import chalk from 'chalk'
 
 export const networkStatus = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   configEntry: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network } = argv
 
   const platformVersions = await nvm.versions.get()
@@ -76,7 +78,9 @@ export const networkStatus = async (
   // Metadata API
   logger.info('')
   logger.info(chalk.dim(`${chalk.whiteBright('Metadata API')}:`))
-  logger.info(chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.metadataUri)}`))
+  logger.info(
+    chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.marketplaceUri)}`)
+  )
   if (platformVersions.metadata.status === PlatformTechStatus.Working)
     logger.info(
       chalk.dim(`  Status: ${chalk.bgGreen(platformVersions.metadata.status)}`)
@@ -172,5 +176,8 @@ export const networkStatus = async (
 
   logger.info('\n')
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify(platformVersions)
+  }
 }

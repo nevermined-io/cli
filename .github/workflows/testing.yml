@@ -1,17 +1,25 @@
-name: Build
+name: Testing
 
-on: [ push ]
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        network: ["--spree-embedded-contracts", "--polygon"]
+        node: ["16"]
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: ${{ matrix.node }}
       - name: Install dependencies
         run: |
           yarn install --ignore-engines
@@ -19,25 +27,24 @@ jobs:
         run: |
           yarn lint
       - name: Reclaim some disk space
-        run : |
-            docker system prune --all --volumes -f
+        run: |
+          docker system prune --all --volumes -f
       - name: Run Nevermined Tools
         run: |
-          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}          
+          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
           sudo chmod go+r /etc/hosts
           sudo echo "127.0.0.1  nevermined-metadata" | sudo tee -a /etc/hosts
           git clone https://github.com/nevermined-io/tools
           cd tools
-          
+
           export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
-          export KEEPER_VERSION=v1.3.12
-          export GATEWAY_VERSION=v0.12.8
-          export METADATA_VERSION=v0.5.5
 
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
-          ./start_nevermined.sh --latest --no-marketplace --spree-embedded-contracts &
-          cd ..          
+          ./start_nevermined.sh --latest ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
+          cd ..
           ./scripts/wait-nevermined.sh
+          ./scripts/wait-subgraphs.sh
+
       - name: Run integration tests
         env:
           MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
@@ -47,3 +54,9 @@ jobs:
           sleep 10
           yarn build
           yarn test
+      - name: Upload logs
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: nevermined-tools-output
+          path: tools/nevermined_tools.txt

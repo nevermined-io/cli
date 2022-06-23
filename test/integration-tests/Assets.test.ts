@@ -7,7 +7,9 @@ import {
   sleep
 } from '../helpers/StdoutParser'
 import * as fs from 'fs'
+import { mkdtempSync, writeFileSync } from 'fs'
 import * as Path from 'path'
+import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 const { execSync } = require('child_process')
 
 describe('Assets e2e Testing', () => {
@@ -20,10 +22,10 @@ describe('Assets e2e Testing', () => {
 
     const stdout = execSync(fundCommand, execOpts)
 
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerDatasetCommand, execOpts)
+    const registerStdout = execSync(registerAssetCommand, execOpts)
 
     console.log(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewAsset(registerStdout)
@@ -53,7 +55,15 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Registering an asset using metadata from a JSON', async () => {
-    const importCommand = `${baseCommands.assets.importMetadata} --metadata ${metadataConfig.metadataFile}`
+    let jsonImported = JSON.parse(
+      fs.readFileSync(metadataConfig.metadataFile).toString()
+    )
+    jsonImported.main.author = jsonImported.main.author + generateId()
+    const tempDir = mkdtempSync('/tmp/cli_test_')
+    const randomMetadataFile = `${tempDir}/random_metadata.json`
+    fs.writeFileSync(randomMetadataFile, JSON.stringify(jsonImported, null, 4))
+
+    const importCommand = `${baseCommands.assets.importMetadata} --metadata ${randomMetadataFile}`
     console.debug(`COMMAND: ${importCommand}`)
 
     const stdout = execSync(importCommand, execOpts)
@@ -65,10 +75,10 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Search for an asset', async () => {
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --name "searching test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --name "searching test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const stdout = execSync(registerDatasetCommand, execOpts)
+    const stdout = execSync(registerAssetCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
     const didSearch = parseDIDFromNewAsset(stdout)
@@ -124,4 +134,3 @@ describe('Assets e2e Testing', () => {
     })
   })
 })
-

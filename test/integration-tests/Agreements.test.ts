@@ -17,10 +17,10 @@ describe('Agreements e2e Testing', () => {
 
     const stdout = execSync(fundCommand, execOpts)
 
-    const registerDatasetCommand = `${baseCommands.assets.registerDataset} --account "${execOpts.accounts[0]}" --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
-    console.debug(`COMMAND: ${registerDatasetCommand}`)
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerDatasetCommand, execOpts)
+    const registerStdout = execSync(registerAssetCommand, execOpts)
 
     console.log(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewAsset(registerStdout)

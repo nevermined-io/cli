@@ -1,10 +1,11 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, findAccountOrFirst } from '../../utils'
 import chalk from 'chalk'
 
 import readline from 'readline'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -13,22 +14,20 @@ const rl = readline.createInterface({
 
 export const downloadAsset = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
-  const { verbose, network, did, account } = argv
+): Promise<ExecutionOutput> => {
+  const { verbose, network, did } = argv
 
   logger.info(chalk.dim(`Downloading asset: ${did}`))
 
-  const accounts = await nvm.accounts.list()
-  const userAccount = findAccountOrFirst(accounts, account)
-
-  logger.debug(chalk.dim(`Using account: '${userAccount.getId()}'`))
+  logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
   const path = await nvm.assets.download(
     did,
-    userAccount,
+    account,
     argv.path,
     argv.fileIndex,
     false
@@ -36,5 +35,8 @@ export const downloadAsset = async (
 
   logger.info(chalk.dim(`Files downloaded to: ${path}`))
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify({ path })
+  }
 }

@@ -1,29 +1,22 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import {
-  Constants,
-  StatusCodes,
-  findAccountOrFirst,
-  ConfigEntry,
-  loadToken
-} from '../../utils'
-import chalk from 'chalk'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Constants, StatusCodes, ConfigEntry, loadToken } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import chalk from 'chalk'
 import { Logger } from 'log4js'
 
 export const orderNft = async (
   nvm: Nevermined,
+  buyerAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
-  const { verbose, network, did, account } = argv
+): Promise<ExecutionOutput> => {
+  const { verbose, network, did } = argv
 
   logger.info(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
 
   const token = await loadToken(nvm, config, verbose)
-
-  const accounts = await nvm.accounts.list()
-  const buyerAccount = findAccountOrFirst(accounts, account)
 
   const ddo = await nvm.assets.resolve(did)
 
@@ -61,5 +54,5 @@ export const orderNft = async (
     )
   )
 
-  return StatusCodes.OK
+  return { status: StatusCodes.OK }
 }

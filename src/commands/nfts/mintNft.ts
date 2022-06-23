@@ -1,29 +1,26 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
-  findAccountOrFirst,
   loadNftContract,
   printNftTokenBanner,
   ConfigEntry,
   getNFTAddressFromInput
 } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 
 export const mintNft = async (
   nvm: Nevermined,
+  minterAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
-  const { verbose, network, did, account, uri } = argv
+): Promise<ExecutionOutput> => {
+  const { verbose, network, did, uri } = argv
 
   logger.info(chalk.dim(`Minting NFT: '${chalk.whiteBright(did)}'`))
-
-  const accounts = await nvm.accounts.list()
-
-  const minterAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(
     chalk.dim(`Using Minter: ${chalk.whiteBright(minterAccount.getId())}`)
@@ -60,10 +57,10 @@ export const mintNft = async (
 
     try {
       const oldOwner = await nft.methods.ownerOf(ddo.shortId()).call()
-      logger.info(
-        chalk.red(`ERROR: NFT already existing and owned by: '${oldOwner}'`)
-      )
-      return StatusCodes.NFT_ALREADY_OWNED
+      return {
+        status: StatusCodes.NFT_ALREADY_OWNED,
+        errorMessage: `ERROR: NFT already existing and owned by: '${oldOwner}'`
+      }
     } catch {}
 
     const to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
@@ -93,8 +90,10 @@ export const mintNft = async (
         .mint(zeroX(ddo.shortId()))
         .send({ from: minterAccount.getId() })
     } else {
-      logger.error(`Unable to mint NFT, minting function not recognized`)
-      return StatusCodes.ERROR
+      return {
+        status: StatusCodes.NOT_IMPLEMENTED,
+        errorMessage: `Unable to mint NFT, minting function not recognized`
+      }
     }
 
     logger.info(
@@ -108,10 +107,10 @@ export const mintNft = async (
     // Minting NFT (ERC-1155)
 
     if (argv.amount < 1 || argv.amount > register.mintCap) {
-      logger.error(
-        `Invalid number of ERC-1155 NFTs to mint. It should be >=1 and <cap`
-      )
-      return StatusCodes.ERROR
+      return {
+        status: StatusCodes.ERROR,
+        errorMessage: `Invalid number of ERC-1155 NFTs to mint. It should be >=1 and <cap`
+      }
     }
 
     await nvm.keeper.didRegistry.mint(did, argv.amount, minterAccount.getId())
@@ -125,5 +124,7 @@ export const mintNft = async (
     )
   }
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK
+  }
 }

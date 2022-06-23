@@ -15,16 +15,17 @@ import {
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721.json'
-import { Constants, StatusCodes } from './enums'
+import { Constants } from './enums'
 import { ConfigEntry, getConfig, logger } from './config'
 import { AbiItem } from 'web3-utils'
 import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
-import { Logger } from 'log4js'
+import { Configuration, Logger } from 'log4js'
 import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
+import { ethers } from 'ethers'
 
 export const cmdHandler = async (cmd: Function, argv: any) => {
-  const { verbose, network } = argv
+  const { verbose, network, account } = argv
 
   if (verbose) {
     logger.level = 'debug'
@@ -36,6 +37,34 @@ export const cmdHandler = async (cmd: Function, argv: any) => {
   const config = getConfig(network as string)
 
   return process.exit(await cmd(argv, config, logger))
+}
+
+export const loadNevermined = async (
+  config: ConfigEntry,
+  network: string,
+  verbose = false
+): Promise<Nevermined> => {
+  const nvm = await Nevermined.getInstance({
+    ...config.nvm,
+    verbose: verbose ? verbose : config.nvm.verbose
+  })
+
+  if (!nvm.keeper) {
+    logger.error(
+      chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
+    )
+  }
+
+  return nvm
+}
+
+export const loginMarketplaceApi = async (
+  nvm: Nevermined,
+  account: Account
+): Promise<boolean> => {
+  const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)
+  await nvm.marketplace.login(clientAssertion)
+  return true
 }
 
 export const loadContract = (
@@ -86,34 +115,46 @@ export const findAccountOrFirst = (
   accounts: Account[],
   address: string
 ): Account => {
-  let account: Account | undefined = accounts[0]!
+  let account
 
-  if (address) {
+  if (ethers.utils.isAddress(address)) {
     account = accounts.find(
       (a: Account) => a.getId().toLowerCase() === address.toLowerCase()
     )
 
     if (!account) {
-      console.log(chalk.red(`ERROR: '${address}' is not an account!\n`))
-      throw new Error(`${StatusCodes[StatusCodes.ADDRESS_NOT_AN_ACCOUNT]}`)
+      logger.debug(
+        chalk.dim(
+          `Account provided not found, using : ${chalk.redBright(accounts[0])}`
+        )
+      )
+    } else {
+      return account
     }
+  } else {
+    logger.debug(
+      chalk.dim(
+        `Account address not valid, using : ${chalk.redBright(account)}`
+      )
+    )
+    // throw new Error(`${StatusCodes[StatusCodes.ADDRESS_NOT_AN_ACCOUNT]}`)
   }
 
-  return account
+  return accounts[0]
 }
 
 export const printNftTokenBanner = async (nftContract: Contract) => {
   const { address } = nftContract.options
 
-  console.log('\n')
-  console.log(chalk.dim('===== NFT Contract ====='))
+  logger.info('\n')
+  logger.info(chalk.dim('===== NFT Contract ====='))
 
   let owner = ''
   try {
     owner = await nftContract.methods.owner().call()
-    console.log(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
+    logger.info(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
   } catch {
-    console.log(`Owner: The NFT doesn't expose the owner`)
+    logger.info(`Owner: The NFT doesn't expose the owner`)
   }
 
   const [name, symbol] = await Promise.all([
@@ -121,10 +162,9 @@ export const printNftTokenBanner = async (nftContract: Contract) => {
     nftContract.methods.symbol().call()
   ])
 
-  console.log(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
-  console.log(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
-  console.log(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
-  console.log('\n')
+  logger.info(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
+  logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
+  logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}\n`))
 }
 
 export const printTokenBanner = async (token: Token | null) => {
@@ -169,25 +209,25 @@ export const printProvenanceEvents = (
     activityId: string
     relatedDid: string
     agentInvolvedId: string
-    attributes: string
+    attributes?: string
     blockNumberUpdated: number
   }[],
   logger: Logger
 ) => {
-  logger.info(chalk.dim(`# of Provenance events: ${events.length}`))
-  logger.info(chalk.dim(`--------------------------`))
+  logger.info(`# of Provenance events: ${chalk.bgBlue(events.length)}`)
+  logger.info(`--------------------------`)
 
   events.map((e) => {
-    logger.info(chalk.dim(`\t Provenance Id: ${e.provId}`))
-    logger.info(chalk.dim(`\t Method: ${ProvenanceMethod[e.method]}`))
-    logger.info(chalk.dim(`\t DID: ${e.did}`))
-    logger.info(chalk.dim(`\t Related DID: ${e.relatedDid}`))
-    logger.info(chalk.dim(`\t Agent: ${e.agentId}`))
-    logger.info(chalk.dim(`\t Agent involved: ${e.agentInvolvedId}`))
-    logger.info(chalk.dim(`\t Activity: ${e.activityId}`))
-    logger.info(chalk.dim(`\t Attributes: ${e.attributes}`))
-    logger.info(chalk.dim(`\t Block Number: ${e.blockNumberUpdated}`))
-    logger.info(chalk.dim(`-----`))
+    logger.info(`\t Provenance Id: ${chalk.yellowBright(e.provId)}`)
+    logger.info(`\t Method: ${chalk.yellowBright(ProvenanceMethod[e.method])}`)
+    logger.info(`\t DID: ${e.did}`)
+    logger.info(`\t Related DID: ${e.relatedDid}`)
+    logger.info(`\t Agent: ${e.agentId}`)
+    logger.info(`\t Agent involved: ${e.agentInvolvedId}`)
+    logger.info(`\t Activity: ${e.activityId}`)
+    logger.info(`\t Attributes: ${e.attributes}`)
+    logger.info(`\t Block Number: ${chalk.bgRed(e.blockNumberUpdated)})`)
+    logger.info(`-----`)
   })
 }
 
@@ -215,9 +255,8 @@ export const printSearchResult = async (
 }
 
 export const printNativeTokenBanner = async () => {
-  console.log('\n')
-  console.log(chalk.dim('===== Native Token (ETH, MATIC, etc) ====='))
-  console.log(
+  logger.info(chalk.dim('\n===== Native Token (ETH, MATIC, etc) ====='))
+  logger.info(
     chalk.dim(`Decimals: ${chalk.whiteBright(Constants.ETHDecimals)}\n`)
   )
 }
@@ -232,13 +271,12 @@ export const printErc20TokenBanner = async (token: Token) => {
     token.totalSupply()
   ])
 
-  console.log('\n')
-  console.log(chalk.dim('===== ERC20 Contract ====='))
-  console.log(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
-  console.log(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
-  console.log(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
-  console.log(chalk.dim(`Decimals: ${chalk.whiteBright(decimals)}`))
-  console.log(
+  logger.info(chalk.dim('\n===== ERC20 Contract ====='))
+  logger.info(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
+  logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
+  logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
+  logger.info(chalk.dim(`Decimals: ${chalk.whiteBright(decimals)}`))
+  logger.info(
     chalk.dim(
       `Total Supply: ${chalk.whiteBright(totalSupply / 10 ** decimals)}`
     )
@@ -264,25 +302,6 @@ export const getContractNameFromAddress = async (
   return contractName
 }
 
-export const loadNevermined = async (
-  config: ConfigEntry,
-  network: string,
-  verbose = false
-): Promise<Nevermined> => {
-  const nvm = await Nevermined.getInstance({
-    ...config.nvm,
-    verbose: verbose ? verbose : config.nvm.verbose
-  })
-
-  if (!nvm.keeper) {
-    console.log(
-      chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
-    )
-  }
-
-  return nvm
-}
-
 export const loadToken = async (
   nvm: Nevermined,
   config: ConfigEntry,
@@ -292,13 +311,12 @@ export const loadToken = async (
   let token: Token | null = null
 
   if (
-    config.erc20TokenAddress.toLowerCase() ===
+    config.erc20TokenAddress!.toLowerCase() ===
       Constants.ZeroAddress.toLowerCase() ||
-    config.erc20TokenAddress.toLowerCase() ===
+    config.erc20TokenAddress!.toLowerCase() ===
       Constants.ShortZeroAddress.toLowerCase()
   ) {
-
-    console.debug(
+    logger.debug(
       chalk.yellow('INFO: Using native token (ETH, MATIC, etc) for payments!\n')
     )
   } else {
@@ -307,12 +325,12 @@ export const loadToken = async (
     // if the token address is not zero try to load it
     token = nvm.keeper.token // eslint-disable-line
     const nvmTokenAddress = token.getAddress() || ''
-    console.debug(
+    logger.debug(
       `Loading ERC20 Token ${config.erc20TokenAddress.toLowerCase()}`
     )
-    console.debug(`ERC20 Token Address ${config.erc20TokenAddress}`)
+    logger.debug(`ERC20 Token Address ${config.erc20TokenAddress}`)
 
-    // check if we have a different token configured    
+    // check if we have a different token configured
     if (
       config.erc20TokenAddress.toLowerCase() !== nvmTokenAddress.toLowerCase()
     ) {
@@ -332,15 +350,51 @@ export const loadToken = async (
       )
       config.erc20TokenAddress = tokenAddress
     } else {
-      console.debug(
+      logger.debug(
         chalk.yellow(`WARNING: Using Nevermined token '${token.address}'!\n`)
       )
     }
-    console.debug(`Using Token Address: ${token.address}`)
+    logger.debug(`Using Token Address: ${token.address}`)
 
     if (verbose) {
       await printErc20TokenBanner(token)
     }
   }
   return token
+}
+
+export const getDefaultLoggerConfig = (): Configuration => {
+  return {
+    appenders: {
+      out: {
+        type: 'stdout',
+        level: 'info',
+        layout: {
+          type: 'pattern',
+          pattern: '%m'
+        }
+      }
+    },
+    categories: {
+      default: { appenders: ['out'], level: 'info' }
+    }
+  }
+}
+
+export const getJsonLoggerConfig = (): Configuration => {
+  return {
+    appenders: {
+      json: {
+        type: 'stdout',
+        level: 'mark',
+        layout: {
+          type: 'json',
+          separator: ','
+        }
+      }
+    },
+    categories: {
+      default: { appenders: ['json'], level: 'mark' }
+    }
+  }
 }

@@ -1,30 +1,38 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, ConfigEntry } from '../../utils'
 import { Logger } from 'log4js'
 import chalk from 'chalk'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 export const accountsFund = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
-  const { verbose, network, account, token } = argv
+): Promise<ExecutionOutput> => {
+  const { verbose, token } = argv
 
-  logger.info(chalk.dim(`Funding account: '${chalk.whiteBright(account)}'`))
+  let errorMessage = ''
+  let results: string[] = []
+  logger.info(
+    chalk.dim(`Funding account: '${chalk.whiteBright(account.getId())}'`)
+  )
 
   if (token === 'both' || token === 'native') {
     try {
-      await nvm.faucet.requestEth(account)
-      console.log(chalk.dim(`Funded ETH to ${chalk.whiteBright(account)}`))
-    } catch (err) {
+      await nvm.faucet.requestEth(account.getId())
       console.log(
-        chalk.red(
-          `Funding ETH to ${chalk.whiteBright(account)} failed! ${
-            (err as Error).message
-          }`
+        chalk.dim(
+          `Funded Native token to ${chalk.whiteBright(account.getId())}`
         )
       )
+      results.push('native')
+    } catch (err) {
+      errorMessage = `Funding Native token to ${chalk.whiteBright(
+        account.getId()
+      )} failed! ${(err as Error).message}`
+      console.log(chalk.red(errorMessage))
 
       if (verbose) {
         console.log(err)
@@ -34,21 +42,26 @@ export const accountsFund = async (
 
   if (token === 'erc20' || token === 'native') {
     try {
-      await nvm.keeper.dispenser.requestTokens(100, account)
-      console.log(chalk.dim(`Funded Tokens to ${chalk.whiteBright(account)}`))
-    } catch (err) {
+      await nvm.keeper.dispenser.requestTokens(100, account.getId())
       console.log(
-        chalk.red(
-          `Funding Tokens to ${chalk.whiteBright(account)} failed! ${
-            (err as Error).message
-          }`
-        )
+        chalk.dim(`Funded Tokens to ${chalk.whiteBright(account.getId())}`)
       )
+      results.push('erc20')
+    } catch (err) {
+      const erc20ErrorMessage = `Funding Tokens to ${chalk.whiteBright(
+        account.getId()
+      )} failed! ${(err as Error).message}`
+      console.log(chalk.red(erc20ErrorMessage))
+      errorMessage = `${errorMessage}, ${erc20ErrorMessage}`
       if (verbose) {
         console.log(err)
       }
     }
   }
 
-  return StatusCodes.OK
+  return {
+    status: results.length > 0 ? StatusCodes.OK : StatusCodes.ERROR,
+    errorMessage,
+    results: JSON.stringify(results)
+  }
 }

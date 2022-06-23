@@ -1,4 +1,4 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
@@ -9,6 +9,7 @@ import {
   getNFTAddressFromInput,
   loadToken
 } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import {
@@ -21,11 +22,12 @@ import { Contract } from 'web3-eth-contract'
 
 export const showNft = async (
   nvm: Nevermined,
+  userAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
-  const { verbose, network, did, account } = argv
+): Promise<ExecutionOutput> => {
+  const { verbose, network, did } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
@@ -36,10 +38,6 @@ export const showNft = async (
       )}'`
     )
   )
-
-  let userAccount
-  if (account) userAccount = new Account(account)
-  else [userAccount] = await nvm.accounts.list()
 
   const ddo = await nvm.assets.resolve(did)
 
@@ -178,19 +176,38 @@ export const showNft = async (
       )
     )
 
-    const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
-      .getTotalPrice()
-      .div(10)
-      .multipliedBy(decimals)
+    try {
+      const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
+        .getTotalPrice()
+        .div(10)
+        .multipliedBy(decimals)
 
-    logger.info(
-      chalk.dim(
-        `Price: ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
+      logger.info(
+        chalk.dim(
+          `Price (NFT-1155): ${chalk.whiteBright(price)} ${chalk.whiteBright(
+            symbol
+          )}`
+        )
       )
-    )
+    } catch {}
+
+    try {
+      const price = getAssetRewardsFromDDOByService(ddo, 'nft721-sales')
+        .getTotalPrice()
+        .div(10)
+        .multipliedBy(decimals)
+
+      logger.info(
+        chalk.dim(
+          `Price (NFT-721): ${chalk.whiteBright(price)} ${chalk.whiteBright(
+            symbol
+          )}`
+        )
+      )
+    } catch {}
   }
 
-  // logger.debug(chalk.dim(DDO.serialize(ddo)))
+  logger.trace(chalk.dim(DDO.serialize(ddo)))
 
-  return StatusCodes.OK
+  return { status: StatusCodes.OK }
 }

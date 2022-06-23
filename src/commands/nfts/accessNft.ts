@@ -1,24 +1,22 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, findAccountOrFirst, ConfigEntry } from '../../utils'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { StatusCodes, ConfigEntry } from '../../utils'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 
 export const accessNft = async (
   nvm: Nevermined,
+  consumerAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
-  const { verbose, network, did, destination, account, agreementId, seller } =
-    argv
+): Promise<ExecutionOutput> => {
+  const { verbose, network, did, destination, agreementId, seller } = argv
 
   logger.info(
     chalk.dim(`Access & download NFT associated to ${chalk.whiteBright(did)}`)
   )
   logger.info(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
-
-  const accounts = await nvm.accounts.list()
-  const consumerAccount = findAccountOrFirst(accounts, account)
 
   logger.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
 
@@ -36,10 +34,10 @@ export const accessNft = async (
   )
 
   if (!isSuccessfulTransfer) {
-    logger.warn(
-      chalk.dim(`Problem executing 'transferForDelegate' through the gateway`)
-    )
-    return StatusCodes.ERROR
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Problem executing 'transferForDelegate' through the gateway`
+    }
   }
 
   logger.info(`NFT Access request through the gateway sucessfully`)
@@ -55,8 +53,16 @@ export const accessNft = async (
     logger.info(
       chalk.dim(`NFT Assets downloaded to: ${chalk.whiteBright(destination)}`)
     )
-    return StatusCodes.OK
+    return {
+      status: StatusCodes.OK,
+      results: JSON.stringify({
+        destination
+      })
+    }
   }
-  logger.warn(chalk.dim(`Unable to download assets`))
-  return StatusCodes.ERROR
+
+  return {
+    status: StatusCodes.ERROR,
+    errorMessage: `Unable to download assets`
+  }
 }

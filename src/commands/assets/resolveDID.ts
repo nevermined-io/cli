@@ -1,19 +1,20 @@
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 
 export const resolveDID = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   const { verbose, network, did } = argv
 
   logger.info(chalk.dim(`Resolving the asset: ${did}`))
-
 
   logger.info(
     chalk.dim(`Using DIDRegistry: ${await nvm.keeper.didRegistry.getAddress()}`)
@@ -21,19 +22,25 @@ export const resolveDID = async (
   const onchainInfo = await nvm.keeper.didRegistry.getDIDRegister(did)
 
   logger.info(JSON.stringify(onchainInfo))
-  
+
   let ddo
   try {
     ddo = await nvm.assets.resolve(did)
     if (!ddo || ddo.id! !== did) {
       logger.warn('Asset not found')
-      return StatusCodes.DID_NOT_FOUND
+      return {
+        status: StatusCodes.DID_NOT_FOUND,
+        errorMessage: 'Asset not found'
+      }
     }
     logger.info(chalk.dim('DID found and DDO resolved'))
     logger.debug(ddo)
   } catch {
     logger.warn('Asset not found')
-    return StatusCodes.DID_NOT_FOUND
+    return {
+      status: StatusCodes.DID_NOT_FOUND,
+      errorMessage: 'Asset not found'
+    }
   }
 
   // Check if Gateway is a provider
@@ -62,5 +69,8 @@ export const resolveDID = async (
     )
   }
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify(ddo)
+  }
 }

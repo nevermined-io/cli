@@ -1,17 +1,18 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
-import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 import { ethers } from 'ethers'
+import { ExecutionOutput } from '../../models/ExecutionOutput'
 
 export const accountsNew = async (
   nvm: Nevermined,
+  account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
-): Promise<number> => {
+): Promise<ExecutionOutput> => {
   logger.info(chalk.dim('Creating wallet ...'))
 
   const wallet = ethers.Wallet.createRandom()
@@ -42,5 +43,15 @@ export const accountsNew = async (
     )
   )
 
-  return StatusCodes.OK
+  return {
+    status: StatusCodes.OK,
+    results: JSON.stringify({
+      walletAddress: wallet.address,
+      walletPublicKey: wallet.publicKey,
+      walletPrivateKey: wallet.privateKey,
+      mnemonicPhrase: wallet.mnemonic.phrase,
+      mnemonicPath: wallet.mnemonic.path,
+      mnemonicLocale: wallet.mnemonic.locale
+    })
+  }
 }
