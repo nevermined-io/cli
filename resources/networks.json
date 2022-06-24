@@ -24,7 +24,7 @@
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.matic.today",
+			"nodeUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://graph-node.defi.mumbai.nevermined.rocks",
@@ -37,8 +37,8 @@
 		"networkName": "mumbai",
 		"contractsVersion": "2.0.0",
 		"tagName": "public",
-		"etherscanUrl": "https://mumbai.polygonscan.com/",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+		"etherscanUrl": "https://mumbai.polygonscan.com",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0
 	},
@@ -60,8 +60,8 @@
 		"networkName": "mumbai",
 		"contractsVersion": "2.0.0",
 		"tagName": "common",
-		"etherscanUrl": "https://mumbai.polygonscan.com/",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+		"etherscanUrl": "https://mumbai.polygonscan.com",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0
 	},
@@ -75,7 +75,7 @@
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://graph-node.defi.mumbai.nevermined.rocks",
 			"gatewayUri": "https://gateway.autonomies.test.nevermined.rocks",
-			"gatewayAddress": "0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b",
+			"gatewayAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 			"verbose": true
 		},
 		"nativeToken": "MATIC",
@@ -83,7 +83,7 @@
 		"networkName": "mumbai",
 		"contractsVersion": "2.0.0",
 		"tagName": "common",
-		"etherscanUrl": "https://mumbai.polygonscan.com/",
+		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0

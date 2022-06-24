@@ -1,4 +1,3 @@
-import { Config } from '@nevermined-io/nevermined-sdk-js'
 import HDWalletProvider from '@truffle/hdwallet-provider'
 import dotenv from 'dotenv'
 import Web3 from 'web3'
@@ -39,7 +38,6 @@ export async function configureLocalEnvironment(
   }
 
   const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
-  console.debug(`Trying to load ABI" ${abiTestPath}`)
 
   if (network.toLowerCase() === 'spree') {
     if (
@@ -102,12 +100,11 @@ export function getConfig(network: string): ConfigEntry {
       )
     }
   }
-
   let defaultConfig
   try {
     defaultConfig = JSON.parse(
       fs.readFileSync('resources/networks.json').toString()
-    )[network.toLowerCase()] as ConfigEntry
+    )[network] as ConfigEntry
   } catch (error) {
     throw new Error(`Network '${network}' is not supported`)
   }

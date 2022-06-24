@@ -19,14 +19,14 @@ export const networkList = async (
   const networksConfig = getNetworksConfig()
   const networks = Object.keys(networksConfig)
   networks.forEach((_key: string) => {
-    logger.info(` ${chalk.whiteBright(_key)}:`)
+    logger.info(` ${chalk.green(_key)}:`)
     logger.info(`\t${networksConfig[_key].envDescription}`)
     logger.info(
-      `\tIs a Production environment? ${networksConfig[_key].isProduction}`
+      `\tIs a Production environment? ${chalk.blue(networksConfig[_key].isProduction)}`
     )
-    logger.info(`\tGateway: ${networksConfig[_key].nvm.gatewayUri}`)
-    logger.info(`\tMarketplace API: ${networksConfig[_key].nvm.marketplaceUri}`)
-    logger.info(`\tFaucet: ${networksConfig[_key].nvm.faucetUri}`)
+    logger.info(`\tGateway: ${chalk.yellow(networksConfig[_key].nvm.gatewayUri)}`)
+    logger.info(`\tMarketplace API: ${chalk.yellow(networksConfig[_key].nvm.marketplaceUri)}`)
+    logger.info(`\tFaucet: ${chalk.yellow(networksConfig[_key].nvm.faucetUri)}`)
     logger.info('\n')
   })
 

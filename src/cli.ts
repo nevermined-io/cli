@@ -33,7 +33,7 @@ const cmdHandler = async (cmd: keyof CliCommands, argv: any) => {
     await configureLocalEnvironment(network as string, config)
     nvm = await loadNevermined(config, network, verbose)
   } catch (err) {
-    logger.error(`Error setting up the CLI: ${(err as Error).message}`)
+    console.error(`Error setting up the CLI: ${(err as Error).message}`)
     return process.exit(StatusCodes.ERROR)
   }
 

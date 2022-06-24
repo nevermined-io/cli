@@ -28,7 +28,11 @@ export const accountsList = async (
 
   logger.debug(chalk.dim('Loading account/s ...'))
 
-  const accounts = await nvm.accounts.list()
+  let accounts
+  if (account !== undefined)
+    accounts = [account]
+  else
+    accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
@@ -109,7 +113,7 @@ export const accountsList = async (
     logger.info(
       chalk.dim(`===== Account ${chalk.whiteBright(a.address)} =====`)
     )
-    logger.info(chalk.dim(`ETH Balance: ${chalk.whiteBright(a.ethBalance)}`))
+    logger.info(chalk.dim(`${config.nativeToken} Balance: ${chalk.whiteBright(a.ethBalance)}`))
     if (token !== null) {
       logger.info(
         chalk.dim(
