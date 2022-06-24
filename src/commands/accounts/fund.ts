@@ -1,8 +1,9 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, ConfigEntry } from '../../utils'
+import { StatusCodes } from '../../utils'
 import { Logger } from 'log4js'
 import chalk from 'chalk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const accountsFund = async (
   nvm: Nevermined,

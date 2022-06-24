@@ -1,8 +1,9 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, ConfigEntry, config } from '../../utils'
+import { StatusCodes, getNetworksConfig } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const networkList = async (
   nvm: Nevermined,
@@ -15,14 +16,17 @@ export const networkList = async (
 
   logger.info(chalk.dim(`Nevermined pre-configured networks:`))
 
-  const networks = Object.keys(config)
+  const networksConfig = getNetworksConfig()
+  const networks = Object.keys(networksConfig)
   networks.forEach((_key: string) => {
-    logger.info(chalk.dim(` ${chalk.whiteBright(_key)}:`))
-    logger.info(chalk.dim(`   Gateway: ${config[_key].nvm.gatewayUri}`))
+    logger.info(` ${chalk.whiteBright(_key)}:`)
+    logger.info(`\t${networksConfig[_key].envDescription}`)
     logger.info(
-      chalk.dim(`   Marketplace API: ${config[_key].nvm.marketplaceUri}`)
+      `\tIs a Production environment? ${networksConfig[_key].isProduction}`
     )
-    logger.info(chalk.dim(`   Faucet: ${config[_key].nvm.faucetUri}`))
+    logger.info(`\tGateway: ${networksConfig[_key].nvm.gatewayUri}`)
+    logger.info(`\tMarketplace API: ${networksConfig[_key].nvm.marketplaceUri}`)
+    logger.info(`\tFaucet: ${networksConfig[_key].nvm.faucetUri}`)
     logger.info('\n')
   })
 
@@ -31,9 +35,9 @@ export const networkList = async (
     results: JSON.stringify(
       networks.map((_key) =>
         JSON.stringify({
-          gatewayUri: config[_key].nvm.gatewayUri,
-          marketplaceUri: config[_key].nvm.marketplaceUri,
-          faucetUri: config[_key].nvm.faucetUri
+          gatewayUri: networksConfig[_key].nvm.gatewayUri,
+          marketplaceUri: networksConfig[_key].nvm.marketplaceUri,
+          faucetUri: networksConfig[_key].nvm.faucetUri
         })
       )
     )

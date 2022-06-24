@@ -2,8 +2,8 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const resolveDID = async (
   nvm: Nevermined,

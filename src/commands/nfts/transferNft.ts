@@ -1,10 +1,11 @@
 import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { Constants, StatusCodes, ConfigEntry, loadToken } from '../../utils'
+import { Constants, StatusCodes, loadToken } from '../../utils'
 import chalk from 'chalk'
 import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const transferNft = async (
   nvm: Nevermined,

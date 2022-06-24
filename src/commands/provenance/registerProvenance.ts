@@ -2,9 +2,9 @@ import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes } from '../../utils'
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
-import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 import chalk from 'chalk'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const registerProvenance = async (
   nvm: Nevermined,

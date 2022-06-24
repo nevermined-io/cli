@@ -1,4 +1,8 @@
-# Nevermined Command Line Interface (CLI) Commands
+---
+sidebar_position: 3
+---
+
+# Commands  Reference
 
 The Nevermined CLI (aka `ncli`) offers multiple options to facilitate the interaction of a user with a Nevermined network.
 
@@ -29,16 +33,7 @@ List all the pre-configured Nevermined networks<br/>
 
 The `ncli` has a pre-configured list of Nevermined environments in different networks. This command list some basic information about all of these available Nevermined environments.<br/>
 
-#### Positional Arguments
 
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
-
-
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -54,16 +49,7 @@ List all the information about a Nevermined deployment<br/>
 
 If the `ncli` is connected to a Nevermined network correctly this command will return information about that network. This will include information about the contracts (version, addresses, etc), Gateway, Marketplace API.<br/>
 
-#### Positional Arguments
 
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
-
-
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -89,16 +75,7 @@ Creates a new account locally<br/>
 
 Nevermined interact with EVM compatible blockchain networks. To interact with them a user needs to have some local credentials compatible (BIP-44). This command creates a local wallet Etherum compatible that can be used to interact with a Ethereum like network and by extension with Nevermined contracts.<br/>
 
-#### Positional Arguments
 
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
-
-
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -127,6 +104,7 @@ To work prorperly the `ncli` needs to use a wallet to interact with the blockcha
 |----------------------|------|-------------:|--------------:|-------------|
 | **nftTokenAddress** | `string` |  |    | Load NFT (ERC-721) inventory as well |
 
+
 #### Example/s
 
 
@@ -153,6 +131,7 @@ Given the public address of an account, this command gets the balance of the Nat
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
 | **nftTokenAddress** | `string` |  |    | Load NFT (ERC-721) inventory as well |
+
 
 #### Example/s
 
@@ -181,6 +160,7 @@ In the test environments all the tokens are not having a real value. Typically i
 |----------------------|------|-------------:|--------------:|-------------|
 | **token** | `string` |  |  `both`  | What kind of tokens you want to fund the account (native, erc20 or both) |
 
+
 #### Example/s
 
 
@@ -205,11 +185,6 @@ Register a new asset<br/>
 
 This command allows to register a new asset into a Nevermined network. This asset registered will have attached an access service, allowing to the users paying for the price defined by the user to get access to the files attached to the asset.<br/>
 
-#### Positional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
-
 
 #### Optional Arguments
 
@@ -225,6 +200,7 @@ This command allows to register a new asset into a Nevermined network. This asse
 | **password** | `string` |  |    | The password for encrypted files |
 | **assetType** | `string` |  |  `dataset`  | The type of the asset to register |
 
+
 #### Example/s
 
 
@@ -238,11 +214,6 @@ ncli assets register-asset --name &quot;My cool artwork&quot; --author &quot;Joh
 Register a new algorithm<br/>
 
 This command allows to register a new algorithm into a Nevermined network. The algorithm can be the representation of a Notebook, python script, etc. This asset registered will have attached an access service, allowing to the users paying for the price defined by the user to get access to the files attached to the asset.<br/>
-
-#### Positional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 
 #### Optional Arguments
@@ -260,6 +231,7 @@ This command allows to register a new algorithm into a Nevermined network. The a
 | **entrypoint** | `string` |  &#x2611;  |    | The entrypoint for running the algorithm. Example: python word_count.py |
 | **container** | `string` |  &#x2611;  |    | The docker container where the algorithm can be executed. Example: python:3.8-alpine |
 | **assetType** | `string` |  |  `algorithm`  | The type of the asset to register |
+
 
 #### Example/s
 
@@ -287,6 +259,7 @@ An asset in a Nevermined network can be described by different level of metadata
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
 | **encrypt** | `boolean` |  |  `false`  | Use encrypted service endpoint |
+
 
 #### Example/s
 
@@ -316,6 +289,7 @@ All the metadata given by the users registering assets into Nevermined can be us
 | **offset** | `number` |  |  `10`  | The number of elements to obtain from the search query |
 | **page** | `number` |  |  `1`  | The page to show |
 
+
 #### Example/s
 
 
@@ -344,6 +318,7 @@ When a user publishes some content into Nevermined this command allows to downlo
 | **fileIndex** | `number` |  |  `-1`  | The index of the file to retrieve in the DDO |
 | **path** | `string` |  |  `.`  | Local path where the asset files will be downloaded |
 
+
 #### Example/s
 
 
@@ -370,6 +345,7 @@ This method makes the payment and retrieve a serviceAgreementId that can be used
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
 | **password** | `string` |  |    | Password for receiving encrypted files |
+
 
 #### Example/s
 
@@ -401,6 +377,7 @@ This commands is the best entry point to get access to the files attached to a N
 | **password** | `string` |  |    | Password for receiving encrypted files |
 | **path** | `string` |  |  `.`  | Local path where the asset files will be downloaded |
 
+
 #### Example/s
 
 
@@ -427,10 +404,6 @@ An asset registered into Nevermined is represented by 2 parts. Some metadata sto
 | **did** | `string` |  |    | The asset DID |
 
 
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -453,10 +426,6 @@ This command allows to retire an asset from a Marketplace. Only the owner of the
 | **did** | `string` |  |    | The asset DID |
 
 
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -489,10 +458,6 @@ For an asset published in Nevermined, this command returns all the agreements cr
 | **did** | `string` |  |    | The DID to list the agreements for |
 
 
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -515,10 +480,6 @@ An agreement in Nevermined keep track of the state of the different conditions t
 | **agreementId** | `string` |  |    | The agreement id |
 
 
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -563,6 +524,7 @@ The Nevermined provenance record allows to keep track of all the individual even
 | **signature** | `string` |  |  `0x0`  | The signature associated to the provenance event |
 | **attributes** | `string` |  |    | Additional attributes to register associated with the activity |
 
+
 #### Example/s
 
 
@@ -584,10 +546,6 @@ An asset can have associated multiple provenance events associated with it. This
 | **did** | `string` |  |    | The DID to list the provenance events |
 
 
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -610,10 +568,6 @@ A `provenanceId` represents a unique event referring to a DID. This command obta
 | **provenanceId** | `string` |  |    | The provenance identifier |
 
 
-#### Optional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
 
 #### Example/s
 
@@ -651,6 +605,7 @@ A Smart Contract is represented by an ABI file that includes the definition of i
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
 | **params** | `array` |  |    | A list of parameters to be given during the contract initialization |
+
 
 #### Example/s
 
@@ -692,6 +647,7 @@ Having a previously deployed ERC-721 NFT contract, this command registers a new 
 | **royalties** | `number` |  |  `0`  | The royalties (between 0 and 100%) to reward to the original creator in the secondary market |
 | **nftType** | `string` |  |  `721`  | The NFT type |
 
+
 #### Example/s
 
 
@@ -722,6 +678,7 @@ For a given DID and NFT (ERC-721) this command displays some information about i
 | **is721** | `boolean` |  |  `true`  | Is a ERC-721 NFT |
 | **show1155** | `boolean` |  |  `false`  | Show if there are any NFT ERC-1155 attached to the DID |
 
+
 #### Example/s
 
 
@@ -751,6 +708,7 @@ This command allows to the owner of an asset to mint a ERC-721 based NFT<br/>
 | **uri** | `string` |  |    | The token uri for the Asset Metadata |
 | **nftType** | `string` |  |  `721`  | The NFT type |
 
+
 #### Example/s
 
 
@@ -779,6 +737,7 @@ It allows to a ERC-721 NFT owner to burn it<br/>
 |----------------------|------|-------------:|--------------:|-------------|
 | **nftType** | `string` |  |  `721`  | The NFT type |
 
+
 #### Example/s
 
 
@@ -805,6 +764,7 @@ When a user orders for an asset attached to a NFT, this command purchases that N
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
 | **nftType** | `string` |  |  `721`  | The NFT type |
+
 
 #### Example/s
 
@@ -834,6 +794,7 @@ This command requires a valid `serviceAgreementId` created by the `buyerAccount`
 |----------------------|------|-------------:|--------------:|-------------|
 | **nftType** | `string` |  |  `721`  | The NFT type |
 
+
 #### Example/s
 
 
@@ -861,6 +822,7 @@ This command will allow to download the file contents associated to a DID that h
 |----------------------|------|-------------:|--------------:|-------------|
 | **destination** | `string` |  &#x2611;  |    | The destination of the files |
 
+
 #### Example/s
 
 
@@ -885,11 +847,6 @@ Registers a new asset and associates a NFT (ERC-1155) to it<br/>
 
 This command registers a new asset that allows the publisher to provide access to some exclusive contents when users purchase the price of that NFT.<br/>
 
-#### Positional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
-
 
 #### Optional Arguments
 
@@ -906,6 +863,7 @@ This command registers a new asset that allows the publisher to provide access t
 | **preMint** | `boolean` |  |  `false`  | If true the NFTs will be minted during creation |
 | **royalties** | `number` |  |  `0`  | The royalties (between 0 and 100%) to reward to the original creator in the secondary market |
 | **nftType** | `string` |  |  `1155`  | The NFT type |
+
 
 #### Example/s
 
@@ -935,6 +893,7 @@ For a given DID and NFT (ERC-1155) this command displays some information about 
 | **nftAddress** | `string` |  |    | The address of the NFT (ERC-721) contract |
 | **show1155** | `boolean` |  |  `false`  | Show if there are any NFT ERC-1155 attached to the DID |
 
+
 #### Example/s
 
 
@@ -962,6 +921,7 @@ This command allows to the owner of an asset to mint a ERC-1155 based NFT<br/>
 |----------------------|------|-------------:|--------------:|-------------|
 | **amount** | `number` |  |  `1`  | The number of NFTs (ERC-1155) to mint |
 | **nftType** | `string` |  |  `1155`  | The NFT type |
+
 
 #### Example/s
 
@@ -991,6 +951,7 @@ It allows to a ERC-1155 NFT owner to burn it<br/>
 | **amount** | `number` |  |  `1`  | The number of NFTs (ERC-1155) to burn |
 | **nftType** | `string` |  |  `1155`  | The NFT type |
 
+
 #### Example/s
 
 
@@ -1018,6 +979,7 @@ When a user orders for an asset attached to a NFT, this command purchases that N
 |----------------------|------|-------------:|--------------:|-------------|
 | **amount** | `number` |  |  `1`  | The number of NFTs (ERC-1155) to burn |
 | **nftType** | `string` |  |  `1155`  | The NFT type |
+
 
 #### Example/s
 
@@ -1048,6 +1010,7 @@ This command requires a valid `serviceAgreementId` created by the `buyerAccount`
 | **buyerAccount** | `string` |  |    | The address of the buyer |
 | **nftType** | `string` |  |  `1155`  | The NFT type |
 
+
 #### Example/s
 
 
@@ -1077,6 +1040,7 @@ Providing a `serviceAgreementId` this command will allow to download the file co
 |----------------------|------|-------------:|--------------:|-------------|
 | **destination** | `string` |  &#x2611;  |    | The destination of the files downloaded |
 
+
 #### Example/s
 
 
@@ -1103,6 +1067,7 @@ This command will allow to purchase a NFT and download the file contents associa
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
 | **destination** | `string` |  &#x2611;  |    | The destination of the files |
+
 
 #### Example/s
 
@@ -1141,6 +1106,7 @@ It uploads a local file to the decentralized storage network Filecoin. It return
 |----------------------|------|-------------:|--------------:|-------------|
 | **encrypt** | `boolean` |  |  `false`  | If given it encrypts the file with AES and return password |
 
+
 #### Example/s
 
 
@@ -1168,6 +1134,7 @@ It decrypts a previously encrypted file using the password provided.<br/>
 |----------------------|------|-------------:|--------------:|-------------|
 | **password** | `string` |  |    | The password to be used to decrypt the file |
 
+
 #### Example/s
 
 
@@ -1182,11 +1149,6 @@ It publish the metadata associated to a NFT into external storage<br/>
 
 The NFTs use some basic metadata allowing to some external Marketplaces to discover them and provide some additional information. This command allows to publish NFT metadata in the regular format supported by most popular marketplaces.<br/>
 
-#### Positional Arguments
-
-| Name of the Argument | Type | Is required? | Default value | Description |
-|----------------------|------|-------------:|--------------:|-------------|
-
 
 #### Optional Arguments
 
@@ -1200,6 +1162,7 @@ The NFTs use some basic metadata allowing to some external Marketplaces to disco
 | **youtubeUrl** | `string` |  |    | A URL to a YouTube video |
 | **royalties** | `number` |  |    | Royalties for selling the NFT through a marketplace out of Nevermined (i.e OpenSea) |
 | **royaltiesReceiver** | `string` |  |    | Address of the user receiving the royalties |
+
 
 #### Example/s
 
@@ -1228,11 +1191,47 @@ The NFT Metadata is associated to the DID during the publication. This command a
 |----------------------|------|-------------:|--------------:|-------------|
 | **nftAddress** | `string` |  |    | The address of the NFT contract |
 
+
 #### Example/s
 
 
 ```bash
 ncli utils get-nft-metadata did:nv:3fc08573160370d81ee075c80b800ae90d87eb5dd458b96febd11a0dac02baf5
+```
+
+
+
+### download-artifacts [contractsVersion]
+Downloads the Nevermined Contracts artifacts<br/>
+
+Nevermined exposes the Smart Contracts artifacts with their definition. Also Nevermined record all the different versions of these contracts deployed in different networks ready to be downloaded. Depending on the parameters provided, this command allows to download them.<br/>
+
+#### Positional Arguments
+
+| Name of the Argument | Type | Is required? | Default value | Description |
+|----------------------|------|-------------:|--------------:|-------------|
+| **contractsVersion** | `string` |  &#x2611;  |    | Version of the artifacts to download |
+
+
+#### Optional Arguments
+
+| Name of the Argument | Type | Is required? | Default value | Description |
+|----------------------|------|-------------:|--------------:|-------------|
+| **networkId** | `string` |  |    | The networkId of the network where Nevermined contracts are deployed and we want to download the artifacts |
+| **tag** | `string` |  |  `common`  | The tag name of the contracts artifacts to download |
+| **destination** | `string` |  &#x2611;  |    | The destination folder for the artifacts to download |
+
+
+#### Example/s
+
+
+```bash
+ncli utils download-artifacts 2.0.0 --destination /tmp
+```
+
+
+```bash
+ncli utils download-artifacts v2.0.0 --networkId 8001 --tag common --destination /tmp
 ```
 
 

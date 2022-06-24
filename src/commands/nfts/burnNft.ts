@@ -1,16 +1,15 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
-  findAccountOrFirst,
   loadNftContract,
   printNftTokenBanner,
-  ConfigEntry,
   getNFTAddressFromInput
 } from '../../utils'
 import chalk from 'chalk'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const burnNft = async (
   nvm: Nevermined,

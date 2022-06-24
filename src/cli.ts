@@ -9,7 +9,8 @@ import {
   getJsonLoggerConfig,
   loadNevermined,
   logger,
-  loginMarketplaceApi
+  loginMarketplaceApi,
+  configureLocalEnvironment
 } from '../src/utils'
 import { StatusCodes } from './utils/enums'
 import { configure, addLayout } from 'log4js'
@@ -17,14 +18,24 @@ import { ExecutionOutput } from './models/ExecutionOutput'
 import fs from 'fs'
 import * as CliCommands from './commands'
 import { CLICommandsDefinition } from './models/CLICommandsDefinition'
+import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { ConfigEntry } from './models/ConfigDefinition'
 type CliCommands = typeof CliCommands
 let cliCommands: CliCommands
 
 const cmdHandler = async (cmd: keyof CliCommands, argv: any) => {
   const { verbose, network } = argv
 
-  const config = getConfig(network as string)
-  const nvm = await loadNevermined(config, network, verbose)
+  let config: ConfigEntry
+  let nvm: Nevermined
+  try {
+    config = getConfig(network as string)
+    await configureLocalEnvironment(network as string, config)
+    nvm = await loadNevermined(config, network, verbose)
+  } catch (err) {
+    logger.error(`Error setting up the CLI: ${(err as Error).message}`)
+    return process.exit(StatusCodes.ERROR)
+  }
 
   if (argv.json) {
     // The `--json` parameter was given so we setup logs in json format
@@ -63,6 +74,17 @@ const cmdHandler = async (cmd: keyof CliCommands, argv: any) => {
   )
 
   if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
+
+  const networkId = await nvm.keeper.getNetworkId()
+  if (networkId !== Number(config.networkId)) {
+    logger.warn(chalk.red(`\nWARNING: Network connectivity issue`))
+    logger.warn(
+      `The network id obtained from the blockchain node (${networkId}), is not the same we have in the configuration for the network ${network} (${config.networkId}) `
+    )
+    logger.warn(
+      `Please, check if you are connected to the right node url. Currently using: ${config.nvm.nodeUri}\n`
+    )
+  }
 
   const accounts = await nvm.accounts.list()
   const userAccount = findAccountOrFirst(accounts, argv.account)

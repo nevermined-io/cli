@@ -1,11 +1,10 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, findAccountOrFirst } from '../../utils'
+import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
-
 import readline from 'readline'
-import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 const rl = readline.createInterface({
   input: process.stdin,

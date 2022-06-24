@@ -6,15 +6,14 @@ import utils from 'web3-utils'
 import BigNumber from 'bignumber.js'
 
 import {
-  ConfigEntry,
   Constants,
-  loadNevermined,
   loadNftContract,
   loadToken,
   printNftTokenBanner,
   StatusCodes
 } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const accountsList = async (
   nvm: Nevermined,

@@ -4,7 +4,6 @@ import {
   StatusCodes,
   loadNftContract,
   printNftTokenBanner,
-  ConfigEntry,
   loadContract,
   getNFTAddressFromInput,
   loadToken
@@ -19,6 +18,7 @@ import {
 import { Logger } from 'log4js'
 import * as fs from 'fs'
 import { Contract } from 'web3-eth-contract'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const showNft = async (
   nvm: Nevermined,

@@ -1,4 +1,8 @@
-# Nevermined Command Line Interface (CLI) Commands
+---
+sidebar_position: 3
+---
+
+# Commands  Reference
 
 The Nevermined CLI (aka `ncli`) offers multiple options to facilitate the interaction of a user with a Nevermined network.
 
@@ -32,6 +36,7 @@ Commands:
 
 <%= sc.details %><br/>
 
+<% if(sc.positionalArguments !== undefined && sc.positionalArguments?.length > 0) { %>
 #### Positional Arguments
 
 | Name of the Argument | Type | Is required? | Default value | Description |
@@ -40,7 +45,9 @@ Commands:
 | **<%= argument.name %>** | `<%= argument.type %>` | <% if(argument.demandOption === true) { %> &#x2611; <% } else if(argument.demandOption === false) { %> &#x2612; <% } %> | <% if(argument.default !== undefined && argument.default !== "") { %> `<%= argument.default %>` <% } else { %>  <% } %> | <%= argument.description %> |
 <% }) %>
 
+<% } %>
 
+<% if(sc.optionalArguments !== undefined && sc.optionalArguments?.length > 0) { %>
 #### Optional Arguments
 
 | Name of the Argument | Type | Is required? | Default value | Description |
@@ -48,6 +55,8 @@ Commands:
 <% sc.optionalArguments?.forEach(function(argument){ %>
 | **<%= argument.name %>** | `<%= argument.type %>` | <% if(argument.demandOption === true) { %> &#x2611; <% } else if(argument.demandOption === false) { %> &#x2612; <% } %> | <% if(argument.default !== undefined && argument.default !== "") { %> `<%= argument.default %>` <% } else { %>  <% } %> | <%= argument.description %> |
 <% }) %>
+
+<% } %>
 
 #### Example/s
 

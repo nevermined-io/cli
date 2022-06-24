@@ -3,216 +3,98 @@ import HDWalletProvider from '@truffle/hdwallet-provider'
 import dotenv from 'dotenv'
 import Web3 from 'web3'
 import fs from 'fs'
+import { mkdirSync, writeFileSync } from 'fs'
+import os from 'os'
+import { x } from 'tar'
+import fetch from 'cross-fetch'
 import { getLogger } from 'log4js'
+import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 
 dotenv.config()
 
-interface CliConfig {
-  [index: string]: ConfigEntry
-}
-
-export interface ConfigEntry {
-  nvm: Config
-  nativeToken: string
-  etherscanUrl: string
-  nftTokenAddress: string
-  erc20TokenAddress: string
-  seed?: string
-  keyfilePath?: string
-  keyfilePassword?: string
-  gasMultiplier?: number
-  gasPriceMultiplier?: number
-}
-
 export const logger = getLogger()
+
+export const LOCAL_CONF_PATH =
+  process.env.LOCAL_CONF_PATH || `${os.homedir()}/.nevermined`
+export const ARTIFACTS_PATH = `${LOCAL_CONF_PATH}/nevermined-contracts/artifacts`
+export const CLI_PATH = `${LOCAL_CONF_PATH}/cli`
+export const CLI_ENV = `${LOCAL_CONF_PATH}/nevermined-contracts/cli/.env`
 
 export const ARTIFACTS_REPOSITORY =
   process.env.ARTIFACTS_REPO ||
   'https://artifacts-nevermined-rocks.s3.amazonaws.com'
 
-export const config: CliConfig = {
-  spree: {
-    nvm: {
-      nodeUri: process.env.NODE_URL || 'http://localhost:8545',
-      marketplaceUri:
-        process.env.MARKETPLACE_API_URL || 'http://172.17.0.1:3100',
-      faucetUri: process.env.FAUCET_URL || 'http://localhost:3001',
-      graphHttpUri:
-        process.env.GRAPH_URL ||
-        'http://localhost:9000/subgraphs/name/neverminedio',
-      gatewayUri: process.env.GATEWAY_URL || 'http://localhost:8030',
-      gatewayAddress:
-        process.env.GATEWAY_ADDRESS ||
-        '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0',
-      verbose: true
-    } as Config,
-    nativeToken: 'ETH',
-    etherscanUrl: 'https://spree.etherscan.io',
-    erc20TokenAddress: process.env.TOKEN_ADDRESS || '',
-    seed: process.env.MNEMONIC,
-    keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
-  } as ConfigEntry,
-  rinkeby: {
-    nvm: {
-      nodeUri: `${process.env.NODE_URL}`, // default infura rinkeby endpoint
-      marketplaceUri:
-        process.env.MARKETPLACE_API_URL ||
-        'https://marketplace-api.rinkeby.nevermined.rocks',
-      faucetUri:
-        process.env.FAUCET_URL || 'https://faucet.rinkeby.nevermined.rocks',
-      graphHttpUri: `${process.env.GRAPH_URL}`,
-      gatewayUri:
-        process.env.GATEWAY_URL || 'https://gateway.rinkeby.nevermined.rocks',
-      gatewayAddress:
-        process.env.GATEWAY_ADDRESS ||
-        '0xF8D50e0e0F47c5dbE943AeD661cCF25c3468c44f',
-      verbose: true
-    } as Config,
-    nativeToken: 'ETH',
-    etherscanUrl: 'https://rinkeby.etherscan.io',
-    erc20TokenAddress:
-      process.env.TOKEN_ADDRESS ||
-      // WETH
-      '0xc778417E063141139Fce010982780140Aa0cD5Ab',
-    seed: process.env.MNEMONIC,
-    keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
-  } as ConfigEntry,
-  celoAlfajores: {
-    nvm: {
-      nodeUri:
-        process.env.NODE_URL || 'https://alfajores-forno.celo-testnet.org',
-      marketplaceUri:
-        process.env.MARKETPLACE_API_URL ||
-        'https://marketplace-api.alfajores.nevermined.rocks',
-      faucetUri:
-        process.env.FAUCET_URL || 'https://faucet.alfajores.nevermined.rocks',
-      graphHttpUri: `${process.env.GRAPH_URL}`,
-      gatewayUri:
-        process.env.GATEWAY_URL || 'https://gateway.alfajores.nevermined.rocks',
-      gatewayAddress:
-        process.env.GATEWAY_ADDRESS ||
-        '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
-      verbose: true
-    } as Config,
-    nativeToken: 'CELO',
-    etherscanUrl: 'https://alfajores-blockscout.celo-testnet.org',
-    erc20TokenAddress:
-      process.env.TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000', // CELO
-    // process.env.TOKEN_ADDRESS || '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1', // cUSD
-    seed: process.env.MNEMONIC,
-    keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
-  } as ConfigEntry,
-  celoMainnet: {
-    nvm: {
-      nodeUri: `${process.env.NODE_URL}` || 'https://forno.celo.org',
-      marketplaceUri:
-        process.env.MARKETPLACE_API_URL ||
-        'https://marketplace-api.alities.celo.nevermined.rocks',
-      faucetUri:
-        process.env.FAUCET_URL ||
-        'https://faucet.alities.celo.nevermined.rocks',
-      graphHttpUri: `${process.env.GRAPH_URL}`,
-      gatewayUri:
-        process.env.GATEWAY_URL ||
-        'https://gateway.alities.celo.nevermined.rocks',
-      gatewayAddress:
-        process.env.GATEWAY_ADDRESS ||
-        '0x7f3661d22E89Ad3549c7fC034D94B53da731D36A',
-      verbose: true
-    } as Config,
-    nativeToken: 'CELO',
-    etherscanUrl: 'https://explorer.celo.org',
-    erc20TokenAddress:
-      process.env.TOKEN_ADDRESS ||
-      // CELO
-      '0x0000000000000000000000000000000000000000',
-    seed: process.env.MNEMONIC,
-    keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
-  } as ConfigEntry,
-  defiMumbai: {
-    nvm: {
-      nodeUri: `${process.env.NODE_URL}`,
-      marketplaceUri:
-        process.env.MARKETPLACE_API_URL ||
-        'https://marketplace-api.mumbai.nevermined.rocks',
-      graphHttpUri:
-        process.env.GRAPH_URL || 'https://graph.mumbai.nevermined.rocks',
-      faucetUri:
-        process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
-      gatewayUri:
-        process.env.GATEWAY_URL || 'https://gateway.mumbai.nevermined.rocks',
-      gatewayAddress:
-        process.env.GATEWAY_ADDRESS ||
-        '0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0',
-      verbose: true
-    } as Config,
-    nativeToken: 'MATIC',
-    etherscanUrl: 'https://explorer-mumbai.maticvigil.com',
-    erc20TokenAddress:
-      process.env.TOKEN_ADDRESS ||
-      // MATIC
-      '0x0000000000000000000000000000000000000000',
-    seed: process.env.MNEMONIC,
-    keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
-  } as ConfigEntry,
-  autonomiesMumbai: {
-    nvm: {
-      nodeUri: `${process.env.NODE_URL}`,
-      faucetUri:
-        process.env.FAUCET_URL || 'https://faucet.mumbai.nevermined.rocks',
-      marketplaceUri:
-        process.env.MARKETPLACE_API_URL ||
-        'https://marketplace-api.autonomies.mumbai.nevermined.rocks',
-      graphHttpUri:
-        process.env.GRAPH_URL || 'https://graph.mumbai.nevermined.rocks',
-      gatewayUri:
-        process.env.GATEWAY_URL ||
-        'https://gateway.autonomies.mumbai.nevermined.rocks',
-      gatewayAddress:
-        process.env.GATEWAY_ADDRESS ||
-        '0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b',
-      verbose: true
-    } as Config,
-    nativeToken: 'MATIC',
-    etherscanUrl: 'https://explorer-mumbai.maticvigil.com/',
-    erc20TokenAddress:
-      process.env.TOKEN_ADDRESS ||
-      // MATIC
-      '0x0000000000000000000000000000000000000000',
-    seed: process.env.MNEMONIC,
-    keyfilePath: process.env.KEYFILE_PATH,
-    keyfilePassword: process.env.KEYFILE_PASSWORD,
-    gasMultiplier: process.env.GAS_MULTIPLIER || 0,
-    gasPriceMultiplier: process.env.GAS_PRICE_MULTIPLIER || 0
-  } as ConfigEntry
+export const execOpts = {
+  encoding: 'utf8',
+  maxBuffer: 50 * 1024 * 1024
+}
+
+export async function configureLocalEnvironment(
+  network: string,
+  config: ConfigEntry
+): Promise<boolean> {
+  if (!fs.existsSync(CLI_PATH)) {
+    console.debug(`Creating folder: ${CLI_PATH}`)
+    mkdirSync(CLI_PATH, { recursive: true })
+  }
+
+  const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
+  console.debug(`Trying to load ABI" ${abiTestPath}`)
+
+  if (network.toLowerCase() === 'spree') {
+    if (
+      !fs.existsSync(abiTestPath) ||
+      !fs.existsSync(`${ARTIFACTS_PATH}/ready`)
+    ) {
+      throw new Error(
+        `The Spree ABI files are not in the artifacts folder: ${ARTIFACTS_PATH}. Make sure nevermined tools is up and running`
+      )
+    }
+  } else {
+    if (!fs.existsSync(abiTestPath)) {
+      console.debug(
+        `Remote network artifacts not found: ${ARTIFACTS_PATH}. Downloading them.`
+      )
+      const artifactPackageUrl = `${ARTIFACTS_REPOSITORY}/${config.networkId}/${config.tagName}/contracts_v${config.contractsVersion}.tar.gz`
+      const destinationPackage = `${ARTIFACTS_PATH}/contracts_${config.contractsVersion}.tar.gz`
+      const response = await fetch(artifactPackageUrl)
+      if (response.status !== 200) {
+        throw new Error(
+          `Unable to download the artifacts from: ${artifactPackageUrl}.` +
+            +` ${JSON.stringify(response)}`
+        )
+      }
+      try {
+        if (!fs.existsSync(ARTIFACTS_PATH)) {
+          console.debug(`Creating folder: ${ARTIFACTS_PATH}`)
+          mkdirSync(ARTIFACTS_PATH, { recursive: true })
+        }
+
+        const buffer = Buffer.from(await response.arrayBuffer())
+        writeFileSync(destinationPackage, buffer, 'binary')
+        await x({
+          file: destinationPackage,
+          cwd: ARTIFACTS_PATH
+        })
+        console.log(
+          `Artifacts downloaded (${destinationPackage} file) and de-compressed in the destination folder (${ARTIFACTS_PATH})`
+        )
+      } catch (error) {
+        throw new Error(
+          `Unable to write and unpack the artifacts from: ${destinationPackage}`
+        )
+      }
+    }
+  }
+
+  return true
+}
+
+export function getNetworksConfig(): CliConfig {
+  return JSON.parse(fs.readFileSync('resources/networks.json').toString())
 }
 
 export function getConfig(network: string): ConfigEntry {
-  if (!config[network]) {
-    throw new Error(`Network '${network}' is not supported`)
-  }
-
-  if (!process.env.NODE_URL) {
-    throw new Error(
-      "ERROR: 'NODE_URL' is not set in environment! Please see README.md for details."
-    )
-  }
-
   if (!process.env.MNEMONIC) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
       throw new Error(
@@ -221,25 +103,54 @@ export function getConfig(network: string): ConfigEntry {
     }
   }
 
+  let defaultConfig
+  try {
+    defaultConfig = JSON.parse(
+      fs.readFileSync('resources/networks.json').toString()
+    )[network.toLowerCase()] as ConfigEntry
+  } catch (error) {
+    throw new Error(`Network '${network}' is not supported`)
+  }
+  let config = defaultConfig
+
+  if (process.env.NODE_URL) config.nvm.nodeUri = process.env.NODE_URL
+  if (process.env.MARKETPLACE_API_URL)
+    config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
+  if (process.env.FAUCET_URL) config.nvm.faucetUri = process.env.FAUCET_URL
+  if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
+  if (process.env.GATEWAY_URL) config.nvm.gatewayUri = process.env.GATEWAY_URL
+  if (process.env.GATEWAY_ADDRESS)
+    config.nvm.gatewayAddress = process.env.GATEWAY_ADDRESS
+  if (process.env.TOKEN_ADDRESS)
+    config.erc20TokenAddress = process.env.TOKEN_ADDRESS
+  if (process.env.GAS_MULTIPLIER)
+    config.gasMultiplier = Number(process.env.GAS_MULTIPLIER)
+  if (process.env.GAS_PRICE_MULTIPLIER)
+    config.gasPriceMultiplier = Number(process.env.GAS_PRICE_MULTIPLIER)
+  config.seed = process.env.MNEMONIC
+  config.keyfilePath = process.env.KEYFILE_PATH
+  config.keyfilePassword = process.env.KEYFILE_PASSWORD
+
   let hdWalletProvider: HDWalletProvider
   if (!process.env.MNEMONIC) {
     hdWalletProvider = new HDWalletProvider(
       [getPrivateKey(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!)],
-      config[network].nvm.nodeUri
+      config.nvm.nodeUri
     )
   } else {
     hdWalletProvider = new HDWalletProvider(
-      config[network].seed!,
-      config[network].nvm.nodeUri,
+      config.seed!,
+      config.nvm.nodeUri,
       0,
       3
     )
   }
 
   return {
-    ...config[network],
+    ...config,
     nvm: {
-      ...config[network].nvm,
+      ...config.nvm,
+      artifactsFolder: ARTIFACTS_PATH,
       web3Provider: hdWalletProvider
     }
   }

@@ -22,9 +22,8 @@
   },
   "dependencies": {
     "@nevermined-io/nevermined-sdk-js": "0.20.2",
-    "@truffle/hdwallet-provider": "^1.4.1",
+    "@truffle/hdwallet-provider": "^1.4.2",
     "chalk": "^4.1.2",
-    "cli-docs-generator": "^1.0.7",
     "dotenv": "^10.0.0",
     "eta": "1.12.3",
     "ethers": "~5.6.2",

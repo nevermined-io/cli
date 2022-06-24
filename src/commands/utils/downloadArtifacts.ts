@@ -1,5 +1,5 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { ARTIFACTS_REPOSITORY, ConfigEntry } from '../../utils/config'
+import { ARTIFACTS_REPOSITORY } from '../../utils/config'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
 import { StatusCodes } from '../../utils'
@@ -7,6 +7,7 @@ import chalk from 'chalk'
 import { writeFileSync, mkdirSync } from 'fs'
 import { x } from 'tar'
 import fetch from 'cross-fetch'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const downloadArtifacts = async (
   nvm: Nevermined,
@@ -44,12 +45,6 @@ export const downloadArtifacts = async (
       status: StatusCodes.ERROR,
       errorMessage
     }
-  }
-
-  const settings = {
-    flags: 'w',
-    encoding: 'binary', //not applicable / no changes
-    mode: 0o666
   }
 
   try {
