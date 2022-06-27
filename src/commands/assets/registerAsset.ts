@@ -14,9 +14,9 @@ import {
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
-import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 import BigNumber from 'bignumber.js'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const registerAsset = async (
   nvm: Nevermined,

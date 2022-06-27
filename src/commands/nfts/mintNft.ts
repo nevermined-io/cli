@@ -3,13 +3,13 @@ import {
   StatusCodes,
   loadNftContract,
   printNftTokenBanner,
-  ConfigEntry,
   getNFTAddressFromInput
 } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const mintNft = async (
   nvm: Nevermined,

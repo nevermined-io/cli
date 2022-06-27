@@ -16,28 +16,14 @@ import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721.json'
 import { Constants } from './enums'
-import { ConfigEntry, getConfig, logger } from './config'
+import { logger } from './config'
 import { AbiItem } from 'web3-utils'
 import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 import { Configuration, Logger } from 'log4js'
 import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 import { ethers } from 'ethers'
-
-export const cmdHandler = async (cmd: Function, argv: any) => {
-  const { verbose, network, account } = argv
-
-  if (verbose) {
-    logger.level = 'debug'
-  }
-
-  logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
-  logger.info(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
-
-  const config = getConfig(network as string)
-
-  return process.exit(await cmd(argv, config, logger))
-}
+import { ConfigEntry } from '../models/ConfigDefinition'
 
 export const loadNevermined = async (
   config: ConfigEntry,

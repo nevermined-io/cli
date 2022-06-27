@@ -2,10 +2,8 @@ import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
-  findAccountOrFirst,
   loadNftContract,
   printNftTokenBanner,
-  ConfigEntry,
   loadToken
 } from '../../utils'
 import chalk from 'chalk'
@@ -16,6 +14,7 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
 import BigNumber from 'bignumber.js'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const createNft = async (
   nvm: Nevermined,

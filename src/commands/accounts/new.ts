@@ -1,10 +1,10 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
-import { ConfigEntry } from '../../utils/config'
 import { Logger } from 'log4js'
 import { ethers } from 'ethers'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
+import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const accountsNew = async (
   nvm: Nevermined,

@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        network: ["--spree-embedded-contracts", "--polygon"]
+        network: ["--spree-embedded-contracts"]
         node: ["16"]
 
     steps:
@@ -30,6 +30,8 @@ jobs:
         run: |
           docker system prune --all --volumes -f
       - name: Run Nevermined Tools
+        env:
+          LOCAL_CONF_DIR: "/tmp/.nevermined"
         run: |
           docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
           sudo chmod go+r /etc/hosts
@@ -40,11 +42,11 @@ jobs:
           export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
 
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
-          ./start_nevermined.sh --latest ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
+          ./start_nevermined.sh ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
           cd ..
           ./scripts/wait-nevermined.sh
           ./scripts/wait-subgraphs.sh
-
+          
       - name: Run integration tests
         env:
           MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
