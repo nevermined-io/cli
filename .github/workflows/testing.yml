@@ -31,7 +31,7 @@ jobs:
           docker system prune --all --volumes -f
       - name: Run Nevermined Tools
         env:
-          LOCAL_CONF_DIR: "/tmp/.nevermined"
+          LOCAL_CONF_DIR: "/tmp/.nevermined/nevermined-contracts"
         run: |
           docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
           sudo chmod go+r /etc/hosts
