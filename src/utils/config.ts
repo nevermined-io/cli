@@ -13,11 +13,11 @@ dotenv.config()
 
 export const logger = getLogger()
 
-export const LOCAL_CONF_PATH =
-  process.env.LOCAL_CONF_PATH || `${os.homedir()}/.nevermined`
-export const ARTIFACTS_PATH = `${LOCAL_CONF_PATH}/nevermined-contracts/artifacts`
-export const CLI_PATH = `${LOCAL_CONF_PATH}/cli`
-export const CLI_ENV = `${LOCAL_CONF_PATH}/nevermined-contracts/cli/.env`
+export const LOCAL_CONF_DIR =
+  process.env.LOCAL_CONF_DIR || `${os.homedir()}/.nevermined`
+export const ARTIFACTS_PATH = `${LOCAL_CONF_DIR}/nevermined-contracts/artifacts`
+export const CLI_PATH = `${LOCAL_CONF_DIR}/cli`
+export const CLI_ENV = `${LOCAL_CONF_DIR}/nevermined-contracts/cli/.env`
 
 export const ARTIFACTS_REPOSITORY =
   process.env.ARTIFACTS_REPO ||

@@ -23,7 +23,7 @@ export const execOpts = {
     NODE_URL: `${process.env.NODE_URL}` || 'http://localhost:8545',
     TOKEN_ADDRESS: process.env.TOKEN_ADDRESS,
     MNEMONIC: process.env.MNEMONIC,
-    LOCAL_CONF_PATH: '/tmp/.nevermined'
+    LOCAL_CONF_DIR: '/tmp/.nevermined'
   },
   accounts: [
     '0xe2DD09d719Da89e5a3D0F2549c7E24566e947260', // alfajores or spree

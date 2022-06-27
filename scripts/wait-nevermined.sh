@@ -4,15 +4,15 @@
 
 RETRY_COUNT=0
 COMMAND_STATUS=1
-CONF_DIR=${LOCAL_CONF_DIR:-~/.nevermined/nevermined-contracts}
+CONF_DIR=${LOCAL_CONF_DIR:-~/.nevermined}
 
-ARTIFACTS_DIR=$CONF_DIR/artifacts/
-CIRCUITS_DIR=$CONF_DIR/circuits/
+ARTIFACTS_DIR=$CONF_DIR/nevermined-contracts/artifacts/
+CIRCUITS_DIR=$CONF_DIR/nevermined-contracts/circuits/
 
 mkdir -p $ARTIFACTS_DIR
 mkdir -p $CIRCUITS_DIR
 
-printf "\nUsing conf dir:$CONF_DIR\n"
+printf "\nUsing conf dir: $CONF_DIR\n"
 printf '\n\e[33m◯ Waiting for contracts to be generated...\e[0m\n'
 
 
@@ -38,5 +38,8 @@ docker cp ${nevermined_keeper_docker_id}:/nevermined-contracts/artifacts/. $ARTI
 docker cp ${nevermined_keeper_docker_id}:/nevermined-contracts/circuits/keytransfer.wasm $CIRCUITS_DIR
 docker cp ${nevermined_keeper_docker_id}:/nevermined-contracts/circuits/keytransfer.zkey $CIRCUITS_DIR
 
+find $CONF_DIR -type f
 
 printf '\e[32m✔ Copied new contract artifacts and circuits.\e[0m\n'
+
+

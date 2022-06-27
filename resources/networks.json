@@ -14,7 +14,7 @@
 		"nativeToken": "ETH",
 		"networkId": "8996",
 		"networkName": "spree",
-		"etherscanUrl": "https://spree.etherscan.io",
+		"etherscanUrl": "",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0
