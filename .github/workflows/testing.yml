@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        network: ["--spree-embedded-contracts", "--polygon"]
+        network: ["--spree-embedded-contracts"]
         node: ["16"]
 
     steps:
