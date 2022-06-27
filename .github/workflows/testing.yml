@@ -30,6 +30,8 @@ jobs:
         run: |
           docker system prune --all --volumes -f
       - name: Run Nevermined Tools
+        env:
+          LOCAL_CONF_DIR: ${{secrets.LOCAL_CONF_DIR}}      
         run: |
           docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
           sudo chmod go+r /etc/hosts
@@ -42,7 +44,7 @@ jobs:
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
           ./start_nevermined.sh --latest ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
           cd ..
-          ./scripts/wait-nevermined.sh
+          ./scripts/wait-nevermined.sh $LOCAL_CONF_DIR
           ./scripts/wait-subgraphs.sh
 
       - name: Run integration tests
