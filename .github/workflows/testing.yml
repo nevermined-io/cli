@@ -44,7 +44,7 @@ jobs:
           rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
           ./start_nevermined.sh ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
           cd ..
-          ./scripts/wait-nevermined.sh ${LOCAL_CONF_DIR}
+          ./scripts/wait-nevermined.sh
           ./scripts/wait-subgraphs.sh
 
       - name: Run integration tests
