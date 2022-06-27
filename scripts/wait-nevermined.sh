@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 set -emo pipefail
 
+export LC_ALL=en_US.UTF-8
+
 # Wait for contracts migration and extract Keeper artifacts
 
 RETRY_COUNT=0
 COMMAND_STATUS=1
-LOCAL_CONF_DIR=${1:-~/.nevermined}
+LOCAL_CONF_DIR=${LOCAL_CONF_DIR:-~/.nevermined}
 
 echo "Using $LOCAL_CONF_DIR for copying artifacts"
 
