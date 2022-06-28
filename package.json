@@ -22,7 +22,7 @@
     "ncli": "./dist/src/index.js"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "0.20.2",
+    "@nevermined-io/nevermined-sdk-js": "0.20.3",
     "@truffle/hdwallet-provider": "^1.4.2",
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
