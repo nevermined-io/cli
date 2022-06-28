@@ -1,6 +1,7 @@
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import chalk from 'chalk'
+import path from 'path'
 
 import {
   findAccountOrFirst,
@@ -113,8 +114,10 @@ const cmdHandler = async (cmd: keyof CliCommands, argv: any) => {
   }
 }
 
+const commandJsonPath = path.join(__dirname, '../resources', 'commands.json')
+
 const commandsParser: CLICommandsDefinition = JSON.parse(
-  fs.readFileSync('resources/commands.json').toString()
+  fs.readFileSync(commandJsonPath).toString()
 )
 
 const y = yargs(hideBin(process.argv))
