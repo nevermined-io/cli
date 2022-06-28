@@ -73,9 +73,9 @@
   "include": [
     "src/**/*",
     "test/**/*",
+    "resources/*.json"
   ],
   "exclude": [
-    "node_modules",
-    "resources"
+    "node_modules"
   ]
 }
