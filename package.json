@@ -7,6 +7,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc",
+    "prebuild": "rm -rf ./dist && mkdir ./dist && cp -r ./resources ./dist/resources",
     "lint": "eslint --ignore-path .gitignore --ext .ts,.tsx .",
     "lint:fix": "eslint --fix --ignore-path .gitignore --ext .ts,.tsx .",
     "format": "prettier --parser typescript --ignore-path .gitignore --write '**/*.{js,jsx,ts,tsx}'",
