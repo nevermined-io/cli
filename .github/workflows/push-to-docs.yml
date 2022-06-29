@@ -18,9 +18,11 @@ jobs:
         run: |
           yarn install --ignore-engines  
           yarn run generate-doc
-  push-to-docs:       
-      uses: nevermined-io/reusable-workflows/.github/workflows/push-to-docs.yml@main
-      with:
-        path-to-push: docs/tools/cli
-        repo-to-push: nvm-docs
-      secrets: inherit
+  push-to-docs:
+    needs: build-doc
+    uses: nevermined-io/reusable-workflows/.github/workflows/push-to-docs.yml@main
+    with:
+      path-to-push: docs/tools/cli
+      repo-to-push: nvm-docs
+      branch-to-clone: main
+    secrets: inherit

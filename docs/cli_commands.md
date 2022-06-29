@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 # Commands  Reference
@@ -1210,28 +1210,28 @@ Nevermined exposes the Smart Contracts artifacts with their definition. Also Nev
 
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
-| **contractsVersion** | `string` |  &#x2611;  |    | Version of the artifacts to download |
+| **contractsVersion** | `string` |  &#x2611;  |    | Version of the artifacts to download. For example 2.0.0 |
 
 
 #### Optional Arguments
 
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
-| **networkId** | `string` |  |    | The networkId of the network where Nevermined contracts are deployed and we want to download the artifacts |
+| **networkId** | `string` |  |    | The networkId of the network where Nevermined contracts are deployed and we want to download the artifacts. For example &#39;mumbai&#39; is 80001 |
 | **tag** | `string` |  |  `common`  | The tag name of the contracts artifacts to download |
-| **destination** | `string` |  &#x2611;  |    | The destination folder for the artifacts to download |
+| **destination** | `string` |  &#x2611;  |    | The destination folder for the artifacts to download. For example /tmp |
 
 
 #### Example/s
 
 
 ```bash
-ncli utils download-artifacts 2.0.0 --destination /tmp
+ncli utils download-artifacts 2.0.0 --networkId 80001 --destination /tmp
 ```
 
 
 ```bash
-ncli utils download-artifacts v2.0.0 --networkId 8001 --tag common --destination /tmp
+ncli utils download-artifacts 2.0.0 --networkId 8001 --tag common --destination /tmp
 ```
 
 
