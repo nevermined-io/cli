@@ -706,6 +706,7 @@ This command allows to the owner of an asset to mint a ERC-721 based NFT<br/>
 |----------------------|------|-------------:|--------------:|-------------|
 | **nftAddress** | `string` |  |    | The address of the NFT (ERC-721) contract |
 | **uri** | `string` |  |    | The token uri for the Asset Metadata |
+| **receiver** | `string` |  |    | The address of the receiver of the NFT, if not given will be the minter address |
 | **nftType** | `string` |  |  `721`  | The NFT type |
 
 
