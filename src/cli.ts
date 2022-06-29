@@ -24,13 +24,17 @@ import { ConfigEntry } from './models/ConfigDefinition'
 type CliCommands = typeof CliCommands
 let cliCommands: CliCommands
 
-const cmdHandler = async (cmd: keyof CliCommands, argv: any) => {
+const cmdHandler = async (
+  cmd: keyof CliCommands,
+  argv: any,
+  requiresAccount: boolean = true
+) => {
   const { verbose, network } = argv
 
   let config: ConfigEntry
   let nvm: Nevermined
   try {
-    config = getConfig(network as string)
+    config = getConfig(network as string, requiresAccount)
     await configureLocalEnvironment(network as string, config)
     nvm = await loadNevermined(config, network, verbose)
   } catch (err) {
@@ -169,7 +173,8 @@ commandsParser.commands.map((_cmd) => {
               })
             })
           },
-          async (argv) => cmdHandler(sc.commandHandler, argv)
+          async (argv) =>
+            cmdHandler(sc.commandHandler, argv, sc.requiresAccount)
         )
         .showHelpOnFail(true)
         .demandCommand(1, '')

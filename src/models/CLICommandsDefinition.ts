@@ -22,6 +22,7 @@ export interface SubcommandDefinition {
   optionalArguments?: OptionalArgument[]
   details?: string
   examples?: string[]
+  requiresAccount?: boolean
 }
 
 export interface PositionalArgument {

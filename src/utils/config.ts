@@ -8,6 +8,7 @@ import { x } from 'tar'
 import fetch from 'cross-fetch'
 import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
+import path from 'path'
 
 dotenv.config()
 
@@ -22,6 +23,10 @@ export const CLI_ENV = `${LOCAL_CONF_DIR}/nevermined-contracts/cli/.env`
 export const ARTIFACTS_REPOSITORY =
   process.env.ARTIFACTS_REPO ||
   'https://artifacts-nevermined-rocks.s3.amazonaws.com'
+
+// INFO: This mnemonic is only used to initialize the HDWallet in commands not requiring network connectivity
+export const DUMMY_MNEMONIC =
+  'kitchen proud renew agent print clap trigger ladder poverty salad marriage hotel'
 
 export const execOpts = {
   encoding: 'utf8',
@@ -89,22 +94,36 @@ export async function configureLocalEnvironment(
 }
 
 export function getNetworksConfig(): CliConfig {
-  return JSON.parse(fs.readFileSync('resources/networks.json').toString())
+  const networksJsonPath = path.join(
+    __dirname,
+    '../../resources',
+    'networks.json'
+  )
+  return JSON.parse(fs.readFileSync(networksJsonPath).toString())
 }
 
-export function getConfig(network: string): ConfigEntry {
+export function getConfig(
+  network: string,
+  requiresAccount: boolean = true
+): ConfigEntry {
   if (!process.env.MNEMONIC) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
-      throw new Error(
-        "ERROR: 'MNEMONIC' or 'KEYFILE' not set in environment! Please see README.md for details."
-      )
+      const accountMessage =
+        "'MNEMONIC' or 'KEYFILE' not set in environment! Please see http://nvm-docs.nevermined.io/docs/tools/cli/getting-started#configure-your-account for details."
+      if (requiresAccount) throw new Error(accountMessage)
     }
   }
   let defaultConfig
   try {
-    defaultConfig = JSON.parse(
-      fs.readFileSync('resources/networks.json').toString()
-    )[network] as ConfigEntry
+    const networksJsonPath = path.join(
+      __dirname,
+      '../../resources',
+      'networks.json'
+    )
+    console.log(networksJsonPath)
+    defaultConfig = JSON.parse(fs.readFileSync(networksJsonPath).toString())[
+      network
+    ] as ConfigEntry
   } catch (error) {
     throw new Error(`Network '${network}' is not supported`)
   }
@@ -129,17 +148,31 @@ export function getConfig(network: string): ConfigEntry {
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
 
   let hdWalletProvider: HDWalletProvider
-  if (!process.env.MNEMONIC) {
-    hdWalletProvider = new HDWalletProvider(
-      [getPrivateKey(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!)],
-      config.nvm.nodeUri
-    )
+  if (requiresAccount) {
+    if (!process.env.MNEMONIC) {
+      hdWalletProvider = new HDWalletProvider(
+        [
+          getPrivateKey(
+            process.env.KEYFILE_PATH!,
+            process.env.KEYFILE_PASSWORD!
+          )
+        ],
+        config.nvm.nodeUri
+      )
+    } else {
+      hdWalletProvider = new HDWalletProvider(
+        config.seed!,
+        config.nvm.nodeUri,
+        0,
+        3
+      )
+    }
   } else {
     hdWalletProvider = new HDWalletProvider(
-      config.seed!,
+      DUMMY_MNEMONIC,
       config.nvm.nodeUri,
       0,
-      3
+      1
     )
   }
 
