@@ -23,7 +23,7 @@ export const accountsFund = async (
   if (token === 'both' || token === 'native') {
     try {
       await nvm.faucet.requestEth(account.getId())
-      console.log(
+      logger.info(
         chalk.dim(
           `Funded Native token to ${chalk.whiteBright(account.getId())}`
         )
@@ -33,10 +33,10 @@ export const accountsFund = async (
       errorMessage = `Funding Native token to ${chalk.whiteBright(
         account.getId()
       )} failed! ${(err as Error).message}`
-      console.log(chalk.red(errorMessage))
+      logger.info(chalk.red(errorMessage))
 
       if (verbose) {
-        console.log(err)
+        logger.debug(err)
       }
     }
   }
@@ -44,7 +44,7 @@ export const accountsFund = async (
   if (token === 'erc20' || token === 'native') {
     try {
       await nvm.keeper.dispenser.requestTokens(100, account.getId())
-      console.log(
+      logger.info(
         chalk.dim(`Funded Tokens to ${chalk.whiteBright(account.getId())}`)
       )
       results.push('erc20')
@@ -52,10 +52,10 @@ export const accountsFund = async (
       const erc20ErrorMessage = `Funding Tokens to ${chalk.whiteBright(
         account.getId()
       )} failed! ${(err as Error).message}`
-      console.log(chalk.red(erc20ErrorMessage))
+      logger.info(chalk.red(erc20ErrorMessage))
       errorMessage = `${errorMessage}, ${erc20ErrorMessage}`
       if (verbose) {
-        console.log(err)
+        logger.info(err)
       }
     }
   }

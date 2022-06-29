@@ -55,9 +55,9 @@ export const createNft = async (
       new BigNumber(10).exponentiatedBy(decimals)
     )
 
-    console.log(`new BigNumber ${new BigNumber(argv.price)}`)
-    console.log(`DDO Price: ${ddoPrice}`)
-    console.log(`to Fixed: ${ddoPrice.toFixed()}`)
+    logger.trace(`new BigNumber ${new BigNumber(argv.price)}`)
+    logger.trace(`DDO Price: ${ddoPrice}`)
+    logger.trace(`to Fixed: ${ddoPrice.toFixed()}`)
 
     const _files: File[] = []
     let _fileIndex = 0

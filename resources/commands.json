@@ -643,6 +643,12 @@
 						"description": "The token uri for the Asset Metadata"
 					},
 					{
+						"name": "receiver",
+						"type": "string",
+						"default": "",
+						"description": "The address of the receiver of the NFT, if not given will be the minter address"
+					},					
+					{
 						"name": "nftType",
 						"type": "string",
 						"default": "721",

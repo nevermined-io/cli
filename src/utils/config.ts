@@ -120,7 +120,6 @@ export function getConfig(
       '../../resources',
       'networks.json'
     )
-    console.log(networksJsonPath)
     defaultConfig = JSON.parse(fs.readFileSync(networksJsonPath).toString())[
       network
     ] as ConfigEntry
