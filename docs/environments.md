@@ -58,7 +58,7 @@ The Native token being used is **MATIC**. This environment is having the network
 
  The Nevermined contracts deployed have the version: **2.0.0**  The Nevermined contracts are labeled with the tag name: **common** 
 The Marketplace API used can be found on https://marketplace-api.autonomies.test.nevermined.rocks. <br/>
-The Gateway can be found on https://gateway.autonomies.test.nevermined.rocks and uses the public address **0xe63a11dC61b117D9c2B1Ac8021d4cffEd8EC213b**.<br/>
+The Gateway can be found on https://gateway.autonomies.test.nevermined.rocks and uses the public address **0xe11A86849d99F524cAC3E7A0Ec1241828e332C62**.<br/>
  There is deployed a faucet on https://faucet.mumbai.public.nevermined.rocks .<br/> The subgraphs to fetch contracts events can be found on https://graph-node.defi.mumbai.nevermined.rocks .<br/>
 
 ## alitiesAlfajores

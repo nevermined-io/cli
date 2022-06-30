@@ -10,6 +10,7 @@ import chalk from 'chalk'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import { ethers } from 'ethers'
 
 export const mintNft = async (
   nvm: Nevermined,
@@ -41,6 +42,10 @@ export const mintNft = async (
     )
   )
 
+  let to
+  if (ethers.utils.isAddress(argv.receiver)) to = argv.receiver
+  else to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
+
   if (argv.nftType === '721') {
     // Minting NFT (ERC-721)
 
@@ -62,8 +67,6 @@ export const mintNft = async (
         errorMessage: `ERROR: NFT already existing and owned by: '${oldOwner}'`
       }
     } catch {}
-
-    const to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
 
     // Mint function is out of the ERC-721, so there are typically 3 implementations:
     // 1. toAddress + tokenId

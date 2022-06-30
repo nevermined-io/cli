@@ -48,6 +48,27 @@ Remember to keep safe all your private information related to your account like 
 :::
 
 
+## Connecting to different environments
+
+Nevermined is a framework for building digital ecosystems that can be deployed or configured in different ways. Because of that Nevermined is used to deliver multiple use cases installed in different networks. There are list of pre-defined networks/environments provided by the `ncli`. You can get the list of them running:
+
+```bash
+ncli network list
+```
+
+This will return a list of all the existing environments grouped by **name**. 
+If you want to connect to any of them, we just need to configure your `NODE_URL` environmnet variable (using the "Node Uri" printed our using your own Infura or similar provider):
+
+```bash
+export NODE_URL=https://rpc-mumbai.matic.today
+```
+
+ Now you can use the parameter `--network` in the `ncli` commands allow to connect and use any of these environments:
+
+```bash
+ncli --network defiMumbai network status
+```
+
 ## Network Environment variables
 
 The following list of variables are related to the configuration of the Nevermined environment and how you interact with them:

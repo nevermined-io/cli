@@ -27,6 +27,9 @@ export const networkList = async (
       )}`
     )
     logger.info(
+      `\n\tNode Uri: ${chalk.yellow(networksConfig[_key].nvm.nodeUri)}`
+    )
+    logger.info(
       `\tGateway: ${chalk.yellow(networksConfig[_key].nvm.gatewayUri)}`
     )
     logger.info(

@@ -31,7 +31,7 @@ export const showNft = async (
 
   const token = await loadToken(nvm, config, verbose)
 
-  console.log(
+  logger.info(
     chalk.dim(
       `Loading information of NFTs attached to the DID: '${chalk.whiteBright(
         did

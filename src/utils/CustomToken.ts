@@ -1,6 +1,7 @@
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import { abi } from '@nevermined-io/contracts/artifacts/NeverminedToken.development.json'
 import { InstantiableConfig } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
+import { logger } from 'ethers'
 
 export default class CustomToken extends Token {
   public static async getInstanceByAddress(
@@ -11,7 +12,7 @@ export default class CustomToken extends Token {
 
     token.setInstanceConfig(config)
 
-    console.log(`CustomToken with address ${address}`)
+    logger.info(`CustomToken with address ${address}`)
 
     const code = await token.web3.eth.getCode(address)
     if (code === '0x0') {

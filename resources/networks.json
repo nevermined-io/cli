@@ -24,7 +24,7 @@
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://matic-mumbai.chainstacklabs.com",
+			"nodeUri": "https://rpc-mumbai.maticvigil.com",
 			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://graph-node.defi.mumbai.nevermined.rocks",
@@ -47,7 +47,7 @@
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.matic.today",
+			"nodeUri": "https://rpc-mumbai.maticvigil.com",
 			"marketplaceUri": "https://defi.v2.marketplace-api.mumbai.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://graph-node.defi.mumbai.nevermined.rocks",
@@ -70,7 +70,7 @@
 		"envUrl": "https://portal.autonomies.test.nevermined.rocks",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.matic.today",
+			"nodeUri": "https://rpc-mumbai.maticvigil.com",
 			"marketplaceUri": "https://marketplace-api.autonomies.test.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://graph-node.defi.mumbai.nevermined.rocks",
