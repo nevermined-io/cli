@@ -6,7 +6,7 @@
 			"nodeUri": "http://localhost:8545",
 			"marketplaceUri": "http://172.17.0.1:3100",
 			"faucetUri": "http://localhost:3001",
-			"graphHttpUri": "http://localhost:9000/subgraphs/name/neverminedio",
+			"graphHttpUri": "http://localhost:9000/subgraphs/name/nevermined-io/development",
 			"gatewayUri": "http://localhost:8030",
 			"gatewayAddress": "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0",
 			"verbose": true
@@ -27,7 +27,7 @@
 			"nodeUri": "https://rpc-mumbai.maticvigil.com",
 			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
-			"graphHttpUri": "https://graph-node.defi.mumbai.nevermined.rocks",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
 			"gatewayUri": "https://gateway.mumbai.public.nevermined.rocks",
 			"gatewayAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
 			"verbose": true
@@ -50,7 +50,7 @@
 			"nodeUri": "https://rpc-mumbai.maticvigil.com",
 			"marketplaceUri": "https://defi.v2.marketplace-api.mumbai.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
-			"graphHttpUri": "https://graph-node.defi.mumbai.nevermined.rocks",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
 			"gatewayUri": "https://defi.v2.gateway.mumbai.nevermined.rocks",
 			"gatewayAddress": "0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0",
 			"verbose": true
@@ -73,7 +73,7 @@
 			"nodeUri": "https://rpc-mumbai.maticvigil.com",
 			"marketplaceUri": "https://marketplace-api.autonomies.test.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
-			"graphHttpUri": "https://graph-node.defi.mumbai.nevermined.rocks",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
 			"gatewayUri": "https://gateway.autonomies.test.nevermined.rocks",
 			"gatewayAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 			"verbose": true
