@@ -45,6 +45,13 @@
 				"examples": ["ncli network status"],
 				"commandHandler": "networkStatus",
 				"requiresAccount": false
+			}, {
+				"name": "get-config",
+				"description": "Get all the Governance configuration about a Nevermined environment",
+				"details": "If the `ncli` is connected to a Nevermined network correctly this command will return information about all the governance parameters related to a Nevermined deployment.",
+				"examples": ["ncli network get-config"],
+				"commandHandler": "networkGetConfig",
+				"requiresAccount": false
 			}]
 		}, {
 			"name": "accounts",

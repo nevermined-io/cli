@@ -30,6 +30,7 @@ export * from './agreements/listAgreements'
 // network
 export * from './network/networkStatus'
 export * from './network/networkList'
+export * from './network/networkGetConfig'
 
 // provenance
 export * from './provenance/provenanceHistory'
