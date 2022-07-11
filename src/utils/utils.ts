@@ -111,7 +111,7 @@ export const findAccountOrFirst = (
     if (!account) {
       logger.debug(
         chalk.dim(
-          `Account provided not found, using : ${chalk.redBright(accounts[0])}`
+          `Account provided not found, using : ${chalk.redBright(accounts[0].getId())}`
         )
       )
     } else {

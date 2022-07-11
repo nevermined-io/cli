@@ -1,4 +1,4 @@
-import { execOpts, baseCommands, metadataConfig } from '../helpers/Config'
+import { execOpts, baseCommands, metadataConfig, getAccountsFromMnemonic } from '../helpers/Config'
 import {
   parseCIDFromNFTMetadata,
   parseDIDFromNewNFT
@@ -21,8 +21,11 @@ describe('Utils e2e Testing', () => {
   const youtubeUrl = 'https://youtu.be/zLhqd1tXmao'
   const royalties = '1'
   const royaltiesReceiver = '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0'
+  let accounts: string[] = []
 
-  beforeAll(async () => {})
+  beforeAll(async () => {
+    accounts = await getAccountsFromMnemonic(execOpts.env.MNEMONIC)
+  })
 
   test('Publishing NFT Metadata', async () => {
     const command = `${baseCommands.utils.publishMetadata} --image "${imageUrl}" --name "${name}" --description "${description}" --externalUrl "${externalUrl}" --animationUrl "${animationUrl}" --royalties ${royalties} --royaltiesReceiver ${royaltiesReceiver} `
@@ -41,7 +44,7 @@ describe('Utils e2e Testing', () => {
   })
 
   test('Register a NFT with IPFS Metadata and get access to it', async () => {
-    const registerCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType text/text --cap 10 --royalties 5 --nftMetadata "${cid}" `
+    const registerCommand = `${baseCommands.nfts1155.create} --account "${accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType text/text --cap 10 --royalties 5 --nftMetadata "${cid}" `
     console.debug(`COMMAND: ${registerCommand}`)
 
     const registerStdout = execSync(registerCommand, execOpts)

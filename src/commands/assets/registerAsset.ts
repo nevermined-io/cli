@@ -17,6 +17,8 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 import BigNumber from 'bignumber.js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
+import { TxParameters } from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/ContractBase'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -115,12 +117,21 @@ export const registerAsset = async (
 
   logger.info(chalk.dim('\nCreating Asset ...'))
 
+  const web3 = Web3Provider.getWeb3(config.nvm)
+  const gasPrice = await web3.eth.getGasPrice()
+  console.log(`WEB3 GAS PRICE: ${gasPrice}`)
+
   const ddo = await nvm.assets.create(
     ddoMetadata,
     account,
     // @ts-ignore
     new AssetRewards(account.getId(), ddoPrice),
-    encrypt || password ? ['access-proof'] : undefined
+    encrypt || password ? ['access-proof'] : undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    { gasMultiplier: config.nvm.gasMultiplier }
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

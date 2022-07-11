@@ -42,9 +42,13 @@ export const orderNft = async (
   let agreementId = ''
   if (argv.nftType === '721') {
     logger.info(`Lets order the did`)
-    agreementId = await nvm.nfts.order721(did, buyerAccount)
+    agreementId = await nvm.nfts.order721(did, buyerAccount, {
+      gasMultiplier: config.nvm.gasMultiplier
+    })
   } else {
-    agreementId = await nvm.nfts.order(did, argv.amount, buyerAccount)
+    agreementId = await nvm.nfts.order(did, argv.amount, buyerAccount, {
+      gasMultiplier: config.nvm.gasMultiplier
+    })
   }
 
   logger.info(

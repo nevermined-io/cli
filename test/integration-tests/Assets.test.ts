@@ -1,4 +1,4 @@
-import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
+import { execOpts, metadataConfig, baseCommands, getAccountsFromMnemonic } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
   parseDownloadPath,
@@ -14,15 +14,19 @@ const { execSync } = require('child_process')
 
 describe('Assets e2e Testing', () => {
   let did = ''
+  let accounts: string[] = []
 
   beforeAll(async () => {
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
+
+    accounts = await getAccountsFromMnemonic(execOpts.env.MNEMONIC)
+
+    console.log(`Funding account: ${accounts[0]}`)
+    const fundCommand = `${baseCommands.accounts.fund} "${accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
     const stdout = execSync(fundCommand, execOpts)
 
-    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execSync(registerAssetCommand, execOpts)
@@ -97,7 +101,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Download my own asset', async () => {
-    const downloadCommand = `${baseCommands.assets.downloadAsset} ${did} --account "${execOpts.accounts[0]}" --path /tmp --fileIndex 0`
+    const downloadCommand = `${baseCommands.assets.downloadAsset} ${did} --account "${accounts[0]}" --path /tmp --fileIndex 0`
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const downloadStdout = execSync(downloadCommand, execOpts)
@@ -112,7 +116,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const orderCommand = `${baseCommands.assets.orderAsset} ${did} --account "${execOpts.accounts[0]}"  `
+    const orderCommand = `${baseCommands.assets.orderAsset} ${did} --account "${accounts[0]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execSync(orderCommand, execOpts)
@@ -120,7 +124,7 @@ describe('Assets e2e Testing', () => {
     const serviceAgreementId = parseServiceAgreementId(orderStdout)
 
     const parentPath = '/tmp/nevermined/test-order'
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${execOpts.accounts[0]}" --path ${parentPath} --fileIndex 0 `
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${accounts[0]}" --path ${parentPath} --fileIndex 0 `
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execSync(getCommand, execOpts)

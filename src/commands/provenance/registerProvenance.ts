@@ -38,7 +38,8 @@ export const registerProvenance = async (
       argv.activityId,
       argv.signature,
       argv.attributes,
-      creatorAccount
+      creatorAccount,
+      { gasMultiplier: config.nvm.gasMultiplier }
     )
   } else if (method === 'wasDerivedFrom') {
     await nvm.provenance.wasDerivedFrom(
@@ -48,7 +49,8 @@ export const registerProvenance = async (
       argv.agentId,
       argv.activity,
       argv.attributes,
-      creatorAccount
+      creatorAccount,
+      { gasMultiplier: config.nvm.gasMultiplier }
     )
   } else if (method === 'wasAssociatedWith') {
     await nvm.provenance.wasAssociatedWith(
@@ -57,7 +59,8 @@ export const registerProvenance = async (
       argv.agentId,
       argv.activityId,
       argv.attributes,
-      creatorAccount
+      creatorAccount,
+      { gasMultiplier: config.nvm.gasMultiplier }
     )
   } else if (method === 'ActedOnBehalf') {
     await nvm.provenance.actedOnBehalf(
@@ -68,7 +71,8 @@ export const registerProvenance = async (
       argv.activity,
       argv.signature,
       argv.attributes,
-      creatorAccount
+      creatorAccount,
+      { gasMultiplier: config.nvm.gasMultiplier }
     )
   } else {
     return {

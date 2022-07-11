@@ -33,9 +33,13 @@ export const orderAsset = async (
     account.babyX = key.x
     account.babyY = key.y
     account.babySecret = password
-    agreementId = await nvm.assets.order(did, 'access-proof', account)
+    agreementId = await nvm.assets.order(did, 'access-proof', account, {
+      gasMultiplier: config.nvm.gasMultiplier
+    })
   } else {
-    agreementId = await nvm.assets.order(did, 'access', account)
+    agreementId = await nvm.assets.order(did, 'access', account, {
+      gasMultiplier: config.nvm.gasMultiplier
+    })
   }
 
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))

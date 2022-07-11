@@ -27,10 +27,9 @@ export const accountsList = async (
   const token = await loadToken(nvm, config, verbose)
 
   logger.debug(chalk.dim('Loading account/s ...'))
-
-  let accounts
-  if (account !== undefined) accounts = [account]
-  else accounts = await nvm.accounts.list()
+  
+  logger.debug(`Using Seed: ${config.seed}`)
+  const accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =

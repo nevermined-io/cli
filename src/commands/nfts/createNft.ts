@@ -105,7 +105,8 @@ export const createNft = async (
       argv.nftAddress,
       token ? token.getAddress() : config.erc20TokenAddress,
       argv.royalties,
-      argv.nftMetadata
+      argv.nftMetadata,
+      { gasMultiplier: config.nvm.gasMultiplier }
     )
   } else {
     // erc-1155
@@ -119,7 +120,8 @@ export const createNft = async (
       undefined,
       token ? token.getAddress() : config.erc20TokenAddress,
       argv.preMint,
-      argv.nftMetadata
+      argv.nftMetadata,
+      { gasMultiplier: config.nvm.gasMultiplier }
     )
 
     const isApproved = await nvm.keeper.nftUpgradeable.isApprovedForAll(

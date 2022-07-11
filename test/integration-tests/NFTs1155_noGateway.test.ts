@@ -1,4 +1,4 @@
-import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
+import { execOpts, metadataConfig, baseCommands, getAccountsFromMnemonic } from '../helpers/Config'
 import {
   parseDIDFromNewNFT,
   parseNFTOrderAgreementId
@@ -12,25 +12,28 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
   let nftCap = 10
   let nftRoyalties = 5
   let orderAgreementId = ''
+  let accounts: string[] = []
 
   beforeAll(async () => {
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
+    accounts = await getAccountsFromMnemonic(execOpts.env.MNEMONIC)
+
+    console.log(`Funding account: ${accounts[0]}`)
+    const fundCommand = `${baseCommands.accounts.fund} "${accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
     const stdout = execSync(fundCommand, execOpts)
     execSync(
-      `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`,
+      `${baseCommands.accounts.fund} "${accounts[1]}" --token erc20`,
       execOpts
     )
     execSync(
-      `${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`,
+      `${baseCommands.accounts.fund} "${accounts[2]}" --token erc20`,
       execOpts
     )
   })
 
   test('The buyer order and the seller transfer a NFT (directly)', async () => {
-    const registerAssetCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --preMint true --name " NFTs 1155 test2 ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
+    const registerAssetCommand = `${baseCommands.nfts1155.create} --account "${accounts[0]}" --preMint true --name " NFTs 1155 test2 ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execSync(registerAssetCommand, execOpts)
@@ -40,7 +43,7 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
     expect(did.length > 0)
 
-    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[2]}"  `
+    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${accounts[2]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execSync(orderCommand, execOpts).toString()
@@ -50,7 +53,7 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
     expect(orderAgreementId.length > 0)
 
-    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}" --buyerAccount "${execOpts.accounts[2]}" `
+    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${accounts[0]}" --buyerAccount "${accounts[2]}" `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execSync(transferCommand, execOpts)
@@ -63,7 +66,7 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
   test('As NFT holder I can download the files associated to an asset', async () => {
     const destination = `/tmp/nevemined/cli/test/nft`
-    const downloadCommand = `${baseCommands.nfts1155.download} "${did}" --destination "${destination}" --account "${execOpts.accounts[2]}"  `
+    const downloadCommand = `${baseCommands.nfts1155.download} "${did}" --destination "${destination}" --account "${accounts[2]}"  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const stdout = execSync(downloadCommand, execOpts)

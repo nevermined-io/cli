@@ -116,7 +116,9 @@ export const mintNft = async (
       }
     }
 
-    await nvm.keeper.didRegistry.mint(did, argv.amount, minterAccount.getId())
+    await nvm.keeper.didRegistry.mint(did, argv.amount, minterAccount.getId(), {
+      gasMultiplier: config.nvm.gasMultiplier
+    })
 
     logger.info(
       chalk.dim(

@@ -138,10 +138,11 @@ export function getConfig(
     config.nvm.gatewayAddress = process.env.GATEWAY_ADDRESS
   if (process.env.TOKEN_ADDRESS)
     config.erc20TokenAddress = process.env.TOKEN_ADDRESS
-  if (process.env.GAS_MULTIPLIER)
-    config.gasMultiplier = Number(process.env.GAS_MULTIPLIER)
-  if (process.env.GAS_PRICE_MULTIPLIER)
-    config.gasPriceMultiplier = Number(process.env.GAS_PRICE_MULTIPLIER)
+
+  config.gasMultiplier = process.env.GAS_MULTIPLIER
+    ? Number(process.env.GAS_MULTIPLIER)
+    : 1
+
   config.seed = process.env.MNEMONIC
   config.keyfilePath = process.env.KEYFILE_PATH
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
@@ -174,7 +175,7 @@ export function getConfig(
       1
     )
   }
-
+  
   return {
     ...config,
     nvm: {

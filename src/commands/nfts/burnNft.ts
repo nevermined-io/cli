@@ -99,7 +99,9 @@ export const burnNft = async (
       }
     }
 
-    await nvm.keeper.didRegistry.burn(did, argv.amount, burnerAccount.getId())
+    await nvm.keeper.didRegistry.burn(did, argv.amount, burnerAccount.getId(), {
+      gasMultiplier: config.nvm.gasMultiplier
+    })
 
     logger.info(
       chalk.dim(
