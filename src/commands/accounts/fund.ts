@@ -41,7 +41,7 @@ export const accountsFund = async (
     }
   }
 
-  if (token === 'erc20' || token === 'native') {
+  if (token === 'both' || token === 'erc20') {
     try {
       await nvm.keeper.dispenser.requestTokens(100, account.getId())
       logger.info(

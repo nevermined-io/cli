@@ -6,6 +6,7 @@ import {
 } from '../helpers/StdoutParser'
 const { execSync } = require('child_process')
 
+// TODO: Re-enable DTP tests when `sdk-dtp` is published back
 describe('Assets e2e Testing', () => {
   let did = ''
   let url = ''
@@ -22,7 +23,7 @@ describe('Assets e2e Testing', () => {
     console.log(stdout.toString())
   })
 
-  test('Upload a file', async () => {
+  test.skip('Upload a file', async () => {
     const uploadCommand = `${baseCommands.utils.upload} --encrypt --account "${execOpts.accounts[0]}" README.md`
     console.debug(`COMMAND: ${uploadCommand}`)
 
@@ -31,7 +32,7 @@ describe('Assets e2e Testing', () => {
     ;({ url, password } = parseUrlAndPassword(uploadStdout))
   })
 
-  test('Registering a new dataset and resolve the DID', async () => {
+  test.skip('Registering a new dataset and resolve the DID', async () => {
     const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name a --author b --price 1 --urls ${url} --password '${password}' --contentType text/plain`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
@@ -49,7 +50,7 @@ describe('Assets e2e Testing', () => {
     expect(stdoutResolve.includes(did))
   })
 
-  test('Order and download an asset', async () => {
+  test.skip('Order and download an asset', async () => {
     const getCommand = `${baseCommands.assets.getAsset} ${did} --account "${execOpts.accounts[0]}" --fileIndex 0 --password abde`
     console.debug(`COMMAND: ${getCommand}`)
 

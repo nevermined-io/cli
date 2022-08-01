@@ -70,7 +70,7 @@ export const getNftMetadata = async (
     metadataUrl = await nvm.keeper.nftUpgradeable.uri(did)
   } else {
     const nftContract = loadNftContract(config, nftAddress)
-    metadataUrl = await nftContract.methods.tokenURI(didHash).call()
+    metadataUrl = await nftContract.tokenURI(didHash)
   }
 
   // Resolve the metadata

@@ -467,7 +467,7 @@
 					{
 						"name": "signature",
 						"type": "string",
-						"default": "0x0",
+						"default": "0x",
 						"description": "The signature associated to the provenance event"
 					},
 					{

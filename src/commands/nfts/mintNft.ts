@@ -22,7 +22,7 @@ export const mintNft = async (
   const { verbose, network, did, uri } = argv
 
   logger.info(chalk.dim(`Minting NFT: '${chalk.whiteBright(did)}'`))
-
+  
   logger.debug(
     chalk.dim(`Using Minter: ${chalk.whiteBright(minterAccount.getId())}`)
   )
@@ -55,43 +55,42 @@ export const mintNft = async (
       'nft721-sales'
     )
 
-    const nft = loadNftContract(config, nftAddress)
+    const nft = loadNftContract(config, nftAddress).connect(config.signer)
+
     if (verbose) {
       await printNftTokenBanner(nft)
     }
 
     try {
-      const oldOwner = await nft.methods.ownerOf(ddo.shortId()).call()
+      const oldOwner = await nft.ownerOf(ddo.shortId())
       return {
         status: StatusCodes.NFT_ALREADY_OWNED,
         errorMessage: `ERROR: NFT already existing and owned by: '${oldOwner}'`
       }
     } catch {}
 
+
     // Mint function is out of the ERC-721, so there are typically 3 implementations:
     // 1. toAddress + tokenId
     // 2. toAddress + tokenId + tokenURI
     // 3. tokenId
     // We check the number of parameters expected by the mint function to adapt the parameters
-    const mintAbiDefinition = nft.options.jsonInterface
-      .filter((item) => item.name === 'mint')
-      .map((entry) => entry.inputs)
+    const mintAbiDefinition = nft.interface.fragments
+      .filter((item: { name: string }) => item.name === 'mint')
+      .map((entry: { inputs: any }) => entry.inputs)
 
     if (mintAbiDefinition.length == 3) {
       logger.debug(`Minting using the To address + tokenId + tokenURI`)
-      await nft.methods
-        .mint(to, zeroX(ddo.shortId()), uri || register.url)
-        .send({ from: minterAccount.getId() })
+      await nft.mint(to, zeroX(ddo.shortId()), uri || register.url)
+        // .send({ from: minterAccount.getId() })
     } else if (mintAbiDefinition.length == 2) {
       logger.debug(`Minting using the To address + tokenId`)
-      await nft.methods
-        .mint(to, zeroX(ddo.shortId()))
-        .send({ from: minterAccount.getId() })
+      await nft.mint(to, zeroX(ddo.shortId()))
+        // .send({ from: minterAccount.getId() })
     } else if (mintAbiDefinition.length == 1) {
       logger.debug(`Minting using the tokenId`)
-      await nft.methods
-        .mint(zeroX(ddo.shortId()))
-        .send({ from: minterAccount.getId() })
+      await nft.mint(zeroX(ddo.shortId()))
+        // .send({ from: minterAccount.getId() })
     } else {
       return {
         status: StatusCodes.NOT_IMPLEMENTED,

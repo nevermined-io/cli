@@ -17,7 +17,7 @@ import {
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 import * as fs from 'fs'
-import { Contract } from 'web3-eth-contract'
+import { Contract } from 'ethers'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const showNft = async (
@@ -108,21 +108,15 @@ export const showNft = async (
 
     logger.info(JSON.stringify(nft.methods))
 
-    const accountBalance = await nft.methods
-      .balanceOf(userAccount.getId())
-      .call()
+    const accountBalance = await nft.balanceOf(userAccount.getId())
     logger.info(
       chalk.dim(`Account Balance: ${chalk.whiteBright(accountBalance)}`)
     )
 
     try {
-      const contractTokenUri = await nft.methods
-        .tokenURI(zeroX(ddo.shortId()))
-        .call()
+      const contractTokenUri = await nft.tokenURI(zeroX(ddo.shortId()))
       logger.info(chalk.dim(`Url: ${chalk.whiteBright(contractTokenUri)}`))
-      const contractTokenOwner = await nft.methods
-        .ownerOf(zeroX(ddo.shortId()))
-        .call()
+      const contractTokenOwner = await nft.ownerOf(zeroX(ddo.shortId()))
       logger.info(chalk.dim(`Owner: ${chalk.whiteBright(contractTokenOwner)}`))
     } catch {
       logger.warn(`Token Id not found`)
@@ -131,7 +125,7 @@ export const showNft = async (
     const price = getAssetRewardsFromDDOByService(ddo, 'nft721-sales')
       .getTotalPrice()
       .div(10)
-      .multipliedBy(decimals)
+      .mul(decimals)
 
     logger.info(
       chalk.dim(
@@ -180,7 +174,7 @@ export const showNft = async (
       const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
         .getTotalPrice()
         .div(10)
-        .multipliedBy(decimals)
+        .mul(decimals)
 
       logger.info(
         chalk.dim(
@@ -195,7 +189,7 @@ export const showNft = async (
       const price = getAssetRewardsFromDDOByService(ddo, 'nft721-sales')
         .getTotalPrice()
         .div(10)
-        .multipliedBy(decimals)
+        .mul(decimals)
 
       logger.info(
         chalk.dim(

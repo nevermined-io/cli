@@ -1,10 +1,7 @@
 import { Nevermined, Account } from '@nevermined-io/nevermined-sdk-js'
+import { Contract, ethers } from 'ethers'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
-import { Contract } from 'web3-eth-contract'
-import utils from 'web3-utils'
-import BigNumber from 'bignumber.js'
-
 import {
   Constants,
   loadNftContract,
@@ -14,6 +11,7 @@ import {
 } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const accountsList = async (
   nvm: Nevermined,
@@ -38,6 +36,7 @@ export const accountsList = async (
 
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
+
   let withInventory = false
   let nft: Contract
   if (nftTokenAddress != '') {
@@ -50,16 +49,15 @@ export const accountsList = async (
 
   const loadedAccounts = await Promise.all(
     accounts.map(async (a, index) => {
-      const ethBalance = utils.fromWei(
-        (await a.getEtherBalance()).toString(),
-        'ether'
+      const ethBalance = ethers.utils.parseEther(
+        (await a.getEtherBalance()).toString()
       )
 
       const tokenBalance = (
-        token ? await token.balanceOf(a.getId()) : new BigNumber(0)
+        token ? await token.balanceOf(a.getId()) : BigNumber.from(0)
       )
         .div(10)
-        .multipliedBy(decimals)
+        .mul(decimals)
 
       const inventory = withInventory
         ? (
@@ -72,22 +70,25 @@ export const accountsList = async (
                     to: a.getId()
                   }
                 })
-              ).map(async (l) => {
-                // check if the account is still the owner
-                if (
-                  (
-                    (await nft.methods
-                      .ownerOf(l.returnValues.tokenId)
-                      .call()) as string
-                  ).toLowerCase() === a.getId().toLowerCase()
-                ) {
-                  return {
-                    block: l.blockNumber,
-                    tokenId: utils.toHex(l.returnValues.tokenId),
-                    url: `${config.etherscanUrl}/token/${nftTokenAddress}?a=${l.returnValues.tokenId}#inventory`
+              ).map(
+                async (l: {
+                  returnValues: { tokenId: { toHex: () => any } }
+                  blockNumber: any
+                }) => {
+                  // check if the account is still the owner
+                  if (
+                    (
+                      (await nft.ownerOf(l.returnValues.tokenId)) as string
+                    ).toLowerCase() === a.getId().toLowerCase()
+                  ) {
+                    return {
+                      block: l.blockNumber,
+                      tokenId: l.returnValues.tokenId.toHex(),
+                      url: `${config.etherscanUrl}/token/${nftTokenAddress}?a=${l.returnValues.tokenId}#inventory`
+                    }
                   }
                 }
-              })
+              )
             )
           ).filter((inv) => Boolean(inv))
         : []
@@ -100,7 +101,7 @@ export const accountsList = async (
         url: `${config.etherscanUrl}/address/${a.getId()}`,
         nftTokenUrl: `${config.etherscanUrl}/token/${nftTokenAddress}`,
         nftBalance: withInventory
-          ? await nft.methods.balanceOf(a.getId()).call()
+          ? await nft.balanceOf(a.getId())
           : 0,
         inventory
       }

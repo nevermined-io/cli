@@ -9,14 +9,14 @@ import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import {
-  makeKeyTransfer,
+  // makeKeyTransfer,
   zeroX
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
-import BigNumber from 'bignumber.js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -28,7 +28,8 @@ export const registerAsset = async (
   const { verbose, network, metadata, assetType, password, encrypt } = argv
   const token = await loadToken(nvm, config, verbose)
 
-  const keyTransfer = await makeKeyTransfer()
+  // TODO: Enable DTP when `sdk-dtp` is ready
+  // const keyTransfer = await makeKeyTransfer()
 
   if (verbose) {
     printTokenBanner(token)
@@ -46,9 +47,7 @@ export const registerAsset = async (
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
 
-    ddoPrice = new BigNumber(argv.price).multipliedBy(
-      new BigNumber(10).exponentiatedBy(decimals)
-    )
+    ddoPrice = BigNumber.from(argv.price).mul(BigNumber.from(10).pow(decimals))
 
     logger.debug(`Using Price ${argv.price}`)
 
@@ -84,13 +83,13 @@ export const registerAsset = async (
         files: _files
       } as MetaDataMain
     }
-    if (password) {
-      ddoMetadata.additionalInformation = {
-        poseidonHash: await keyTransfer.hashKey(Buffer.from(password)),
-        providerKey,
-        links: argv.urls.map((url: string) => ({ name: 'public url', url }))
-      }
-    }
+    // if (password) {
+    //   ddoMetadata.additionalInformation = {
+    //     poseidonHash: await keyTransfer.hashKey(Buffer.from(password)),
+    //     providerKey,
+    //     links: argv.urls.map((url: string) => ({ name: 'public url', url }))
+    //   }
+    // }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')
       ddoMetadata.main.algorithm = {
@@ -108,9 +107,9 @@ export const registerAsset = async (
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
 
-    ddoPrice = new BigNumber(ddoMetadata.main.price).isGreaterThan(0)
-      ? new BigNumber(ddoMetadata.main.price)
-      : new BigNumber(0)
+    ddoPrice = BigNumber.from(ddoMetadata.main.price).gt(0)
+      ? BigNumber.from(ddoMetadata.main.price)
+      : BigNumber.from(0)
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))

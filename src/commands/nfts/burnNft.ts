@@ -50,13 +50,14 @@ export const burnNft = async (
       'nft721-sales'
     )
 
-    const nft = loadNftContract(config, nftAddress)
+    const nft = loadNftContract(config, nftAddress).connect(config.signer)
+
     if (verbose) {
       await printNftTokenBanner(nft)
     }
 
     try {
-      const oldOwner = await nft.methods.ownerOf(ddo.shortId()).call()
+      const oldOwner = await nft.ownerOf(ddo.shortId())
       return {
         status: StatusCodes.NFT_ALREADY_OWNED,
         errorMessage: `ERROR: NFT already existing and owned by: '${oldOwner}'`
@@ -67,8 +68,8 @@ export const burnNft = async (
 
     // Some ERC-721 NFT contracts don't implement the burn function
     // Se we are checking if it's already there
-    const burnAbiDefinition = nft.options.jsonInterface.filter(
-      (item) => item.name === 'burn'
+    const burnAbiDefinition = nft.interface.fragments.filter(
+      (item: { name: string }) => item.name === 'burn'
     )
 
     if (burnAbiDefinition.length === 0) {
@@ -78,9 +79,7 @@ export const burnNft = async (
       }
     }
 
-    await nft.methods
-      .burn(zeroX(ddo.shortId()))
-      .send({ from: burnerAccount.getId() })
+    await nft.burn(zeroX(ddo.shortId()))
 
     logger.info(
       chalk.dim(

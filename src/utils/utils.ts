@@ -1,4 +1,4 @@
-import { Contract } from 'web3-eth-contract'
+import { Contract } from 'ethers'
 import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import {
   findServiceConditionByName,
@@ -17,7 +17,6 @@ import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/T
 import ERC721 from '../abis/ERC721.json'
 import { Constants } from './enums'
 import { logger } from './config'
-import { AbiItem } from 'web3-utils'
 import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 import { Configuration, Logger } from 'log4js'
@@ -55,14 +54,15 @@ export const loginMarketplaceApi = async (
 
 export const loadContract = (
   config: Config,
-  abi: AbiItem[] | AbiItem,
+  abi: string,
   address: string
 ): Contract => {
+  
   const web3 = Web3Provider.getWeb3(config)
-  web3.setProvider(config.web3Provider)
-
-  // @ts-ignore
-  return new web3.eth.Contract(abi, address)
+  // web3.setProvider(config.web3Provider)
+ 
+  return new ethers.Contract(address, abi, web3)
+  //return new web3.eth.Contract(abi, address)
 }
 
 export const loadNftContract = (
@@ -91,6 +91,22 @@ export const getNFTAddressFromInput = (
   } else {
     return nftAddress
   }
+}
+
+export const getSignatureOfMethod = (
+  contractInstace: ethers.Contract,
+  methodName: string,
+  args: any[]
+): string => {
+  const methods = contractInstace.interface.fragments.filter(
+    (f) => f.name === methodName
+  )
+  const foundMethod =
+    methods.find((f) => f.inputs.length === args.length) || methods[0]
+  if (!foundMethod) {
+    throw new Error(`Method "${methodName}" not found in contract`)
+  }
+  return foundMethod.format()
 }
 
 export const getDidHash = (did: string): string => did.replace('did:nv:', '')
@@ -130,27 +146,33 @@ export const findAccountOrFirst = (
 }
 
 export const printNftTokenBanner = async (nftContract: Contract) => {
-  const { address } = nftContract.options
+  const { address } = nftContract
 
   logger.info('\n')
   logger.info(chalk.dim('===== NFT Contract ====='))
+  logger.info(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
 
   let owner = ''
   try {
-    owner = await nftContract.methods.owner().call()
+    owner = await nftContract.owner()
     logger.info(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
   } catch {
     logger.info(`Owner: The NFT doesn't expose the owner`)
   }
 
-  const [name, symbol] = await Promise.all([
-    nftContract.methods.name().call(),
-    nftContract.methods.symbol().call()
-  ])
+  try {
+    let name = await nftContract.name()
+    logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
+  } catch {
+    logger.info(`Name: The NFT doesn't expose the name`)
+  }
+  try {
+    let symbol = await nftContract.symbol()
+    logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
+  } catch {
+    logger.info(`Symbol: The NFT doesn't expose the symbol`)
+  }
 
-  logger.info(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
-  logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
-  logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}\n`))
 }
 
 export const printTokenBanner = async (token: Token | null) => {
@@ -322,7 +344,7 @@ export const loadToken = async (
     ) {
       let tokenAddress
       try {
-        tokenAddress = web3.utils.toChecksumAddress(config.erc20TokenAddress)
+        tokenAddress = ethers.utils.getAddress(config.erc20TokenAddress)
       } catch {
         tokenAddress = nvmTokenAddress
       }
@@ -332,7 +354,7 @@ export const loadToken = async (
           nevermined: nvm,
           web3: Web3Provider.getWeb3(config.nvm)
         },
-        web3.utils.toChecksumAddress(tokenAddress)
+        ethers.utils.getAddress(tokenAddress)
       )
       config.erc20TokenAddress = tokenAddress
     } else {
