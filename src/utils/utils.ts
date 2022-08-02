@@ -16,13 +16,14 @@ import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721.json'
 import { Constants } from './enums'
-import { logger } from './config'
+import { ARTIFACTS_PATH, logger } from './config'
 import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 import { Configuration, Logger } from 'log4js'
 import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 import { ethers } from 'ethers'
 import { ConfigEntry } from '../models/ConfigDefinition'
+import * as fs from 'fs'
 
 export const loadNevermined = async (
   config: ConfigEntry,
@@ -57,10 +58,9 @@ export const loadContract = (
   abi: string,
   address: string
 ): Contract => {
-  
   const web3 = Web3Provider.getWeb3(config)
   // web3.setProvider(config.web3Provider)
- 
+
   return new ethers.Contract(address, abi, web3)
   //return new web3.eth.Contract(abi, address)
 }
@@ -71,6 +71,17 @@ export const loadNftContract = (
 ): Contract => {
   // @ts-ignore
   return loadContract(config.nvm, ERC721.abi, nftTokenAddress)
+}
+
+export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
+  const abiNvmConfig = `${ARTIFACTS_PATH}/NeverminedConfig.${config.networkName?.toLowerCase()}.json`
+  const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
+
+  return new ethers.Contract(
+    nvmConfigAbi.address,
+    nvmConfigAbi.abi,
+    config.signer
+  )
 }
 
 export const getNFTAddressFromInput = (
@@ -172,7 +183,6 @@ export const printNftTokenBanner = async (nftContract: Contract) => {
   } catch {
     logger.info(`Symbol: The NFT doesn't expose the symbol`)
   }
-
 }
 
 export const printTokenBanner = async (token: Token | null) => {

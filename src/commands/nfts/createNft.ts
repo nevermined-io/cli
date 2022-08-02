@@ -51,9 +51,7 @@ export const createNft = async (
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
 
-    ddoPrice = BigNumber.from(argv.price).mul(
-      BigNumber.from(10).pow(decimals)
-    )
+    ddoPrice = BigNumber.from(argv.price).mul(BigNumber.from(10).pow(decimals))
 
     logger.trace(`new BigNumber ${BigNumber.from(argv.price)}`)
     logger.trace(`DDO Price: ${ddoPrice}`)

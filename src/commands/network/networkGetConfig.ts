@@ -1,4 +1,8 @@
-import { ARTIFACTS_PATH, StatusCodes } from '../../utils'
+import {
+  ARTIFACTS_PATH,
+  loadNeverminedConfigContract,
+  StatusCodes
+} from '../../utils'
 import { Logger } from 'log4js'
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -33,19 +37,23 @@ export const networkGetConfig = async (
   logger.info('')
 
   try {
-    const provider = new ethers.providers.JsonRpcProvider(
-      configEntry.nvm.nodeUri
-    )
-    const abiNvmConfig = `${ARTIFACTS_PATH}/DIDRegistry.${configEntry.networkName?.toLowerCase()}.json`
-    const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
+    const configContract = loadNeverminedConfigContract(configEntry)
 
-    console.log(JSON.stringify(nvmConfigAbi))
-
-    const nvmConfigContract = new ethers.Contract(
-      nvmConfigAbi.address,
-      nvmConfigAbi.abi,
-      provider
+    logger.info(
+      chalk.dim(
+        ` Marketplace Fee: ${chalk.yellow(
+          await configContract.getMarketplaceFee()
+        )}`
+      )
     )
+
+    logger.info(
+      chalk.dim(
+        ` Fee Receiver: ${chalk.yellow(await configContract.getFeeReceiver())}`
+      )
+    )
+
+    logger.info('')
   } catch (error) {
     const errorMessage = `Unable to get config information: ${error}`
     return {

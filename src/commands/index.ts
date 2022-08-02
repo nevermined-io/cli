@@ -31,6 +31,7 @@ export * from './agreements/listAgreements'
 export * from './network/networkStatus'
 export * from './network/networkList'
 export * from './network/networkGetConfig'
+export * from './network/networkSetConfig'
 
 // provenance
 export * from './provenance/provenanceHistory'

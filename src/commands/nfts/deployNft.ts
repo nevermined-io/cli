@@ -41,8 +41,6 @@ export const deployNft = async (
   const isZos = contract.interface.fragments.some(
     (f) => f.name === 'initialize'
   )
-  // const contract = new web3.eth.Contract(artifact.abi)
-  // const isZos = !!contract.methods.initialize
 
   let args: string[] = argv.params.filter(
     (_key: string) => _key !== '' && _key !== undefined
@@ -63,9 +61,7 @@ export const deployNft = async (
   }
 
   const argument = isZos ? [] : args
-  const contractInstance: ethers.Contract = await contract.deploy(
-    ...argument
-  )
+  const contractInstance: ethers.Contract = await contract.deploy(...argument)
   await contractInstance.deployTransaction.wait()
 
   if (isZos) {
@@ -78,7 +74,7 @@ export const deployNft = async (
     const transactionResponse: TransactionResponse = await contract[
       methodSignature
     ](...args)
-  // ](...args, sendOptions)
+    // ](...args, sendOptions)
     const contractReceipt: ContractReceipt = await transactionResponse.wait()
     if (contractReceipt.status !== 1) {
       return {
@@ -88,36 +84,9 @@ export const deployNft = async (
     }
   }
 
-  // const gas = await contract.deploy(deployData).estimateGas({
-  //   from: creatorAccount.getId()
-  // })
-  // const sendConfig = {
-  //   from: creatorAccount.getId(),
-  //   gas: gas,
-  //   gasPrice: '10000'
-  // }
-
-  // const contractInstance = await contract.deploy(deployData).send(sendConfig)
-
-  // if (isZos) {
-  //   let gasEstimation = await contractInstance.methods
-  //     .initialize(...args)
-  //     .estimateGas({
-  //       from: creatorAccount.getId()
-  //     })
-  //   await contractInstance.methods.initialize(...args).send({
-  //     from: creatorAccount.getId(),
-  //     gas: gasEstimation,
-  //     gasPrice: '10000'
-  //   })
-  // }
-
   await printNftTokenBanner(contractInstance)
 
-
-  logger.info(
-    `Contract deployed into address: ${contractInstance.address}\n`
-  )
+  logger.info(`Contract deployed into address: ${contractInstance.address}\n`)
 
   return {
     status: StatusCodes.OK,

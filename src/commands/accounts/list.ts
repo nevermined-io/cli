@@ -36,7 +36,6 @@ export const accountsList = async (
 
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-
   let withInventory = false
   let nft: Contract
   if (nftTokenAddress != '') {
@@ -100,9 +99,7 @@ export const accountsList = async (
         tokenBalance,
         url: `${config.etherscanUrl}/address/${a.getId()}`,
         nftTokenUrl: `${config.etherscanUrl}/token/${nftTokenAddress}`,
-        nftBalance: withInventory
-          ? await nft.balanceOf(a.getId())
-          : 0,
+        nftBalance: withInventory ? await nft.balanceOf(a.getId()) : 0,
         inventory
       }
     })

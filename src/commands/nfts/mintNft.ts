@@ -22,7 +22,7 @@ export const mintNft = async (
   const { verbose, network, did, uri } = argv
 
   logger.info(chalk.dim(`Minting NFT: '${chalk.whiteBright(did)}'`))
-  
+
   logger.debug(
     chalk.dim(`Using Minter: ${chalk.whiteBright(minterAccount.getId())}`)
   )
@@ -69,7 +69,6 @@ export const mintNft = async (
       }
     } catch {}
 
-
     // Mint function is out of the ERC-721, so there are typically 3 implementations:
     // 1. toAddress + tokenId
     // 2. toAddress + tokenId + tokenURI
@@ -82,15 +81,12 @@ export const mintNft = async (
     if (mintAbiDefinition.length == 3) {
       logger.debug(`Minting using the To address + tokenId + tokenURI`)
       await nft.mint(to, zeroX(ddo.shortId()), uri || register.url)
-        // .send({ from: minterAccount.getId() })
     } else if (mintAbiDefinition.length == 2) {
       logger.debug(`Minting using the To address + tokenId`)
       await nft.mint(to, zeroX(ddo.shortId()))
-        // .send({ from: minterAccount.getId() })
     } else if (mintAbiDefinition.length == 1) {
       logger.debug(`Minting using the tokenId`)
       await nft.mint(zeroX(ddo.shortId()))
-        // .send({ from: minterAccount.getId() })
     } else {
       return {
         status: StatusCodes.NOT_IMPLEMENTED,

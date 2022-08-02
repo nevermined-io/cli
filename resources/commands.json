@@ -52,6 +52,25 @@
 				"examples": ["ncli network get-config"],
 				"commandHandler": "networkGetConfig",
 				"requiresAccount": false
+			}, {
+				"name": "set-config [parameter]",
+				"description": "Allows to the governor account to modify the configuration of a running Nevermined blockchain environment",
+				"details": "If the `ncli` is connected to a Nevermined network correctly this command will allow to modify the on-chain configuration of a deployment. This function only can be executed by a `governor` account.",
+				"examples": ["ncli network set-config governor 0x12345", "ncli network set-config fees 350,0x4569832"],
+				"commandHandler": "networkSetConfig",
+				"requiresAccount": true,
+				"positionalArguments": [{
+					"name": "parameter",
+					"type": "string",					
+					"description": "the name of the governance parameter to configure. Existing options: 'fees' OR 'governor'"
+				}], 
+				"optionalArguments": [{
+					"name": "newValue",
+					"type": "string",
+					"demandOption": true,
+					"description": "the new value to set"
+				}
+				]
 			}]
 		}, {
 			"name": "accounts",

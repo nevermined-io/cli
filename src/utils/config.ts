@@ -12,7 +12,6 @@ import path from 'path'
 import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import { Wallet, Signer } from 'ethers'
 
-
 dotenv.config()
 
 export const logger = getLogger()
@@ -149,7 +148,6 @@ export function getConfig(
   config.keyfilePath = process.env.KEYFILE_PATH
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
 
-
   // TODO: Decommission the integration via Truffle HDWalletProvider
   const provider = Web3Provider.getWeb3(config.nvm)
   let hdWalletProvider: HDWalletProvider
@@ -158,7 +156,8 @@ export function getConfig(
     if (!process.env.MNEMONIC) {
       signer = Wallet.fromEncryptedJsonSync(
         process.env.KEYFILE_PATH!,
-        process.env.KEYFILE_PASSWORD!)
+        process.env.KEYFILE_PASSWORD!
+      )
       hdWalletProvider = new HDWalletProvider(
         [
           getPrivateKey(
@@ -186,7 +185,7 @@ export function getConfig(
       1
     )
   }
-  
+
   return {
     ...config,
     signer: signer.connect(provider),
