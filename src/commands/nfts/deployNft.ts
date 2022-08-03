@@ -74,7 +74,6 @@ export const deployNft = async (
     const transactionResponse: TransactionResponse = await contract[
       methodSignature
     ](...args)
-    // ](...args, sendOptions)
     const contractReceipt: ContractReceipt = await transactionResponse.wait()
     if (contractReceipt.status !== 1) {
       return {

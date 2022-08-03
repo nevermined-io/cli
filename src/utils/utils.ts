@@ -59,10 +59,7 @@ export const loadContract = (
   address: string
 ): Contract => {
   const web3 = Web3Provider.getWeb3(config)
-  // web3.setProvider(config.web3Provider)
-
   return new ethers.Contract(address, abi, web3)
-  //return new web3.eth.Contract(abi, address)
 }
 
 export const loadNftContract = (
