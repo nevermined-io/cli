@@ -103,7 +103,7 @@ Options:
       --help     Show help                                                                                                                                                    [boolean]
       --version  Show version number                                                                                                                                          [boolean]
   -v, --verbose  Run with verbose logging                                                                                                                                     [boolean]
-  -n, --network  The network to use                                                                                                                         [string] [default: "spree"]
+  -n, --network  The network to use                                                                                                                         [string] [default: "testnet"]
   -a, --account  The account to use                                                                                                                              [string] [default: ""]
 ```
 
@@ -114,34 +114,51 @@ The CLI has pre-configured some Nevermined environments. You can check what is p
 ```
 $ ncli network list
 Nevermined pre-configured networks:
- rinkeby:
-   Gateway: https://gateway.rinkeby.nevermined.rocks
-   Metadata API: https://metadata.rinkeby.nevermined.rocks
-   Faucet: https://faucet.rinkeby.nevermined.rocks
-
-
  spree:
-   Gateway: http://localhost:8030
-   Metadata API: http://nevermined-metadata:5000
-   Faucet: http://localhost:3001
+        This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/
+        Is a Production environment? false
+
+        Node Uri: http://localhost:8545
+        Gateway: http://localhost:8030
+        Marketplace API: http://172.17.0.1:3100
+        Faucet: http://localhost:3001
+
+
+ testnet:
+        Public testnet environment where users can interact with Nevermined protocol.
+        Is a Production environment? false
+
+        Node Uri: https://rpc-mumbai.maticvigil.com
+        Gateway: https://gateway.mumbai.public.nevermined.rocks
+        Marketplace API: https://marketplace-api.mumbai.public.nevermined.rocks
+        Faucet: https://faucet.mumbai.public.nevermined.rocks
 
 
  defiMumbai:
-   Gateway: https://gateway.mumbai.nevermined.rocks
-   Metadata API: https://metadata.mumbai.nevermined.rocks
-   Faucet: https://faucet.mumbai.nevermined.rocks
+        Testnet environment for the DeFi Marketplace.
+        Is a Production environment? false
+
+        Node Uri: https://rpc-mumbai.maticvigil.com
+        Gateway: https://defi.v2.gateway.mumbai.nevermined.rocks
+        Marketplace API: https://defi.v2.marketplace-api.mumbai.nevermined.rocks
+        Faucet: https://faucet.mumbai.public.nevermined.rocks
 
 
  autonomiesMumbai:
-   Gateway: https://gateway.autonomies.mumbai.nevermined.rocks
-   Metadata API: https://metadata.autonomies.mumbai.nevermined.rocks
-   Faucet: https://faucet.mumbai.nevermined.rocks
+        Testnet environment for the Autonomies Marketplace.
+        Is a Production environment? false
+
+        Node Uri: https://rpc-mumbai.maticvigil.com
+        Gateway: https://gateway.autonomies.test.nevermined.rocks
+        Marketplace API: https://marketplace-api.autonomies.test.nevermined.rocks
+        Faucet: https://faucet.mumbai.public.nevermined.rocks
+
 
 ```
 
 A part of these networks you can connect to any other network using the environment variables described above.
 
-When you want to connect and interact with a different network of the default (`spree`), make sure you have exported the `NODE_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
+When you want to connect and interact with a different network of the default (`testnet`), make sure you have exported the `NODE_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
 
 
 ## License

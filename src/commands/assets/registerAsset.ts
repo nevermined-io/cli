@@ -17,6 +17,7 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+import { TxParameters } from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/ContractBase'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -113,13 +114,22 @@ export const registerAsset = async (
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))
+  // const feeData = await config.nvm.web3Provider.getFeeData()
+  // feeData.mul(gasLimit)
+  // (await provider.getFeeData()).maxFeePerGas.mul(gasLimit)
+  // const params: TxParameters= { gasMultiplier: 10 }
 
   const ddo = await nvm.assets.create(
     ddoMetadata,
     account,
     // @ts-ignore
     new AssetRewards(account.getId(), ddoPrice),
-    encrypt || password ? ['access-proof'] : undefined
+    encrypt || password ? ['access-proof'] : undefined //,
+    // undefined,
+    // undefined,
+    // undefined,
+    // undefined,
+    // params
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

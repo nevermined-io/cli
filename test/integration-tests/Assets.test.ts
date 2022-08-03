@@ -7,7 +7,7 @@ import {
   sleep
 } from '../helpers/StdoutParser'
 import * as fs from 'fs'
-import { mkdtempSync, writeFileSync } from 'fs'
+import { mkdtempSync } from 'fs'
 import * as Path from 'path'
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 const { execSync } = require('child_process')
@@ -16,11 +16,13 @@ describe('Assets e2e Testing', () => {
   let did = ''
 
   beforeAll(async () => {
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-    console.debug(`COMMAND: ${fundCommand}`)
-
-    const stdout = execSync(fundCommand, execOpts)
+    console.log(`NETWORK: ${execOpts.env.NETWORK}`)
+    if (execOpts.env.NETWORK === 'spree') {
+      console.log(`Funding account: ${execOpts.accounts[0]}`)
+      const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
+      console.debug(`COMMAND: ${fundCommand}`)
+      const stdout = execSync(fundCommand, execOpts)
+    }
 
     const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)

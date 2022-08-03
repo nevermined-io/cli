@@ -4,14 +4,14 @@ import chalk from 'chalk'
 import path from 'path'
 
 import {
-  findAccountOrFirst,
   getConfig,
   getDefaultLoggerConfig,
   getJsonLoggerConfig,
   loadNevermined,
   logger,
   loginMarketplaceApi,
-  configureLocalEnvironment
+  configureLocalEnvironment,
+  loadAccountFromMnemonic
 } from '../src/utils'
 import { StatusCodes } from './utils/enums'
 import { configure, addLayout } from 'log4js'
@@ -91,9 +91,9 @@ const cmdHandler = async (
     )
   }
 
-  const accounts = await nvm.accounts.list()
-  const userAccount = findAccountOrFirst(accounts, argv.account)
-
+  // const accounts = await nvm.accounts.list()
+  // const userAccount = findAccountOrFirst(accounts, argv.account)
+  const userAccount = loadAccountFromMnemonic(config.seed!)
   await loginMarketplaceApi(nvm, userAccount)
 
   try {

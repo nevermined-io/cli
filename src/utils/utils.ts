@@ -15,6 +15,7 @@ import {
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import ERC721 from '../abis/ERC721.json'
+import ERC20 from '@nevermined-io/nevermined-sdk-js/dist/node/artifacts/ERC20.json'
 import { Constants } from './enums'
 import { ARTIFACTS_PATH, logger } from './config'
 import CustomToken from './CustomToken'
@@ -34,7 +35,7 @@ export const loadNevermined = async (
     ...config.nvm,
     verbose: verbose ? verbose : config.nvm.verbose
   })
-
+  // console.log(`CONFIG NVM: ${JSON.stringify(config.nvm.web3Provider.)}`)
   if (!nvm.keeper) {
     logger.error(
       chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
@@ -81,6 +82,15 @@ export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
   )
 }
 
+export const loadERC20Contract = (
+  address: string,
+  signer: ethers.Signer
+): Contract => {
+  // const abi = `${ARTIFACTS_PATH}/NeverminedConfig.${config.networkName?.toLowerCase()}.json`
+  // const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
+  return new ethers.Contract(address, JSON.stringify(ERC20.abi), signer)
+}
+
 export const getNFTAddressFromInput = (
   nftAddress: string,
   ddo: DDO,
@@ -121,11 +131,29 @@ export const getDidHash = (did: string): string => did.replace('did:nv:', '')
 
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
+export const loadHDWalletFromMnemonic = (
+  mnemonic: string,
+  index: number = 0
+): ethers.utils.HDNode => {
+  const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)
+  return hdNode.derivePath(`m/44'/60'/0'/0/${index}`)
+}
+
+export const loadAccountFromMnemonic = (
+  mnemonic: string,
+  index: number = 0
+): Account => {
+  const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)
+  return new Account(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
+}
+
 export const findAccountOrFirst = (
   accounts: Account[],
   address: string
 ): Account => {
   let account
+
+  accounts.map((a) => console.log(`ACCOUNT ${a.getId()}`))
 
   if (ethers.utils.isAddress(address)) {
     account = accounts.find(
@@ -135,7 +163,9 @@ export const findAccountOrFirst = (
     if (!account) {
       logger.debug(
         chalk.dim(
-          `Account provided not found, using : ${chalk.redBright(accounts[0])}`
+          `Account provided (${address}) not found, using : ${chalk.redBright(
+            accounts[0].getId()
+          )}`
         )
       )
     } else {
@@ -279,11 +309,16 @@ export const printNativeTokenBanner = async () => {
 export const printErc20TokenBanner = async (token: Token) => {
   const { address } = token
 
+  // token.contract.totalSupply()
   const [name, symbol, decimals, totalSupply] = await Promise.all([
-    token.name(),
-    token.symbol(),
-    token.decimals(),
-    token.totalSupply()
+    token.contract.name(),
+    token.contract.symbol(),
+    token.contract.decimals(),
+    token.contract.totalSupply()
+    // token.name(),
+    // token.symbol(),
+    // token.decimals(),
+    // token.totalSupply()
   ])
 
   logger.info(chalk.dim('\n===== ERC20 Contract ====='))
@@ -343,7 +378,6 @@ export const loadToken = async (
     logger.debug(
       `Loading ERC20 Token ${config.erc20TokenAddress.toLowerCase()}`
     )
-    logger.debug(`ERC20 Token Address ${config.erc20TokenAddress}`)
 
     // check if we have a different token configured
     if (
@@ -361,7 +395,8 @@ export const loadToken = async (
           nevermined: nvm,
           web3: Web3Provider.getWeb3(config.nvm)
         },
-        ethers.utils.getAddress(tokenAddress)
+        ethers.utils.getAddress(tokenAddress),
+        config.signer
       )
       config.erc20TokenAddress = tokenAddress
     } else {

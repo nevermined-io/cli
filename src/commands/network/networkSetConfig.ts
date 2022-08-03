@@ -4,7 +4,6 @@ import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { ethers } from 'ethers'
 
 type GovernanceParams = 'fees' | 'governor'
 

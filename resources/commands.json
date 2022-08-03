@@ -9,7 +9,7 @@
 		{
 			"name": "network",
 			"alias": "n",
-			"default": "spree",
+			"default": "testnet",
 			"type": "string",
 			"description": "The network to use"
 		},
