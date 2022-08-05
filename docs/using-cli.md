@@ -69,7 +69,7 @@ In this example we are using a public url, but with Nevermined you also could do
 
 * Add multiple urls referring to multiple files
 * Use a cid for referring a content is in IPFS or Filecoin
-* Publish the url of a content that is not publicly available (for example on premise in your own server or in the cloud). You could protect that content running your own [Nevermined Gateway](/docs/architecture/components/gateway).
+* Publish the url of a content that is not publicly available (for example on premise in your own server or in the cloud). You could protect that content running your own [Nevermined Gateway](/docs/architecture/components/gateway/gateway.md).
 
 :::info
 
