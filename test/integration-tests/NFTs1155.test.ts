@@ -5,7 +5,7 @@ import {
 } from '../helpers/StdoutParser'
 import * as fs from 'fs'
 import * as Path from 'path'
-const { execSync } = require('child_process')
+import execCommand from '../helpers/ExecCommand'
 
 describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
   let did = ''
@@ -18,12 +18,12 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
-    const stdout = execSync(fundCommand, execOpts)
-    execSync(
+    const stdout = execCommand(fundCommand, execOpts)
+    execCommand(
       `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`,
       execOpts
     )
-    execSync(
+    execCommand(
       `${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`,
       execOpts
     )
@@ -33,7 +33,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     const registerAssetCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerAssetCommand, execOpts)
+    const registerStdout = execCommand(registerAssetCommand, execOpts)
 
     console.debug(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewNFT(registerStdout)
@@ -45,7 +45,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     const showCommand = `${baseCommands.nfts1155.show} "${did}" `
     console.debug(`COMMAND: ${showCommand}`)
 
-    const showStdout = execSync(showCommand, execOpts)
+    const showStdout = execCommand(showCommand, execOpts)
 
     console.debug(`STDOUT: ${showStdout}`)
     expect(showStdout.includes(did))
@@ -56,7 +56,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     const mintCommand = `${baseCommands.nfts1155.mint} "${did}" --amount 10 --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${mintCommand}`)
 
-    const stdout = execSync(mintCommand, execOpts)
+    const stdout = execCommand(mintCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
@@ -67,7 +67,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     const burnCommand = `${baseCommands.nfts1155.burn} "${did}" --amount 1 --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${burnCommand}`)
 
-    const stdout = execSync(burnCommand, execOpts)
+    const stdout = execCommand(burnCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
@@ -78,7 +78,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
-    const orderStdout = execSync(orderCommand, execOpts)
+    const orderStdout = execCommand(orderCommand, execOpts)
 
     console.debug(`STDOUT: ${orderStdout}`)
     orderAgreementId = parseNFTOrderAgreementId(orderStdout)
@@ -90,7 +90,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --seller "${execOpts.accounts[0]}" --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
-    const stdout = execSync(downloadCommand, execOpts)
+    const stdout = execCommand(downloadCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))

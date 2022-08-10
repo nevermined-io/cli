@@ -4,7 +4,7 @@ import {
   parseDIDFromNewAsset,
   parseProvenanceId
 } from '../helpers/StdoutParser'
-const { execSync } = require('child_process')
+import execCommand from '../helpers/ExecCommand'
 
 describe('Provenance e2e Testing', () => {
   let did = ''
@@ -14,12 +14,12 @@ describe('Provenance e2e Testing', () => {
     const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
-    const stdout = execSync(fundCommand, execOpts)
+    const stdout = execCommand(fundCommand, execOpts)
 
     const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerAssetCommand, execOpts)
+    const registerStdout = execCommand(registerAssetCommand, execOpts)
 
     console.log(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewAsset(registerStdout)
@@ -30,7 +30,7 @@ describe('Provenance e2e Testing', () => {
   test('Register the "used" provenance event and inspect', async () => {
     const activityId = generateId()
     const registerCommand = `${baseCommands.provenance.register} ${did} --account "${execOpts.accounts[0]}" --method used --agentId "${execOpts.accounts[1]}" --activityId "${activityId}" `
-    const registerStdout = execSync(registerCommand, execOpts)
+    const registerStdout = execCommand(registerCommand, execOpts)
 
     console.log(`Register Provenance: ${registerStdout}`)
     expect(registerStdout.includes('AgreementID:'))
@@ -41,14 +41,14 @@ describe('Provenance e2e Testing', () => {
 
     const inspectCommand = `${baseCommands.provenance.inspect} ${provenanceId} `
     console.debug(`COMMAND: ${inspectCommand}`)
-    const inspectStdout = execSync(inspectCommand, execOpts)
+    const inspectStdout = execCommand(inspectCommand, execOpts)
     console.log(`Inspect: ${inspectStdout}`)
     expect(inspectStdout.includes(did))
   })
 
   test('Show all the provenance history of a DID ', async () => {
     const historyCommand = `${baseCommands.provenance.history} ${did}  `
-    const historyStdout = execSync(historyCommand, execOpts)
+    const historyStdout = execCommand(historyCommand, execOpts)
 
     console.log(`Provenance History: ${historyStdout}`)
     expect(historyStdout.includes(did))

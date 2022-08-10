@@ -3,14 +3,13 @@ import {
   parseDIDFromNewAsset,
   parseDownloadPath,
   parseNumberResultsFromSearch,
-  parseServiceAgreementId,
-  sleep
+  parseServiceAgreementId
 } from '../helpers/StdoutParser'
 import * as fs from 'fs'
 import { mkdtempSync } from 'fs'
 import * as Path from 'path'
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-const { execSync } = require('child_process')
+import execCommand from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {
   let did = ''
@@ -21,13 +20,13 @@ describe('Assets e2e Testing', () => {
       console.log(`Funding account: ${execOpts.accounts[0]}`)
       const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
       console.debug(`COMMAND: ${fundCommand}`)
-      const stdout = execSync(fundCommand, execOpts)
+      execCommand(fundCommand, execOpts)
     }
 
     const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerAssetCommand, execOpts)
+    const registerStdout = execCommand(registerAssetCommand, execOpts)
 
     console.log(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewAsset(registerStdout)
@@ -37,7 +36,7 @@ describe('Assets e2e Testing', () => {
 
   test('Registering a new dataset and resolve the DID', async () => {
     const resolveDIDCommand = `${baseCommands.assets.resolveDID} ${did}`
-    const stdoutResolve = execSync(resolveDIDCommand, execOpts)
+    const stdoutResolve = execCommand(resolveDIDCommand, execOpts)
 
     console.log(`Resolved: ${stdoutResolve}`)
     expect(stdoutResolve.includes('DID found'))
@@ -48,7 +47,7 @@ describe('Assets e2e Testing', () => {
     const registerAlgorithmCommand = `${baseCommands.assets.registerAlgorithm} --name "Test Algorithm" --author "${metadataConfig.author}" --price "0" --language "python" --entrypoint "python word_count.py" --container "python:3.8-alpine"  --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAlgorithmCommand}`)
 
-    const stdout = execSync(registerAlgorithmCommand, execOpts)
+    const stdout = execCommand(registerAlgorithmCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
     const algoDid = parseDIDFromNewAsset(stdout)
@@ -68,7 +67,7 @@ describe('Assets e2e Testing', () => {
     const importCommand = `${baseCommands.assets.importMetadata} --metadata ${randomMetadataFile}`
     console.debug(`COMMAND: ${importCommand}`)
 
-    const stdout = execSync(importCommand, execOpts)
+    const stdout = execCommand(importCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
     const didImport = parseDIDFromNewAsset(stdout)
@@ -80,7 +79,7 @@ describe('Assets e2e Testing', () => {
     const registerAssetCommand = `${baseCommands.assets.registerAsset} --name "searching test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const stdout = execSync(registerAssetCommand, execOpts)
+    const stdout = execCommand(registerAssetCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
     const didSearch = parseDIDFromNewAsset(stdout)
@@ -90,7 +89,7 @@ describe('Assets e2e Testing', () => {
     const searchAssetCommand = `${baseCommands.assets.searchAsset} "searching" `
     console.debug(`COMMAND: ${searchAssetCommand}`)
 
-    const searchStdout = execSync(searchAssetCommand, execOpts)
+    const searchStdout = execCommand(searchAssetCommand, execOpts)
     console.log(`STDOUT: ${searchStdout}`)
 
     const numberResults = parseNumberResultsFromSearch(searchStdout)
@@ -102,7 +101,7 @@ describe('Assets e2e Testing', () => {
     const downloadCommand = `${baseCommands.assets.downloadAsset} ${did} --account "${execOpts.accounts[0]}" --path /tmp --fileIndex 0`
     console.debug(`COMMAND: ${downloadCommand}`)
 
-    const downloadStdout = execSync(downloadCommand, execOpts)
+    const downloadStdout = execCommand(downloadCommand, execOpts)
     console.log(`STDOUT: ${downloadStdout}`)
 
     const path = parseDownloadPath(downloadStdout)
@@ -117,7 +116,7 @@ describe('Assets e2e Testing', () => {
     const orderCommand = `${baseCommands.assets.orderAsset} ${did} --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
-    const orderStdout = execSync(orderCommand, execOpts)
+    const orderStdout = execCommand(orderCommand, execOpts)
     console.log(`STDOUT: ${orderStdout}`)
     const serviceAgreementId = parseServiceAgreementId(orderStdout)
 
@@ -125,7 +124,7 @@ describe('Assets e2e Testing', () => {
     const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${execOpts.accounts[0]}" --path ${parentPath} --fileIndex 0 `
     console.debug(`COMMAND: ${getCommand}`)
 
-    const getStdout = execSync(getCommand, execOpts)
+    const getStdout = execCommand(getCommand, execOpts)
     console.log(`STDOUT: ${getStdout}`)
 
     const files = fs.readdirSync(parentPath || '')

@@ -12,8 +12,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        network: ["--spree-embedded-contracts"]
+        network: ["--spree-embedded-contracts", "--polygon"]
         node: ["16"]
+        include:
+          - network: "-spree-embedded-contracts"
+            network-name: spree
+          - network: "--polygon"
+            network-name: polygon-localnet
 
     steps:
       - uses: actions/checkout@v2
@@ -45,13 +50,15 @@ jobs:
           ./start_nevermined.sh ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
           cd ..
           ./scripts/wait-nevermined.sh
-          ./scripts/wait-subgraphs.sh
-          
+          ./scripts/wait-subgraphs.sh ${{ matrix.network-name }}
+
       - name: Run integration tests
         env:
           MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
           TOKEN_ADDRESS: "0x0000000000000000000000000000000000000000"
           NODE_URL: "http://localhost:8545"
+          IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
+          IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
         run: |
           sleep 10
           yarn build

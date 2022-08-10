@@ -80,8 +80,7 @@ export const getNftMetadata = async (
 
   let metadataContent = '{}'
   if (metadataUrl.startsWith('cid://')) {
-    const metadata = await IpfsHelper.get(metadataUrl)
-    metadataContent = await metadata.text()
+    metadataContent = await IpfsHelper.get(metadataUrl)
   } else if (metadataUrl.startsWith('http')) {
     const metadata = await fetch(metadataUrl)
     metadataContent = await metadata.text()

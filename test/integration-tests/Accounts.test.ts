@@ -1,6 +1,6 @@
 import { execOpts, baseCommands } from '../helpers/Config'
 import { parseNewAccount } from '../helpers/StdoutParser'
-const { execSync } = require('child_process')
+import execCommand from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {
   let accountAddress: string
@@ -12,7 +12,7 @@ describe('Assets e2e Testing', () => {
     const listCommand = `${baseCommands.accounts.list} `
     console.debug(`LIST COMMAND: ${listCommand}`)
 
-    const stdout = execSync(listCommand, execOpts)
+    const stdout = execCommand(listCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
   })
@@ -21,7 +21,7 @@ describe('Assets e2e Testing', () => {
     const newAccountCommand = `${baseCommands.accounts.new} `
     console.debug(`NEW ACCOUNT COMMAND: ${newAccountCommand}`)
 
-    const stdout = execSync(newAccountCommand, execOpts)
+    const stdout = execCommand(newAccountCommand, execOpts)
     console.log(`STDOUT: ${stdout}`)
 
     const [address, privateKey] = parseNewAccount(stdout)
@@ -37,7 +37,7 @@ describe('Assets e2e Testing', () => {
     const fundCommand = `${baseCommands.accounts.fund} "${accountAddress}" --token both`
     console.debug(`FUND COMMAND: ${fundCommand}`)
 
-    const stdout = execSync(fundCommand, execOpts)
+    const stdout = execCommand(fundCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
   })
@@ -46,7 +46,7 @@ describe('Assets e2e Testing', () => {
     const balanceCommand = `${baseCommands.accounts.balance} "${accountAddress}" `
     console.debug(`BALANCE COMMAND: ${balanceCommand}`)
 
-    const stdout = execSync(balanceCommand, execOpts)
+    const stdout = execCommand(balanceCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
   })

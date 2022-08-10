@@ -15,7 +15,7 @@
     "build:watch": "npm build --watch",
     "start": "ts-node src/index.ts",
     "generate-doc": "ts-node src/generateDoc.ts",
-    "test": "jest --coverage --rootDir test",
+    "test": "jest --coverage --rootDir test -w 1",
     "test:watch": "jest --watch --rootDir test"
   },
   "bin": {
