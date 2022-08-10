@@ -15,7 +15,7 @@ jobs:
         network: ["--spree-embedded-contracts", "--polygon"]
         node: ["16"]
         include:
-          - network: "-spree-embedded-contracts"
+          - network: "--spree-embedded-contracts"
             network-name: spree
           - network: "--polygon"
             network-name: polygon-localnet
