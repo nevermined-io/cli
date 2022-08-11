@@ -68,7 +68,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('It mints a NFT (ERC-721)', async () => {
-    const mintCommand = `${baseCommands.nfts721.mint} "${did}" ${nftAddress} --uri ${metadataUri} --account "${execOpts.accounts[0]}"  `
+    const mintCommand = `${baseCommands.nfts721.mint} "${did}" --nftAddress ${nftAddress} --uri ${metadataUri} --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${mintCommand}`)
 
     const stdout = execCommand(mintCommand, execOpts)

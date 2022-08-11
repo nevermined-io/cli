@@ -1,7 +1,6 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
-  loadNftContract,
   printNftTokenBanner,
   getNFTAddressFromInput
 } from '../../utils'
@@ -55,43 +54,27 @@ export const mintNft = async (
       'nft721-sales'
     )
 
-    const nft = loadNftContract(config, nftAddress).connect(config.signer)
-
+    const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
     if (verbose) {
       await printNftTokenBanner(nft)
     }
 
-    try {
-      const oldOwner = await nft.ownerOf(ddo.shortId())
-      return {
-        status: StatusCodes.NFT_ALREADY_OWNED,
-        errorMessage: `ERROR: NFT already existing and owned by: '${oldOwner}'`
-      }
-    } catch {}
-
-    // Mint function is out of the ERC-721, so there are typically 3 implementations:
-    // 1. toAddress + tokenId
-    // 2. toAddress + tokenId + tokenURI
-    // 3. tokenId
     // We check the number of parameters expected by the mint function to adapt the parameters
-    const mintAbiDefinition = nft.interface.fragments
+    const mintAbiDefinition = nft.contract.contract.interface.fragments
       .filter((item: { name: string }) => item.name === 'mint')
       .map((entry: { inputs: any }) => entry.inputs)
 
     if (mintAbiDefinition.length == 3) {
       logger.debug(`Minting using the To address + tokenId + tokenURI`)
-      await nft.mint(to, zeroX(ddo.shortId()), uri || register.url)
-    } else if (mintAbiDefinition.length == 2) {
-      logger.debug(`Minting using the To address + tokenId`)
-      await nft.mint(to, zeroX(ddo.shortId()))
-    } else if (mintAbiDefinition.length == 1) {
-      logger.debug(`Minting using the tokenId`)
-      await nft.mint(zeroX(ddo.shortId()))
+      await nft.mintWithURL(
+        to,
+        zeroX(ddo.shortId()),
+        uri || register.url,
+        minterAccount
+      )
     } else {
-      return {
-        status: StatusCodes.NOT_IMPLEMENTED,
-        errorMessage: `Unable to mint NFT, minting function not recognized`
-      }
+      logger.debug(`Minting using the tokenId`)
+      await nft.mint(zeroX(ddo.shortId()), minterAccount)
     }
 
     logger.info(

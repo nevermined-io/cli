@@ -1,10 +1,8 @@
-import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
-  loadNftContract,
   printNftTokenBanner,
-  loadContract,
   getNFTAddressFromInput,
   loadToken
 } from '../../utils'
@@ -16,8 +14,6 @@ import {
   zeroX
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
-import * as fs from 'fs'
-import { Contract } from 'ethers'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const showNft = async (
@@ -80,16 +76,7 @@ export const showNft = async (
   // Showing ERC-721 NFT information
   if (argv.is721) {
     nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft721-sales')
-
-    let nft: Contract
-
-    if (argv.abiPath != '') {
-      const content = fs.readFileSync(argv.abiPath)
-      const artifact = JSON.parse(content.toString())
-      nft = loadContract(config.nvm, artifact.abi, nftAddress)
-    } else {
-      nft = loadNftContract(config, nftAddress)
-    }
+    const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
 
     if (verbose) {
       await printNftTokenBanner(nft)
@@ -106,18 +93,14 @@ export const showNft = async (
       chalk.dim(`====== ${chalk.whiteBright(zeroX(ddo.shortId()))} ======`)
     )
 
-    logger.info(JSON.stringify(nft.methods))
-
-    const accountBalance = await nft.balanceOf(userAccount.getId())
+    const accountBalance = await nft.balanceOf(userAccount)
     logger.info(
       chalk.dim(`Account Balance: ${chalk.whiteBright(accountBalance)}`)
     )
 
     try {
-      const contractTokenUri = await nft.tokenURI(zeroX(ddo.shortId()))
+      const contractTokenUri = await nft.contract.tokenURI(zeroX(ddo.shortId()))
       logger.info(chalk.dim(`Url: ${chalk.whiteBright(contractTokenUri)}`))
-      const contractTokenOwner = await nft.ownerOf(zeroX(ddo.shortId()))
-      logger.info(chalk.dim(`Owner: ${chalk.whiteBright(contractTokenOwner)}`))
     } catch {
       logger.warn(`Token Id not found`)
     }

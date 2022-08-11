@@ -1,7 +1,6 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
-  loadNftContract,
   printNftTokenBanner,
   getNFTAddressFromInput
 } from '../../utils'
@@ -50,25 +49,17 @@ export const burnNft = async (
       'nft721-sales'
     )
 
-    const nft = loadNftContract(config, nftAddress).connect(config.signer)
+    const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
 
     if (verbose) {
       await printNftTokenBanner(nft)
     }
 
-    try {
-      const oldOwner = await nft.ownerOf(ddo.shortId())
-      return {
-        status: StatusCodes.NFT_ALREADY_OWNED,
-        errorMessage: `ERROR: NFT already existing and owned by: '${oldOwner}'`
-      }
-    } catch {}
-
     const to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
 
     // Some ERC-721 NFT contracts don't implement the burn function
     // Se we are checking if it's already there
-    const burnAbiDefinition = nft.interface.fragments.filter(
+    const burnAbiDefinition = nft.contract.contract.interface.fragments.filter(
       (item: { name: string }) => item.name === 'burn'
     )
 
@@ -79,7 +70,11 @@ export const burnNft = async (
       }
     }
 
-    await nft.burn(zeroX(ddo.shortId()))
+    await nft.contract.call(
+      'burn',
+      [zeroX(ddo.shortId())],
+      burnerAccount.getId()
+    )
 
     logger.info(
       chalk.dim(

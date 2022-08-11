@@ -1,10 +1,9 @@
-import { Nevermined, Account } from '@nevermined-io/nevermined-sdk-js'
-import { Contract, ethers } from 'ethers'
+import { Nevermined, Account, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { ethers } from 'ethers'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import {
   Constants,
-  loadNftContract,
   loadToken,
   printNftTokenBanner,
   StatusCodes
@@ -37,10 +36,11 @@ export const accountsList = async (
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
   let withInventory = false
-  let nft: Contract
+  let nft: Nft721
   if (nftTokenAddress != '') {
     withInventory = true
-    nft = loadNftContract(config, nftTokenAddress)
+    nft = await nvm.contracts.loadNft721(nftTokenAddress)
+
     if (verbose) {
       await printNftTokenBanner(nft)
     }
@@ -62,11 +62,15 @@ export const accountsList = async (
         ? (
             await Promise.all(
               (
-                await nft.getPastEvents('Transfer', {
+                await nft.contract.events.getPastEvents({
+                  eventName: 'Transfer',
+                  methodName: 'getTransfers',
+                  filterJsonRpc: { to: a.getId() },
+                  filterSubgraph: { where: { to: a.getId() } },
                   fromBlock: 0,
                   toBlock: 'latest',
-                  filter: {
-                    to: a.getId()
+                  result: {
+                    tokenId: true
                   }
                 })
               ).map(
@@ -77,7 +81,9 @@ export const accountsList = async (
                   // check if the account is still the owner
                   if (
                     (
-                      (await nft.ownerOf(l.returnValues.tokenId)) as string
+                      (await nft.contract.call('ownerOf', [
+                        l.returnValues.tokenId
+                      ])) as string
                     ).toLowerCase() === a.getId().toLowerCase()
                   ) {
                     return {
@@ -99,7 +105,7 @@ export const accountsList = async (
         tokenBalance,
         url: `${config.etherscanUrl}/address/${a.getId()}`,
         nftTokenUrl: `${config.etherscanUrl}/token/${nftTokenAddress}`,
-        nftBalance: withInventory ? await nft.balanceOf(a.getId()) : 0,
+        nftBalance: withInventory ? await nft.balanceOf(a) : 0,
         inventory
       }
     })

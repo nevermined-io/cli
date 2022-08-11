@@ -9,12 +9,12 @@ import {
   Config,
   DDO,
   Nevermined,
+  Nft721,
   ProvenanceMethod,
   ProvenanceRegistry
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
-import ERC721 from '../abis/ERC721.json'
 import ERC20 from '@nevermined-io/nevermined-sdk-js/dist/node/artifacts/ERC20.json'
 import { Constants } from './enums'
 import { ARTIFACTS_PATH, logger } from './config'
@@ -35,7 +35,6 @@ export const loadNevermined = async (
     ...config.nvm,
     verbose: verbose ? verbose : config.nvm.verbose
   })
-  // console.log(`CONFIG NVM: ${JSON.stringify(config.nvm.web3Provider.)}`)
   if (!nvm.keeper) {
     logger.error(
       chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
@@ -61,14 +60,6 @@ export const loadContract = (
 ): Contract => {
   const web3 = Web3Provider.getWeb3(config)
   return new ethers.Contract(address, abi, web3)
-}
-
-export const loadNftContract = (
-  config: ConfigEntry,
-  nftTokenAddress: string
-): Contract => {
-  // @ts-ignore
-  return loadContract(config.nvm, ERC721.abi, nftTokenAddress)
 }
 
 export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
@@ -183,8 +174,8 @@ export const findAccountOrFirst = (
   return accounts[0]
 }
 
-export const printNftTokenBanner = async (nftContract: Contract) => {
-  const { address } = nftContract
+export const printNftTokenBanner = async (nft721: Nft721) => {
+  const { address } = nft721
 
   logger.info('\n')
   logger.info(chalk.dim('===== NFT Contract ====='))
@@ -192,20 +183,20 @@ export const printNftTokenBanner = async (nftContract: Contract) => {
 
   let owner = ''
   try {
-    owner = await nftContract.owner()
+    owner = await nft721.contract.call('owner', [])
     logger.info(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
   } catch {
     logger.info(`Owner: The NFT doesn't expose the owner`)
   }
 
   try {
-    let name = await nftContract.name()
+    let name = await nft721.contract.call('name', [])
     logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
   } catch {
     logger.info(`Name: The NFT doesn't expose the name`)
   }
   try {
-    let symbol = await nftContract.symbol()
+    let symbol = await await nft721.contract.call('symbol', [])
     logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
   } catch {
     logger.info(`Symbol: The NFT doesn't expose the symbol`)

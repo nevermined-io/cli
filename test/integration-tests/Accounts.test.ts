@@ -1,10 +1,14 @@
 import { execOpts, baseCommands } from '../helpers/Config'
-import { parseNewAccount } from '../helpers/StdoutParser'
+import {
+  parseAddressOfContractDeployed,
+  parseNewAccount
+} from '../helpers/StdoutParser'
 import execCommand from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {
   let accountAddress: string
   let accountPrivateKey: string
+  const abiPath = 'test/resources/nfts/TestERC721.json'
 
   beforeAll(async () => {})
 
@@ -15,6 +19,24 @@ describe('Assets e2e Testing', () => {
     const stdout = execCommand(listCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
+  })
+
+  test('List all accounts with inventory', async () => {
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath} --account "${execOpts.accounts[0]}"  `
+    console.debug(`COMMAND: ${deployCommand}`)
+
+    const deployStdout = execCommand(deployCommand, execOpts)
+
+    console.debug(`STDOUT: ${deployStdout}`)
+    expect(deployStdout.includes(`Contract deployed into address`))
+    const nftAddress = parseAddressOfContractDeployed(deployStdout)
+
+    const listCommand = `${baseCommands.accounts.list} --nftAddress ${nftAddress}`
+    console.debug(`LIST COMMAND: ${listCommand}`)
+
+    const listStdout = execCommand(listCommand, execOpts)
+
+    console.log(`STDOUT: ${listStdout}`)
   })
 
   test('Create a new account', async () => {

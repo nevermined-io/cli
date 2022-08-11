@@ -1,8 +1,7 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
-  loadNftContract,
   printNftTokenBanner,
   loadToken
 } from '../../utils'
@@ -89,7 +88,7 @@ export const createNft = async (
   let ddo
 
   if (argv.nftType === '721') {
-    const nft = loadNftContract(config, argv.nftAddress)
+    const nft: Nft721 = await nvm.contracts.loadNft721(argv.nftAddress)
 
     if (verbose) {
       await printNftTokenBanner(nft)

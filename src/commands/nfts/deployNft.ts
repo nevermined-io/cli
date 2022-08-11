@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
 import { ContractReceipt, ethers } from 'ethers'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import {
@@ -82,8 +82,11 @@ export const deployNft = async (
       }
     }
   }
+  const nft721: Nft721 = await nvm.contracts.loadNft721(
+    contractInstance.address
+  )
 
-  await printNftTokenBanner(contractInstance)
+  await printNftTokenBanner(nft721)
 
   logger.info(`Contract deployed into address: ${contractInstance.address}\n`)
 
