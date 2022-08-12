@@ -6,7 +6,6 @@ import {
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import {
   Account,
-  Config,
   DDO,
   Nevermined,
   Nft721,
@@ -15,10 +14,8 @@ import {
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
-import ERC20 from '@nevermined-io/nevermined-sdk-js/dist/node/artifacts/ERC20.json'
 import { Constants } from './enums'
 import { ARTIFACTS_PATH, logger } from './config'
-import CustomToken from './CustomToken'
 import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
 import { Configuration, Logger } from 'log4js'
 import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
@@ -53,15 +50,6 @@ export const loginMarketplaceApi = async (
   return true
 }
 
-export const loadContract = (
-  config: Config,
-  abi: string,
-  address: string
-): Contract => {
-  const web3 = Web3Provider.getWeb3(config)
-  return new ethers.Contract(address, abi, web3)
-}
-
 export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
   const abiNvmConfig = `${ARTIFACTS_PATH}/NeverminedConfig.${config.networkName?.toLowerCase()}.json`
   const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
@@ -71,15 +59,6 @@ export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
     nvmConfigAbi.abi,
     config.signer
   )
-}
-
-export const loadERC20Contract = (
-  address: string,
-  signer: ethers.Signer
-): Contract => {
-  // const abi = `${ARTIFACTS_PATH}/NeverminedConfig.${config.networkName?.toLowerCase()}.json`
-  // const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
-  return new ethers.Contract(address, JSON.stringify(ERC20.abi), signer)
 }
 
 export const getNFTAddressFromInput = (
@@ -381,14 +360,7 @@ export const loadToken = async (
         tokenAddress = nvmTokenAddress
       }
 
-      token = await CustomToken.getInstanceByAddress(
-        {
-          nevermined: nvm,
-          web3: Web3Provider.getWeb3(config.nvm)
-        },
-        ethers.utils.getAddress(tokenAddress),
-        config.signer
-      )
+      token = await nvm.contracts.loadErc20(tokenAddress)
       config.erc20TokenAddress = tokenAddress
     } else {
       logger.debug(

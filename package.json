@@ -22,15 +22,15 @@
     "ncli": "./dist/src/index.js"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "0.22.2",
+    "@nevermined-io/nevermined-sdk-js": "0.22.6",
     "@truffle/hdwallet-provider": "^2.0.9",
     "chalk": "^4.1.2",
+    "cross-fetch": "~3.1.5",
     "dotenv": "^16.0.1",
     "eta": "1.12.3",
     "ipfs-http-client-lite": "~0.3.0",
     "log4js": "^6.5.2",
     "tar": "^6.1.11",
-    "cross-fetch": "~3.1.5",
     "yargs": "^17.5.1"
   },
   "devDependencies": {

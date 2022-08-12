@@ -1,4 +1,4 @@
-import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
+import { execOpts, baseCommands } from '../helpers/Config'
 import execCommand from '../helpers/ExecCommand'
 
 describe('Status e2e Testing', () => {
