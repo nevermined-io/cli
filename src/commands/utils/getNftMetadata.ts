@@ -1,9 +1,5 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import {
-  StatusCodes,
-  getNFTAddressFromInput,
-  loadNftContract
-} from '../../utils'
+import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { StatusCodes, getNFTAddressFromInput } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import IpfsHelper from '../../utils/IpfsHelper'
 import { getDidHash } from '../../utils/utils'
@@ -69,8 +65,8 @@ export const getNftMetadata = async (
   if (is1155) {
     metadataUrl = await nvm.keeper.nftUpgradeable.uri(did)
   } else {
-    const nftContract = loadNftContract(config, nftAddress)
-    metadataUrl = await nftContract.methods.tokenURI(didHash).call()
+    const nftContract: Nft721 = await nvm.contracts.loadNft721(nftAddress)
+    metadataUrl = await nftContract.contract.tokenURI(didHash)
   }
 
   // Resolve the metadata
@@ -80,8 +76,7 @@ export const getNftMetadata = async (
 
   let metadataContent = '{}'
   if (metadataUrl.startsWith('cid://')) {
-    const metadata = await IpfsHelper.get(metadataUrl)
-    metadataContent = await metadata.text()
+    metadataContent = await IpfsHelper.get(metadataUrl)
   } else if (metadataUrl.startsWith('http')) {
     const metadata = await fetch(metadataUrl)
     metadataContent = await metadata.text()

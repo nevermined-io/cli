@@ -1,5 +1,11 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes, printNftTokenBanner } from '../../utils'
+import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { ContractReceipt, ethers } from 'ethers'
+import { TransactionResponse } from '@ethersproject/abstract-provider'
+import {
+  StatusCodes,
+  printNftTokenBanner,
+  getSignatureOfMethod
+} from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -24,9 +30,17 @@ export const deployNft = async (
 
   const content = fs.readFileSync(abiPath)
   const artifact = JSON.parse(content.toString())
-  artifact
-  const contract = new web3.eth.Contract(artifact.abi)
-  const isZos = !!contract.methods.initialize
+
+  const signer = web3.getSigner(account)
+  const contract = new ethers.ContractFactory(
+    artifact.abi,
+    artifact.bytecode,
+    signer
+  )
+
+  const isZos = contract.interface.fragments.some(
+    (f) => f.name === 'initialize'
+  )
 
   let args: string[] = argv.params.filter(
     (_key: string) => _key !== '' && _key !== undefined
@@ -39,37 +53,47 @@ export const deployNft = async (
     arguments: isZos ? undefined : args
   }
 
-  const gas = await contract.deploy(deployData).estimateGas({
-    from: creatorAccount.getId()
-  })
-  const sendConfig = {
-    from: creatorAccount.getId(),
-    gas: gas,
-    gasPrice: '10000'
+  // Set gas limit and gas price, using the default Ropsten provider
+  const price = ethers.utils.formatUnits(await web3.getGasPrice(), 'gwei')
+  const sendOptions = {
+    gasLimit: 100000,
+    gasPrice: ethers.utils.parseUnits(price, 'gwei')
   }
 
-  const contractInstance = await contract.deploy(deployData).send(sendConfig)
+  const argument = isZos ? [] : args
+  const contractInstance: ethers.Contract = await contract.deploy(...argument)
+  await contractInstance.deployTransaction.wait()
 
   if (isZos) {
-    let gasEstimation = await contractInstance.methods
-      .initialize(...args)
-      .estimateGas({
-        from: creatorAccount.getId()
-      })
-    await contractInstance.methods.initialize(...args).send({
-      from: creatorAccount.getId(),
-      gas: gasEstimation,
-      gasPrice: '10000'
-    })
+    const methodSignature = getSignatureOfMethod(
+      contractInstance,
+      'initialize',
+      args
+    )
+    const contract = contractInstance.connect(signer)
+    const transactionResponse: TransactionResponse = await contract[
+      methodSignature
+    ](...args)
+    const contractReceipt: ContractReceipt = await transactionResponse.wait()
+    if (contractReceipt.status !== 1) {
+      return {
+        status: StatusCodes.ERROR,
+        errorMessage: `Error deploying contract ${artifact.name}`
+      }
+    }
   }
-
-  await printNftTokenBanner(contractInstance)
-
-  logger.info(
-    `Contract deployed into address: ${contractInstance.options.address}\n`
+  const nft721: Nft721 = await nvm.contracts.loadNft721(
+    contractInstance.address
   )
 
+  await printNftTokenBanner(nft721)
+
+  logger.info(`Contract deployed into address: ${contractInstance.address}\n`)
+
   return {
-    status: StatusCodes.OK
+    status: StatusCodes.OK,
+    results: JSON.stringify({
+      address: contractInstance.address
+    })
   }
 }

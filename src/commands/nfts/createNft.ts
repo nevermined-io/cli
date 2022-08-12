@@ -1,8 +1,7 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
-  loadNftContract,
   printNftTokenBanner,
   loadToken
 } from '../../utils'
@@ -13,8 +12,8 @@ import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
-import BigNumber from 'bignumber.js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -51,13 +50,11 @@ export const createNft = async (
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
 
-    ddoPrice = new BigNumber(argv.price).multipliedBy(
-      new BigNumber(10).exponentiatedBy(decimals)
-    )
+    ddoPrice = BigNumber.from(argv.price).mul(BigNumber.from(10).pow(decimals))
 
-    logger.trace(`new BigNumber ${new BigNumber(argv.price)}`)
+    logger.trace(`new BigNumber ${BigNumber.from(argv.price)}`)
     logger.trace(`DDO Price: ${ddoPrice}`)
-    logger.trace(`to Fixed: ${ddoPrice.toFixed()}`)
+    logger.trace(`to Fixed: ${ddoPrice.toString()}`)
 
     const _files: File[] = []
     let _fileIndex = 0
@@ -77,13 +74,13 @@ export const createNft = async (
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
-        price: ddoPrice.toFixed(),
+        price: ddoPrice.toString(),
         files: _files
       } as MetaDataMain
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
-    ddoPrice = new BigNumber(ddoMetadata.main.price)
+    ddoPrice = BigNumber.from(ddoMetadata.main.price)
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))
@@ -91,7 +88,7 @@ export const createNft = async (
   let ddo
 
   if (argv.nftType === '721') {
-    const nft = loadNftContract(config, argv.nftAddress)
+    const nft: Nft721 = await nvm.contracts.loadNft721(argv.nftAddress)
 
     if (verbose) {
       await printNftTokenBanner(nft)

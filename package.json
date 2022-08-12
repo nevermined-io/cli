@@ -15,23 +15,22 @@
     "build:watch": "npm build --watch",
     "start": "ts-node src/index.ts",
     "generate-doc": "ts-node src/generateDoc.ts",
-    "test": "jest --coverage --rootDir test",
+    "test": "jest --coverage --rootDir test -w 1",
     "test:watch": "jest --watch --rootDir test"
   },
   "bin": {
     "ncli": "./dist/src/index.js"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "0.21.0",
+    "@nevermined-io/nevermined-sdk-js": "0.22.6",
     "@truffle/hdwallet-provider": "^2.0.9",
     "chalk": "^4.1.2",
+    "cross-fetch": "~3.1.5",
     "dotenv": "^16.0.1",
     "eta": "1.12.3",
-    "ethers": "~5.6.9",
     "ipfs-http-client-lite": "~0.3.0",
     "log4js": "^6.5.2",
     "tar": "^6.1.11",
-    "cross-fetch": "~3.1.5",
     "yargs": "^17.5.1"
   },
   "devDependencies": {

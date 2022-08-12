@@ -1,5 +1,5 @@
-import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
-const { execSync } = require('child_process')
+import { execOpts, baseCommands } from '../helpers/Config'
+import execCommand from '../helpers/ExecCommand'
 
 describe('Status e2e Testing', () => {
   let did = ''
@@ -7,7 +7,7 @@ describe('Status e2e Testing', () => {
 
   test('Get a list of the available pre-configured networks', async () => {
     const command = `${baseCommands.network.list} `
-    const stdout = execSync(command, execOpts)
+    const stdout = execCommand(command, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
     expect(stdout.includes('spree'))
@@ -16,7 +16,7 @@ describe('Status e2e Testing', () => {
 
   test('Get status information of a local network', async () => {
     const command = `${baseCommands.network.status} `
-    const stdout = execSync(command, execOpts)
+    const stdout = execCommand(command, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
     expect(stdout.includes(`Loading information from network`))

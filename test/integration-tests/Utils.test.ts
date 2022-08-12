@@ -1,9 +1,9 @@
 import { execOpts, baseCommands, metadataConfig } from '../helpers/Config'
+import execCommand from '../helpers/ExecCommand'
 import {
   parseCIDFromNFTMetadata,
   parseDIDFromNewNFT
 } from '../helpers/StdoutParser'
-const { execSync } = require('child_process')
 
 describe('Utils e2e Testing', () => {
   let cid = ''
@@ -28,14 +28,14 @@ describe('Utils e2e Testing', () => {
     const command = `${baseCommands.utils.publishMetadata} --image "${imageUrl}" --name "${name}" --description "${description}" --externalUrl "${externalUrl}" --animationUrl "${animationUrl}" --royalties ${royalties} --royaltiesReceiver ${royaltiesReceiver} `
     console.debug(`COMMAND: ${command}`)
 
-    const stdout = execSync(command, execOpts).toString()
+    const stdout = execCommand(command, execOpts as any).toString()
 
     console.log(`STDOUT: ${stdout}`)
 
     expect(stdout).toContain('NFT Metadata JSON')
     expect(stdout).toContain(imageUrl)
 
-    cid = parseCIDFromNFTMetadata(stdout)
+    cid = parseCIDFromNFTMetadata(stdout as any)
     console.log(`CID: ${cid}`)
     expect(cid === '' ? false : cid.startsWith('cid://'))
   })
@@ -44,7 +44,7 @@ describe('Utils e2e Testing', () => {
     const registerCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType text/text --cap 10 --royalties 5 --nftMetadata "${cid}" `
     console.debug(`COMMAND: ${registerCommand}`)
 
-    const registerStdout = execSync(registerCommand, execOpts)
+    const registerStdout = execCommand(registerCommand, execOpts as any)
 
     console.debug(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewNFT(registerStdout)
@@ -54,7 +54,7 @@ describe('Utils e2e Testing', () => {
     const getCommand = `${baseCommands.utils.getMetadata} "${did}" `
     console.debug(`COMMAND: ${getCommand}`)
 
-    const stdout = execSync(getCommand, execOpts).toString()
+    const stdout = execCommand(getCommand, execOpts as any).toString()
 
     console.log(`STDOUT: ${stdout}`)
 

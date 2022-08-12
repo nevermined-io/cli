@@ -7,7 +7,7 @@ import {
 
 import * as fs from 'fs'
 import * as Path from 'path'
-const { execSync } = require('child_process')
+import execCommand from '../helpers/ExecCommand'
 
 describe('NFTs (ERC-721) e2e Testing', () => {
   const abiPath = 'test/resources/nfts/TestERC721.json'
@@ -22,21 +22,21 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
-    const stdout = execSync(fundCommand, execOpts)
+    const stdout = execCommand(fundCommand, execOpts)
   })
 
   test('Deploy a new NFT (ERC-721) contract with parameters', async () => {
     const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath2} --account "${execOpts.accounts[0]}" --params "Token Name" --params Symbol `
     console.debug(`COMMAND: ${deployCommand}`)
 
-    const stdout = execSync(deployCommand, execOpts)
+    const stdout = execCommand(deployCommand, execOpts)
   })
 
   test('Deploy a new NFT (ERC-721) contract without params', async () => {
     const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath} --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${deployCommand}`)
 
-    const stdout = execSync(deployCommand, execOpts)
+    const stdout = execCommand(deployCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(`Contract deployed into address`))
@@ -49,7 +49,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress} --account "${execOpts.accounts[0]}" --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
-    const registerStdout = execSync(registerAssetCommand, execOpts)
+    const registerStdout = execCommand(registerAssetCommand, execOpts)
 
     console.debug(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewNFT(registerStdout)
@@ -61,17 +61,17 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const showCommand = `${baseCommands.nfts721.show} "${did}" --nftAddress ${nftAddress} `
     console.debug(`COMMAND: ${showCommand}`)
 
-    const showStdout = execSync(showCommand, execOpts)
+    const showStdout = execCommand(showCommand, execOpts)
 
     console.debug(`STDOUT: ${showStdout}`)
     expect(showStdout.includes(did))
   })
 
   test('It mints a NFT (ERC-721)', async () => {
-    const mintCommand = `${baseCommands.nfts721.mint} "${did}" ${nftAddress} --uri ${metadataUri} --account "${execOpts.accounts[0]}"  `
+    const mintCommand = `${baseCommands.nfts721.mint} "${did}" --nftAddress ${nftAddress} --uri ${metadataUri} --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${mintCommand}`)
 
-    const stdout = execSync(mintCommand, execOpts)
+    const stdout = execCommand(mintCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
@@ -82,7 +82,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const orderCommand = `${baseCommands.nfts721.order} "${did}" --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${orderCommand}`)
 
-    const stdout = execSync(orderCommand, execOpts)
+    const stdout = execCommand(orderCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     orderAgreementId = parseNFTOrderAgreementId(stdout)
@@ -95,7 +95,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" --account "${execOpts.accounts[0]}" --buyerAccount "${execOpts.accounts[1]}" `
     console.debug(`COMMAND: ${transferCommand}`)
 
-    const stdout = execSync(transferCommand, execOpts)
+    const stdout = execCommand(transferCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
@@ -108,7 +108,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const downloadCommand = `${baseCommands.nfts721.download} "${did}" --destination "${destination}" --account "${execOpts.accounts[1]}"  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
-    const stdout = execSync(downloadCommand, execOpts)
+    const stdout = execCommand(downloadCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
@@ -126,7 +126,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     const burnCommand = `${baseCommands.nfts721.burn} "${did}" ${nftAddress} --account "${execOpts.accounts[0]}"  `
     console.debug(`COMMAND: ${burnCommand}`)
 
-    const stdout = execSync(burnCommand, execOpts)
+    const stdout = execCommand(burnCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))

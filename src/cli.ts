@@ -4,14 +4,14 @@ import chalk from 'chalk'
 import path from 'path'
 
 import {
-  findAccountOrFirst,
   getConfig,
   getDefaultLoggerConfig,
   getJsonLoggerConfig,
   loadNevermined,
   logger,
   loginMarketplaceApi,
-  configureLocalEnvironment
+  configureLocalEnvironment,
+  loadAccountFromMnemonic
 } from '../src/utils'
 import { StatusCodes } from './utils/enums'
 import { configure, addLayout } from 'log4js'
@@ -22,7 +22,6 @@ import { CLICommandsDefinition } from './models/CLICommandsDefinition'
 import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ConfigEntry } from './models/ConfigDefinition'
 type CliCommands = typeof CliCommands
-let cliCommands: CliCommands
 
 const cmdHandler = async (
   cmd: keyof CliCommands,
@@ -91,10 +90,10 @@ const cmdHandler = async (
     )
   }
 
-  const accounts = await nvm.accounts.list()
-  const userAccount = findAccountOrFirst(accounts, argv.account)
-
-  await loginMarketplaceApi(nvm, userAccount)
+  const userAccount = loadAccountFromMnemonic(config.seed!)
+  if (requiresAccount) {
+    await loginMarketplaceApi(nvm, userAccount)
+  }
 
   try {
     const executionOutput: ExecutionOutput = await CliCommands[cmd](

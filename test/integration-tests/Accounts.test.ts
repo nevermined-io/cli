@@ -1,10 +1,14 @@
 import { execOpts, baseCommands } from '../helpers/Config'
-import { parseNewAccount } from '../helpers/StdoutParser'
-const { execSync } = require('child_process')
+import {
+  parseAddressOfContractDeployed,
+  parseNewAccount
+} from '../helpers/StdoutParser'
+import execCommand from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {
   let accountAddress: string
   let accountPrivateKey: string
+  const abiPath = 'test/resources/nfts/TestERC721.json'
 
   beforeAll(async () => {})
 
@@ -12,16 +16,34 @@ describe('Assets e2e Testing', () => {
     const listCommand = `${baseCommands.accounts.list} `
     console.debug(`LIST COMMAND: ${listCommand}`)
 
-    const stdout = execSync(listCommand, execOpts)
+    const stdout = execCommand(listCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
+  })
+
+  test('List all accounts with inventory', async () => {
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath} --account "${execOpts.accounts[0]}"  `
+    console.debug(`COMMAND: ${deployCommand}`)
+
+    const deployStdout = execCommand(deployCommand, execOpts)
+
+    console.debug(`STDOUT: ${deployStdout}`)
+    expect(deployStdout.includes(`Contract deployed into address`))
+    const nftAddress = parseAddressOfContractDeployed(deployStdout)
+
+    const listCommand = `${baseCommands.accounts.list} --nftAddress ${nftAddress}`
+    console.debug(`LIST COMMAND: ${listCommand}`)
+
+    const listStdout = execCommand(listCommand, execOpts)
+
+    console.log(`STDOUT: ${listStdout}`)
   })
 
   test('Create a new account', async () => {
     const newAccountCommand = `${baseCommands.accounts.new} `
     console.debug(`NEW ACCOUNT COMMAND: ${newAccountCommand}`)
 
-    const stdout = execSync(newAccountCommand, execOpts)
+    const stdout = execCommand(newAccountCommand, execOpts)
     console.log(`STDOUT: ${stdout}`)
 
     const [address, privateKey] = parseNewAccount(stdout)
@@ -37,7 +59,7 @@ describe('Assets e2e Testing', () => {
     const fundCommand = `${baseCommands.accounts.fund} "${accountAddress}" --token both`
     console.debug(`FUND COMMAND: ${fundCommand}`)
 
-    const stdout = execSync(fundCommand, execOpts)
+    const stdout = execCommand(fundCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
   })
@@ -46,7 +68,7 @@ describe('Assets e2e Testing', () => {
     const balanceCommand = `${baseCommands.accounts.balance} "${accountAddress}" `
     console.debug(`BALANCE COMMAND: ${balanceCommand}`)
 
-    const stdout = execSync(balanceCommand, execOpts)
+    const stdout = execCommand(balanceCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
   })

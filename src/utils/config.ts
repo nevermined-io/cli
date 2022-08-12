@@ -1,6 +1,6 @@
 import HDWalletProvider from '@truffle/hdwallet-provider'
+import ethers from 'ethers'
 import dotenv from 'dotenv'
-import Web3 from 'web3'
 import fs from 'fs'
 import { mkdirSync, writeFileSync } from 'fs'
 import os from 'os'
@@ -9,6 +9,8 @@ import fetch from 'cross-fetch'
 import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
+import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
+import { Wallet, Signer } from 'ethers'
 
 dotenv.config()
 
@@ -43,7 +45,7 @@ export async function configureLocalEnvironment(
   }
 
   const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
-
+  console.log(`ABI PATH ${abiTestPath}`)
   if (network.toLowerCase() === 'spree') {
     if (
       !fs.existsSync(abiTestPath) ||
@@ -146,9 +148,16 @@ export function getConfig(
   config.keyfilePath = process.env.KEYFILE_PATH
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
 
+  // TODO: Decommission the integration via Truffle HDWalletProvider
+  const provider = Web3Provider.getWeb3(config.nvm)
   let hdWalletProvider: HDWalletProvider
+  let signer: Signer
   if (requiresAccount) {
     if (!process.env.MNEMONIC) {
+      signer = Wallet.fromEncryptedJsonSync(
+        process.env.KEYFILE_PATH!,
+        process.env.KEYFILE_PASSWORD!
+      )
       hdWalletProvider = new HDWalletProvider(
         [
           getPrivateKey(
@@ -159,6 +168,7 @@ export function getConfig(
         config.nvm.nodeUri
       )
     } else {
+      signer = Wallet.fromMnemonic(config.seed!)
       hdWalletProvider = new HDWalletProvider(
         config.seed!,
         config.nvm.nodeUri,
@@ -167,6 +177,7 @@ export function getConfig(
       )
     }
   } else {
+    signer = Wallet.fromMnemonic(DUMMY_MNEMONIC)
     hdWalletProvider = new HDWalletProvider(
       DUMMY_MNEMONIC,
       config.nvm.nodeUri,
@@ -177,6 +188,7 @@ export function getConfig(
 
   return {
     ...config,
+    signer: signer.connect(provider),
     nvm: {
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,
@@ -186,9 +198,8 @@ export function getConfig(
 }
 
 function getPrivateKey(keyfilePath: string, password: string): string {
-  const w3 = new Web3()
   const data = fs.readFileSync(keyfilePath)
   const keyfile = JSON.parse(data.toString())
-
-  return w3.eth.accounts.decrypt(keyfile, password).privateKey
+  const wallet = ethers.Wallet.fromEncryptedJsonSync(keyfile, password)
+  return wallet.privateKey
 }

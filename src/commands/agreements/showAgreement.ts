@@ -68,10 +68,6 @@ export const showAgreement = async (
     )
   else if (contractName === 'AccessTemplate')
     await nvm.keeper.templates.accessTemplate.printAgreementStatus(agreementId)
-  else if (contractName === 'AccessProofTemplate')
-    await nvm.keeper.templates.accessProofTemplate.printAgreementStatus(
-      agreementId
-    )
   else if (contractName === 'DIDSalesTemplate')
     await nvm.keeper.templates.didSalesTemplate.printAgreementStatus(
       agreementId
