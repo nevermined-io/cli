@@ -57,7 +57,7 @@ jobs:
           MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
           TOKEN_ADDRESS: "0x0000000000000000000000000000000000000000"
           NODE_URL: "http://localhost:8545"
-          NETOWRK: ${{ matrix.network-name }}
+          NETWORK: ${{ matrix.network-name }}
           IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
         run: |

@@ -1,5 +1,4 @@
 import { Nevermined, Account, Nft721 } from '@nevermined-io/nevermined-sdk-js'
-import { ethers } from 'ethers'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import {
@@ -48,7 +47,7 @@ export const accountsList = async (
 
   const loadedAccounts = await Promise.all(
     accounts.map(async (a, index) => {
-      const ethBalance = ethers.utils.parseEther(
+      const ethBalance = BigNumber.parseEther(
         (await a.getEtherBalance()).toString()
       )
 

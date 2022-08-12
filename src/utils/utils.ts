@@ -279,16 +279,11 @@ export const printNativeTokenBanner = async () => {
 export const printErc20TokenBanner = async (token: Token) => {
   const { address } = token
 
-  // token.contract.totalSupply()
   const [name, symbol, decimals, totalSupply] = await Promise.all([
     token.contract.name(),
     token.contract.symbol(),
     token.contract.decimals(),
     token.contract.totalSupply()
-    // token.name(),
-    // token.symbol(),
-    // token.decimals(),
-    // token.totalSupply()
   ])
 
   logger.info(chalk.dim('\n===== ERC20 Contract ====='))
