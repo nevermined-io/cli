@@ -16,7 +16,10 @@ describe('Assets e2e Testing', () => {
 
   beforeAll(async () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)
-    if (execOpts.env.NETWORK === 'spree') {
+    if (
+      execOpts.env.NETWORK === 'spree' ||
+      execOpts.env.NETWORK === 'polygon-localnet'
+    ) {
       console.log(`Funding account: ${execOpts.accounts[0]}`)
       const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
       console.debug(`COMMAND: ${fundCommand}`)
