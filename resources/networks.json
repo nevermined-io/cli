@@ -1,4 +1,50 @@
 {
+	"testnet": {
+		"envDescription": "Public testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
+		"isProduction": false,
+		"nvm": {
+			"nodeUri": "https://rpc-mumbai.maticvigil.com",
+			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
+			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"gatewayUri": "https://gateway.mumbai.public.nevermined.rocks",
+			"gatewayAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
+			"verbose": true
+		},
+		"nativeToken": "MATIC",
+		"networkId": "80001",
+		"networkName": "mumbai",
+		"contractsVersion": "2.0.5",
+		"tagName": "public",
+		"etherscanUrl": "https://mumbai.polygonscan.com",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0
+	},
+	"polygon": {
+		"envDescription": "Public production environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://nvm-docs.nevermined.io/",
+		"isProduction": true,
+		"nvm": {
+			"nodeUri": "https://rpc-mumbai.maticvigil.com",
+			"marketplaceUri": "https://marketplace-api.public.nevermined.rocks",
+			"faucetUri": "",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"gatewayUri": "https://gateway.public.nevermined.rocks",
+			"gatewayAddress": "0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86",
+			"verbose": true
+		},
+		"nativeToken": "MATIC",
+		"networkId": "137",
+		"networkName": "polygon",
+		"contractsVersion": "2.0.5",
+		"tagName": "public",
+		"etherscanUrl": "https://polygonscan.com",
+		"erc20TokenAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0
+	},		
 	"spree": {
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
 		"isProduction": false,
@@ -39,31 +85,8 @@
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0
 	},
-	"testnet": {
-		"envDescription": "Public testnet environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
-		"isProduction": false,
-		"nvm": {
-			"nodeUri": "https://rpc-mumbai.maticvigil.com",
-			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
-			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"gatewayUri": "https://gateway.mumbai.public.nevermined.rocks",
-			"gatewayAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
-			"verbose": true
-		},
-		"nativeToken": "MATIC",
-		"networkId": "80001",
-		"networkName": "mumbai",
-		"contractsVersion": "2.0.3",
-		"tagName": "public",
-		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
-	},
-	"defiMumbai": {
-		"envDescription": "Testnet environment for the DeFi Marketplace.",
+	"commonMumbai": {
+		"envDescription": "Testnet environment for the DeFi Marketplace, Autonomies and other projects.",
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
 		"isProduction": false,
 		"nvm": {
@@ -78,33 +101,33 @@
 		"nativeToken": "MATIC",
 		"networkId": "80001",
 		"networkName": "mumbai",
-		"contractsVersion": "2.0.0",
+		"contractsVersion": "2.0.5",
 		"tagName": "common",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0
 	},
-	"autonomiesMumbai": {
-		"envDescription": "Testnet environment for the Autonomies Marketplace.",
-		"envUrl": "https://portal.autonomies.test.nevermined.rocks",
-		"isProduction": false,
+	"commonPolygon": {
+		"envDescription": "Production environment for the DeFi Marketplace, Autonomies and other projects.",
+		"envUrl": "https://defi-data.net",
+		"isProduction": true,
 		"nvm": {
 			"nodeUri": "https://rpc-mumbai.maticvigil.com",
-			"marketplaceUri": "https://marketplace-api.autonomies.test.nevermined.rocks",
-			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
+			"marketplaceUri": "https://marketplace-api.autonomies.nevermined.rocks/",
+			"faucetUri": "",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
-			"gatewayUri": "https://gateway.autonomies.test.nevermined.rocks",
-			"gatewayAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+			"gatewayUri": "https://gateway.autonomies.nevermined.rocks",
+			"gatewayAddress": "0x908C5456220093aFC518EF54cC9B3aB19a7166a6",
 			"verbose": true
 		},
 		"nativeToken": "MATIC",
-		"networkId": "80001",
-		"networkName": "mumbai",
-		"contractsVersion": "2.0.0",
+		"networkId": "137",
+		"networkName": "polygon",
+		"contractsVersion": "2.0.5",
 		"tagName": "common",
-		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+		"etherscanUrl": "https://polygonscan.com",
+		"erc20TokenAddress": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0
 	},

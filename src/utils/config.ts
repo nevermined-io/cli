@@ -45,7 +45,6 @@ export async function configureLocalEnvironment(
   }
 
   const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
-  console.log(`ABI PATH ${abiTestPath}`)
   if (network.toLowerCase() === 'spree') {
     if (
       !fs.existsSync(abiTestPath) ||

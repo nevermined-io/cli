@@ -22,7 +22,7 @@ The `ncli` allows to pass different parameters depending on the command you want
 * `--help` - If given the CLI will parse information about how to use the `ncli` or a specific command
 * `--version` - If given the CLI will print the application version and will finish
 * `--verbose` or `-v` - It allows to run the `ncli` in debug mode printing more information about what is going on
-* `--network` or `-n` - It allows to specify to what network you want to connect (`spree`, `testnet`, `defiMumbai`, etc). If you want to see the full list of pre-configured environments please run `ncli network list`
+* `--network` or `-n` - It allows to specify to what network you want to connect (`spree`, `testnet`, `commonMumbai`, etc). If you want to see the full list of pre-configured environments please run `ncli network list`
 * `--acount` or `-a` - If given, the `ncli` will try to use that specific `address` of the possible derived accounts from your `MNEMONIC`. If not given the `ncli` will try to load the first account derived (derivation path 0).
 * `--json` - If this flag is provided the `ncli` will print all the output in JSON format. This facilitates integrating the `ncli` with another application.
 

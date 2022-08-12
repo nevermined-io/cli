@@ -6,6 +6,19 @@ sidebar_position: 3
 
 Once you have created your account and have some funds, you are ready to start using the `ncli` to interact with different Nevermined networks.
 
+Let's first setup the main config we need:
+
+```bash
+export MNEMONIC="YOUR 12 WORDS SEED PHRASE"
+export NETWORK=testnet
+export NODE_URL="the node url valid for the network you are connecting"
+```
+
+:::tip
+
+If you don't know what **NODE_URL** use, we recommend get a free account on [Infura](https://infura.io/) or [Alchemy](https://alchemyapi.io/).
+
+:::
 
 ## What environments can I use?
 
@@ -18,7 +31,7 @@ ncli network list
 And later see the status of any of them:
 
 ```bash
-ncli --network testnet network status
+ncli network status
 ```
 
 ## Let's create a new account and check the balance
@@ -42,6 +55,12 @@ In the testnets with a faucet available, you can get some funds running:
 ```bash
 ncli accounts fund 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260
 ```
+
+:::caution
+
+This command can fail if there is no a faucet available in the network you are using or the faucet is running out of funds/
+
+:::
 
 Getting the balance of an account is possible running:
 
