@@ -13,7 +13,7 @@ echo "Loading artifact from ABI: $ARTIFACTS_DIR/DIDRegistry.$NETWORK.json"
 VERSION=$(jq ".version" $ARTIFACTS_DIR/DIDRegistry.$NETWORK.json)
 
 # remove dots and quotes
-VERSION=$(echo ${VERSION//./} | tr -d '"')
+VERSION=$(echo ${VERSION%%.*} | tr -d '"')
 
 echo "Version found $VERSION"
 
