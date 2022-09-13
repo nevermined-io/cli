@@ -30,7 +30,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
   })
 
   test('Register an asset with a NFT (ERC-1155) attached to it', async () => {
-    const registerAssetCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
+    const registerAssetCommand = `${baseCommands.nfts1155.create} --accountIndex 0 --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -53,7 +53,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
   })
 
   test('It mints a NFT (ERC-1155)', async () => {
-    const mintCommand = `${baseCommands.nfts1155.mint} "${did}" --amount 10 --account "${execOpts.accounts[0]}"  `
+    const mintCommand = `${baseCommands.nfts1155.mint} "${did}" --amount 10 --accountIndex 0  `
     console.debug(`COMMAND: ${mintCommand}`)
 
     const stdout = execCommand(mintCommand, execOpts)
@@ -64,7 +64,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
   })
 
   test('It burns a NFT (ERC-1155)', async () => {
-    const burnCommand = `${baseCommands.nfts1155.burn} "${did}" --amount 1 --account "${execOpts.accounts[0]}"  `
+    const burnCommand = `${baseCommands.nfts1155.burn} "${did}" --amount 1 --accountIndex 0  `
     console.debug(`COMMAND: ${burnCommand}`)
 
     const stdout = execCommand(burnCommand, execOpts)
@@ -75,7 +75,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
   })
 
   test('The buyer can order and get access to the files (through the gateway)', async () => {
-    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[1]}"  `
+    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --accountIndex 1  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execCommand(orderCommand, execOpts)
@@ -87,7 +87,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     expect(orderStdout.includes(`NFT Agreement Created`))
 
     const destination = `/tmp/nevemined/cli/test-gateway/access`
-    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --seller "${execOpts.accounts[0]}" --account "${execOpts.accounts[1]}"  `
+    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --seller "${execOpts.accounts[0]}" --accountIndex 1  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const stdout = execCommand(downloadCommand, execOpts)

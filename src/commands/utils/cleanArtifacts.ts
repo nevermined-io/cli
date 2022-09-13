@@ -18,8 +18,7 @@ export const cleanArtifacts = async (
   logger.info(`Deleting local copy of Smart Contracts artifacts`)
 
   let artifactsFolder
-  if (path && path.length() > 0)
-    artifactsFolder = `${path}`
+  if (path && path.length() > 0) artifactsFolder = `${path}`
   else artifactsFolder = ARTIFACTS_PATH
 
   try {
@@ -39,4 +38,3 @@ export const cleanArtifacts = async (
     results: JSON.stringify({})
   }
 }
-

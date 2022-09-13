@@ -1,4 +1,4 @@
-import { loadNeverminedConfigContract, StatusCodes } from '../../utils'
+import { StatusCodes } from '../../utils'
 import { Logger } from 'log4js'
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -37,9 +37,7 @@ export const networkSetConfig = async (
   }
 
   try {
-    const configContract = loadNeverminedConfigContract(configEntry)
-
-    const isGovernor = await configContract.isGovernor(account.getId())
+    const isGovernor = await nvm.keeper.nvmConfig.isGovernor(account.getId())
     if (!isGovernor) {
       const errorMessage = `The account you are using is not a Governor of the network: ${account.getId()}`
       return {
@@ -48,9 +46,11 @@ export const networkSetConfig = async (
       }
     }
 
+    const functionParams = argv.newValue.split(',')
+
     if (_param === 'fees') {
-      if (argv.newValue.length != 2) {
-        const errorMessage = `You need to pass 2 parameters, the fee and the receiver. Example: --newValue 350 --newValue 0x123`
+      if (functionParams.length != 2) {
+        const errorMessage = `You need to pass 2 parameters, the fee and the receiver. Example: ncli network set-config fees 350,0x4569832`
         logger.error(errorMessage)
         return {
           status: StatusCodes.ERROR,
@@ -58,15 +58,16 @@ export const networkSetConfig = async (
         }
       }
       logger.info(
-        `Setting up Fees ... with values ${JSON.stringify(argv.newValue)}`
+        `Setting up Fees ... with values ${JSON.stringify(functionParams)}`
       )
       try {
-        await configContract.setMarketplaceFees(
-          argv.newValue[0],
-          argv.newValue[1]
+        await nvm.keeper.nvmConfig.setNetworkFees(
+          functionParams[0],
+          functionParams[1],
+          account
         )
       } catch (error) {
-        const errorMessage = `Unable to modify 'fee' parameter: ${error}`
+        const errorMessage = `Unable to modify network fees parameter: ${error}`
         logger.error(errorMessage)
         return {
           status: StatusCodes.ERROR,
@@ -76,7 +77,7 @@ export const networkSetConfig = async (
     } else if (_param === 'governor') {
       logger.info(`Setting up a new Governor ${argv.newValue}`)
       try {
-        await configContract.setGovernor(argv.newValue)
+        await nvm.keeper.nvmConfig.setGovernor(argv.newValue, account)
       } catch (error) {
         const errorMessage = `Unable to modify 'governor' parameter: ${error}`
         logger.error(errorMessage)

@@ -22,7 +22,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('List all accounts with inventory', async () => {
-    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath} --account "${execOpts.accounts[0]}"  `
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath} --accountIndex 0  `
     console.debug(`COMMAND: ${deployCommand}`)
 
     const deployStdout = execCommand(deployCommand, execOpts)

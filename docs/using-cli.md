@@ -56,7 +56,7 @@ ncli accounts balance 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260
 Nevermined is all about registering digital assets and provide services on top of them. The most basic one is about **data sharing**. So here we are gonna register a new asset and will set a price of 1 ETH for getting access to the file attached to that asset:
 
 ```bash
-ncli assets register-asset --account 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260 --name 'A picture about myself' --author 'John Doe' --price 1 --urls https://www.kazoart.com/blog/wp-content/uploads/2018/03/23-magritte-uomo-con-mela-100x70-70x50_jpg.jpg --contentType image/jpeg
+ncli assets register-asset --name 'A picture about myself' --author 'John Doe' --price 1 --urls https://www.kazoart.com/blog/wp-content/uploads/2018/03/23-magritte-uomo-con-mela-100x70-70x50_jpg.jpg --contentType image/jpeg
 ```
 
 :::info
@@ -197,7 +197,7 @@ ncli nfts721 order did:nv:b7b7a12fa80477d2c75fb730ec4c378445519bba7c816f10740ca5
 If everything went okay, now you should be able to download the files attached to the asset and protected by the NFT as access control:
 
 ```bash
-ncli nfts721 download did:nv:b7b7a12fa80477d2c75fb730ec4c378445519bba7c816f10740ca564acbea06c --destination /tmp --account 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e
+ncli nfts721 download did:nv:b7b7a12fa80477d2c75fb730ec4c378445519bba7c816f10740ca564acbea06c --destination /tmp
 ```
 
 You can check the account you used to purchase the asset is now holding the NFT:

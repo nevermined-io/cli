@@ -16,7 +16,7 @@ describe('Provenance e2e Testing', () => {
 
     const stdout = execCommand(fundCommand, execOpts)
 
-    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --accountIndex 0 --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -29,7 +29,7 @@ describe('Provenance e2e Testing', () => {
 
   test('Register the "used" provenance event and inspect', async () => {
     const activityId = generateId()
-    const registerCommand = `${baseCommands.provenance.register} ${did} --account "${execOpts.accounts[0]}" --method used --agentId "${execOpts.accounts[1]}" --activityId "${activityId}" `
+    const registerCommand = `${baseCommands.provenance.register} ${did} --accountIndex 0 --method used --agentId "${execOpts.accounts[1]}" --activityId "${activityId}" `
     const registerStdout = execCommand(registerCommand, execOpts)
 
     console.log(`Register Provenance: ${registerStdout}`)

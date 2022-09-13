@@ -578,7 +578,7 @@ The Nevermined provenance record allows to keep track of all the individual even
 
 
 ```bash
-ncli provenance register did:nv:020283aed6525d815a4bc3f4b5970a7aaa03752d1e3755d7604185ecbc5f7aa5 --account 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260 --method used --agentId 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e --activityId 73492af5abe94333a648dd42e1f1675c9cad5ba4f0614f1283093448cd03d300
+ncli provenance register did:nv:020283aed6525d815a4bc3f4b5970a7aaa03752d1e3755d7604185ecbc5f7aa5 --accountIndex 0 --method used --agentId 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e --activityId 73492af5abe94333a648dd42e1f1675c9cad5ba4f0614f1283093448cd03d300
 ```
 
 

@@ -18,7 +18,7 @@ export const metadataConfig = {
 
 export const loadAddressesFromMnemonic = (
   mnemonic: string | undefined,
-  numberOfAccounts: number = 3
+  numberOfAccounts: number = 10
 ): string[] => {
   if (mnemonic) {
     const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)

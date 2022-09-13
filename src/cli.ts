@@ -28,13 +28,13 @@ const cmdHandler = async (
   argv: any,
   requiresAccount: boolean = true
 ) => {
-  const { verbose, network } = argv
+  const { verbose, network, accountIndex } = argv
 
   let config: ConfigEntry
   let nvm: Nevermined
   let userAccount: Account
   try {
-    config = getConfig(network as string, requiresAccount)
+    config = getConfig(network as string, requiresAccount, accountIndex)
     await configureLocalEnvironment(network as string, config)
   } catch (err) {
     console.error(`Error setting up the CLI: ${(err as Error).message}`)
@@ -77,23 +77,34 @@ const cmdHandler = async (
     )
   )
 
+  try {
+    if (requiresAccount) {
+      nvm = await loadNevermined(config, network, verbose)
+      if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
 
-  if (requiresAccount) {
-    nvm = await loadNevermined(config, network, verbose)
-    if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
+      const networkId = await nvm.keeper.getNetworkId()
+      if (networkId !== Number(config.networkId)) {
+        logger.warn(chalk.red(`\nWARNING: Network connectivity issue`))
+        logger.warn(
+          `The network id obtained from the blockchain node (${networkId}), is not the same we have in the configuration for the network ${network} (${config.networkId}) `
+        )
+        logger.warn(
+          `Please, check if you are connected to the right node url. Currently using: ${config.nvm.nodeUri}\n`
+        )
+      }
+      userAccount = loadAccountFromMnemonic(config.seed!, accountIndex)
 
-    const networkId = await nvm.keeper.getNetworkId()
-    if (networkId !== Number(config.networkId)) {
-      logger.warn(chalk.red(`\nWARNING: Network connectivity issue`))
-      logger.warn(
-        `The network id obtained from the blockchain node (${networkId}), is not the same we have in the configuration for the network ${network} (${config.networkId}) `
+      logger.debug(
+        chalk.dim(
+          `Using account: '${chalk.whiteBright(userAccount.getId())}'\n`
+        )
       )
-      logger.warn(
-        `Please, check if you are connected to the right node url. Currently using: ${config.nvm.nodeUri}\n`
-      )
+
+      await loginMarketplaceApi(nvm, userAccount)
     }
-    userAccount = loadAccountFromMnemonic(config.seed!)
-    await loginMarketplaceApi(nvm, userAccount)
+  } catch (err) {
+    logger.error(`Error Connecting to Nevermined: ${(err as Error).message}`)
+    return process.exit(StatusCodes.ERROR)
   }
 
   try {
@@ -155,8 +166,11 @@ commandsParser.commands.map((_cmd) => {
           sc.name,
           sc.description +
             '\nExamples: \n' +
-            sc.examples?.map( e => `\t$ ${e}`).toString().replace(',','\n'),
-            //sc.examples?.forEach((e) => `  $ ${e} \n`),
+            sc.examples
+              ?.map((e) => `\t$ ${e}`)
+              .toString()
+              .replace(',', '\n'),
+          //sc.examples?.forEach((e) => `  $ ${e} \n`),
           (yargs) => {
             sc.positionalArguments?.map((a) => {
               yargs.positional(a.name, {

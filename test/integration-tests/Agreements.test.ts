@@ -17,7 +17,7 @@ describe('Agreements e2e Testing', () => {
 
     const stdout = execCommand(fundCommand, execOpts)
 
-    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --accountIndex 0 --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -27,7 +27,7 @@ describe('Agreements e2e Testing', () => {
     console.log(`DID: ${did}`)
     expect(did === '' ? false : did.startsWith('did:nv:'))
 
-    const orderCommand = `${baseCommands.assets.orderAsset} ${did} --account "${execOpts.accounts[0]}"  `
+    const orderCommand = `${baseCommands.assets.orderAsset} ${did} --accountIndex 0  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execCommand(orderCommand, execOpts)
@@ -35,7 +35,7 @@ describe('Agreements e2e Testing', () => {
     const serviceAgreementId = parseServiceAgreementId(orderStdout)
 
     const parentPath = '/tmp/nevermined/test-order-agreements'
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${execOpts.accounts[0]}" --path ${parentPath} --fileIndex 0 `
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId}  --accountIndex 0 --path ${parentPath} --fileIndex 0 `
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)

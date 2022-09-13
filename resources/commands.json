@@ -14,12 +14,12 @@
 			"description": "The network to use"
 		},
 		{
-			"name": "account",
+			"name": "accountIndex",
 			"alias": "a",
-			"default": "",
+			"default": "0",
 			"type": "string",
-			"description": "The account to use"
-		},
+			"description": "The index in the derivation path related with the account to use"
+		},		
 		{
 			"name": "json",
 			"default": false,
@@ -59,26 +59,25 @@
 				"details": "If the `ncli` is connected to a Nevermined network correctly this command will return information about all the governance parameters related to a Nevermined deployment.",
 				"examples": ["ncli network get-config"],
 				"commandHandler": "networkGetConfig",
-				"requiresAccount": false
+				"requiresAccount": true
 			}, {
-				"name": "set-config [parameter]",
-				"description": "Allows to the governor account to modify the configuration of a running Nevermined blockchain environment",
+				"name": "set-config [parameter] [newValue]",
+				"description": "Allows to the governor account to modify the configuration of a running Nevermined blockchain environment. The fees need to be applied with 4 decimal numbers, so 25000 means 2.5% fee",
 				"details": "If the `ncli` is connected to a Nevermined network correctly this command will allow to modify the on-chain configuration of a deployment. This function only can be executed by a `governor` account.",
-				"examples": ["ncli network set-config governor 0x12345", "ncli network set-config fees 350,0x4569832"],
+				"examples": ["ncli network set-config governor 0x309039F6A4e876bE0a3FCA8c1e32292358D7f07c", "ncli network set-config fees 10000,0x309039F6A4e876bE0a3FCA8c1e32292358D7f07c"],
 				"commandHandler": "networkSetConfig",
 				"requiresAccount": true,
 				"positionalArguments": [{
 					"name": "parameter",
 					"type": "string",
 					"description": "the name of the governance parameter to configure. Existing options: 'fees' OR 'governor'"
-				}],
-				"optionalArguments": [{
+				}, {
 					"name": "newValue",
 					"type": "string",
 					"demandOption": true,
 					"description": "the new value to set"
-				}
-				]
+				}],
+				"optionalArguments": []
 			}]
 		}, {
 			"name": "accounts",
@@ -95,15 +94,11 @@
 				"optionalArguments": []
 			}, {
 				"name": "list",
-				"description": "List all accounts",
+				"description": "List all accounts related with your credentials.",
 				"details": "To work prorperly the `ncli` needs to use a wallet to interact with the blockchain network where the Nevermined Smart Contracts are deployed. This wallet is given to the `ncli` with the **seed phrase** exported into the `MNEMONIC` environment variable. This command list some of the accounts derived from the mnemonic given by the user.",
 				"examples": ["ncli accounts list"],
 				"commandHandler": "accountsList",
-				"positionalArguments": [{
-					"name": "account",
-					"type": "string",
-					"description": "the account to retrieve the balance"
-				}],
+				"positionalArguments": [],
 				"optionalArguments": [{
 					"name": "nftTokenAddress",
 					"type": "string",
@@ -454,7 +449,7 @@
 				"name": "register [did]",
 				"description": "Registers a provenance event associated to a DID",
 				"details": "The Nevermined provenance record allows to keep track of all the individual events happening in the assets registered in a Nevermined network. This command allows to register a new event in that track record.",
-				"examples": ["ncli provenance register did:nv:020283aed6525d815a4bc3f4b5970a7aaa03752d1e3755d7604185ecbc5f7aa5 --account 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260 --method used --agentId 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e --activityId 73492af5abe94333a648dd42e1f1675c9cad5ba4f0614f1283093448cd03d300"],
+				"examples": ["ncli provenance register did:nv:020283aed6525d815a4bc3f4b5970a7aaa03752d1e3755d7604185ecbc5f7aa5 --accountIndex 0 --method used --agentId 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e --activityId 73492af5abe94333a648dd42e1f1675c9cad5ba4f0614f1283093448cd03d300"],
 				"commandHandler": "registerProvenance",
 				"positionalArguments": [{
 					"name": "did",

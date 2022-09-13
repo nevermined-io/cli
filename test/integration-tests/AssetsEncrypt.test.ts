@@ -24,7 +24,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test.skip('Upload a file', async () => {
-    const uploadCommand = `${baseCommands.utils.upload} --encrypt --account "${execOpts.accounts[0]}" README.md`
+    const uploadCommand = `${baseCommands.utils.upload} --encrypt  --accountIndex 0 README.md`
     console.debug(`COMMAND: ${uploadCommand}`)
 
     const uploadStdout = execCommand(uploadCommand, execOpts)
@@ -33,7 +33,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test.skip('Registering a new dataset and resolve the DID', async () => {
-    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name a --author b --price 1 --urls ${url} --password '${password}' --contentType text/plain`
+    const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name a --author b --price 1 --urls ${url} --password '${password}' --contentType text/plain`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -51,7 +51,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test.skip('Order and download an asset', async () => {
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --account "${execOpts.accounts[0]}" --fileIndex 0 --password abde`
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 0 --password abde`
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)

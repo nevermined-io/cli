@@ -4,7 +4,7 @@
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.maticvigil.com",
+			"nodeUri": "",
 			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
@@ -28,7 +28,7 @@
 		"envUrl": "https://nevermined.io/",
 		"isProduction": true,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.maticvigil.com",
+			"nodeUri": "",
 			"marketplaceUri": "https://marketplace-api.public.nevermined.rocks",
 			"faucetUri": "",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
@@ -76,7 +76,7 @@
 		"envUrl": "https://goerli.net/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://goerli.infura.io/v3/",
+			"nodeUri": "",
 			"marketplaceUri": "https://marketplace-api.goerli.public.nevermined.rocks",
 			"faucetUri": "https://faucet.goerli.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
@@ -166,7 +166,7 @@
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.maticvigil.com",
+			"nodeUri": "",
 			"marketplaceUri": "https://defi.v2.marketplace-api.mumbai.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
@@ -190,7 +190,7 @@
 		"envUrl": "https://portal.autonomies.test.nevermined.rocks",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.maticvigil.com",
+			"nodeUri": "",
 			"marketplaceUri": "https://marketplace-api.autonomies.test.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",

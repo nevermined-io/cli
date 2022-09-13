@@ -45,7 +45,10 @@ export async function configureLocalEnvironment(
   }
 
   const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
-  if (network.toLowerCase() === 'spree' || network.toLowerCase() === 'geth-localnet') {
+  if (
+    network.toLowerCase() === 'spree' ||
+    network.toLowerCase() === 'geth-localnet'
+  ) {
     if (
       !fs.existsSync(abiTestPath) ||
       !fs.existsSync(`${ARTIFACTS_PATH}/ready`)
@@ -105,7 +108,8 @@ export function getNetworksConfig(): CliConfig {
 
 export function getConfig(
   network: string,
-  requiresAccount: boolean = true
+  requiresAccount: boolean = true,
+  accountIndex: number = 0
 ): ConfigEntry {
   if (!process.env.MNEMONIC) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
@@ -147,6 +151,12 @@ export function getConfig(
   config.keyfilePath = process.env.KEYFILE_PATH
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
 
+  if (!config.nvm.nodeUri || config.nvm.nodeUri.length < 1) {
+    throw new Error(
+      `You need to configure a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://nvm-docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
+    )
+  }
+
   // TODO: Decommission the integration via Truffle HDWalletProvider
   const provider = Web3Provider.getWeb3(config.nvm)
   let hdWalletProvider: HDWalletProvider
@@ -171,8 +181,8 @@ export function getConfig(
       hdWalletProvider = new HDWalletProvider(
         config.seed!,
         config.nvm.nodeUri,
-        0,
-        3
+        accountIndex,
+        10
       )
     }
   } else {

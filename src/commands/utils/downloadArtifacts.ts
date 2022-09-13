@@ -27,11 +27,11 @@ export const downloadArtifacts = async (
   let packageFileName
   let destinationFolder
   let artifactPackageUrl = `${ARTIFACTS_REPOSITORY}`
-  if (destination && destination.length() > 0)  {
+  if (destination && destination.length() > 0) {
     packageFileName = `${destination}`
     destinationFolder = destination
   } else {
-    packageFileName = ARTIFACTS_PATH 
+    packageFileName = ARTIFACTS_PATH
     destinationFolder = ARTIFACTS_PATH
   }
 
@@ -61,7 +61,9 @@ export const downloadArtifacts = async (
     const buffer = Buffer.from(await response.arrayBuffer())
     writeFileSync(packageFileName, buffer, 'binary')
 
-    logger.info(`Extracting artifacts from package: ${packageFileName} into ${destinationFolder}`)
+    logger.info(
+      `Extracting artifacts from package: ${packageFileName} into ${destinationFolder}`
+    )
 
     await x({
       file: packageFileName,
