@@ -1,44 +1,4 @@
 {
-	"spree": {
-		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
-		"isProduction": false,
-		"nvm": {
-			"nodeUri": "http://localhost:8545",
-			"marketplaceUri": "http://172.17.0.1:3100",
-			"faucetUri": "http://localhost:3001",
-			"graphHttpUri": "http://localhost:9000/subgraphs/name/nevermined-io/development",
-			"gatewayUri": "http://localhost:8030",
-			"gatewayAddress": "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0",
-			"verbose": true
-		},
-		"nativeToken": "ETH",
-		"networkId": "8996",
-		"networkName": "spree",
-		"etherscanUrl": "",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
-	},
-	"polygon-localnet": {
-		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
-		"isProduction": false,
-		"nvm": {
-			"nodeUri": "http://localhost:8545",
-			"marketplaceUri": "http://172.17.0.1:3100",
-			"faucetUri": "http://localhost:3001",
-			"graphHttpUri": "http://localhost:9000/subgraphs/name/nevermined-io/development",
-			"gatewayUri": "http://localhost:8030",
-			"gatewayAddress": "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0",
-			"verbose": true
-		},
-		"nativeToken": "MATIC",
-		"networkId": "8997",
-		"networkName": "polygon-localnet",
-		"etherscanUrl": "",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
-	},
 	"testnet": {
 		"envDescription": "Public testnet environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
@@ -60,7 +20,50 @@
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"generateDoc": true
+	},
+	"geth-localnet": {
+		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
+		"isProduction": false,
+		"nvm": {
+			"nodeUri": "http://localhost:8545",
+			"marketplaceUri": "http://172.17.0.1:3100",
+			"faucetUri": "http://localhost:3001",
+			"graphHttpUri": "http://localhost:9000/subgraphs/name/nevermined-io/development",
+			"gatewayUri": "http://localhost:8030",
+			"gatewayAddress": "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0",
+			"verbose": true
+		},
+		"nativeToken": "ETH",
+		"networkId": "8996",
+		"networkName": "geth-localnet",
+		"etherscanUrl": "",
+		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"generateDoc": true
+	},
+	"polygon-localnet": {
+		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
+		"isProduction": false,
+		"nvm": {
+			"nodeUri": "http://localhost:8545",
+			"marketplaceUri": "http://172.17.0.1:3100",
+			"faucetUri": "http://localhost:3001",
+			"graphHttpUri": "http://localhost:9000/subgraphs/name/nevermined-io/development",
+			"gatewayUri": "http://localhost:8030",
+			"gatewayAddress": "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0",
+			"verbose": true
+		},
+		"nativeToken": "MATIC",
+		"networkId": "8997",
+		"networkName": "polygon-localnet",
+		"etherscanUrl": "",
+		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"generateDoc": false
 	},
 	"defiMumbai": {
 		"envDescription": "Testnet environment for the DeFi Marketplace.",
@@ -83,7 +86,8 @@
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"generateDoc": false
 	},
 	"autonomiesMumbai": {
 		"envDescription": "Testnet environment for the Autonomies Marketplace.",
@@ -106,7 +110,8 @@
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"generateDoc": false
 	},
 	"alitiesAlfajores": {
 		"envDescription": "Testnet environment for the Alities Marketplace.",
@@ -128,7 +133,8 @@
 		"etherscanUrl": "https://alfajores-blockscout.celo-testnet.org",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"generateDoc": false
 	},
 	"alitiesMainnet": {
 		"envDescription": "Public environment for the Alities Marketplace.",
@@ -151,6 +157,7 @@
 		"etherscanUrl": "https://explorer.celo.org",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"generateDoc": false
 	}
 }

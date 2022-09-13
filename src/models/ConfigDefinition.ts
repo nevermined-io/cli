@@ -24,4 +24,5 @@ export interface ConfigEntry {
   keyfilePassword?: string
   gasMultiplier?: number
   gasPriceMultiplier?: number
+  generateDoc?: boolean
 }
