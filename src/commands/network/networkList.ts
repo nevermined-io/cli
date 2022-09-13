@@ -12,13 +12,15 @@ export const networkList = async (
   configEntry: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network } = argv
+  const { verbose, network, hideInternal } = argv
 
   logger.info(chalk.dim(`Nevermined pre-configured networks:`))
 
   const networksConfig = getNetworksConfig()
   const networks = Object.keys(networksConfig)
-  networks.forEach((_key: string) => {
+  networks
+  .filter((_key: string) => hideInternal && networksConfig[_key].externalNetwork)
+  .forEach((_key: string) => {
     logger.info(` ${chalk.green(_key)}:`)
     logger.info(`\t${networksConfig[_key].envDescription}`)
     logger.info(

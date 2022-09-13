@@ -10,7 +10,7 @@ Nevermined is a web3 developers framework that allows to deploy and use it in se
 
 <% it._keys.forEach(function(name){ %>
 
-<% if(it._env[name].generateDoc === true) { %> 
+<% if(it._env[name].externalNetwork === true) { %> 
 
 ## <%= name %>
 

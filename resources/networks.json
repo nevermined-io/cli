@@ -21,7 +21,7 @@
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": true
+		"externalNetwork": true
 	},
 	"matic": {
 		"envDescription": "Polygon production environment where users can interact with Nevermined protocol.",
@@ -45,7 +45,7 @@
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": true
+		"externalNetwork": true
 	},
 	"arbitrum-one": {
 		"envDescription": "Arbitrum production environment where users can interact with Nevermined protocol.",
@@ -69,7 +69,7 @@
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": true
+		"externalNetwork": true
 	},	
 	"goerli": {
 		"envDescription": "Ethereum testnet environment where users can interact with Nevermined protocol.",
@@ -93,7 +93,7 @@
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": true
+		"externalNetwork": true
 	},
 	"arbitrum-goerli": {
 		"envDescription": "Arbitrum testnet environment where users can interact with Nevermined protocol.",
@@ -117,7 +117,7 @@
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": true
+		"externalNetwork": true
 	},		
 	"geth-localnet": {
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
@@ -138,7 +138,7 @@
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": true
+		"externalNetwork": true
 	},
 	"polygon-localnet": {
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
@@ -159,7 +159,7 @@
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": false
+		"externalNetwork": false
 	},
 	"defiMumbai": {
 		"envDescription": "Testnet environment for the DeFi Marketplace.",
@@ -183,7 +183,7 @@
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": false
+		"externalNetwork": false
 	},
 	"autonomiesMumbai": {
 		"envDescription": "Testnet environment for the Autonomies Marketplace.",
@@ -207,7 +207,7 @@
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": false
+		"externalNetwork": false
 	},
 	"alitiesAlfajores": {
 		"envDescription": "Testnet environment for the Alities Marketplace.",
@@ -230,7 +230,7 @@
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": false
+		"externalNetwork": false
 	},
 	"alitiesMainnet": {
 		"envDescription": "Public environment for the Alities Marketplace.",
@@ -254,6 +254,6 @@
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"generateDoc": false
+		"externalNetwork": false
 	}
 }

@@ -37,7 +37,15 @@
 				"details": "The `ncli` has a pre-configured list of Nevermined environments in different networks. This command list some basic information about all of these available Nevermined environments.",
 				"examples": ["ncli network list"],
 				"commandHandler": "networkList",
-				"requiresAccount": false
+				"requiresAccount": false,
+				"optionalArguments": [{
+					"name": "hideInternal",
+					"type": "string",
+					"default": true,
+					"demandOption": false,
+					"description": "If true it doesn't show internal Nevermined networks"
+				}
+				]
 			}, {
 				"name": "status",
 				"description": "List all the information about a Nevermined deployment",
