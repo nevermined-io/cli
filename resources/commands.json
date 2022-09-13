@@ -1117,7 +1117,7 @@
 				"name": "download-artifacts [contractsVersion]",
 				"description": "Downloads the Nevermined Contracts artifacts",
 				"details": "Nevermined exposes the Smart Contracts artifacts with their definition. Also Nevermined record all the different versions of these contracts deployed in different networks ready to be downloaded. Depending on the parameters provided, this command allows to download them.",
-				"examples": ["ncli utils download-artifacts 2.0.0 --networkId 80001 --destination /tmp", "ncli utils download-artifacts 2.0.0 --networkId 8001 --tag common --destination /tmp"],
+				"examples": ["ncli utils download-artifacts 2.0.0 --networkId 80001 --destination /tmp", "ncli utils download-artifacts 2.0.0 --networkId 8001 --tag public --destination /tmp"],
 				"commandHandler": "downloadArtifacts",
 				"requiresAccount": false,
 				"positionalArguments": [{
@@ -1133,13 +1133,27 @@
 				}, {
 					"name": "tag",
 					"type": "string",
-                    "default": "common",
+                    "default": "public",
 					"description": "The tag name of the contracts artifacts to download"
 				}, {
 					"name": "destination",
 					"type": "string",
-					"demandOption": true,
+					"demandOption": false,
 					"description": "The destination folder for the artifacts to download. For example /tmp"
+				}]
+			}, {
+				"name": "clean-artifacts",
+				"description": "Removes all the previously downloaded and cached artifacts",
+				"details": "The CLI stores a local copy of the Smart Contracts artifacts into a local folder. This command deletes this cached copy.",
+				"examples": ["ncli utils clean-artifacts", "ncli utils clean-artifacts --path /tmp"],
+				"commandHandler": "cleanArtifacts",
+				"requiresAccount": false,
+				"positionalArguments": [],
+				"optionalArguments": [{
+					"name": "path",
+					"type": "string",
+					"demandOption": false,
+					"description": "The folder where are the artifacts to clean. For example /tmp"
 				}]
 			}]
 		}

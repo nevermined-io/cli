@@ -45,14 +45,13 @@ export async function configureLocalEnvironment(
   }
 
   const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
-  console.log(`ABI PATH ${abiTestPath}`)
-  if (network.toLowerCase() === 'spree') {
+  if (network.toLowerCase() === 'spree' || network.toLowerCase() === 'geth-localnet') {
     if (
       !fs.existsSync(abiTestPath) ||
       !fs.existsSync(`${ARTIFACTS_PATH}/ready`)
     ) {
       throw new Error(
-        `The Spree ABI files are not in the artifacts folder: ${ARTIFACTS_PATH}. Make sure nevermined tools is up and running`
+        `The Local Network ABI files are not in the artifacts folder: ${ARTIFACTS_PATH}. Make sure nevermined tools is up and running`
       )
     }
   } else {
