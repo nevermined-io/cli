@@ -19,10 +19,74 @@ The Native token being used is **MATIC**. This environment is having the network
 
 ### Nevermined configuration 
 
- The Nevermined contracts deployed have the version: **2.0.3**  The Nevermined contracts are labeled with the tag name: **public** 
+ The Nevermined contracts deployed have the version: **2.1.0**  The Nevermined contracts are labeled with the tag name: **public** 
 The Marketplace API used can be found on https://marketplace-api.mumbai.public.nevermined.rocks. <br/>
 The Gateway can be found on https://gateway.mumbai.public.nevermined.rocks and uses the public address **0xB82dc620BB4dE6712376055a5cfc0DF11112D442**.<br/>
  There is deployed a faucet on https://faucet.mumbai.public.nevermined.rocks .<br/> The subgraphs to fetch contracts events can be found on https://api.thegraph.com/subgraphs/name/nevermined-io/public .<br/>
+
+
+ 
+
+## matic
+Polygon production environment where users can interact with Nevermined protocol.<br/>
+
+ **Production Environment** 
+The Native token being used is **MATIC**. This environment is having the network name **matic** and the chain id/network id **137**. <br/>
+
+### Nevermined configuration 
+
+ The Nevermined contracts deployed have the version: **2.1.0**  The Nevermined contracts are labeled with the tag name: **public** 
+The Marketplace API used can be found on https://marketplace-api.public.nevermined.rocks. <br/>
+The Gateway can be found on https://gateway.public.nevermined.rocks and uses the public address **0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86**.<br/>
+ The subgraphs to fetch contracts events can be found on https://api.thegraph.com/subgraphs/name/nevermined-io/public .<br/>
+
+
+ 
+
+## arbitrum-one
+Arbitrum production environment where users can interact with Nevermined protocol.<br/>
+
+ **Production Environment** 
+The Native token being used is **ETH**. This environment is having the network name **matic** and the chain id/network id **42161**. <br/>
+
+### Nevermined configuration 
+
+ The Nevermined contracts deployed have the version: **2.1.0**  The Nevermined contracts are labeled with the tag name: **public** 
+The Marketplace API used can be found on https://marketplace-api.arbitrum-one.public.nevermined.rocks. <br/>
+The Gateway can be found on https://gateway.arbitrum-one.public.nevermined.rocks and uses the public address **0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86**.<br/>
+ The subgraphs to fetch contracts events can be found on https://api.thegraph.com/subgraphs/name/nevermined-io/public .<br/>
+
+
+ 
+
+## goerli
+Ethereum testnet environment where users can interact with Nevermined protocol.<br/>
+
+ **Testnet** 
+The Native token being used is **ETH**. This environment is having the network name **goerli** and the chain id/network id **5**. <br/>
+
+### Nevermined configuration 
+
+ The Nevermined contracts deployed have the version: **2.1.0**  The Nevermined contracts are labeled with the tag name: **public** 
+The Marketplace API used can be found on https://marketplace-api.goerli.public.nevermined.rocks. <br/>
+The Gateway can be found on https://gateway.goerli.public.nevermined.rocks and uses the public address **0xB82dc620BB4dE6712376055a5cfc0DF11112D442**.<br/>
+ There is deployed a faucet on https://faucet.goerli.public.nevermined.rocks .<br/> The subgraphs to fetch contracts events can be found on https://api.thegraph.com/subgraphs/name/nevermined-io/public .<br/>
+
+
+ 
+
+## arbitrum-goerli
+Arbitrum testnet environment where users can interact with Nevermined protocol.<br/>
+
+ **Testnet** 
+The Native token being used is **ETH**. This environment is having the network name **arbitrum-goerli** and the chain id/network id **421613**. <br/>
+
+### Nevermined configuration 
+
+ The Nevermined contracts deployed have the version: **2.1.0**  The Nevermined contracts are labeled with the tag name: **public** 
+The Marketplace API used can be found on https://marketplace-api.arbitrum-goerli.public.nevermined.rocks. <br/>
+The Gateway can be found on https://gateway.arbitrum-goerli.public.nevermined.rocks and uses the public address **0xB82dc620BB4dE6712376055a5cfc0DF11112D442**.<br/>
+ There is deployed a faucet on https://faucet.arbitrum-goerli.public.nevermined.rocks .<br/> The subgraphs to fetch contracts events can be found on https://api.thegraph.com/subgraphs/name/nevermined-io/public .<br/>
 
 
  
