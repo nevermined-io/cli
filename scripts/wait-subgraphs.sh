@@ -3,7 +3,7 @@ NETWORK=$1
 RETRY_COUNT=0
 HTTP_CODE=0
 CONF_DIR=${LOCAL_CONF_DIR:-~/.nevermined}
-NETWORK=${NETWORK:-spree}
+NETWORK=${NETWORK:-geth-localnet}
 
 ARTIFACTS_DIR=$CONF_DIR/nevermined-contracts/artifacts
 GRAPH_NODE_URL=${GRAPH_NODE_URL:-http://localhost:9000}

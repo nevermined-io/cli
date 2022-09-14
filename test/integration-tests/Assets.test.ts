@@ -18,6 +18,7 @@ describe('Assets e2e Testing', () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)
     if (
       execOpts.env.NETWORK === 'spree' ||
+      execOpts.env.NETWORK === 'geth-localnet' ||
       execOpts.env.NETWORK === 'polygon-localnet'
     ) {
       console.log(`Funding account: ${execOpts.accounts[0]}`)

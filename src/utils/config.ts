@@ -26,6 +26,9 @@ export const ARTIFACTS_REPOSITORY =
   process.env.ARTIFACTS_REPO ||
   'https://artifacts-nevermined-rocks.s3.amazonaws.com'
 
+export const USE_NEW_GATEWAY = true
+export const DEFAULT_ENCRYPTION_METHOD = 'PSK-RSA'
+
 // INFO: This mnemonic is only used to initialize the HDWallet in commands not requiring network connectivity
 export const DUMMY_MNEMONIC =
   'kitchen proud renew agent print clap trigger ladder poverty salad marriage hotel'
@@ -131,6 +134,9 @@ export function getConfig(
   } catch (error) {
     throw new Error(`Network '${network}' is not supported`)
   }
+
+  if (!defaultConfig) throw new Error(`Network '${network}' is not supported`)
+
   let config = defaultConfig
 
   if (process.env.NODE_URL) config.nvm.nodeUri = process.env.NODE_URL
@@ -201,6 +207,7 @@ export function getConfig(
     nvm: {
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,
+      newGateway: USE_NEW_GATEWAY,
       web3Provider: hdWalletProvider
     }
   }

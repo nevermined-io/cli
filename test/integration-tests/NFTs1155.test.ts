@@ -14,19 +14,34 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
   let orderAgreementId = ''
 
   beforeAll(async () => {
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-    console.debug(`COMMAND: ${fundCommand}`)
+    console.log(`NETWORK: ${execOpts.env.NETWORK}`)
+    try {
+      if (
+        execOpts.env.NETWORK === 'spree' ||
+        execOpts.env.NETWORK === 'geth-localnet' ||
+        execOpts.env.NETWORK === 'polygon-localnet'
+      ) {
+        console.log(
+          `Funding accounts: ${execOpts.accounts[0]} + ${execOpts.accounts[1]} + ${execOpts.accounts[2]}`
+        )
+        execCommand(
+          `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`,
+          execOpts
+        )
 
-    const stdout = execCommand(fundCommand, execOpts)
-    execCommand(
-      `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`,
-      execOpts
-    )
-    execCommand(
-      `${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`,
-      execOpts
-    )
+        execCommand(
+          `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`,
+          execOpts
+        )
+        execCommand(
+          `${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`,
+          execOpts
+        )
+      }
+    } catch (error) {
+      console.warn(`Unable to fund accounts`)
+      console.trace((error as Error).message)
+    }
   })
 
   test('Register an asset with a NFT (ERC-1155) attached to it', async () => {

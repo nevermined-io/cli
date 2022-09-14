@@ -22,7 +22,7 @@ export const cleanArtifacts = async (
   else artifactsFolder = ARTIFACTS_PATH
 
   try {
-    const result = execSync(`rm -f ${artifactsFolder}/*.json`)
+    const result = execSync(`rm -f ${artifactsFolder}/*.*`)
   } catch (error) {
     const errorMessage = `Unable to removed the cached the artifacts: ${JSON.stringify(
       error

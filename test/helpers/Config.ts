@@ -1,7 +1,7 @@
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils/GeneratorHelpers'
 import { ethers } from 'ethers'
 
-const NETWORK = process.env.NETWORK || 'spree'
+const NETWORK = process.env.NETWORK || 'geth-localnet'
 const BASE_COMMAND = `yarn start -n ${NETWORK}`
 const VERBOSE = '-v'
 

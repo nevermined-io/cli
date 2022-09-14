@@ -52,7 +52,7 @@
 				"details": "If the `ncli` is connected to a Nevermined network correctly this command will return information about that network. This will include information about the contracts (version, addresses, etc), Gateway, Marketplace API.",
 				"examples": ["ncli network status"],
 				"commandHandler": "networkStatus",
-				"requiresAccount": false
+				"requiresAccount": true
 			}, {
 				"name": "get-config",
 				"description": "Get all the Governance configuration about a Nevermined environment",
