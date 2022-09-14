@@ -24,10 +24,7 @@ export const accountsList = async (
 
   logger.debug(chalk.dim('Loading account/s ...'))
 
-  let accounts
-  // if (address !== undefined) accounts = [account]
-  // else
-  accounts = await nvm.accounts.list()
+  let accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =

@@ -1,0 +1,63 @@
+name: Tests Nightly
+
+on:
+  schedule:
+    - cron: '30 3 * * *'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - name: Install dependencies
+        run: |
+          yarn install --ignore-engines
+      - name: Lint
+        run: |
+          yarn lint
+      - name: Reclaim some disk space
+        run: |
+          docker system prune --all --volumes -f
+      - name: Run Nevermined Tools
+        env:
+        run: |
+          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
+          sudo chmod go+r /etc/hosts
+          sudo echo "127.0.0.1  nevermined-metadata" | sudo tee -a /etc/hosts
+          git clone https://github.com/nevermined-io/tools
+          cd tools
+
+          export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
+
+          rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
+          ./start_nevermined.sh ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
+          cd ..
+          ./scripts/wait-nevermined.sh
+          ./scripts/wait-subgraphs.sh ${{ matrix.network-name }}
+
+      - name: Run e2e tests
+        env:
+          LOCAL_CONF_DIR: "/tmp/.nevermined"
+          MNEMONIC: ${{ secrets.MNEMONIC_TESTING_MUMBAI }}
+          TOKEN_ADDRESS: "0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F"
+          NODE_URL: https://polygon-mumbai.infura.io/v3/${{ secrets.INFURA_TOKEN }}
+          NETWORK: "testnet"
+          IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
+          IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
+        run: |
+          sleep 10
+          yarn build
+          yarn test
+      - name: Upload logs
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: nevermined-tools-output
+          path: tools/nevermined_tools.txt

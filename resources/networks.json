@@ -1,7 +1,7 @@
 {
 	"testnet": {
 		"envDescription": "Public testnet environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
+		"envUrl": "https://nevermined.io/",
 		"isProduction": false,
 		"nvm": {
 			"nodeUri": "",
@@ -62,7 +62,7 @@
 		},
 		"nativeToken": "ETH",
 		"networkId": "42161",
-		"networkName": "matic",
+		"networkName": "arbitrum-one",
 		"contractsVersion": "2.1.0",
 		"tagName": "public",
 		"etherscanUrl": "https://arbiscan.io/",
@@ -132,7 +132,7 @@
 			"verbose": true
 		},
 		"nativeToken": "ETH",
-		"networkId": "1337",
+		"networkId": "8997",
 		"networkName": "geth-localnet",
 		"etherscanUrl": "",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",

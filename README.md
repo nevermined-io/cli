@@ -104,7 +104,7 @@ Options:
       --version  Show version number                                                                                                                                          [boolean]
   -v, --verbose  Run with verbose logging                                                                                                                                     [boolean]
   -n, --network  The network to use                                                                                                                         [string] [default: "testnet"]
-  -a, --accountIndex  The account to index referring to the account to use                                                                                                                              [string] [default: ""]
+  -a, --accountIndex The index of the account to use                                                                                                                              [string] [default: "0"]
 ```
 
 ## Networks
