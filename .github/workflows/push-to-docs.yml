@@ -28,7 +28,7 @@ jobs:
       - name: Replace env vars in push-to-docs script
         env:
           BRANCH_TO_CLONE: main
-          REPO_TO_PUSH: nvm-docs
+          REPO_TO_PUSH: docs
           PATH_TO_COPY: docs/
           PATH_TO_PUSH: docs/tools/cli
           REPOSITORY_NAME: ${{ github.repository }}
