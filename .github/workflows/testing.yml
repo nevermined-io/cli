@@ -12,13 +12,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        network: ["--polygon", "--geth"]
+        network: ["--geth"]
         node: ["16"]
         include:
-          - network: "--polygon"
-            network-name: polygon-localnet
-            chainId: 8997
-            delay: none
           - network: "--geth"
             network-name: geth-localnet
             chainId: 8998
