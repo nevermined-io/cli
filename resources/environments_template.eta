@@ -10,6 +10,8 @@ Nevermined is a web3 developers framework that allows to deploy and use it in se
 
 <% it._keys.forEach(function(name){ %>
 
+<% if(it._env[name].externalNetwork === true) { %> 
+
 ## <%= name %>
 
 <%= it._env[name].envDescription %><br/>
@@ -27,5 +29,7 @@ The Marketplace API used can be found on <%= it._env[name].nvm.marketplaceUri %>
 The Gateway can be found on <%= it._env[name].nvm.gatewayUri %> and uses the public address **<%= it._env[name].nvm.gatewayAddress %>**.<br/>
 <% if(it._env[name].nvm.faucetUri !== '') { %> There is deployed a faucet on <%= it._env[name].nvm.faucetUri %> .<br/><% } %>
 <% if(it._env[name].nvm.graphHttpUri !== '') { %> The subgraphs to fetch contracts events can be found on <%= it._env[name].nvm.graphHttpUri %> .<br/><% } %>
+
+<% } %>
 
 <% }) %>

@@ -10,13 +10,26 @@ describe('Provenance e2e Testing', () => {
   let did = ''
 
   beforeAll(async () => {
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-    console.debug(`COMMAND: ${fundCommand}`)
+    try {
+      if (
+        execOpts.env.NETWORK === 'spree' ||
+        execOpts.env.NETWORK === 'geth-localnet' ||
+        execOpts.env.NETWORK === 'polygon-localnet'
+      ) {
+        console.log(
+          `Funding accounts: ${execOpts.accounts[0]} + ${execOpts.accounts[1]} + ${execOpts.accounts[2]}`
+        )
+        execCommand(
+          `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`,
+          execOpts
+        )
+      }
+    } catch (error) {
+      console.warn(`Unable to fund accounts`)
+      console.trace((error as Error).message)
+    }
 
-    const stdout = execCommand(fundCommand, execOpts)
-
-    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --accountIndex 0 --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -29,7 +42,7 @@ describe('Provenance e2e Testing', () => {
 
   test('Register the "used" provenance event and inspect', async () => {
     const activityId = generateId()
-    const registerCommand = `${baseCommands.provenance.register} ${did} --account "${execOpts.accounts[0]}" --method used --agentId "${execOpts.accounts[1]}" --activityId "${activityId}" `
+    const registerCommand = `${baseCommands.provenance.register} ${did} --accountIndex 0 --method used --agentId "${execOpts.accounts[1]}" --activityId "${activityId}" `
     const registerStdout = execCommand(registerCommand, execOpts)
 
     console.log(`Register Provenance: ${registerStdout}`)

@@ -3,7 +3,8 @@ import {
   Constants,
   StatusCodes,
   printNftTokenBanner,
-  loadToken
+  loadToken,
+  DEFAULT_ENCRYPTION_METHOD
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
@@ -14,6 +15,10 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+import {
+  getRoyaltyAttributes,
+  RoyaltyKind
+} from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Assets'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -32,6 +37,8 @@ export const createNft = async (
       errorMessage: `Royalties must be between 0 and 100%`
     }
   }
+
+  logger.info(chalk.dim('Loading token'))
 
   const token = await loadToken(nvm, config, verbose)
 
@@ -83,6 +90,12 @@ export const createNft = async (
     ddoPrice = BigNumber.from(ddoMetadata.main.price)
   }
 
+  const royaltyAttributes = getRoyaltyAttributes(
+    nvm,
+    RoyaltyKind.Standard,
+    argv.royalties
+  )
+
   logger.info(chalk.dim('\nCreating Asset ...'))
 
   let ddo
@@ -94,27 +107,32 @@ export const createNft = async (
       await printNftTokenBanner(nft)
     }
 
-    ddo = await nvm.nfts.create721(
+    ddo = await nvm.assets.createNft721(
       ddoMetadata,
       creatorAccount,
       // @ts-ignore
       new AssetRewards(creatorAccount.getId(), ddoPrice),
+      DEFAULT_ENCRYPTION_METHOD,
       argv.nftAddress,
       token ? token.getAddress() : config.erc20TokenAddress,
-      argv.royalties,
+      true,
+      [config.nvm.gatewayAddress!],
+      royaltyAttributes,
       argv.nftMetadata
     )
   } else {
     // erc-1155
-    ddo = await nvm.nfts.create(
+    ddo = await nvm.assets.createNft(
       ddoMetadata,
       creatorAccount,
-      argv.cap,
-      argv.royalties,
-      // @ts-ignore
       new AssetRewards(creatorAccount.getId(), ddoPrice),
-      undefined,
+      DEFAULT_ENCRYPTION_METHOD,
+      argv.cap,
+      [config.nvm.gatewayAddress!],
+      1,
+      royaltyAttributes,
       token ? token.getAddress() : config.erc20TokenAddress,
+      argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),
       argv.preMint,
       argv.nftMetadata
     )
@@ -129,9 +147,11 @@ export const createNft = async (
         true,
         creatorAccount
       )
-      logger.info('Approval receipt:', receipt)
+      logger.trace('Approval receipt:', receipt)
     }
   }
+
+  logger.info('Asset with DID created:', ddo.id)
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(
     zeroX(ddo.shortId())

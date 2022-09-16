@@ -1,5 +1,125 @@
 {
-	"spree": {
+	"testnet": {
+		"envDescription": "Public testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://nevermined.io/",
+		"isProduction": false,
+		"nvm": {
+			"nodeUri": "",
+			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
+			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"gatewayUri": "https://gateway.mumbai.public.nevermined.rocks",
+			"gatewayAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
+			"verbose": true
+		},
+		"nativeToken": "MATIC",
+		"networkId": "80001",
+		"networkName": "mumbai",
+		"contractsVersion": "2.1.0",
+		"tagName": "public",
+		"etherscanUrl": "https://mumbai.polygonscan.com",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},
+	"matic": {
+		"envDescription": "Polygon production environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://nevermined.io/",
+		"isProduction": true,
+		"nvm": {
+			"nodeUri": "",
+			"marketplaceUri": "https://marketplace-api.public.nevermined.rocks",
+			"faucetUri": "",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"gatewayUri": "https://gateway.public.nevermined.rocks",
+			"gatewayAddress": "0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86",
+			"verbose": true
+		},
+		"nativeToken": "MATIC",
+		"networkId": "137",
+		"networkName": "matic",
+		"contractsVersion": "2.1.0",
+		"tagName": "public",
+		"etherscanUrl": "https://polygonscan.com",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},
+	"arbitrum-one": {
+		"envDescription": "Arbitrum production environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://arbitrum.io/",
+		"isProduction": true,
+		"nvm": {
+			"nodeUri": "https://arb1.arbitrum.io/rpc",
+			"marketplaceUri": "https://marketplace-api.arbitrum-one.public.nevermined.rocks",
+			"faucetUri": "",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"gatewayUri": "https://gateway.arbitrum-one.public.nevermined.rocks",
+			"gatewayAddress": "0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86",
+			"verbose": true
+		},
+		"nativeToken": "ETH",
+		"networkId": "42161",
+		"networkName": "arbitrum-one",
+		"contractsVersion": "2.1.0",
+		"tagName": "public",
+		"etherscanUrl": "https://arbiscan.io/",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},	
+	"goerli": {
+		"envDescription": "Ethereum testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://goerli.net/",
+		"isProduction": false,
+		"nvm": {
+			"nodeUri": "",
+			"marketplaceUri": "https://marketplace-api.goerli.public.nevermined.rocks",
+			"faucetUri": "https://faucet.goerli.public.nevermined.rocks",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"gatewayUri": "https://gateway.goerli.public.nevermined.rocks",
+			"gatewayAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
+			"verbose": true
+		},
+		"nativeToken": "ETH",
+		"networkId": "5",
+		"networkName": "goerli",
+		"contractsVersion": "2.1.0",
+		"tagName": "public",
+		"etherscanUrl": "https://goerli.etherscan.io",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},
+	"arbitrum-goerli": {
+		"envDescription": "Arbitrum testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://arbitrum.io/",
+		"isProduction": false,
+		"nvm": {
+			"nodeUri": "https://goerli-rollup.arbitrum.io/rpc",
+			"marketplaceUri": "https://marketplace-api.arbitrum-goerli.public.nevermined.rocks",
+			"faucetUri": "https://faucet.arbitrum-goerli.public.nevermined.rocks",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"gatewayUri": "https://gateway.arbitrum-goerli.public.nevermined.rocks",
+			"gatewayAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
+			"verbose": true
+		},
+		"nativeToken": "ETH",
+		"networkId": "421613",
+		"networkName": "arbitrum-goerli",
+		"contractsVersion": "2.1.0",
+		"tagName": "public",
+		"etherscanUrl": "https://goerli-rollup-explorer.arbitrum.io/",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},		
+	"geth-localnet": {
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
 		"isProduction": false,
 		"nvm": {
@@ -12,12 +132,13 @@
 			"verbose": true
 		},
 		"nativeToken": "ETH",
-		"networkId": "8996",
-		"networkName": "spree",
+		"networkId": "8998",
+		"networkName": "geth-localnet",
 		"etherscanUrl": "",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
 	},
 	"polygon-localnet": {
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
@@ -37,37 +158,15 @@
 		"etherscanUrl": "",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
-	},
-	"testnet": {
-		"envDescription": "Public testnet environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
-		"isProduction": false,
-		"nvm": {
-			"nodeUri": "https://rpc-mumbai.maticvigil.com",
-			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
-			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"gatewayUri": "https://gateway.mumbai.public.nevermined.rocks",
-			"gatewayAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
-			"verbose": true
-		},
-		"nativeToken": "MATIC",
-		"networkId": "80001",
-		"networkName": "mumbai",
-		"contractsVersion": "2.0.3",
-		"tagName": "public",
-		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"externalNetwork": false
 	},
 	"defiMumbai": {
 		"envDescription": "Testnet environment for the DeFi Marketplace.",
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.maticvigil.com",
+			"nodeUri": "",
 			"marketplaceUri": "https://defi.v2.marketplace-api.mumbai.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
@@ -83,14 +182,15 @@
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"externalNetwork": false
 	},
 	"autonomiesMumbai": {
 		"envDescription": "Testnet environment for the Autonomies Marketplace.",
 		"envUrl": "https://portal.autonomies.test.nevermined.rocks",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "https://rpc-mumbai.maticvigil.com",
+			"nodeUri": "",
 			"marketplaceUri": "https://marketplace-api.autonomies.test.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
@@ -106,7 +206,8 @@
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"externalNetwork": false
 	},
 	"alitiesAlfajores": {
 		"envDescription": "Testnet environment for the Alities Marketplace.",
@@ -128,7 +229,8 @@
 		"etherscanUrl": "https://alfajores-blockscout.celo-testnet.org",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"externalNetwork": false
 	},
 	"alitiesMainnet": {
 		"envDescription": "Public environment for the Alities Marketplace.",
@@ -151,6 +253,7 @@
 		"etherscanUrl": "https://explorer.celo.org",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
 		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0
+		"gasPriceMultiplier": 0,
+		"externalNetwork": false
 	}
 }

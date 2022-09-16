@@ -1,7 +1,7 @@
 import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils/GeneratorHelpers'
 import { ethers } from 'ethers'
 
-const NETWORK = process.env.NETWORK || 'spree'
+const NETWORK = process.env.NETWORK || 'geth-localnet'
 const BASE_COMMAND = `yarn start -n ${NETWORK}`
 const VERBOSE = '-v'
 
@@ -18,7 +18,7 @@ export const metadataConfig = {
 
 export const loadAddressesFromMnemonic = (
   mnemonic: string | undefined,
-  numberOfAccounts: number = 3
+  numberOfAccounts: number = 10
 ): string[] => {
   if (mnemonic) {
     const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)

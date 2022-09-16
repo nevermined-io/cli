@@ -13,23 +13,38 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
   let nftRoyalties = 5
 
   beforeAll(async () => {
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-    console.debug(`COMMAND: ${fundCommand}`)
+    console.log(`NETWORK: ${execOpts.env.NETWORK}`)
+    try {
+      if (
+        execOpts.env.NETWORK === 'spree' ||
+        execOpts.env.NETWORK === 'geth-localnet' ||
+        execOpts.env.NETWORK === 'polygon-localnet'
+      ) {
+        console.log(
+          `Funding accounts: ${execOpts.accounts[0]} + ${execOpts.accounts[1]} + ${execOpts.accounts[2]}`
+        )
+        execCommand(
+          `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`,
+          execOpts
+        )
 
-    const stdout = execCommand(fundCommand, execOpts)
-    execCommand(
-      `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`,
-      execOpts
-    )
-    execCommand(
-      `${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`,
-      execOpts
-    )
+        execCommand(
+          `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token erc20`,
+          execOpts
+        )
+        execCommand(
+          `${baseCommands.accounts.fund} "${execOpts.accounts[2]}" --token erc20`,
+          execOpts
+        )
+      }
+    } catch (error) {
+      console.warn(`Unable to fund accounts`)
+      console.trace((error as Error).message)
+    }
   })
 
   test('The buyer order and the seller transfer a NFT (directly)', async () => {
-    const registerAssetCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --preMint true --name " NFTs 1155 test2 ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
+    const registerAssetCommand = `${baseCommands.nfts1155.create} --accountIndex 0 --preMint true --name " NFTs 1155 test2 ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --cap ${nftCap} --royalties ${nftRoyalties} --nftMetadata "${metadataConfig.metadataNFT}" `
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -39,7 +54,7 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
     expect(did.length > 0)
 
-    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --account "${execOpts.accounts[2]}"  `
+    const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --accountIndex 2  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execCommand(orderCommand, execOpts).toString()
@@ -49,7 +64,7 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
     expect(orderAgreementId.length > 0)
 
-    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --account "${execOpts.accounts[0]}" --buyerAccount "${execOpts.accounts[2]}" `
+    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" --amount 1 --accountIndex 0 --buyerAccount "${execOpts.accounts[2]}" `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execCommand(transferCommand, execOpts)
@@ -62,7 +77,7 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
   test('As NFT holder I can download the files associated to an asset', async () => {
     const destination = `/tmp/nevemined/cli/test/nft`
-    const downloadCommand = `${baseCommands.nfts1155.download} "${did}" --destination "${destination}" --account "${execOpts.accounts[2]}"  `
+    const downloadCommand = `${baseCommands.nfts1155.download} "${did}" --destination "${destination}" --accountIndex 2  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const stdout = execCommand(downloadCommand, execOpts)

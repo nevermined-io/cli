@@ -1,5 +1,5 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { ARTIFACTS_REPOSITORY } from '../../utils/config'
+import { ARTIFACTS_PATH, ARTIFACTS_REPOSITORY } from '../../utils/config'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
 import { StatusCodes } from '../../utils'
@@ -24,8 +24,17 @@ export const downloadArtifacts = async (
     )}`
   )
 
+  let packageFileName
+  let destinationFolder
   let artifactPackageUrl = `${ARTIFACTS_REPOSITORY}`
-  let packageFileName = `${destination}`
+  if (destination && destination.length() > 0) {
+    packageFileName = `${destination}`
+    destinationFolder = destination
+  } else {
+    packageFileName = ARTIFACTS_PATH
+    destinationFolder = ARTIFACTS_PATH
+  }
+
   if (networkId !== undefined && networkId.length > 0) {
     // We have `networkId` information so we are trying to download artifacts deployed
     artifactPackageUrl = `${artifactPackageUrl}/${networkId}/${tag}/contracts_v${contractsVersion}.tar.gz`
@@ -48,12 +57,17 @@ export const downloadArtifacts = async (
   }
 
   try {
-    mkdirSync(destination, { recursive: true })
+    mkdirSync(destinationFolder, { recursive: true })
     const buffer = Buffer.from(await response.arrayBuffer())
     writeFileSync(packageFileName, buffer, 'binary')
+
+    logger.info(
+      `Extracting artifacts from package: ${packageFileName} into ${destinationFolder}`
+    )
+
     await x({
       file: packageFileName,
-      cwd: destination
+      cwd: destinationFolder
     })
     logger.info(
       `Artifacts downloaded (${chalk.greenBright(
@@ -75,7 +89,7 @@ export const downloadArtifacts = async (
   return {
     status: StatusCodes.OK,
     results: JSON.stringify({
-      destination,
+      destinationFolder,
       packageFileName
     })
   }

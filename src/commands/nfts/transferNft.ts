@@ -88,12 +88,7 @@ export const transferNft = async (
     await nvm.nfts.transfer721(agreementId, ddo.id, sellerAccount)
 
     logger.info(chalk.dim('Releasing rewards ...'))
-    await nvm.nfts.release721Rewards(
-      agreementId,
-      ddo.id,
-      buyerAccount,
-      sellerAccount
-    )
+    await nvm.nfts.release721Rewards(agreementId, ddo.id, sellerAccount)
   } else {
     // ERC-1155
     logger.info(
@@ -108,8 +103,7 @@ export const transferNft = async (
       agreementId,
       ddo.id,
       argv.amount,
-      buyerAccount,
-      sellerAccount
+      buyerAccount
     )
   }
 

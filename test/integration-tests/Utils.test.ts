@@ -41,7 +41,7 @@ describe('Utils e2e Testing', () => {
   })
 
   test('Register a NFT with IPFS Metadata and get access to it', async () => {
-    const registerCommand = `${baseCommands.nfts1155.create} --account "${execOpts.accounts[0]}" --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType text/text --cap 10 --royalties 5 --nftMetadata "${cid}" `
+    const registerCommand = `${baseCommands.nfts1155.create} --accountIndex 0 --name " NFTs 1155 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType text/text --cap 10 --royalties 5 --nftMetadata "${cid}" `
     console.debug(`COMMAND: ${registerCommand}`)
 
     const registerStdout = execCommand(registerCommand, execOpts as any)

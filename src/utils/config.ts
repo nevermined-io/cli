@@ -26,6 +26,9 @@ export const ARTIFACTS_REPOSITORY =
   process.env.ARTIFACTS_REPO ||
   'https://artifacts-nevermined-rocks.s3.amazonaws.com'
 
+export const USE_NEW_GATEWAY = true
+export const DEFAULT_ENCRYPTION_METHOD = 'PSK-RSA'
+
 // INFO: This mnemonic is only used to initialize the HDWallet in commands not requiring network connectivity
 export const DUMMY_MNEMONIC =
   'kitchen proud renew agent print clap trigger ladder poverty salad marriage hotel'
@@ -45,14 +48,16 @@ export async function configureLocalEnvironment(
   }
 
   const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
-  console.log(`ABI PATH ${abiTestPath}`)
-  if (network.toLowerCase() === 'spree') {
+  if (
+    network.toLowerCase() === 'spree' ||
+    network.toLowerCase() === 'geth-localnet'
+  ) {
     if (
       !fs.existsSync(abiTestPath) ||
       !fs.existsSync(`${ARTIFACTS_PATH}/ready`)
     ) {
       throw new Error(
-        `The Spree ABI files are not in the artifacts folder: ${ARTIFACTS_PATH}. Make sure nevermined tools is up and running`
+        `The Local Network ABI files are not in the artifacts folder: ${ARTIFACTS_PATH}. Make sure nevermined tools is up and running`
       )
     }
   } else {
@@ -106,7 +111,8 @@ export function getNetworksConfig(): CliConfig {
 
 export function getConfig(
   network: string,
-  requiresAccount: boolean = true
+  requiresAccount: boolean = true,
+  accountIndex: number = 0
 ): ConfigEntry {
   if (!process.env.MNEMONIC) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
@@ -128,6 +134,9 @@ export function getConfig(
   } catch (error) {
     throw new Error(`Network '${network}' is not supported`)
   }
+
+  if (!defaultConfig) throw new Error(`Network '${network}' is not supported`)
+
   let config = defaultConfig
 
   if (process.env.NODE_URL) config.nvm.nodeUri = process.env.NODE_URL
@@ -147,6 +156,12 @@ export function getConfig(
   config.seed = process.env.MNEMONIC
   config.keyfilePath = process.env.KEYFILE_PATH
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
+
+  if (!config.nvm.nodeUri || config.nvm.nodeUri.length < 1) {
+    throw new Error(
+      `You need to configure a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://nvm-docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
+    )
+  }
 
   // TODO: Decommission the integration via Truffle HDWalletProvider
   const provider = Web3Provider.getWeb3(config.nvm)
@@ -172,8 +187,8 @@ export function getConfig(
       hdWalletProvider = new HDWalletProvider(
         config.seed!,
         config.nvm.nodeUri,
-        0,
-        3
+        accountIndex,
+        10
       )
     }
   } else {
@@ -192,6 +207,7 @@ export function getConfig(
     nvm: {
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,
+      newGateway: USE_NEW_GATEWAY,
       web3Provider: hdWalletProvider
     }
   }

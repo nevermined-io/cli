@@ -10,8 +10,8 @@ describe('Status e2e Testing', () => {
     const stdout = execCommand(command, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    expect(stdout.includes('spree'))
-    expect(stdout.includes('rinkeby'))
+    expect(stdout.includes('geth-localnet'))
+    expect(stdout.includes('matic'))
   })
 
   test('Get status information of a local network', async () => {

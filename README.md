@@ -104,7 +104,7 @@ Options:
       --version  Show version number                                                                                                                                          [boolean]
   -v, --verbose  Run with verbose logging                                                                                                                                     [boolean]
   -n, --network  The network to use                                                                                                                         [string] [default: "testnet"]
-  -a, --account  The account to use                                                                                                                              [string] [default: ""]
+  -a, --accountIndex The index of the account to use                                                                                                                              [string] [default: "0"]
 ```
 
 ## Networks
@@ -114,15 +114,6 @@ The CLI has pre-configured some Nevermined environments. You can check what is p
 ```
 $ ncli network list
 Nevermined pre-configured networks:
- spree:
-        This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/
-        Is a Production environment? false
-
-        Node Uri: http://localhost:8545
-        Gateway: http://localhost:8030
-        Marketplace API: http://172.17.0.1:3100
-        Faucet: http://localhost:3001
-
 
  testnet:
         Public testnet environment where users can interact with Nevermined protocol.

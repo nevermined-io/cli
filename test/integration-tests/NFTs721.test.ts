@@ -26,14 +26,14 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Deploy a new NFT (ERC-721) contract with parameters', async () => {
-    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath2} --account "${execOpts.accounts[0]}" --params "Token Name" --params Symbol `
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath2}  --accountIndex 0 --params "Token Name" --params Symbol `
     console.debug(`COMMAND: ${deployCommand}`)
 
     const stdout = execCommand(deployCommand, execOpts)
   })
 
   test('Deploy a new NFT (ERC-721) contract without params', async () => {
-    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath} --account "${execOpts.accounts[0]}"  `
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath}  --accountIndex 0 `
     console.debug(`COMMAND: ${deployCommand}`)
 
     const stdout = execCommand(deployCommand, execOpts)
@@ -46,7 +46,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Register an asset with a NFT (ERC-721) attached to it', async () => {
-    const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress} --account "${execOpts.accounts[0]}" --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
+    const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress}  --accountIndex 0 --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -68,7 +68,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('It mints a NFT (ERC-721)', async () => {
-    const mintCommand = `${baseCommands.nfts721.mint} "${did}" --nftAddress ${nftAddress} --uri ${metadataUri} --account "${execOpts.accounts[0]}"  `
+    const mintCommand = `${baseCommands.nfts721.mint} "${did}" --nftAddress ${nftAddress} --uri ${metadataUri}  --accountIndex 0  `
     console.debug(`COMMAND: ${mintCommand}`)
 
     const stdout = execCommand(mintCommand, execOpts)
@@ -79,7 +79,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Order a NFT (ERC-721)', async () => {
-    const orderCommand = `${baseCommands.nfts721.order} "${did}" --account "${execOpts.accounts[1]}"  `
+    const orderCommand = `${baseCommands.nfts721.order} "${did}"  --accountIndex 1  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const stdout = execCommand(orderCommand, execOpts)
@@ -92,7 +92,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('The seller transfer a NFT (ERC-721)', async () => {
-    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" --account "${execOpts.accounts[0]}" --buyerAccount "${execOpts.accounts[1]}" `
+    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" --accountIndex 0 --buyerAccount "${execOpts.accounts[1]}" `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execCommand(transferCommand, execOpts)
@@ -105,7 +105,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
 
   test('As NFT holder I can download the files associated to an asset', async () => {
     const destination = `/tmp/nevemined/cli/test/nft`
-    const downloadCommand = `${baseCommands.nfts721.download} "${did}" --destination "${destination}" --account "${execOpts.accounts[1]}"  `
+    const downloadCommand = `${baseCommands.nfts721.download} "${did}" --destination "${destination}" --accountIndex 1  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const stdout = execCommand(downloadCommand, execOpts)
@@ -123,7 +123,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('It burns a NFT (ERC-721)', async () => {
-    const burnCommand = `${baseCommands.nfts721.burn} "${did}" ${nftAddress} --account "${execOpts.accounts[0]}"  `
+    const burnCommand = `${baseCommands.nfts721.burn} "${did}" ${nftAddress} --accountIndex 0  `
     console.debug(`COMMAND: ${burnCommand}`)
 
     const stdout = execCommand(burnCommand, execOpts)

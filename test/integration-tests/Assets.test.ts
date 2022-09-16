@@ -18,6 +18,7 @@ describe('Assets e2e Testing', () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)
     if (
       execOpts.env.NETWORK === 'spree' ||
+      execOpts.env.NETWORK === 'geth-localnet' ||
       execOpts.env.NETWORK === 'polygon-localnet'
     ) {
       console.log(`Funding account: ${execOpts.accounts[0]}`)
@@ -26,7 +27,7 @@ describe('Assets e2e Testing', () => {
       execCommand(fundCommand, execOpts)
     }
 
-    const registerAssetCommand = `${baseCommands.assets.registerAsset} --account "${execOpts.accounts[0]}" --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -101,7 +102,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Download my own asset', async () => {
-    const downloadCommand = `${baseCommands.assets.downloadAsset} ${did} --account "${execOpts.accounts[0]}" --path /tmp --fileIndex 0`
+    const downloadCommand = `${baseCommands.assets.downloadAsset} ${did}  --accountIndex 0 --path /tmp --fileIndex 0`
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const downloadStdout = execCommand(downloadCommand, execOpts)
@@ -116,7 +117,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const orderCommand = `${baseCommands.assets.orderAsset} ${did} --account "${execOpts.accounts[0]}"  `
+    const orderCommand = `${baseCommands.assets.orderAsset} ${did}  --accountIndex 0  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execCommand(orderCommand, execOpts)
@@ -124,7 +125,7 @@ describe('Assets e2e Testing', () => {
     const serviceAgreementId = parseServiceAgreementId(orderStdout)
 
     const parentPath = '/tmp/nevermined/test-order'
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId} --account "${execOpts.accounts[0]}" --path ${parentPath} --fileIndex 0 `
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId}  --accountIndex 0 --path ${parentPath} --fileIndex 0 `
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)

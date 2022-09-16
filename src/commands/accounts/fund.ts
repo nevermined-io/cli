@@ -4,6 +4,9 @@ import { Logger } from 'log4js'
 import chalk from 'chalk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+
+const ERC20_DISPENSED_AMOUNT = BigNumber.from(100)
 
 export const accountsFund = async (
   nvm: Nevermined,
@@ -43,13 +46,27 @@ export const accountsFund = async (
 
   if (token === 'both' || token === 'erc20') {
     try {
-      await nvm.keeper.dispenser.requestTokens(100, account.getId())
       logger.info(
-        chalk.dim(`Funded Tokens to ${chalk.whiteBright(account.getId())}`)
+        chalk.dim(
+          `Calling Dispenser to get ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(
+            account.getId()
+          )}`
+        )
+      )
+      await nvm.keeper.dispenser.requestTokens(
+        ERC20_DISPENSED_AMOUNT,
+        account.getId()
+      )
+      logger.info(
+        chalk.dim(
+          `Funded ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(
+            account.getId()
+          )}`
+        )
       )
       results.push('erc20')
     } catch (err) {
-      const erc20ErrorMessage = `Funding Tokens to ${chalk.whiteBright(
+      const erc20ErrorMessage = `Funding ERC20 Tokens to ${chalk.whiteBright(
         account.getId()
       )} failed! ${(err as Error).message}`
       logger.info(chalk.red(erc20ErrorMessage))

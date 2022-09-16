@@ -14,7 +14,7 @@ This are the optional parameters that apply to all `ncli` commands:
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
 | **verbose** | `boolean` |  |  `false`  | Run with verbose logging |
-| **network** | `string` |  |  `spree`  | The network to use |
+| **network** | `string` |  |  `testnet`  | The network to use |
 | **account** | `string` |  |    | The account to use |
 | **json** | `boolean` |  |  `false`  | If provided all the output will be in JSON format |
 
@@ -56,6 +56,55 @@ If the `ncli` is connected to a Nevermined network correctly this command will r
 
 ```bash
 ncli network status
+```
+
+
+
+### get-config
+Get all the Governance configuration about a Nevermined environment<br/>
+
+If the `ncli` is connected to a Nevermined network correctly this command will return information about all the governance parameters related to a Nevermined deployment.<br/>
+
+
+
+#### Example/s
+
+
+```bash
+ncli network get-config
+```
+
+
+
+### set-config [parameter]
+Allows to the governor account to modify the configuration of a running Nevermined blockchain environment<br/>
+
+If the `ncli` is connected to a Nevermined network correctly this command will allow to modify the on-chain configuration of a deployment. This function only can be executed by a `governor` account.<br/>
+
+#### Positional Arguments
+
+| Name of the Argument | Type | Is required? | Default value | Description |
+|----------------------|------|-------------:|--------------:|-------------|
+| **parameter** | `string` |  |    | the name of the governance parameter to configure. Existing options: &#39;fees&#39; OR &#39;governor&#39; |
+
+
+#### Optional Arguments
+
+| Name of the Argument | Type | Is required? | Default value | Description |
+|----------------------|------|-------------:|--------------:|-------------|
+| **newValue** | `string` |  &#x2611;  |    | the new value to set |
+
+
+#### Example/s
+
+
+```bash
+ncli network set-config governor 0x12345
+```
+
+
+```bash
+ncli network set-config fees 350,0x4569832
 ```
 
 
@@ -521,7 +570,7 @@ The Nevermined provenance record allows to keep track of all the individual even
 | **activityId** | `string` |  |    | The identifier of the activity to register |
 | **relatedDid** | `string` |  |    | The additional DID related with the activity (if any) |
 | **agentInvolved** | `string` |  |    | The address of the additional agent (if any) involved with the activity |
-| **signature** | `string` |  |  `0x0`  | The signature associated to the provenance event |
+| **signature** | `string` |  |  `0x`  | The signature associated to the provenance event |
 | **attributes** | `string` |  |    | Additional attributes to register associated with the activity |
 
 
@@ -529,7 +578,7 @@ The Nevermined provenance record allows to keep track of all the individual even
 
 
 ```bash
-ncli provenance register did:nv:020283aed6525d815a4bc3f4b5970a7aaa03752d1e3755d7604185ecbc5f7aa5 --account 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260 --method used --agentId 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e --activityId 73492af5abe94333a648dd42e1f1675c9cad5ba4f0614f1283093448cd03d300
+ncli provenance register did:nv:020283aed6525d815a4bc3f4b5970a7aaa03752d1e3755d7604185ecbc5f7aa5 --accountIndex 0 --method used --agentId 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e --activityId 73492af5abe94333a648dd42e1f1675c9cad5ba4f0614f1283093448cd03d300
 ```
 
 
@@ -666,7 +715,7 @@ For a given DID and NFT (ERC-721) this command displays some information about i
 
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
-| **did** | `string` |  |    | The DID associated with the NFT (tokenId) |
+| **did** | `string` |  |    | The DID associated with the NFT |
 
 
 #### Optional Arguments
