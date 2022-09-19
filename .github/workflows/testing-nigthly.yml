@@ -1,8 +1,14 @@
 name: Tests Nightly
 
 on:
-  schedule:
-    - cron: '30 3 * * *'
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+# on:
+#   schedule:
+#     - cron: '30 3 * * *'
 
 
 jobs:
@@ -26,7 +32,6 @@ jobs:
         run: |
           docker system prune --all --volumes -f
       - name: Run Nevermined Tools
-        env:
         run: |
           docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
           sudo chmod go+r /etc/hosts
