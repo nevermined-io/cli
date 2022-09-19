@@ -22,26 +22,6 @@ jobs:
       - name: Lint
         run: |
           yarn lint
-      - name: Reclaim some disk space
-        run: |
-          docker system prune --all --volumes -f
-      - name: Run Nevermined Tools
-        env:
-        run: |
-          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
-          sudo chmod go+r /etc/hosts
-          sudo echo "127.0.0.1  nevermined-metadata" | sudo tee -a /etc/hosts
-          git clone https://github.com/nevermined-io/tools
-          cd tools
-
-          export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
-
-          rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
-          ./start_nevermined.sh ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
-          cd ..
-          ./scripts/wait-nevermined.sh
-          ./scripts/wait-subgraphs.sh ${{ matrix.network-name }}
-
       - name: Run e2e tests
         env:
           LOCAL_CONF_DIR: "/tmp/.nevermined"
