@@ -42,4 +42,6 @@ find $CONF_DIR -type f
 
 printf '\e[32m✔ Copied new contract artifacts and circuits.\e[0m\n'
 
+printf '\e[32m✔ Nevermined is up and runnning !!!.\e[0m\n'
+
 
