@@ -117,7 +117,7 @@ export function getConfig(
   if (!process.env.MNEMONIC) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
       const accountMessage =
-        "'MNEMONIC' or 'KEYFILE' not set in environment! Please see http://nvm-docs.nevermined.io/docs/tools/cli/getting-started#configure-your-account for details."
+        "'MNEMONIC' or 'KEYFILE' not set in environment! Please see http://docs.nevermined.io/docs/tools/cli/getting-started#configure-your-account for details."
       if (requiresAccount) throw new Error(accountMessage)
     }
   }
@@ -159,7 +159,7 @@ export function getConfig(
 
   if (!config.nvm.nodeUri || config.nvm.nodeUri.length < 1) {
     throw new Error(
-      `You need to configure a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://nvm-docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
+      `You need to configure a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
     )
   }
 
