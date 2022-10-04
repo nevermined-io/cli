@@ -315,7 +315,12 @@
 					"type": "number",
 					"default": "1",
 					"description": "The page to show"
-				}]
+				}, {
+                    "name": "onlyMetadata",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "True if we only want to get metadata"
+                }]
 			}, {
 				"name": "download [did]",
 				"description": "Download an asset owned by me",
