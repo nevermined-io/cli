@@ -1,5 +1,4 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { ServiceMetadata } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 import { StatusCodes, printSearchResult } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -13,31 +12,16 @@ export const searchAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, query, json, onlyMetadata } = argv
+  const { verbose, network, query } = argv
 
   logger.info(chalk.dim(`Search using query: ${query}`))
 
-  const queryResults = await nvm.assets.search(query, argv.offset, argv.page)
-  let metadataResult
+  const assets = await nvm.assets.search(query, argv.offset, argv.page)
 
-  if (onlyMetadata) {
-    metadataResult =  {
-      page: queryResults.page,
-      totalPages: queryResults.page,
-      totalResults: queryResults.totalResults,
-      results: queryResults.results.map((ddo)=> {
-        const service: ServiceMetadata = ddo.findServiceByType('metadata') as ServiceMetadata
-        service.attributes.encryptedFiles = ""
-        return service      
-      })
-    }
-  }
-
-  if (!json)
-    printSearchResult(queryResults, logger)
+  printSearchResult(assets, logger)
 
   return {
     status: StatusCodes.OK,
-    results: onlyMetadata?JSON.stringify(metadataResult):JSON.stringify(queryResults)
+    results: JSON.stringify(assets)
   }
 }
