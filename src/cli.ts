@@ -116,8 +116,9 @@ const cmdHandler = async (
       logger
     )
     if (argv.json) {
-      logger.mark(JSON.stringify(executionOutput))
+      logger.mark(executionOutput)
     }
+    
     if (executionOutput.status > 0) {
       logger.error(`Command error: ${executionOutput.errorMessage}`)
     }
