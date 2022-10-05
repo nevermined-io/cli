@@ -17,7 +17,7 @@ jobs:
         include:
           - network: "--geth"
             network-name: geth-localnet
-            chainId: 8998
+            chainId: 1337
             delay: GRAPH_DELAY
 
     steps:
