@@ -26,7 +26,7 @@ export const ARTIFACTS_REPOSITORY =
   process.env.ARTIFACTS_REPO ||
   'https://artifacts-nevermined-rocks.s3.amazonaws.com'
 
-export const USE_NEW_GATEWAY = process.env.USE_NEW_GATEWAY || true
+export const USE_NEW_GATEWAY = process.env.USE_NEW_GATEWAY === 'true' || true
 export const DEFAULT_ENCRYPTION_METHOD = 'PSK-RSA'
 
 // INFO: This mnemonic is only used to initialize the HDWallet in commands not requiring network connectivity
