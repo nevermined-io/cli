@@ -60,7 +60,7 @@ jobs:
           NETWORK: ${{ matrix.network-name }}
           IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
-          USE_NEW_GATEWAY: false
+          USE_NEW_GATEWAY: true
         run: |
           export ${{ matrix.delay }}=true
           sleep 10

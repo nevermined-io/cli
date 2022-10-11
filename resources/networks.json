@@ -132,7 +132,7 @@
 			"verbose": true
 		},
 		"nativeToken": "ETH",
-		"networkId": "8998",
+		"networkId": "1337",
 		"networkName": "geth-localnet",
 		"etherscanUrl": "",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
