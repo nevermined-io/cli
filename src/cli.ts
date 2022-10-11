@@ -45,7 +45,8 @@ const cmdHandler = async (
     // The `--json` parameter was given so we setup logs in json format
     addLayout('json', function (config) {
       return function (logEvent) {
-        return JSON.stringify(logEvent) + config.separator
+        // we don't need separator as we only have one line, wich represents the output of the command
+        return JSON.stringify(logEvent) // + config.separator
       }
     })
     configure(getJsonLoggerConfig())
@@ -116,7 +117,7 @@ const cmdHandler = async (
       logger
     )
     if (argv.json) {
-      logger.mark(JSON.stringify(executionOutput))
+      logger.mark(executionOutput)
     }
     if (executionOutput.status > 0) {
       logger.error(`Command error: ${executionOutput.errorMessage}`)

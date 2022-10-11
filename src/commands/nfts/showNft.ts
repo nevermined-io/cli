@@ -75,7 +75,7 @@ export const showNft = async (
   let nftAddress = ''
   // Showing ERC-721 NFT information
   if (argv.is721) {
-    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft721-sales')
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
     const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
 
     if (verbose) {
@@ -105,7 +105,7 @@ export const showNft = async (
       logger.warn(`Token Id not found`)
     }
 
-    const price = getAssetRewardsFromDDOByService(ddo, 'nft721-sales')
+    const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
       .getTotalPrice()
       .div(10)
       .mul(decimals)
@@ -169,7 +169,7 @@ export const showNft = async (
     } catch {}
 
     try {
-      const price = getAssetRewardsFromDDOByService(ddo, 'nft721-sales')
+      const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
         .getTotalPrice()
         .div(10)
         .mul(decimals)

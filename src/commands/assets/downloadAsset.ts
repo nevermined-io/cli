@@ -28,8 +28,7 @@ export const downloadAsset = async (
     did,
     account,
     argv.path,
-    argv.fileIndex,
-    false
+    argv.fileIndex
   )
 
   logger.info(chalk.dim(`Files downloaded to: ${path}`))

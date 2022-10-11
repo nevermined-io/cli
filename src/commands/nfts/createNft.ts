@@ -129,7 +129,7 @@ export const createNft = async (
       DEFAULT_ENCRYPTION_METHOD,
       argv.cap,
       [config.nvm.gatewayAddress!],
-      1,
+      BigNumber.from(1),
       royaltyAttributes,
       token ? token.getAddress() : config.erc20TokenAddress,
       argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),

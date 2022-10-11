@@ -124,7 +124,7 @@ export const registerAsset = async (
     account,
     // @ts-ignore
     new AssetRewards(account.getId(), ddoPrice),
-    encrypt || password ? ['access-proof'] : undefined //,
+    ['access']
     // undefined,
     // undefined,
     // undefined,

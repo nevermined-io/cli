@@ -37,11 +37,7 @@ export const getAsset = async (
 
   if (argv.agreementId === '') {
     logger.info(chalk.dim(`Ordering asset: ${did}`))
-    if (password) {
-      agreementId = await nvm.assets.order(did, 'access-proof', account)
-    } else {
-      agreementId = await nvm.assets.order(did, 'access', account)
-    }
+    agreementId = await nvm.assets.order(did, 'access', account)
   } else {
     ;({ agreementId } = argv)
   }

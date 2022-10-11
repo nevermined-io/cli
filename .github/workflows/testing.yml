@@ -17,12 +17,12 @@ jobs:
         include:
           - network: "--geth"
             network-name: geth-localnet
-            chainId: 8998
+            chainId: 1337
             delay: GRAPH_DELAY
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
       - name: Install dependencies
@@ -60,13 +60,14 @@ jobs:
           NETWORK: ${{ matrix.network-name }}
           IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
+          USE_NEW_GATEWAY: true
         run: |
           export ${{ matrix.delay }}=true
           sleep 10
           yarn build
           yarn test
       - name: Upload logs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: nevermined-tools-output

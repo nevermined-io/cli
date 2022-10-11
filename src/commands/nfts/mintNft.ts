@@ -48,11 +48,7 @@ export const mintNft = async (
   if (argv.nftType === '721') {
     // Minting NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(
-      argv.nftAddress,
-      ddo,
-      'nft721-sales'
-    )
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
 
     const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
     if (verbose) {

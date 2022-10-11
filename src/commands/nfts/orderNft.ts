@@ -28,9 +28,7 @@ export const orderNft = async (
     token !== null ? await token.decimals() : Constants.ETHDecimals
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  const serviceInDDO = argv.nftType === '721' ? 'nft721-sales' : 'nft-sales'
-
-  const price = getAssetRewardsFromDDOByService(ddo, serviceInDDO)
+  const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
     .getTotalPrice()
     .div(10)
     .mul(decimals)
