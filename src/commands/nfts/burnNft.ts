@@ -43,11 +43,7 @@ export const burnNft = async (
   if (argv.nftType === '721') {
     // Burning NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(
-      argv.nftAddress,
-      ddo,
-      'nft721-sales'
-    )
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
 
     const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
 

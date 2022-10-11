@@ -46,7 +46,7 @@ const cmdHandler = async (
     addLayout('json', function (config) {
       return function (logEvent) {
         // we don't need separator as we only have one line, wich represents the output of the command
-        return JSON.stringify(logEvent)// + config.separator
+        return JSON.stringify(logEvent) // + config.separator
       }
     })
     configure(getJsonLoggerConfig())

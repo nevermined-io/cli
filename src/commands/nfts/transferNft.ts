@@ -72,7 +72,7 @@ export const transferNft = async (
 
   const serviceInDDO = argv.nftType === '721' ? 'nft721-sales' : 'nft-sales'
 
-  const price = getAssetRewardsFromDDOByService(ddo, serviceInDDO)
+  const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
     .getTotalPrice()
     .div(10)
     .mul(decimals)

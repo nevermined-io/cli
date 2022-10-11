@@ -21,23 +21,26 @@ export const searchAsset = async (
   let metadataResult
 
   if (onlyMetadata) {
-    metadataResult =  {
+    metadataResult = {
       page: queryResults.page,
       totalPages: queryResults.page,
       totalResults: queryResults.totalResults,
-      results: queryResults.results.map((ddo)=> {
-        const service: ServiceMetadata = ddo.findServiceByType('metadata') as ServiceMetadata
-        service.attributes.encryptedFiles = ""
-        return service      
+      results: queryResults.results.map((ddo) => {
+        const service: ServiceMetadata = ddo.findServiceByType(
+          'metadata'
+        ) as ServiceMetadata
+        service.attributes.encryptedFiles = ''
+        return service
       })
     }
   }
 
-  if (!json)
-    printSearchResult(queryResults, logger)
+  if (!json) printSearchResult(queryResults, logger)
 
   return {
     status: StatusCodes.OK,
-    results: onlyMetadata?JSON.stringify(metadataResult):JSON.stringify(queryResults)
+    results: onlyMetadata
+      ? JSON.stringify(metadataResult)
+      : JSON.stringify(queryResults)
   }
 }

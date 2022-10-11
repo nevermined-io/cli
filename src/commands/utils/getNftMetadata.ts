@@ -44,11 +44,11 @@ export const getNftMetadata = async (
       `The DID has a ERC-1155 NFT attached with address ${nftAddress}`
     )
   } else if (
-    ddo.findServiceByType('nft721-access') ||
-    ddo.findServiceByType('nft721-sales')
+    ddo.findServiceByType('nft-access') ||
+    ddo.findServiceByType('nft-sales')
   ) {
     is1155 = false
-    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft721-sales')
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
     logger.debug(
       `The DID has a ERC-721 NFT attached with address ${nftAddress}`
     )
