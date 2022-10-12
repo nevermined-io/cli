@@ -2,9 +2,6 @@ import { execOpts, baseCommands } from '../helpers/Config'
 import execCommand from '../helpers/ExecCommand'
 
 describe('Status e2e Testing', () => {
-  let did = ''
-  let stdoutList = ''
-
   test('Get a list of the available pre-configured networks', async () => {
     const command = `${baseCommands.network.list} `
     const stdout = execCommand(command, execOpts)

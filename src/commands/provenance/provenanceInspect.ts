@@ -13,7 +13,7 @@ export const provenanceInspect = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, provenanceId } = argv
+  const { provenanceId } = argv
 
   logger.info(
     chalk.dim(

@@ -60,7 +60,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Registering an asset using metadata from a JSON', async () => {
-    let jsonImported = JSON.parse(
+    const jsonImported = JSON.parse(
       fs.readFileSync(metadataConfig.metadataFile).toString()
     )
     jsonImported.main.author = jsonImported.main.author + generateId()

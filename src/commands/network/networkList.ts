@@ -12,7 +12,7 @@ export const networkList = async (
   configEntry: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, hideInternal } = argv
+  const { hideInternal } = argv
 
   logger.info(chalk.dim(`Nevermined pre-configured networks:`))
 

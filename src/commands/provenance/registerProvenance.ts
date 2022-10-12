@@ -13,7 +13,7 @@ export const registerProvenance = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, method } = argv
+  const { method } = argv
 
   logger.info(chalk.dim(`Registering provenance activity (${method}) ...`))
 

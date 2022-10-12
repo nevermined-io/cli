@@ -15,21 +15,21 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   let did = ''
   let orderAgreementId = ''
   let nftAddress = ''
-  let metadataUri = 'http://nevermined.io/xxx'
+  const metadataUri = 'http://nevermined.io/xxx'
 
   beforeAll(async () => {
     console.log(`Funding account: ${execOpts.accounts[0]}`)
     const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
     console.debug(`COMMAND: ${fundCommand}`)
 
-    const stdout = execCommand(fundCommand, execOpts)
+    execCommand(fundCommand, execOpts)
   })
 
   test('Deploy a new NFT (ERC-721) contract with parameters', async () => {
     const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath2}  --accountIndex 0 --params "Token Name" --params Symbol `
     console.debug(`COMMAND: ${deployCommand}`)
 
-    const stdout = execCommand(deployCommand, execOpts)
+    execCommand(deployCommand, execOpts)
   })
 
   test('Deploy a new NFT (ERC-721) contract without params', async () => {

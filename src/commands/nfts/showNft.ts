@@ -23,7 +23,7 @@ export const showNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { verbose, did } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
@@ -166,7 +166,9 @@ export const showNft = async (
           )}`
         )
       )
-    } catch {}
+    } catch(error) {
+      logger.error(error)
+    }
 
     try {
       const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
@@ -181,7 +183,9 @@ export const showNft = async (
           )}`
         )
       )
-    } catch {}
+    } catch(error) {
+      console.log(error)
+    }
   }
 
   logger.trace(chalk.dim(DDO.serialize(ddo)))

@@ -14,7 +14,7 @@ export const transferNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, agreementId } = argv
+  const { verbose, agreementId } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
@@ -42,7 +42,7 @@ export const transferNft = async (
     )
   )
 
-  const { lastUpdatedBy } = await nvm.keeper.conditionStoreManager.getCondition(
+  await nvm.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
   )
 
@@ -69,8 +69,6 @@ export const transferNft = async (
     token !== null ? await token.decimals() : Constants.ETHDecimals
 
   const symbol = token !== null ? await token.symbol() : config.nativeToken
-
-  const serviceInDDO = argv.nftType === '721' ? 'nft721-sales' : 'nft-sales'
 
   const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
     .getTotalPrice()

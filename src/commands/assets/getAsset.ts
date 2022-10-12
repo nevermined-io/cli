@@ -7,7 +7,7 @@ import { Logger } from 'log4js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
-const rl = readline.createInterface({
+readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
@@ -19,39 +19,26 @@ export const getAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did, password } = argv
+  const { did } = argv
 
   // TODO: Enable DTP when `sdk-dtp` is ready
   // const keyTransfer = await makeKeyTransfer()
 
   let agreementId
 
-  // if (password) {
-  //   const key = await keyTransfer.secretToPublic(keyTransfer.makeKey(password))
-  //   account.babyX = key.x
-  //   account.babyY = key.y
-  //   account.babySecret = password
-  // }
-
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
-  if (argv.agreementId === '') {
+  if (!argv.agreementId) {
     logger.info(chalk.dim(`Ordering asset: ${did}`))
     agreementId = await nvm.assets.order(did, 'access', account)
   } else {
-    ;({ agreementId } = argv)
+    agreementId = argv.agreementId
   }
 
   logger.info(
     chalk.dim(`Downloading asset: ${did} with agreement id: ${agreementId}`)
   )
 
-  let results
-  // if (password) {
-  //   const key = await nvm.assets.consumeProof(agreementId, did, account)
-  //   results = Buffer.from(key as any, 'hex').toString()
-  //   logger.info(`Got password ${results}`)
-  // } else {
   const path = await nvm.assets.consume(
     agreementId,
     did,
@@ -60,7 +47,7 @@ export const getAsset = async (
     argv.fileIndex
   )
   logger.info(chalk.dim(`Files downloaded to: ${path}`))
-  results = path
+  const results = path
   // }
 
   return {

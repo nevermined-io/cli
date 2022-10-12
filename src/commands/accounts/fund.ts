@@ -18,7 +18,7 @@ export const accountsFund = async (
   const { verbose, token } = argv
 
   let errorMessage = ''
-  let results: string[] = []
+  const results: string[] = []
   logger.info(
     chalk.dim(`Funding account: '${chalk.whiteBright(account.getId())}'`)
   )

@@ -9,8 +9,8 @@ import execCommand from '../helpers/ExecCommand'
 
 describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
   let did = ''
-  let nftCap = 10
-  let nftRoyalties = 5
+  const nftCap = 10
+  const nftRoyalties = 5
 
   beforeAll(async () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)

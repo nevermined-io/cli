@@ -2,9 +2,9 @@ export const commandRegex = {
   assets: {
     did: new RegExp('.*Created Asset.(.{71}).*', 'g'),
     password: new RegExp('.*Got password (.{32}).*', 'g'),
-    totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\n', 'g'),
+    totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\\n', 'g'),
     downloadPath: new RegExp('.*Files downloaded to:.(.*)', 'gm'),
-    serviceAgreement: new RegExp('.*Agreement Id:.(.*)\n', 'g')
+    serviceAgreement: new RegExp('.*Agreement Id:.(.*)\\n', 'g')
     //
   },
   nfts: {
@@ -17,7 +17,7 @@ export const commandRegex = {
   },
   accounts: {
     newAccount: new RegExp(
-      '.*Wallet address:.(.*)\nWallet public key: (.*)\n',
+      '.*Wallet address:.(.*)\\nWallet public key: (.*)\\n',
       'g'
     )
   },
@@ -28,7 +28,7 @@ export const commandRegex = {
     register: new RegExp('.*Provenance Id: (.*)', 'gm')
   },
   utils: {
-    upload: new RegExp('URL: (.*)\nPassword: (.*)\n', 'gm')
+    upload: new RegExp('URL: (.*)\\nPassword: (.*)\\n', 'gm')
   }
 }
 

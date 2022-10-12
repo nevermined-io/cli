@@ -6,7 +6,7 @@ import { Logger } from 'log4js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
-const rl = readline.createInterface({
+readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
@@ -18,7 +18,7 @@ export const downloadAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { did } = argv
 
   logger.info(chalk.dim(`Downloading asset: ${did}`))
 
