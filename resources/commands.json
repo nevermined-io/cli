@@ -611,7 +611,7 @@
 						"name": "royalties",
 						"type": "number",
 						"default": "0",
-						"description": "The royalties (between 0 and 100%) to reward to the original creator in the secondary market"
+						"description": "The royalties (between 0 and 100%) to reward to the original creator in the secondary market."
 					},
 					{
 						"name": "nftType",

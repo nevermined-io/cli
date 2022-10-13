@@ -21,6 +21,7 @@ import {
   getRoyaltyAttributes,
   RoyaltyKind
 } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Assets'
+import { ethers } from 'ethers'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -39,6 +40,9 @@ export const createNft = async (
       errorMessage: `Royalties must be between 0 and 100%`
     }
   }
+
+  const royaltiesAmount = BigNumber.parseUnits(String(argv.royalties), 4)
+  logger.info(`Royalties: ${royaltiesAmount}`)
 
   logger.info(chalk.dim('Loading token'))
 
@@ -95,7 +99,7 @@ export const createNft = async (
   const royaltyAttributes = getRoyaltyAttributes(
     nvm,
     RoyaltyKind.Standard,
-    argv.royalties
+    royaltiesAmount.toNumber()
   )
 
   const configContract = loadNeverminedConfigContract(config)
