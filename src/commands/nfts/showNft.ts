@@ -51,9 +51,27 @@ export const showNft = async (
 
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  logger.info(chalk.dim(`====== ${chalk.whiteBright('Nevermined')} ======`))
   logger.info(chalk.dim(`====== ${chalk.whiteBright(ddo.id)} ======`))
-  logger.info(chalk.dim(`Url: ${chalk.whiteBright(url)}`))
+  logger.info(chalk.dim(`Metadata Url: ${chalk.whiteBright(url)}`))
+
+  logger.info(
+    chalk.dim(
+      `NFT ERC Type: ${chalk.yellowBright(metadata.attributes.main.ercType)}`
+    )
+  )
+  logger.info(
+    chalk.dim(
+      `Nevermined NFT Type: ${chalk.whiteBright(
+        metadata.attributes.main.nftType
+      )}`
+    )
+  )
+
+  logger.info(
+    chalk.dim(
+      `Asset Type: ${chalk.yellowBright(metadata.attributes.main.type)}`
+    )
+  )
   logger.info(
     chalk.dim(`Name: ${chalk.whiteBright(metadata.attributes.main.name)}`)
   )
@@ -61,21 +79,32 @@ export const showNft = async (
     chalk.dim(`Author: ${chalk.whiteBright(metadata.attributes.main.author)}`)
   )
   logger.info(
-    chalk.dim(`License: ${chalk.whiteBright(metadata.attributes.main.license)}`)
+    chalk.dim(
+      `Data Created: ${chalk.whiteBright(metadata.attributes.main.dateCreated)}`
+    )
   )
   logger.info(
     chalk.dim(
-      `Files: ${chalk.whiteBright(metadata.attributes.main.files?.length || 1)}`
+      `Number of files attached to it: ${chalk.whiteBright(
+        metadata.attributes.main.files?.length || 1
+      )}`
     )
   )
 
-  logger.info('\n')
+  const price = BigNumber.formatUnits(
+    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    decimals
+  )
+
+  logger.info(
+    chalk.dim(`Price: ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)
+  )
 
   // TODO: Implement get `_contract` NFT address from DID/DDO
 
   let nftAddress = ''
   // Showing ERC-721 NFT information
-  if (argv.is721) {
+  if (metadata.attributes.main.ercType === 721) {
     nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
     const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
 
@@ -105,23 +134,7 @@ export const showNft = async (
     } catch {
       logger.warn(`Token Id not found`)
     }
-
-    const price = BigNumber.formatUnits(
-      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
-      decimals
-    )
-
-    logger.info(
-      chalk.dim(
-        `Price: ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
-      )
-    )
-
-    logger.info('\n')
-  }
-
-  // Showing ERC-1155 NFT information
-  if (argv.show1155) {
+  } else {
     const storedDIDRegister: any = await nvm.keeper.didRegistry.getDIDRegister(
       did
     )
@@ -153,17 +166,9 @@ export const showNft = async (
         )}`
       )
     )
-
-    const price = BigNumber.formatUnits(
-      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
-      decimals
-    )
-    logger.info(
-      chalk.dim(
-        `Price (NFT): ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
-      )
-    )
   }
+
+  logger.info('\n')
 
   logger.trace(chalk.dim(DDO.serialize(ddo)))
 
