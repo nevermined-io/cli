@@ -287,6 +287,11 @@
 					"name": "metadata",
 					"type": "string",
 					"description": "The path to the JSON file including the asset metadata"
+				}, {
+					"name": "price",
+					"type": "number",
+					"demandOption": true,
+					"description": "The asset price"
 				}],
 				"optionalArguments": [{
 					"name": "encrypt",
@@ -599,7 +604,7 @@
 					{
 						"name": "price",
 						"type": "number",
-						"default": "",
+						"required": true,
 						"description": "The NFT price"
 					},
 					{
@@ -821,7 +826,7 @@
 					{
 						"name": "price",
 						"type": "number",
-						"default": "",
+						"demand": true,
 						"description": "The NFT price"
 					}, {
 						"name": "cap",

@@ -68,7 +68,7 @@ describe('Assets e2e Testing', () => {
     const randomMetadataFile = `${tempDir}/random_metadata.json`
     fs.writeFileSync(randomMetadataFile, JSON.stringify(jsonImported, null, 4))
 
-    const importCommand = `${baseCommands.assets.importMetadata} --metadata ${randomMetadataFile}`
+    const importCommand = `${baseCommands.assets.importMetadata} --metadata ${randomMetadataFile} --price 1`
     console.debug(`COMMAND: ${importCommand}`)
 
     const stdout = execCommand(importCommand, execOpts)

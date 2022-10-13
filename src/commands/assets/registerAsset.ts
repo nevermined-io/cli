@@ -44,20 +44,16 @@ export const registerAsset = async (
   logger.debug(chalk.dim(`Using creator: '${account.getId()}'\n`))
 
   let ddoMetadata: MetaData
-  let ddoPrice: BigNumber
+
+  const ddoPrice = BigNumber.from(argv.price).gt(0)
+    ? BigNumber.from(argv.price)
+    : BigNumber.from(0)
+
   if (!metadata) {
     const decimals =
       token !== null ? await token.decimals() : Constants.ETHDecimals
 
-    ddoPrice = BigNumber.from(argv.price).mul(BigNumber.from(10).pow(decimals))
-
     logger.debug(`Using Price ${argv.price}`)
-
-    const configContract = loadNeverminedConfigContract(config)
-    const networkFee = await configContract.getMarketplaceFee()
-    const networkFeeFormatted = getFeesFromBigNumber(networkFee)
-
-    logger.info(`Network Fees: ${networkFeeFormatted}`)
 
     const providerKey = await nvm.gateway.getBabyjubPublicKey()
 
@@ -87,7 +83,6 @@ export const registerAsset = async (
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
-        price: ddoPrice.toString(),
         files: _files
       } as MetaDataMain
     }
@@ -114,13 +109,23 @@ export const registerAsset = async (
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
+  }
 
-    ddoPrice = BigNumber.from(ddoMetadata.main.price).gt(0)
-      ? BigNumber.from(ddoMetadata.main.price)
-      : BigNumber.from(0)
+  const configContract = loadNeverminedConfigContract(config)
+  const networkFee = await configContract.getMarketplaceFee()
+
+  const assetRewards = new AssetRewards(account.getId(), ddoPrice)
+  if (networkFee.gt(0)) {
+    assetRewards.addNetworkFees(
+      await configContract.getFeeReceiver(),
+      networkFee
+    )
+    logger.info(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))
+
+
   // const feeData = await config.nvm.web3Provider.getFeeData()
   // feeData.mul(gasLimit)
   // (await provider.getFeeData()).maxFeePerGas.mul(gasLimit)
@@ -130,7 +135,7 @@ export const registerAsset = async (
     ddoMetadata,
     account,
     // @ts-ignore
-    new AssetRewards(account.getId(), ddoPrice),
+    assetRewards,
     ['access']
     // undefined,
     // undefined,
