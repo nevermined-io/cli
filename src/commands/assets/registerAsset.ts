@@ -125,7 +125,6 @@ export const registerAsset = async (
 
   logger.info(chalk.dim('\nCreating Asset ...'))
 
-
   // const feeData = await config.nvm.web3Provider.getFeeData()
   // feeData.mul(gasLimit)
   // (await provider.getFeeData()).maxFeePerGas.mul(gasLimit)

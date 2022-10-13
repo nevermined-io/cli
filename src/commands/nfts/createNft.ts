@@ -135,9 +135,7 @@ export const createNft = async (
       ['nft-sales', 'nft-access'],
       true
     )
-
   } else {
-
     ddo = await nvm.assets.createNft(
       ddoMetadata,
       creatorAccount,

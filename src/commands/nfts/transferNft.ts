@@ -74,7 +74,9 @@ export const transferNft = async (
   const serviceInDDO = 'nft-sales'
 
   const price = BigNumber.formatUnits(
-    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(), decimals)
+    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    decimals
+  )
 
   logger.info(
     chalk.dim(`Price ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)

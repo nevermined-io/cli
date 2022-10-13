@@ -30,7 +30,9 @@ export const orderNft = async (
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
   const price = BigNumber.formatUnits(
-    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(), decimals)
+    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    decimals
+  )
 
   logger.info(
     chalk.dim(`Price: ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)

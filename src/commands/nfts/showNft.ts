@@ -107,7 +107,9 @@ export const showNft = async (
     }
 
     const price = BigNumber.formatUnits(
-      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(), decimals)
+      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+      decimals
+    )
 
     logger.info(
       chalk.dim(
@@ -153,14 +155,14 @@ export const showNft = async (
     )
 
     const price = BigNumber.formatUnits(
-      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(), decimals)
-      logger.info(
-        chalk.dim(
-          `Price (NFT): ${chalk.whiteBright(price)} ${chalk.whiteBright(
-            symbol
-          )}`
-        )
+      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+      decimals
+    )
+    logger.info(
+      chalk.dim(
+        `Price (NFT): ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`
       )
+    )
   }
 
   logger.trace(chalk.dim(DDO.serialize(ddo)))
