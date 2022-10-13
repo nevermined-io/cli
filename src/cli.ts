@@ -28,11 +28,14 @@ const cmdHandler = async (
   argv: any,
   requiresAccount: boolean = true
 ) => {
-  const { verbose, network, accountIndex } = argv
+  let { verbose, network, accountIndex } = argv
 
   let config: ConfigEntry
   let nvm: Nevermined
   let userAccount: Account
+
+  if (process.env.NETWORK) network = process.env.NETWORK
+
   try {
     config = getConfig(network as string, requiresAccount, accountIndex)
     await configureLocalEnvironment(network as string, config)

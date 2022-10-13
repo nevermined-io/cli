@@ -72,6 +72,7 @@ export TOKEN_ADDRESS=0x0
 
 ## Environment variables
 
+* `NETWORK` - Allows to uses one of the existing pre-configured Nevermined networks. Example: `geth-localnet`, `mumbai`, `matic`, `goerli`. You can see the full list of networks supported running `ncli network list`
 * `NODE_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
 * `TOKEN_ADDRESS` - The ERC20 token address to use for the transactions. If not given or if is `0x0` the payments will be made in the network native token (ETH, Matic, ..)
 * `GATEWAY_URL` - The url of the gateway to use. If not given the default url is: `http://localhost:8030`

@@ -63,7 +63,7 @@ If you want to connect to any of them, we just need to configure your `NODE_URL`
 export NODE_URL=https://rpc-mumbai.matic.today
 ```
 
- Now you can use the parameter `--network` in the `ncli` commands allow to connect and use any of these environments:
+ Now you can use the parameter `--network` in the `ncli` commands or export the `NETWORK` enviroment variable to allow to connect and use any of these environments:
 
 ```bash
 ncli --network defiMumbai network status
@@ -73,6 +73,7 @@ ncli --network defiMumbai network status
 
 The following list of variables are related to the configuration of the Nevermined environment and how you interact with them:
 
+* `NETWORK` - Allows to uses one of the existing pre-configured Nevermined networks. Example: `geth-localnet`, `mumbai`, `matic`, `goerli`. You can see the full list of networks supported running `ncli network list`
 * `NODE_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
 * `TOKEN_ADDRESS` - The ERC20 token address to use for the transactions. If not given or if is `0x0000000000000000000000000000000000000000` the payments will be made in the network native token (ETH, Matic, ..)
 * `GATEWAY_URL` - The url of the gateway to use. If not given the default url is: `http://localhost:8030`
@@ -81,6 +82,7 @@ The following list of variables are related to the configuration of the Nevermin
 * `IPFS_GATEWAY` - The url of the IPFS gateway used to upload/download contents. By default is `https://ipfs.infura.io:5001`
 * `GATEWAY_ADDRESS` - The public address of the gateway. If not given the default address is: `0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0`
 * `GAS_MULTIPLIER` - For networks with some congestion, this parameter can help to increase the gas spent and speed up the transactions. If not given the default is `0`
+
 
 :::info
 

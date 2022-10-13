@@ -162,6 +162,8 @@ export function getConfig(
       throw new Error(
         `You need to configure a 'NETWORK' or a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
       )
+    } else {
+      config.nvm.nodeUri = defaultConfig.nvm.nodeUri
     }
   }
 
