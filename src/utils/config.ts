@@ -158,9 +158,11 @@ export function getConfig(
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
 
   if (!config.nvm.nodeUri || config.nvm.nodeUri.length < 1) {
-    throw new Error(
-      `You need to configure a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
-    )
+    if (!process.env.NETWORK) {
+      throw new Error(
+        `You need to configure a 'NETWORK' or a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
+      )
+    }
   }
 
   // TODO: Decommission the integration via Truffle HDWalletProvider

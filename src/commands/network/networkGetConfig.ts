@@ -6,7 +6,6 @@ import {
 import { Logger } from 'log4js'
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
-import * as fs from 'fs'
 import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import { ethers } from 'ethers'
@@ -41,7 +40,7 @@ export const networkGetConfig = async (
 
     logger.info(
       chalk.dim(
-        ` Marketplace Fee: ${chalk.yellow(
+        ` Network Fee: ${chalk.yellow(
           await configContract.getMarketplaceFee()
         )}`
       )

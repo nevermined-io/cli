@@ -1,5 +1,5 @@
 {
-	"testnet": {
+	"mumbai": {
 		"envDescription": "Public testnet environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://nevermined.io/",
 		"isProduction": false,

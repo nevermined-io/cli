@@ -103,7 +103,7 @@ Options:
       --help     Show help                                                                                                                                                    [boolean]
       --version  Show version number                                                                                                                                          [boolean]
   -v, --verbose  Run with verbose logging                                                                                                                                     [boolean]
-  -n, --network  The network to use                                                                                                                         [string] [default: "testnet"]
+  -n, --network  The network to use                                                                                                                         [string] [default: "mumbai"]
   -a, --accountIndex The index of the account to use                                                                                                                              [string] [default: "0"]
 ```
 
@@ -115,7 +115,7 @@ The CLI has pre-configured some Nevermined environments. You can check what is p
 $ ncli network list
 Nevermined pre-configured networks:
 
- testnet:
+ mumbai:
         Public testnet environment where users can interact with Nevermined protocol.
         Is a Production environment? false
 
@@ -149,7 +149,7 @@ Nevermined pre-configured networks:
 
 A part of these networks you can connect to any other network using the environment variables described above.
 
-When you want to connect and interact with a different network of the default (`testnet`), make sure you have exported the `NODE_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
+When you want to connect and interact with a different network of the default (`mumbai`), make sure you have exported the `NODE_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
 
 
 ## License

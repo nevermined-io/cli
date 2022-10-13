@@ -22,6 +22,7 @@ import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Serv
 import { ethers } from 'ethers'
 import { ConfigEntry } from '../models/ConfigDefinition'
 import * as fs from 'fs'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const loadNevermined = async (
   config: ConfigEntry,
@@ -405,4 +406,8 @@ export const getJsonLoggerConfig = (): Configuration => {
       default: { appenders: ['json'], level: 'mark' }
     }
   }
+}
+
+export const getFeesFromBigNumber = (fees: BigNumber): String => {
+  return (fees.toNumber() / 10000).toPrecision(2).toString()
 }

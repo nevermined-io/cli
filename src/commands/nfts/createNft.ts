@@ -118,10 +118,13 @@ export const createNft = async (
       true,
       [config.nvm.gatewayAddress!],
       royaltyAttributes,
-      argv.nftMetadata
+      argv.nftMetadata,
+      ['nft-sales', 'nft-access'],
+      true
     )
+
   } else {
-    // erc-1155
+
     ddo = await nvm.assets.createNft(
       ddoMetadata,
       creatorAccount,

@@ -3,7 +3,9 @@ import {
   Constants,
   StatusCodes,
   printTokenBanner,
-  loadToken
+  loadToken,
+  loadNeverminedConfigContract,
+  getFeesFromBigNumber
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
@@ -17,7 +19,6 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
-import { TxParameters } from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/ContractBase'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -51,6 +52,12 @@ export const registerAsset = async (
     ddoPrice = BigNumber.from(argv.price).mul(BigNumber.from(10).pow(decimals))
 
     logger.debug(`Using Price ${argv.price}`)
+
+    const configContract = loadNeverminedConfigContract(config)
+    const networkFee = await configContract.getMarketplaceFee()
+    const networkFeeFormatted = getFeesFromBigNumber(networkFee)
+
+    logger.info(`Network Fees: ${networkFeeFormatted}`)
 
     const providerKey = await nvm.gateway.getBabyjubPublicKey()
 
