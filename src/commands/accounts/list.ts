@@ -1,4 +1,9 @@
-import { Nevermined, Account, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import {
+  Nevermined,
+  Account,
+  Nft721,
+  Accounts
+} from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import {
@@ -22,9 +27,14 @@ export const accountsList = async (
 
   const token = await loadToken(nvm, config, verbose)
 
-  logger.debug(chalk.dim('Loading account/s ...'))
-
-  let accounts = await nvm.accounts.list()
+  let accounts: Account[] = []
+  if (address) {
+    logger.info(`Getting balance of account ${address}`)
+    accounts = [new Account(address)]
+  } else {
+    logger.debug(chalk.dim('Loading account/s ...'))
+    accounts = await nvm.accounts.list()
+  }
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
@@ -118,14 +128,16 @@ export const accountsList = async (
     )
     logger.info(
       chalk.dim(
-        `${config.nativeToken} Balance: ${chalk.whiteBright(a.ethBalance)}`
+        `${config.nativeToken} Balance: ${chalk.whiteBright(
+          BigNumber.formatEther(a.ethBalance)
+        )} ${config.nativeToken}`
       )
     )
     if (token !== null) {
       logger.info(
         chalk.dim(
           `Token Balance: ${chalk.whiteBright(
-            a.tokenBalance
+            BigNumber.formatUnits(a.tokenBalance, decimals)
           )} ${chalk.whiteBright(symbol)}`
         )
       )

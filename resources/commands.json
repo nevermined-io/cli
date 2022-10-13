@@ -106,15 +106,15 @@
 					"description": "Load NFT (ERC-721) inventory as well"
 				}]
 			}, {
-				"name": "balance [account]",
-				"description": "Get the balance of a specific account",
+				"name": "balance [address]",
+				"description": "Get the balance of a specific address",
 				"details": "Given the public address of an account, this command gets the balance of the Native token where the `ncli` is connected. This is typically `ETH` in Ethereum networks, `MATIC` in Polygon networks, etc.",
 				"examples": ["ncli accounts balance 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
 				"commandHandler": "accountsList",
 				"positionalArguments": [{
-					"name": "account",
+					"name": "address",
 					"type": "string",
-					"description": "The account to retrieve the balance"
+					"description": "The address of the account to retrieve the balance"
 				}],
 				"optionalArguments": [{
 					"name": "nftTokenAddress",
