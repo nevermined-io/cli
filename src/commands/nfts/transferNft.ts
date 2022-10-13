@@ -6,6 +6,7 @@ import { Logger } from 'log4js'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const transferNft = async (
   nvm: Nevermined,
@@ -70,12 +71,10 @@ export const transferNft = async (
 
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  const serviceInDDO = argv.nftType === '721' ? 'nft721-sales' : 'nft-sales'
+  const serviceInDDO = 'nft-sales'
 
-  const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
-    .getTotalPrice()
-    .div(10)
-    .mul(decimals)
+  const price = BigNumber.formatUnits(
+    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(), decimals)
 
   logger.info(
     chalk.dim(`Price ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)

@@ -15,6 +15,7 @@ import {
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const showNft = async (
   nvm: Nevermined,
@@ -105,10 +106,8 @@ export const showNft = async (
       logger.warn(`Token Id not found`)
     }
 
-    const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
-      .getTotalPrice()
-      .div(10)
-      .mul(decimals)
+    const price = BigNumber.formatUnits(
+      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(), decimals)
 
     logger.info(
       chalk.dim(
@@ -153,35 +152,15 @@ export const showNft = async (
       )
     )
 
-    try {
-      const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
-        .getTotalPrice()
-        .div(10)
-        .mul(decimals)
-
+    const price = BigNumber.formatUnits(
+      getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(), decimals)
       logger.info(
         chalk.dim(
-          `Price (NFT-1155): ${chalk.whiteBright(price)} ${chalk.whiteBright(
+          `Price (NFT): ${chalk.whiteBright(price)} ${chalk.whiteBright(
             symbol
           )}`
         )
       )
-    } catch {}
-
-    try {
-      const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
-        .getTotalPrice()
-        .div(10)
-        .mul(decimals)
-
-      logger.info(
-        chalk.dim(
-          `Price (NFT-721): ${chalk.whiteBright(price)} ${chalk.whiteBright(
-            symbol
-          )}`
-        )
-      )
-    } catch {}
   }
 
   logger.trace(chalk.dim(DDO.serialize(ddo)))
