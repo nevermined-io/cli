@@ -63,7 +63,7 @@ If you want to connect to any of them, we just need to configure your `NODE_URL`
 export NODE_URL=https://rpc-mumbai.matic.today
 ```
 
- Now you can use the parameter `--network` in the `ncli` commands or export the `NETWORK` enviroment variable to allow to connect and use any of these environments:
+ Now you can use the parameter `--network` in the `ncli` commands or export the `NETWORK` environment variable to allow to connect and use any of these environments:
 
 ```bash
 ncli --network defiMumbai network status

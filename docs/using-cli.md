@@ -113,7 +113,7 @@ ncli assets import  --metadata /tmp/my_asset_metadata.json
 
 ### Resolving an Asset
 
-One registered asset in Nevermined is composed if 2 parts:
+One registered asset in Nevermined is composed by 2 parts:
 
 * The **metadata** describing the file (tile, author, description, etc)
 * Some ids stored in the Smart contracts. This includes the **DID** and the reference to the metadata
@@ -187,7 +187,7 @@ We previously registered an asset that allowed limited downloads for people purc
 ncli nfts721 create 0x726baA2f854A3BEC2378a707AeB38c9d933Ebad6 --name 'A picture about myself' --author 'John Doe' --price 1 --urls https://www.kazoart.com/blog/wp-content/uploads/2018/03/23-magritte-uomo-con-mela-100x70-70x50_jpg.jpg --contentType image/jpeg
 ```
 
-As you can see, this command is very similar to the previous one. The main difference is here we have defined that payment of 1 token will result in receiving an ERC-721 NFT. Wwhoever holds that NFT will be able to get access to the urls passed as parameter.
+As you can see, this command is very similar to the previous one. The main difference is here we have defined that payment of 1 token will result in receiving an ERC-721 NFT. Whoever holds that NFT will be able to get access to the urls passed as parameter.
 
 If the asset was registered properly, you got a DID with more information about the asset running:
 
