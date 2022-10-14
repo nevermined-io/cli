@@ -14,14 +14,50 @@ export const resolveDID = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, network, did } = argv
 
-  logger.info(chalk.dim(`Resolving the asset: ${did}`))
+  logger.info(chalk.dim(`Resolving the asset: ${chalk.green(did)}`))
 
   logger.info(
     chalk.dim(`Using DIDRegistry: ${await nvm.keeper.didRegistry.getAddress()}`)
   )
-  const onchainInfo = await nvm.keeper.didRegistry.getDIDRegister(did)
+  const onchainInfo: any = await nvm.keeper.didRegistry.getDIDRegister(did)
 
-  logger.info(JSON.stringify(onchainInfo))
+  logger.info(
+    chalk.dim(
+      `\n====== ${chalk.whiteBright(
+        'On-Chain information on DIDRegistry'
+      )} ======`
+    )
+  )
+  logger.info(chalk.dim(`Owner: ${chalk.whiteBright(onchainInfo.owner)}`))
+  logger.info(
+    chalk.dim(`Last Checksum: ${chalk.whiteBright(onchainInfo.lastChecksum)}`)
+  )
+  logger.info(chalk.dim(`URL: ${chalk.yellowBright(onchainInfo.url)}`))
+  logger.info(
+    chalk.dim(
+      `Last Updated by: ${chalk.whiteBright(onchainInfo.lastUpdatedBy)}`
+    )
+  )
+  logger.info(
+    chalk.dim(
+      `Block number updated: ${chalk.whiteBright(
+        onchainInfo.blockNumberUpdated
+      )}`
+    )
+  )
+  logger.info(
+    chalk.dim(
+      `Providers: ${chalk.whiteBright(JSON.stringify(onchainInfo.providers))}`
+    )
+  )
+  logger.info(
+    chalk.dim(`NFT Supply: ${chalk.whiteBright(onchainInfo.nftSupply)}`)
+  )
+  logger.info(chalk.dim(`Mint cap: ${chalk.whiteBright(onchainInfo.mintCap)}`))
+  logger.info(
+    chalk.dim(`Royalties: ${chalk.whiteBright(onchainInfo.royalties)}`)
+  )
+  logger.info('\n')
 
   let ddo
   try {
@@ -33,7 +69,7 @@ export const resolveDID = async (
         errorMessage: 'Asset not found'
       }
     }
-    logger.info(chalk.dim('DID found and DDO resolved'))
+    logger.info(chalk.dim(`${chalk.bgGreen('✅')} DID found and DDO resolved`))
     logger.debug(ddo)
   } catch {
     logger.warn('Asset not found')
@@ -68,6 +104,16 @@ export const resolveDID = async (
       )
     )
   }
+
+  logger.info(chalk.yellowBright(`Metadata:`))
+  logger.info(
+    JSON.stringify(
+      ddo.findServiceByType('metadata').attributes.main,
+      undefined,
+      2
+    )
+  )
+  logger.info(`\n`)
 
   return {
     status: StatusCodes.OK,
