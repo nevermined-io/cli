@@ -190,12 +190,14 @@ export const showNft = async (
   )
 
   logger.info('Royalties ====')
-  if (nftDetails.royaltyScheme === 0)
-    logger.info(chalk.dim(`Royalty Scheme: ${chalk.whiteBright('Standard')}`))
-  else if (nftDetails.royaltyScheme === 1)
-    logger.info(chalk.dim(`Royalty Scheme: ${chalk.whiteBright('Curve')}`))
-  else if (nftDetails.royaltyScheme === 2)
-    logger.info(chalk.dim(`Royalty Scheme: ${chalk.whiteBright('Legacy')}`))
+  const royaltiesSchemes = ['Standard', 'Curve', 'Legacy']
+  logger.info(
+    chalk.dim(
+      `Royalty Scheme: ${chalk.whiteBright(
+        royaltiesSchemes[nftDetails.royaltyScheme]
+      )}`
+    )
+  )
 
   const royaltiesAmount = nftDetails.royalties / 10000
   logger.info(
