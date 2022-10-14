@@ -30,7 +30,7 @@ export const createNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, metadata } = argv
+  const { verbose, metadata } = argv
 
   logger.info(chalk.dim('Creating NFT ...'))
 
@@ -127,7 +127,6 @@ export const createNft = async (
     ddo = await nvm.assets.createNft721(
       ddoMetadata,
       creatorAccount,
-      // @ts-ignore
       assetRewards,
       DEFAULT_ENCRYPTION_METHOD,
       argv.nftAddress,

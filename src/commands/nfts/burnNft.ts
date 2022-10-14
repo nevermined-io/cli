@@ -17,7 +17,7 @@ export const burnNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did, uri } = argv
+  const { verbose, did} = argv
 
   logger.info(chalk.dim(`Burning NFT: '${chalk.whiteBright(did)}'`))
 

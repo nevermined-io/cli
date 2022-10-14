@@ -12,7 +12,7 @@ export const retireDID = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { did } = argv
 
   logger.info(chalk.dim(`Retiring the asset: ${did}`))
 

@@ -13,7 +13,7 @@ export const cleanArtifacts = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { contractsVersion, networkId, tag, path } = argv
+  const { path } = argv
 
   logger.info(`Deleting local copy of Smart Contracts artifacts`)
 
@@ -22,7 +22,7 @@ export const cleanArtifacts = async (
   else artifactsFolder = ARTIFACTS_PATH
 
   try {
-    const result = execSync(`rm -f ${artifactsFolder}/*.*`)
+    execSync(`rm -f ${artifactsFolder}/*.*`)
   } catch (error) {
     const errorMessage = `Unable to removed the cached the artifacts: ${JSON.stringify(
       error

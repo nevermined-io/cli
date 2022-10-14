@@ -18,11 +18,11 @@ export const metadataConfig = {
 
 export const loadAddressesFromMnemonic = (
   mnemonic: string | undefined,
-  numberOfAccounts: number = 10
+  numberOfAccounts = 10
 ): string[] => {
   if (mnemonic) {
     const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)
-    let addresses = []
+    const addresses = []
     for (let index = 0; index < numberOfAccounts; index++) {
       addresses.push(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
     }

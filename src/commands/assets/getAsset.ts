@@ -13,7 +13,7 @@ import {
   InstantiableConfig
 } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
 
-const rl = readline.createInterface({
+readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
@@ -25,7 +25,7 @@ export const getAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did, password } = argv
+  const { did } = argv
 
   let agreementId
 
@@ -38,20 +38,13 @@ export const getAsset = async (
 
   // const keyTransfer = await makeKeyTransfer()
 
-  // if (password) {
-  //   const key = await keyTransfer.secretToPublic(keyTransfer.makeKey(password))
-  //   account.babyX = key.x
-  //   account.babyY = key.y
-  //   account.babySecret = password
-  // }
-
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
-  if (argv.agreementId === '') {
+  if (!argv.agreementId) {
     logger.info(chalk.dim(`Ordering asset: ${did}`))
     agreementId = await nvm.assets.order(did, 'access', account)
   } else {
-    ;({ agreementId } = argv)
+    agreementId = argv.agreementId
   }
 
   logger.info(
@@ -73,7 +66,7 @@ export const getAsset = async (
     argv.fileIndex
   )
   logger.info(chalk.dim(`Files downloaded to: ${path}`))
-  results = path
+  const results = path
   // }
 
   return {

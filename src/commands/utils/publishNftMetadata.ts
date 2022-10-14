@@ -14,11 +14,9 @@ export const publishNftMetadata = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network } = argv
-
   logger.info(chalk.dim(`Uploading NFT Metadata:`))
 
-  let nftMetadata: NFTMetadata = {
+  const nftMetadata: NFTMetadata = {
     image: argv.image,
     name: argv.name,
     external_link: argv.externalUrl

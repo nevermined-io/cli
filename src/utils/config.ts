@@ -111,8 +111,8 @@ export function getNetworksConfig(): CliConfig {
 
 export function getConfig(
   network: string,
-  requiresAccount: boolean = true,
-  accountIndex: number = 0
+  requiresAccount = true,
+  accountIndex = 0
 ): ConfigEntry {
   if (!process.env.MNEMONIC) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
@@ -137,7 +137,7 @@ export function getConfig(
 
   if (!defaultConfig) throw new Error(`Network '${network}' is not supported`)
 
-  let config = defaultConfig
+  const config = defaultConfig
 
   if (process.env.NODE_URL) config.nvm.nodeUri = process.env.NODE_URL
   if (process.env.MARKETPLACE_API_URL)

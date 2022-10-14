@@ -18,7 +18,7 @@ export const networkStatus = async (
   configEntry: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network } = argv
+  const { network } = argv
 
   const platformVersions = await nvm.versions.get()
 

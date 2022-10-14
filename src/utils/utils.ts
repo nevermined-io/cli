@@ -1,5 +1,4 @@
 import { Contract } from 'ethers'
-import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import {
   findServiceConditionByName,
   noZeroX
@@ -104,7 +103,7 @@ export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
 export const loadHDWalletFromMnemonic = (
   mnemonic: string,
-  index: number = 0
+  index = 0
 ): ethers.utils.HDNode => {
   const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)
   return hdNode.derivePath(`m/44'/60'/0'/0/${index}`)
@@ -112,7 +111,7 @@ export const loadHDWalletFromMnemonic = (
 
 export const loadAccountFromMnemonic = (
   mnemonic: string,
-  index: number = 0
+  index = 0
 ): Account => {
   const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)
   return new Account(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
@@ -170,13 +169,13 @@ export const printNftTokenBanner = async (nft721: Nft721) => {
   }
 
   try {
-    let name = await nft721.contract.call('name', [])
+    const name = await nft721.contract.call('name', [])
     logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
   } catch {
     logger.info(`Name: The NFT doesn't expose the name`)
   }
   try {
-    let symbol = await await nft721.contract.call('symbol', [])
+    const symbol = await await nft721.contract.call('symbol', [])
     logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
   } catch {
     logger.info(`Symbol: The NFT doesn't expose the symbol`)
@@ -262,7 +261,7 @@ export const printSearchResult = async (
   logger.info(chalk.dim(`---------------------------`))
 
   queryResult.results.forEach((_ddo: DDO) => {
-    let _metadata = _ddo.findServiceByType('metadata')
+    const _metadata = _ddo.findServiceByType('metadata')
     logger.info(
       chalk.dim(
         `${chalk.green(_metadata.attributes.main.type)} - ${
@@ -340,8 +339,6 @@ export const loadToken = async (
       chalk.yellow('INFO: Using native token (ETH, MATIC, etc) for payments!\n')
     )
   } else {
-    const web3 = Web3Provider.getWeb3(config)
-
     // if the token address is not zero try to load it
     token = nvm.keeper.token // eslint-disable-line
     const nvmTokenAddress = token.getAddress() || ''

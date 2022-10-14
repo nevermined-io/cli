@@ -13,7 +13,7 @@ export const searchAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, query, json, onlyMetadata } = argv
+  const { query, json, onlyMetadata } = argv
 
   logger.info(chalk.dim(`Search using query: ${chalk.green(query)}`))
 

@@ -20,7 +20,7 @@ export const deployNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, account, abiPath } = argv
+  const { account, abiPath } = argv
 
   logger.info(chalk.dim('Deploying NFT (ERC-721) contract...'))
 
@@ -42,23 +42,11 @@ export const deployNft = async (
     (f) => f.name === 'initialize'
   )
 
-  let args: string[] = argv.params.filter(
+  const args: string[] = argv.params.filter(
     (_key: string) => _key !== '' && _key !== undefined
   )
 
   if (args.length > 0) logger.info(`Using Params: ${JSON.stringify(args)}`)
-
-  const deployData = {
-    data: artifact.bytecode,
-    arguments: isZos ? undefined : args
-  }
-
-  // Set gas limit and gas price, using the default Ropsten provider
-  const price = ethers.utils.formatUnits(await web3.getGasPrice(), 'gwei')
-  const sendOptions = {
-    gasLimit: 100000,
-    gasPrice: ethers.utils.parseUnits(price, 'gwei')
-  }
 
   const argument = isZos ? [] : args
   const contractInstance: ethers.Contract = await contract.deploy(...argument)

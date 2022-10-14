@@ -12,7 +12,7 @@ export const showAgreement = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, agreementId } = argv
+  const { agreementId } = argv
 
   logger.info(
     chalk.dim(

@@ -16,7 +16,7 @@ export const getNftMetadata = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { did } = argv
 
   let nftAddress
   let metadataUrl
@@ -34,6 +34,8 @@ export const getNftMetadata = async (
 
   // Check if the NFT is 721 or 1155
   let is1155
+  // TODO: We need to change the logic here, for now we disable the lint here but it should be enable after change
+  /* eslint-disable no-dupe-else-if*/
   if (
     ddo.findServiceByType('nft-access') ||
     ddo.findServiceByType('nft-sales')
