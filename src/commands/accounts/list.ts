@@ -22,7 +22,7 @@ export const accountsList = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, nftTokenAddress } = argv
+  const { verbose, nftTokenAddress, address } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
