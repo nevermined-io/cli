@@ -24,7 +24,7 @@
 		"externalNetwork": true
 	},
 	"matic": {
-		"envDescription": "Polygon production environment where users can interact with Nevermined protocol.",
+		"envDescription": "The Polygon production environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://nevermined.io/",
 		"isProduction": true,
 		"nvm": {
@@ -48,7 +48,7 @@
 		"externalNetwork": true
 	},
 	"arbitrum-one": {
-		"envDescription": "Arbitrum production environment where users can interact with Nevermined protocol.",
+		"envDescription": "The Arbitrum production environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://arbitrum.io/",
 		"isProduction": true,
 		"nvm": {
@@ -72,7 +72,7 @@
 		"externalNetwork": true
 	},	
 	"goerli": {
-		"envDescription": "Ethereum testnet environment where users can interact with Nevermined protocol.",
+		"envDescription": "The Ethereum testnet environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://goerli.net/",
 		"isProduction": false,
 		"nvm": {
@@ -96,7 +96,7 @@
 		"externalNetwork": true
 	},
 	"arbitrum-goerli": {
-		"envDescription": "Arbitrum testnet environment where users can interact with Nevermined protocol.",
+		"envDescription": "The Arbitrum testnet environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://arbitrum.io/",
 		"isProduction": false,
 		"nvm": {
@@ -120,7 +120,7 @@
 		"externalNetwork": true
 	},		
 	"geth-localnet": {
-		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
+		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running on your computer, please visit https://github.com/nevermined-io/tools/",
 		"isProduction": false,
 		"nvm": {
 			"nodeUri": "http://localhost:8545",

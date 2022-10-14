@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Commands  Reference
 
-The Nevermined CLI (aka `ncli`) offers multiple options to facilitate the interaction of a user with a Nevermined network.
+The Nevermined CLI (aka `ncli`) offers multiple options to facilitate the interaction with the Nevermined network.
 
 
 ## CLI General Options

@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Nevermined Environments
 
-Nevermined is a web3 developers framework that allows to deploy and use it in several networks to implement different use cases. This is a list of the most used environments publicly available that you can use via the Nevermined Command Line interface.
+Nevermined is a web3 developers framework that cam be deployed and used across multiple chains and networks for the implementation of different use cases pertaining to asset and data tokenization, storage and transfer. This is a list of the most used environments publicly available that you can use via the Nevermined Command Line interface.
 
 ## Environments
 
@@ -18,7 +18,7 @@ Nevermined is a web3 developers framework that allows to deploy and use it in se
 
 <% if(it._env[name].isProduction === true) { %> **Production Environment** <% } else { %> **Testnet** <% } %>
 
-The Native token being used is **<%= it._env[name].nativeToken %>**. This environment is having the network name **<%= it._env[name].networkName %>** and the chain id/network id **<%= it._env[name].networkId %>**. <br/>
+The Native token is **<%= it._env[name].nativeToken %>**. This environment has the network name **<%= it._env[name].networkName %>** and the chain id/network id **<%= it._env[name].networkId %>**. <br/>
 
 ### Nevermined configuration 
 
