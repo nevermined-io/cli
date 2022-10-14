@@ -1,6 +1,5 @@
 import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
 import {
-  Constants,
   StatusCodes,
   printNftTokenBanner,
   loadToken,
@@ -21,7 +20,6 @@ import {
   getRoyaltyAttributes,
   RoyaltyKind
 } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Assets'
-import { ethers } from 'ethers'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -62,9 +60,6 @@ export const createNft = async (
         errorMessage: `If not metadata file is provided, the following parameters need to be given: name, author, urls, price`
       }
     }
-
-    const decimals =
-      token !== null ? await token.decimals() : Constants.ETHDecimals
 
     logger.trace(`new BigNumber ${BigNumber.from(argv.price)}`)
     logger.trace(`DDO Price: ${ddoPrice}`)

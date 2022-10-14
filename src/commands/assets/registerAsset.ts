@@ -1,6 +1,5 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
-  Constants,
   StatusCodes,
   printTokenBanner,
   loadToken,
@@ -50,8 +49,6 @@ export const registerAsset = async (
     : BigNumber.from(0)
 
   if (!metadata) {
-    const decimals =
-      token !== null ? await token.decimals() : Constants.ETHDecimals
 
     logger.debug(`Using Price ${argv.price}`)
 

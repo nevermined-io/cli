@@ -71,8 +71,6 @@ export const transferNft = async (
 
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  const serviceInDDO = 'nft-sales'
-
   const price = BigNumber.formatUnits(
     getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
     decimals

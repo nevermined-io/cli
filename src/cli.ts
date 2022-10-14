@@ -28,6 +28,7 @@ const cmdHandler = async (
   argv: any,
   requiresAccount = true
 ) => {
+  // eslint-disable-next-line prefer-const
   let { verbose, network, accountIndex } = argv
 
   let config: ConfigEntry

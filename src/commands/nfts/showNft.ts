@@ -4,8 +4,7 @@ import {
   StatusCodes,
   printNftTokenBanner,
   getNFTAddressFromInput,
-  loadToken,
-  getFeesFromBigNumber
+  loadToken
 } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
@@ -17,10 +16,6 @@ import {
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
-import {
-  getRoyaltyAttributes,
-  RoyaltyKind
-} from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Assets'
 
 export const showNft = async (
   nvm: Nevermined,

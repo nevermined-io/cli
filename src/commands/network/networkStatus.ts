@@ -9,7 +9,6 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { PlatformTechStatus } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Versions'
 import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const networkStatus = async (
   nvm: Nevermined,
@@ -40,7 +39,6 @@ export const networkStatus = async (
   try {
     const configContract = loadNeverminedConfigContract(configEntry)
     const networkFee = await configContract.getMarketplaceFee()
-    const networkFeeFormatted = getFeesFromBigNumber(networkFee)
     logger.info(
       chalk.dim(
         ` Network Fee: ${chalk.yellow(getFeesFromBigNumber(networkFee))} %`

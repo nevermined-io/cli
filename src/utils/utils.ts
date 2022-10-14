@@ -409,6 +409,6 @@ export const getJsonLoggerConfig = (): Configuration => {
   }
 }
 
-export const getFeesFromBigNumber = (fees: BigNumber): String => {
+export const getFeesFromBigNumber = (fees: BigNumber): string => {
   return (fees.toNumber() / 10000).toPrecision(2).toString()
 }
