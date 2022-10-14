@@ -13,7 +13,7 @@ export const provenanceHistory = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { did } = argv
 
   logger.info(
     chalk.dim(`Loading provenance history of: '${chalk.whiteBright(did)}'`)

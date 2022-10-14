@@ -27,7 +27,7 @@ export const registerAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, metadata, assetType, password, encrypt } = argv
+  const { verbose, metadata, assetType, password } = argv
   const token = await loadToken(nvm, config, verbose)
 
   // TODO: Enable DTP when `sdk-dtp` is ready
@@ -55,7 +55,7 @@ export const registerAsset = async (
 
     logger.debug(`Using Price ${argv.price}`)
 
-    const providerKey = await nvm.gateway.getBabyjubPublicKey()
+    await nvm.gateway.getBabyjubPublicKey()
 
     const _files: File[] = []
     let _fileIndex = 0
@@ -133,7 +133,6 @@ export const registerAsset = async (
   const ddo = await nvm.assets.create(
     ddoMetadata,
     account,
-    // @ts-ignore
     assetRewards,
     ['access']
     // undefined,

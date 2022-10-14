@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const IpfsHttpClientLite = require('ipfs-http-client-lite')
 import chalk from 'chalk'
 import fetch from 'cross-fetch'
@@ -23,7 +24,7 @@ export default class IpfsHelper {
   public static async get(cid: string): Promise<string> {
     const url = IPFS_GATEWAY + '/api/v0/cat?arg=' + cid.replace('cid://', '')
     const authToken = this.getAuthToken()
-    var options = {
+    const options = {
       method: 'POST',
       ...(authToken && {
         headers: { Authorization: `Basic ${authToken}` }

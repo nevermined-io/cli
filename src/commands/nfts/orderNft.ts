@@ -14,7 +14,7 @@ export const orderNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { verbose, did } = argv
 
   logger.info(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
 

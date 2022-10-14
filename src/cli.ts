@@ -26,7 +26,7 @@ type CliCommands = typeof CliCommands
 const cmdHandler = async (
   cmd: keyof CliCommands,
   argv: any,
-  requiresAccount: boolean = true
+  requiresAccount = true
 ) => {
   let { verbose, network, accountIndex } = argv
 
@@ -46,7 +46,7 @@ const cmdHandler = async (
 
   if (argv.json) {
     // The `--json` parameter was given so we setup logs in json format
-    addLayout('json', function (config) {
+    addLayout('json', function () {
       return function (logEvent) {
         // we don't need separator as we only have one line, wich represents the output of the command
         return JSON.stringify(logEvent) // + config.separator
@@ -145,8 +145,8 @@ const y = yargs(hideBin(process.argv))
   .command(
     '$0',
     false,
-    () => {},
-    (argv) => {
+    () => ({}),
+    () => {
       yargs.showHelp()
       return process.exit()
     }

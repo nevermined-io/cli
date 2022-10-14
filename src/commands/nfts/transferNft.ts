@@ -15,7 +15,7 @@ export const transferNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, agreementId } = argv
+  const { verbose, agreementId } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
@@ -43,7 +43,7 @@ export const transferNft = async (
     )
   )
 
-  const { lastUpdatedBy } = await nvm.keeper.conditionStoreManager.getCondition(
+  await nvm.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
   )
 

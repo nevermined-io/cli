@@ -29,7 +29,7 @@ export const showNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { verbose, did } = argv
 
   const token = await loadToken(nvm, config, verbose)
 

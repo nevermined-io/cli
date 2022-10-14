@@ -7,7 +7,7 @@ import { Logger } from 'log4js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
-const rl = readline.createInterface({
+readline.createInterface({
   input: process.stdin,
   output: process.stdout
 })
@@ -19,7 +19,7 @@ export const orderAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did, password } = argv
+  const { did } = argv
 
   // TODO: Enable DTP when `sdk-dtp` is ready
   // const keyTransfer = await makeKeyTransfer()
@@ -28,15 +28,7 @@ export const orderAsset = async (
 
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
-  let agreementId
-  // if (password) {
-  //   const key = await keyTransfer.secretToPublic(keyTransfer.makeKey(password))
-  //   account.babyX = key.x
-  //   account.babyY = key.y
-  //   account.babySecret = password
-  //   agreementId = await nvm.assets.order(did, 'access-proof', account)
-  // } else {
-  agreementId = await nvm.assets.order(did, 'access', account)
+  const agreementId = await nvm.assets.order(did, 'access', account)
   // }
 
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))

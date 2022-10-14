@@ -13,7 +13,7 @@ export const listAgreements = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { did } = argv
 
   logger.info(
     chalk.dim(`Loading agreements for DID: '${chalk.whiteBright(did)}'\n`)
