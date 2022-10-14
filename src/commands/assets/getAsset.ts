@@ -3,9 +3,15 @@ import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
 import { Logger } from 'log4js'
-// import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { Dtp } from '@nevermined-io/nevermined-sdk-dtp/dist/Dtp'
+import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-dtp/dist/KeyTransfer'
+import { CryptoConfig } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import {
+  generateIntantiableConfigFromConfig,
+  InstantiableConfig
+} from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -21,10 +27,16 @@ export const getAsset = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, network, did, password } = argv
 
-  // TODO: Enable DTP when `sdk-dtp` is ready
-  // const keyTransfer = await makeKeyTransfer()
-
   let agreementId
+
+  // TODO: Enable DTP when `sdk-dtp` is ready
+  // const instanceConfig: InstantiableConfig = {
+  //   nevermined: nvm,
+  //   config: config.nvm,
+  //   artifactsFolder: config.nvm.artifactsFolder
+  // }
+
+  // const keyTransfer = await makeKeyTransfer()
 
   // if (password) {
   //   const key = await keyTransfer.secretToPublic(keyTransfer.makeKey(password))
@@ -48,7 +60,8 @@ export const getAsset = async (
 
   let results
   // if (password) {
-  //   const key = await nvm.assets.consumeProof(agreementId, did, account)
+  //   const dtp = await Dtp.getInstance(instanceConfig, cryptoConfig)
+  //   const key = await dtp.consumeProof(agreementId, did, account)
   //   results = Buffer.from(key as any, 'hex').toString()
   //   logger.info(`Got password ${results}`)
   // } else {

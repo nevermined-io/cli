@@ -253,17 +253,21 @@ export const printSearchResult = async (
 ) => {
   logger.info(
     chalk.dim(
-      `Total Results: ${queryResult.totalResults} - Total Pages: ${queryResult.totalPages}`
+      `Total Results: ${chalk.yellow(
+        queryResult.totalResults.value
+      )} - Total Pages: ${chalk.yellow(queryResult.totalPages)}`
     )
   )
-  logger.info(chalk.dim(`Page: ${queryResult.page}`))
+  logger.info(chalk.dim(`Page: ${chalk.yellow(queryResult.page)}`))
   logger.info(chalk.dim(`---------------------------`))
 
   queryResult.results.forEach((_ddo: DDO) => {
     let _metadata = _ddo.findServiceByType('metadata')
     logger.info(
       chalk.dim(
-        `${_metadata.attributes.main.type} > Name: ${_metadata.attributes.main.name} - Url: ${_metadata.serviceEndpoint}`
+        `${chalk.green(_metadata.attributes.main.type)} - ${
+          _metadata.attributes.main.name
+        } - ${chalk.blue(_metadata.serviceEndpoint)}`
       )
     )
   })

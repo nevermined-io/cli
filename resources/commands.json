@@ -555,7 +555,7 @@
 					"description": "A list of parameters to be given during the contract initialization"
 				}]
 			}, {
-				"name": "create [nftAddress]",
+				"name": "create [nftAddress]",				
 				"description": "Registers a new asset and associates a ERC-721 NFT to it",
 				"details": "Having a previously deployed ERC-721 NFT contract, this command registers a new asset that allows the publisher to provide access to some exclusive contents when users purchase the price of that NFT.",
 				"examples": ["ncli nfts721 create 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041 --name 'My NFT' --author 'John Doe' --price 1 --urls https://www.apache.org/licenses/LICENSE-2.0 --contentType text/plain"],
