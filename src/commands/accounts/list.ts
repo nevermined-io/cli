@@ -18,13 +18,13 @@ export const accountsList = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, nftTokenAddress, address } = argv
+  const { verbose, nftTokenAddress } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
   logger.debug(chalk.dim('Loading account/s ...'))
 
-  let accounts = await nvm.accounts.list()
+  const accounts = await nvm.accounts.list()
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =

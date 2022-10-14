@@ -7,10 +7,7 @@ import execCommand from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {
   let accountAddress: string
-  let accountPrivateKey: string
   const abiPath = 'test/resources/nfts/TestERC721.json'
-
-  beforeAll(async () => {})
 
   test('List all the accounts ', async () => {
     const listCommand = `${baseCommands.accounts.list} `
@@ -48,7 +45,6 @@ describe('Assets e2e Testing', () => {
 
     const [address, privateKey] = parseNewAccount(stdout)
     accountAddress = address
-    accountPrivateKey = privateKey
 
     console.log(`Address: ${address}`)
     expect(address === null ? false : address.startsWith('0x'))

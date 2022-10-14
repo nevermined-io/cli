@@ -12,7 +12,7 @@ export const resolveDID = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did } = argv
+  const { did } = argv
 
   logger.info(chalk.dim(`Resolving the asset: ${did}`))
 

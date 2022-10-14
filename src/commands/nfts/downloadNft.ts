@@ -12,7 +12,7 @@ export const downloadNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, did, destination, agreementId } = argv
+  const { did, destination, agreementId } = argv
 
   logger.info(
     chalk.dim(`Downloading NFT associated to ${chalk.whiteBright(did)}`)

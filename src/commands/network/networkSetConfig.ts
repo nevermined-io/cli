@@ -14,7 +14,7 @@ export const networkSetConfig = async (
   configEntry: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network } = argv
+  const { network } = argv
 
   logger.info(
     chalk.dim(

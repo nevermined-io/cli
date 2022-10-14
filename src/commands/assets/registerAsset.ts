@@ -17,7 +17,6 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
-import { TxParameters } from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/ContractBase'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -26,7 +25,7 @@ export const registerAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, network, metadata, assetType, password, encrypt } = argv
+  const { verbose, metadata, assetType, password } = argv
   const token = await loadToken(nvm, config, verbose)
 
   // TODO: Enable DTP when `sdk-dtp` is ready
@@ -52,7 +51,7 @@ export const registerAsset = async (
 
     logger.debug(`Using Price ${argv.price}`)
 
-    const providerKey = await nvm.gateway.getBabyjubPublicKey()
+    await nvm.gateway.getBabyjubPublicKey()
 
     const _files: File[] = []
     let _fileIndex = 0
@@ -122,7 +121,6 @@ export const registerAsset = async (
   const ddo = await nvm.assets.create(
     ddoMetadata,
     account,
-    // @ts-ignore
     new AssetRewards(account.getId(), ddoPrice),
     ['access']
     // undefined,
