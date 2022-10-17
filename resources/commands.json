@@ -558,7 +558,10 @@
 				"name": "create [nftAddress]",				
 				"description": "Registers a new asset and associates a ERC-721 NFT to it",
 				"details": "Having a previously deployed ERC-721 NFT contract, this command registers a new asset that allows the publisher to provide access to some exclusive contents when users purchase the NFT.",
-				"examples": ["ncli nfts721 create 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041 --name 'My NFT' --author 'John Doe' --price 1 --urls https://www.apache.org/licenses/LICENSE-2.0 --contentType text/plain"],
+				"examples": [
+					"ncli nfts721 create 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041 --name 'My NFT' --author 'John Doe' --price 1 --urls https://www.apache.org/licenses/LICENSE-2.0 --contentType text/plain",
+					"ncli nfts721 create 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041 --metadata test/resources/metadata-subscription.json"
+				],
 				"commandHandler": "createNft",
 				"positionalArguments": [{
 					"name": "nftAddress",
@@ -600,12 +603,24 @@
 						"type": "string",
 						"default": "",
 						"description": "The asset license (Creative Commons, etc)"
-					},
+					},					
 					{
 						"name": "price",
 						"type": "number",
-						"required": true,
+						"default": "0",
 						"description": "The NFT price"
+					},
+					{
+						"name": "subscription",
+						"type": "boolean",
+						"default": false,						
+						"description": "The NFT contract allows to mint NFTs as subscriptions"
+					},
+					{
+						"name": "duration",
+						"type": "number",
+						"default": "0",
+						"description": "If the asset refers to a subscription, this parameter define the duration of that subscription in blocks"
 					},
 					{
 						"name": "royalties",

@@ -20,6 +20,7 @@ import {
   getRoyaltyAttributes,
   RoyaltyKind
 } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Assets'
+import { NeverminedNFT721Type } from '@nevermined-io/nevermined-sdk-js/dist/node/models/NFTAttributes'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -89,6 +90,7 @@ export const createNft = async (
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
+    ddoMetadata.main.dateCreated = new Date().toISOString().replace(/\.[0-9]{3}/, '')
   }
 
   const royaltyAttributes = getRoyaltyAttributes(
@@ -126,12 +128,14 @@ export const createNft = async (
       DEFAULT_ENCRYPTION_METHOD,
       argv.nftAddress,
       token ? token.getAddress() : config.erc20TokenAddress,
-      true,
+      argv.preMint,
       [config.nvm.gatewayAddress!],
       royaltyAttributes,
       argv.nftMetadata,
       ['nft-sales', 'nft-access'],
-      true
+      false,
+      argv.subscription ? argv.duration: 0,
+      argv.subscription ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721
     )
   } else {
     ddo = await nvm.assets.createNft(

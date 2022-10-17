@@ -1,0 +1,34 @@
+{
+	"curation": {
+		"rating": 0,
+		"numVotes": 0,
+		"isListed": true
+	},
+	"main": {
+		"name": "Aave v2",
+		"dateCreated": "2022-10-17T11:51:12Z",
+		"author": "Nevermined AG",
+		"license": "CC0: Public Domain",
+		"datePublished": "2022-04-14T00:00:00Z",
+		"network": "Ethereum",
+		"files": [{
+			"index": 0,
+			"contentType": "text/csv",
+			"contentLength": "136",
+			"url": "cid://bafkreicvtwwwcoz4cjxlevokpwjysrmgfm5rtcmxtdzf55alg7nvwfhyte"
+		}],
+		"type": "dataset"
+	},
+	"additionalInformation": {
+		"description": "This dataset contains all the Borrows events between the dates Apr 14 2022 and Apr 15 2022 in the the Aave protocol version 2 in the Ethereum blockchain in CSV format. \nThe fields contained in this file are:- User: User that sent the swap- Protocol: Protocol where the swap was executed- Blockchain: Blochain where the swap was executed- Version: version of the protocol- TrasactionId: Transaction id where the trade was executed- Token: Token borrowed- Amount: Amount of token borrowed- Timestamp: Block timestamp where the transaction was included",
+		"categories": ["ProtocolType:Lending", "EventType:Borrows", "Blockchain:Ethereum", "UseCase:defi-datasets", "Version:0.0.6"],
+		"blockchain": "Ethereum",
+		"version": "0.0.6",
+		"source": "filecoin",
+		"file_name": "Aave-v2-LENDBOR-Ethereum_20220414_00:00.csv",
+		"sampleUrl": "https://bafkreihli7bq6ikp3kfpdsd35s3edxkx7jakcdth6chjadwjw5ujg35tja.ipfs.dweb.link",
+		"customData": {
+			"subtype": "dataset"
+		}
+	}
+}

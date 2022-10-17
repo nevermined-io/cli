@@ -11,25 +11,21 @@ import execCommand from '../helpers/ExecCommand'
 
 describe('NFTs (ERC-721) e2e Testing', () => {
   const abiPath = 'test/resources/nfts/TestERC721.json'
-  const abiPath2 = 'test/resources/nfts/NFT721SubscriptionUpgradeable.json'
   let did = ''
   let orderAgreementId = ''
   let nftAddress = ''
   const metadataUri = 'http://nevermined.io/xxx'
 
   beforeAll(async () => {
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-    console.debug(`COMMAND: ${fundCommand}`)
-
-    execCommand(fundCommand, execOpts)
-  })
-
-  test('Deploy a new NFT (ERC-721) contract with parameters', async () => {
-    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath2}  --accountIndex 0 --params "Token Name" --params Symbol `
-    console.debug(`COMMAND: ${deployCommand}`)
-
-    execCommand(deployCommand, execOpts)
+    try {
+      console.log(`Funding account: ${execOpts.accounts[0]}`)
+      const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
+      console.debug(`COMMAND: ${fundCommand}`)
+  
+      execCommand(fundCommand, execOpts)
+    } catch {
+      console.error('Unable to fund account')
+    }
   })
 
   test('Deploy a new NFT (ERC-721) contract without params', async () => {
