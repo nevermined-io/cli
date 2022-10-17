@@ -29,7 +29,8 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Deploy a new NFT (ERC-721) contract without params', async () => {
-    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath}  --accountIndex 0 `
+    
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath}  --accountIndex 0`
     console.debug(`COMMAND: ${deployCommand}`)
 
     const stdout = execCommand(deployCommand, execOpts)

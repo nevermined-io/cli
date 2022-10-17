@@ -199,7 +199,7 @@ export const networkStatus = async (
   // TODO: The Gateway provider address and the `GATEWAY_ADDRESS` env variable are the same
 
   logger.info('\n')
-
+  
   return {
     status: StatusCodes.OK,
     results: JSON.stringify(platformVersions)

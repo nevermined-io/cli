@@ -133,7 +133,7 @@ export const createNft = async (
       royaltyAttributes,
       argv.nftMetadata,
       ['nft-sales', 'nft-access'],
-      false,
+      argv.transfer,
       argv.subscription ? argv.duration: 0,
       argv.subscription ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721
     )

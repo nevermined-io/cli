@@ -1,4 +1,5 @@
 import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import SubscriptionNft721 from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/SubscriptionNft721'
 import { ContractReceipt, ethers } from 'ethers'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import {
@@ -77,6 +78,39 @@ export const deployNft = async (
   await printNftTokenBanner(nft721)
 
   logger.info(`Contract deployed into address: ${contractInstance.address}\n`)
+
+  if (argv.subscription)  {
+    // INFO: We allow transferNFT condition to mint NFTs
+    // Typically this only needs to happen once per NFT contract
+    const subscriptionNFT = await SubscriptionNft721.getInstance(
+      (nvm.keeper as any).instanceConfig,
+      contractInstance.address
+  )  
+    await subscriptionNFT.addMinter(
+      nvm.keeper.conditions.transferNft721Condition.address,
+      creatorAccount.getId()
+    )
+    logger.info(`Adding TransferNFT721Condition with address ${nvm.keeper.conditions.transferNft721Condition.address} as minter`)
+  }
+
+
+  // INFO: We allow the gateway to fulfill the transfer condition in behalf of the user
+  // Typically this only needs to happen once per NFT contract
+  const addressesToApprove: string[] = argv.approve.filter(
+    (_key: string) => _key !== '' && _key !== undefined
+  )
+  if (config.nvm.gatewayAddress) addressesToApprove.push(config.nvm.gatewayAddress!)
+
+  console.log(`ADDRESSES TO APPROVE ${addressesToApprove}`)
+  for await (const addr of addressesToApprove)  {
+    await nft721.setApprovalForAll(addr, true, creatorAccount)        
+    const isApproved = await nft721.isApprovedForAll(
+      creatorAccount.getId(),
+      addr
+    )
+    logger.info(`Address (${addr}) Approved: ${isApproved}\n`)
+  }
+  
 
   return {
     status: StatusCodes.OK,

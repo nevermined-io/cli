@@ -553,7 +553,18 @@
 					"name": "params",
 					"type": "array",
 					"description": "A list of parameters to be given during the contract initialization"
-				}]
+				},{
+					"name": "approve",
+					"type": "array",
+					"description": "A list of addresses to be approved to manage the NFT contract"
+				},{
+					"name": "subscription",
+					"type": "boolean",
+					"default": false,						
+					"description": "The NFT contract allows to mint NFTs as subscriptions"
+				}
+
+			]
 			}, {
 				"name": "create [nftAddress]",				
 				"description": "Registers a new asset and associates a ERC-721 NFT to it",
@@ -616,6 +627,12 @@
 						"default": false,						
 						"description": "The NFT contract allows to mint NFTs as subscriptions"
 					},
+					{
+						"name": "transfer",
+						"type": "boolean",
+						"default": true,						
+						"description": "It allows to transfer a NFT when purchased or mint"
+					},					
 					{
 						"name": "duration",
 						"type": "number",
@@ -837,8 +854,7 @@
 						"type": "string",
 						"default": "",
 						"description": "The asset license (Creative Commons, etc)"
-					},
-					{
+					},{
 						"name": "price",
 						"type": "number",
 						"demand": true,
