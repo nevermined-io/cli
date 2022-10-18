@@ -70,6 +70,7 @@ export const baseCommands = {
     burn: `${BASE_COMMAND} ${VERBOSE} nfts721 burn `,
     order: `${BASE_COMMAND} ${VERBOSE} nfts721 order `,
     transfer: `${BASE_COMMAND} ${VERBOSE} nfts721 transfer `,
+    access: `${BASE_COMMAND} ${VERBOSE} nfts721 access `,
     download: `${BASE_COMMAND} ${VERBOSE} nfts721 download `
   },
   nfts1155: {

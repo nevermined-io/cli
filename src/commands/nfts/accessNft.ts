@@ -48,7 +48,8 @@ export const accessNft = async (
     did,
     consumerAccount,
     destination,
-    undefined
+    undefined,
+    agreementId
   )
 
   if (isSuccessful) {

@@ -620,7 +620,12 @@
 						"type": "number",
 						"default": "0",
 						"description": "The NFT price"
-					},
+					}, {
+						"name": "preMint",
+						"type": "boolean",
+						"default": false,
+						"description": "If true the NFTs will be minted during creation"
+					},					
 					{
 						"name": "subscription",
 						"type": "boolean",
@@ -790,7 +795,33 @@
 					"hidden": true,
 					"description": "The NFT type"
 				}]
-			}, {
+				}, {
+					"name": "access [did] [agreementId]",
+					"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-721 NFT",
+					"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+					"examples": ["ncli nfts721 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
+					"commandHandler": "accessNft",
+					"positionalArguments": [{
+						"name": "did",
+						"type": "string",
+						"description": "The DID of the asset"
+					}, {
+						"name": "agreementId",
+						"type": "string",
+						"description": "The identifier of the agreement created by the buyer"
+					}, {
+						"name": "seller",
+						"type": "string",
+						"demandOption": true,
+						"description": "The address of the seller (0x123..)"
+					}],
+					"optionalArguments": [{
+						"name": "destination",
+						"type": "string",
+						"demandOption": true,
+						"description": "The destination of the files downloaded"
+					}]
+				}, {
 				"name": "download [did]",
 				"description": "As NFT holder this allows to download the files associated to a NFT",
 				"details": "This command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command holds the NFT, it will download the files.",
