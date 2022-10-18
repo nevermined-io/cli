@@ -114,6 +114,12 @@ export const createNft = async (
   const services: ServiceType[] = argv.services.filter(
     (_key: string) => _key !== '' && _key !== undefined
   )
+  if (services.length < 1)  {
+    logger.info(`Services not specified, using the default ..`)
+    services.push('nft-access')
+    services.push('nft-sales')
+  }
+
 
   logger.info(`Attaching services to the asset: ${JSON.stringify(services)}`)
 

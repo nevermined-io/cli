@@ -33,14 +33,14 @@ export const accessNft = async (
   let isOwner = false
   const ddo = await nvm.assets.resolve(did)
   const agreementData = await nvm.agreements.getAgreement(agreementId)
-  const nftAddress = nvm.nfts.getNftContractAddress(ddo) as string
-
-  logger.info(`NFT Address ${nftAddress}`)
   logger.debug(`The agreement refers to the DID: ${agreementData.did}`)
-  logger.info(`Checking owner`)
   
   if (argv.nftType == 721) {     
-
+    logger.info(`Checking owner`)
+    
+    const nftAddress = nvm.nfts.getNftContractAddress(ddo) as string
+    logger.info(`NFT Address ${nftAddress}`)
+  
     ownerOf = await nvm.nfts.ownerOf(
       agreementData.did,
       nftAddress,
@@ -51,6 +51,7 @@ export const accessNft = async (
     isOwner = ownerOf === consumerAccount.getId()
 
   } else {
+    logger.info(`Checking balance`)
     const balance = await nvm.nfts.balance(
       did,
       consumerAccount

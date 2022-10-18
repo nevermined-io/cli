@@ -612,7 +612,7 @@
 					{
 						"name": "services",
 						"type": "array",
-						"default": "nft-access,nft-sales",
+						"demand": false,
 						"description": "The list of services attached to the asset"
 					},
 					{
@@ -899,7 +899,7 @@
 					{
 						"name": "services",
 						"type": "array",
-						"default": "nft-access,nft-sales",
+						"demand": false,
 						"description": "The list of services attached to the asset"
 					},					
 					{
