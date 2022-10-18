@@ -4,13 +4,14 @@ import {
   printTokenBanner,
   loadToken,
   loadNeverminedConfigContract,
-  getFeesFromBigNumber
+  getFeesFromBigNumber,
+  DTP_PROVIDER_KEY
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
+import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-dtp/dist/KeyTransfer'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import {
-  // makeKeyTransfer,
   zeroX
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -30,7 +31,7 @@ export const registerAsset = async (
   const token = await loadToken(nvm, config, verbose)
 
   // TODO: Enable DTP when `sdk-dtp` is ready
-  // const keyTransfer = await makeKeyTransfer()
+  const keyTransfer = await makeKeyTransfer()
 
   if (verbose) {
     printTokenBanner(token)
@@ -52,7 +53,7 @@ export const registerAsset = async (
 
     logger.debug(`Using Price ${argv.price}`)
 
-    await nvm.gateway.getBabyjubPublicKey()
+    await nvm.gateway.getBabyjubPublicKey()    
 
     const _files: File[] = []
     let _fileIndex = 0
@@ -60,6 +61,7 @@ export const registerAsset = async (
       _files.push({
         index: _fileIndex,
         url: Buffer.from(password).toString('hex'),
+        encryption: 'dtp',
         contentType: 'text/plain'
       })
       _fileIndex++
@@ -83,13 +85,14 @@ export const registerAsset = async (
         files: _files
       } as MetaDataMain
     }
-    // if (password) {
-    //   ddoMetadata.additionalInformation = {
-    //     poseidonHash: await keyTransfer.hashKey(Buffer.from(password)),
-    //     providerKey,
-    //     links: argv.urls.map((url: string) => ({ name: 'public url', url }))
-    //   }
-    // }
+    if (password) {
+      const providerKey = DTP_PROVIDER_KEY
+      ddoMetadata.additionalInformation = {
+        poseidonHash: await keyTransfer.hashKey(Buffer.from(password, 'hex')),
+        providerKey,
+        links: argv.urls.map((url: string) => ({ name: 'public url', url }))
+      }
+    }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')
       ddoMetadata.main.algorithm = {
@@ -121,11 +124,6 @@ export const registerAsset = async (
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))
-
-  // const feeData = await config.nvm.web3Provider.getFeeData()
-  // feeData.mul(gasLimit)
-  // (await provider.getFeeData()).maxFeePerGas.mul(gasLimit)
-  // const params: TxParameters= { gasMultiplier: 10 }
 
   const ddo = await nvm.assets.create(
     ddoMetadata,
