@@ -610,6 +610,12 @@
 						"description": "The asset urls. It can be a comma separated list of urls for multiple files."
 					},
 					{
+						"name": "services",
+						"type": "array",
+						"default": "nft-access,nft-sales",
+						"description": "The list of services attached to the asset"
+					},
+					{
 						"name": "license",
 						"type": "string",
 						"default": "",
@@ -620,7 +626,8 @@
 						"type": "number",
 						"default": "0",
 						"description": "The NFT price"
-					}, {
+					}, 
+					{
 						"name": "preMint",
 						"type": "boolean",
 						"default": false,
@@ -799,7 +806,10 @@
 					"name": "access [did] [agreementId]",
 					"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-721 NFT",
 					"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
-					"examples": ["ncli nfts721 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
+					"examples": [
+						"ncli nfts721 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
+						"ncli nfts721 access did:nv:04c50282c7e297c019cea5368c3d7b9e757dfa5d6e28b3d666dd710572669586 0xf988eca804ed9af51653de290e71564dfbbf40afd0dd0a28b25fc95b18476c77 --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260 --destination /tmp/ --accountIndex 1"
+					],
 					"commandHandler": "accessNft",
 					"positionalArguments": [{
 						"name": "did",
@@ -820,6 +830,12 @@
 						"type": "string",
 						"demandOption": true,
 						"description": "The destination of the files downloaded"
+					}, {
+						"name": "nftType",
+						"type": "number",
+						"default": "721",
+						"hidden": true,
+						"description": "The NFT type"
 					}]
 				}, {
 				"name": "download [did]",
@@ -880,6 +896,12 @@
 						"default": "",
 						"description": "The asset urls. It can be a comma separated list of urls for multiple files."
 					},
+					{
+						"name": "services",
+						"type": "array",
+						"default": "nft-access,nft-sales",
+						"description": "The list of services attached to the asset"
+					},					
 					{
 						"name": "license",
 						"type": "string",
@@ -1067,6 +1089,12 @@
 					"type": "string",
 					"demandOption": true,
 					"description": "The destination of the files downloaded"
+				}, {
+					"name": "nftType",
+					"type": "number",
+					"default": "1155",
+					"hidden": true,
+					"description": "The NFT type"
 				}]
 			}, {
 				"name": "download [did]",

@@ -27,22 +27,56 @@ export const accessNft = async (
   logger.debug(`Agreement Id: ${agreementId}`)
   logger.debug(`NFT Holder: ${seller}`)
   logger.debug(`NFT Receiver: ${consumerAccount.getId()}`)
+  logger.debug(`NFT ERC type: ${argv.nftType}`)
 
-  const isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
-    agreementId,
-    seller,
-    consumerAccount.getId(),
-    BigNumber.from(1)
-  )
+  let ownerOf = ''
+  let isOwner = false
+  const ddo = await nvm.assets.resolve(did)
+  const agreementData = await nvm.agreements.getAgreement(agreementId)
+  const nftAddress = nvm.nfts.getNftContractAddress(ddo) as string
 
-  if (!isSuccessfulTransfer) {
-    return {
-      status: StatusCodes.ERROR,
-      errorMessage: `Problem executing 'transferForDelegate' through the gateway`
-    }
+  logger.info(`NFT Address ${nftAddress}`)
+  logger.debug(`The agreement refers to the DID: ${agreementData.did}`)
+  logger.info(`Checking owner`)
+  
+  if (argv.nftType == 721) {     
+
+    ownerOf = await nvm.nfts.ownerOf(
+      agreementData.did,
+      nftAddress,
+      agreementId
+    )
+
+    logger.info(`For the NFT (ERC721) Contract ${nftAddress} the DID ${argv.subscriptionDid} owner is ${ownerOf}`)
+    isOwner = ownerOf === consumerAccount.getId()
+
+  } else {
+    const balance = await nvm.nfts.balance(
+      did,
+      consumerAccount
+    )
+    isOwner = balance.gt(0)
   }
+  
+  if (!isOwner) {
+    logger.info(`Not owner of the NFT, trying transfer`)
+    const isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
+      agreementId,
+      seller,
+      consumerAccount.getId(),
+      BigNumber.from(1),
+      argv.nftType === 721 ? 721 : 1155
+    )
 
-  logger.info(`NFT Access request through the gateway sucessfully`)
+    if (!isSuccessfulTransfer) {
+      return {
+        status: StatusCodes.ERROR,
+        errorMessage: `Problem executing 'transferForDelegate' through the gateway`
+      }
+    }
+    
+    logger.info(`NFT Access request through the gateway sucessfully`)
+  }
 
   const isSuccessful = await nvm.nfts.access(
     did,

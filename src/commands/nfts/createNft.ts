@@ -21,6 +21,7 @@ import {
   RoyaltyKind
 } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Assets'
 import { NeverminedNFT721Type } from '@nevermined-io/nevermined-sdk-js/dist/node/models/NFTAttributes'
+import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -110,6 +111,12 @@ export const createNft = async (
     logger.info(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)
   }
 
+  const services: ServiceType[] = argv.services.filter(
+    (_key: string) => _key !== '' && _key !== undefined
+  )
+
+  logger.info(`Attaching services to the asset: ${JSON.stringify(services)}`)
+
   logger.info(chalk.dim('\nCreating Asset ...'))
 
   let ddo
@@ -132,7 +139,7 @@ export const createNft = async (
       [config.nvm.gatewayAddress!],
       royaltyAttributes,
       argv.nftMetadata,
-      ['nft-sales', 'nft-access'],
+      services,
       argv.transfer,
       argv.subscription ? argv.duration: 0,
       argv.subscription ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721
@@ -150,7 +157,8 @@ export const createNft = async (
       token ? token.getAddress() : config.erc20TokenAddress,
       argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),
       argv.preMint,
-      argv.nftMetadata
+      argv.nftMetadata,
+      services
     )
 
     const isApproved = await nvm.keeper.nftUpgradeable.isApprovedForAll(

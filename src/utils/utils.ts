@@ -252,9 +252,7 @@ export const printSearchResult = async (
 ) => {
   logger.info(
     chalk.dim(
-      `Total Results: ${chalk.yellow(
-        queryResult.totalResults.value
-      )} - Total Pages: ${chalk.yellow(queryResult.totalPages)}`
+      `Total Results: ${chalk.yellow(queryResult.totalResults.value)} - Total Pages: ${chalk.yellow(queryResult.totalPages)}`
     )
   )
   logger.info(chalk.dim(`Page: ${chalk.yellow(queryResult.page)}`))
@@ -264,9 +262,7 @@ export const printSearchResult = async (
     const _metadata = _ddo.findServiceByType('metadata')
     logger.info(
       chalk.dim(
-        `${chalk.green(_metadata.attributes.main.type)} - ${
-          _metadata.attributes.main.name
-        } - ${chalk.blue(_metadata.serviceEndpoint)}`
+        `${chalk.green(_metadata.attributes.main.type)} - ${_metadata.attributes.main.name} - ${chalk.blue(_metadata.serviceEndpoint)}`
       )
     )
   })
@@ -338,7 +334,8 @@ export const loadToken = async (
     logger.debug(
       chalk.yellow('INFO: Using native token (ETH, MATIC, etc) for payments!\n')
     )
-  } else {
+  } else {    
+
     // if the token address is not zero try to load it
     token = nvm.keeper.token // eslint-disable-line
     const nvmTokenAddress = token.getAddress() || ''
