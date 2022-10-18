@@ -22,8 +22,8 @@
     "ncli": "./dist/src/index.js"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "0.25.0-rc3",
-    "@nevermined-io/nevermined-sdk-dtp": "0.0.8",
+    "@nevermined-io/nevermined-sdk-js": "0.25.0",
+    "@nevermined-io/nevermined-sdk-dtp": "0.1.0-rc3",
     "@truffle/hdwallet-provider": "^2.0.9",
     "chalk": "^4.1.2",
     "cross-fetch": "~3.1.5",
@@ -42,7 +42,7 @@
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
     "eslint-config-alloy": "^4.3.0",
-    "eslint-config-nevermined": "^0.1.0",
+    "eslint-config-nevermined": "^0.2.0",
     "eslint-config-next": "^12.3.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
