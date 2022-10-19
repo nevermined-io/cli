@@ -108,7 +108,7 @@ export const resolveDID = async (
   logger.info(chalk.yellowBright(`Metadata:`))
   logger.info(
     JSON.stringify(
-      ddo.findServiceByType('metadata').attributes.main,
+      ddo.findServiceByType('metadata').attributes,
       undefined,
       2
     )

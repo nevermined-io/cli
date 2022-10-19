@@ -130,11 +130,6 @@ export const registerAsset = async (
     account,
     assetRewards,
     ['access']
-    // undefined,
-    // undefined,
-    // undefined,
-    // undefined,
-    // params
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(
