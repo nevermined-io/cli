@@ -5,11 +5,11 @@
 		"isProduction": false,
 		"nvm": {
 			"nodeUri": "",
-			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.rocks",
+			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.network",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"gatewayUri": "https://gateway.mumbai.public.nevermined.rocks",
-			"gatewayAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
+			"gatewayUri": "https://gateway.mumbai.public.nevermined.network",
+			"gatewayAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
 			"verbose": true
 		},
 		"nativeToken": "MATIC",
@@ -29,11 +29,11 @@
 		"isProduction": true,
 		"nvm": {
 			"nodeUri": "",
-			"marketplaceUri": "https://marketplace-api.public.nevermined.rocks",
+			"marketplaceUri": "https://marketplace-api.matic.public.nevermined.network",
 			"faucetUri": "",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"gatewayUri": "https://gateway.public.nevermined.rocks",
-			"gatewayAddress": "0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86",
+			"gatewayUri": "https://gateway.matic.public.nevermined.network",
+			"gatewayAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
 			"verbose": true
 		},
 		"nativeToken": "MATIC",
