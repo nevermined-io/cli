@@ -4,8 +4,7 @@ import {
   printTokenBanner,
   loadToken,
   loadNeverminedConfigContract,
-  getFeesFromBigNumber,
-  DTP_PROVIDER_KEY
+  getFeesFromBigNumber
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
@@ -27,11 +26,11 @@ export const registerAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, metadata, assetType, _password } = argv
+  const { verbose, metadata, assetType } = argv
   const token = await loadToken(nvm, config, verbose)
 
-  // TODO: Enable DTP when `sdk-dtp` is ready
-  const password = '4e657665726d696e65640a436f707972696768742032303230204b65796b6f20476d62482e0a0a546869732070726f6475637420696e636c75646573'
+  //const password = Buffer.from('passwd_32_letters_1234567890asdF').toString('hex')
+  const password = Buffer.from(argv.password).toString('hex')
   if (verbose) {
     printTokenBanner(token)
   }
@@ -55,9 +54,9 @@ export const registerAsset = async (
     if (password) {
       _files.push({
         index: _fileIndex,
-        url: Buffer.from(password).toString('hex'),        
+        url: password,        
         encryption: 'dtp',
-        contentType: argv.contentType
+        contentType: 'text/plain'
       })
       _fileIndex++
     }
@@ -81,16 +80,19 @@ export const registerAsset = async (
       } as MetaDataMain
     }    
     if (password) {
+      const gatewayInfo = await nvm.gateway.getGatewayInfo()
+      const providerKey = gatewayInfo['babyjub-public-key']
+
       const keyTransfer = await makeKeyTransfer()
-      const providerKey = DTP_PROVIDER_KEY
+      
       const bufferHash = Buffer.from(password, 'hex')
       console.log(`Trying to convert poseidon hash: ${bufferHash}`)
       ddoMetadata.additionalInformation = {
-        poseidonHash: await keyTransfer.hashKey(bufferHash),
+        poseidonHash: await keyTransfer.hashKey(Buffer.from(password, 'hex')),
         providerKey,
         links: argv.urls.map((url: string) => ({ name: 'public url', url }))
       }
-      console.log(`We are here now ${JSON.stringify(ddoMetadata.additionalInformation)}`)
+      logger.info(`We are here now ${JSON.stringify(ddoMetadata.additionalInformation)}`)
     }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')

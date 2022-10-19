@@ -33,11 +33,6 @@ export const DEFAULT_ENCRYPTION_METHOD = 'PSK-RSA'
 export const DUMMY_MNEMONIC =
   'kitchen proud renew agent print clap trigger ladder poverty salad marriage hotel'
 
-export const DTP_PROVIDER_KEY = {
-  x: '0x2e3133fbdaeb5486b665ba78c0e7e749700a5c32b1998ae14f7d1532972602bb',
-  y: '0x0b932f02e59f90cdd761d9d5e7c15c8e620efce4ce018bf54015d68d9cb35561',
-}
-
 export const execOpts = {
   encoding: 'utf8',
   maxBuffer: 50 * 1024 * 1024

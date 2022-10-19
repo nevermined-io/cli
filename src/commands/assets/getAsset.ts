@@ -90,6 +90,10 @@ export const getAsset = async (
   logger.info(chalk.dim(`Files downloaded to: ${path}`))    
   results.path = path
 
+  if (isDTP)  {
+    logger.info(`TODO: Decrypt the files using the password`)
+  }
+
   return {
     status: StatusCodes.OK,
     results: JSON.stringify(results)

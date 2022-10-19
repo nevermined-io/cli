@@ -25,7 +25,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Upload a file', async () => {
-    const uploadCommand = `${baseCommands.utils.upload} --encrypt  --accountIndex 0 README.md`
+    const uploadCommand = `${baseCommands.utils.upload} --encrypt --accountIndex 0 README.md`
     console.debug(`COMMAND: ${uploadCommand}`)
 
     const uploadStdout = execCommand(uploadCommand, execOpts)
@@ -34,7 +34,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Registering a new dataset and resolve the DID', async () => {
-    const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name a --author b --price 1 --urls ${url} --password '${password}' --contentType text/plain`
+    const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name a --author b --price 1 --urls ${url} --password ${password} --contentType text/plain`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
