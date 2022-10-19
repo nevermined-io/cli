@@ -13,17 +13,18 @@ describe('Assets e2e Testing', () => {
   let password = ''
 
   beforeAll(async () => {
-    console.log('pwd', execCommand('pwd', execOpts).toString())
-
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-    console.debug(`COMMAND: ${fundCommand}`)
-
-    const stdout = execCommand(fundCommand, execOpts)
-    console.log(stdout.toString())
+    try {
+      console.log(`Funding account: ${execOpts.accounts[0]}`)
+      const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
+      console.debug(`COMMAND: ${fundCommand}`)
+  
+      execCommand(fundCommand, execOpts)
+    } catch {
+      console.error('Unable to fund account')
+    }
   })
 
-  test.skip('Upload a file', async () => {
+  test('Upload a file', async () => {
     const uploadCommand = `${baseCommands.utils.upload} --encrypt  --accountIndex 0 README.md`
     console.debug(`COMMAND: ${uploadCommand}`)
 
@@ -32,7 +33,7 @@ describe('Assets e2e Testing', () => {
     ;({ url, password } = parseUrlAndPassword(uploadStdout))
   })
 
-  test.skip('Registering a new dataset and resolve the DID', async () => {
+  test('Registering a new dataset and resolve the DID', async () => {
     const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name a --author b --price 1 --urls ${url} --password '${password}' --contentType text/plain`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
@@ -50,7 +51,7 @@ describe('Assets e2e Testing', () => {
     expect(stdoutResolve.includes(did))
   })
 
-  test.skip('Order and download an asset', async () => {
+  test('Order and download an asset', async () => {
     const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 0 --password abde`
     console.debug(`COMMAND: ${getCommand}`)
 

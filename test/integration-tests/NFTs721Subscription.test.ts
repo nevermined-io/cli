@@ -99,7 +99,6 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
     const position = registerDatasetStdout.indexOf('did:nv:')
     console.log(`DID found at position ${position}`)
     didDataset = registerDatasetStdout.substring(position, position + 71)
-    //didDataset = parseDIDFromNewNFT(registerDatasetStdout)
     console.debug(`DID (Dataset): ${didDataset}`)
     expect(didDataset.startsWith('did:nv:'))    
   })  

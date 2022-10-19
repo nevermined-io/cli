@@ -27,19 +27,16 @@ export const registerAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, metadata, assetType, password } = argv
+  const { verbose, metadata, assetType, _password } = argv
   const token = await loadToken(nvm, config, verbose)
 
   // TODO: Enable DTP when `sdk-dtp` is ready
-  const keyTransfer = await makeKeyTransfer()
-
+  const password = '4e657665726d696e65640a436f707972696768742032303230204b65796b6f20476d62482e0a0a546869732070726f6475637420696e636c75646573'
   if (verbose) {
     printTokenBanner(token)
   }
 
   logger.info(chalk.dim(`Registering asset (${assetType}) ...`))
-
-  logger.info(JSON.stringify(argv))
 
   logger.debug(chalk.dim(`Using creator: '${account.getId()}'\n`))
 
@@ -48,21 +45,19 @@ export const registerAsset = async (
   const ddoPrice = BigNumber.from(argv.price).gt(0)
     ? BigNumber.from(argv.price)
     : BigNumber.from(0)
+  logger.debug(`With Price ${ddoPrice}`)
+
 
   if (!metadata) {
-
-    logger.debug(`Using Price ${argv.price}`)
-
-    await nvm.gateway.getBabyjubPublicKey()    
 
     const _files: File[] = []
     let _fileIndex = 0
     if (password) {
       _files.push({
         index: _fileIndex,
-        url: Buffer.from(password).toString('hex'),
+        url: Buffer.from(password).toString('hex'),        
         encryption: 'dtp',
-        contentType: 'text/plain'
+        contentType: argv.contentType
       })
       _fileIndex++
     }
@@ -84,14 +79,18 @@ export const registerAsset = async (
         license: argv.license,
         files: _files
       } as MetaDataMain
-    }
+    }    
     if (password) {
+      const keyTransfer = await makeKeyTransfer()
       const providerKey = DTP_PROVIDER_KEY
+      const bufferHash = Buffer.from(password, 'hex')
+      console.log(`Trying to convert poseidon hash: ${bufferHash}`)
       ddoMetadata.additionalInformation = {
-        poseidonHash: await keyTransfer.hashKey(Buffer.from(password, 'hex')),
+        poseidonHash: await keyTransfer.hashKey(bufferHash),
         providerKey,
         links: argv.urls.map((url: string) => ({ name: 'public url', url }))
       }
+      console.log(`We are here now ${JSON.stringify(ddoMetadata.additionalInformation)}`)
     }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')
