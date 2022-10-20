@@ -29,13 +29,10 @@ export const getAsset = async (
   const metadata = ddo.findServiceByType('metadata')
 
   let isDTP = false
-  if (argv.fileIndex && argv.fileIndex >= 0)
-    isDTP = metadata.attributes.main.files?.[argv.fileIndex].encryption === 'dtp' ? true : false
-  else
-    metadata.attributes.main.files?.forEach( _f => {
-      if (_f.encryption === 'dtp')
-        isDTP = true
-    })
+  metadata.attributes.main.files?.forEach( _f => {
+    if (_f.encryption === 'dtp')
+      isDTP = true
+  })
 
   const instanceConfig = {
     ...generateIntantiableConfigFromConfig(config.nvm),

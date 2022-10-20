@@ -60,7 +60,7 @@ export const registerAsset = async (
     if (isDTP) {
       _files.push({
         index: _fileIndex,
-        url: password,        
+        url: password,
         encryption: 'dtp',
         contentType: 'text/plain'
       })

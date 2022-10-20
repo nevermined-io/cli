@@ -4,6 +4,7 @@ export const commandRegex = {
     password: new RegExp('.*Got password (.*)\\n', 'g'),
     totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\\n', 'g'),
     downloadPath: new RegExp('.*Files downloaded to:.(.*)', 'gm'),
+    downloadFile: new RegExp('.*Downloaded:.(.*)', 'gm'),
     serviceAgreement: new RegExp('.*Agreement Id:.(.*)\\n', 'g')
     //
   },
@@ -86,6 +87,14 @@ export const parseNumberResultsFromSearch = (stdout: string): string | null => {
 
 export const parseDownloadPath = (stdout: string): string | null => {
   const path = commandRegex.assets.downloadPath.exec(stdout)
+  if (path != null) {
+    return path[1]
+  }
+  return null
+}
+
+export const parseDownloadFile = (stdout: string): string | null => {
+  const path = commandRegex.assets.downloadFile.exec(stdout)
   if (path != null) {
     return path[1]
   }

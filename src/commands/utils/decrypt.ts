@@ -2,9 +2,9 @@ import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
-import crypto from 'crypto'
 import { StatusCodes } from '../../utils'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import { aes_decryption_256 } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
 
 export const decryptFile = async (
   nvm: Nevermined,
@@ -15,22 +15,7 @@ export const decryptFile = async (
 ): Promise<ExecutionOutput> => {
   const { file, password } = argv
   const encrypted = fs.readFileSync(file).toString('binary')
-
-  const salt = Buffer.from(encrypted.substring(8, 16), 'binary')
-
-  logger.info(`Using salt: ${salt}`)
-
-  const keydata = crypto
-    .pbkdf2Sync(password, salt, 10000, 48, 'sha256')
-    .toString('binary')
-
-  logger.info(`We have keydata`)
-  const key = Buffer.from(keydata.substring(0, 32), 'binary')
-  const iv = Buffer.from(keydata.substring(32, 48), 'binary')
-  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv)
-
-  let decrypted = decipher.update(encrypted.substring(16), 'binary', 'binary')
-  decrypted += decipher.final()
+  const decrypted = aes_decryption_256(encrypted, password)
 
   const filePathDecrypted = file + '.decrypted'
   fs.writeFileSync(filePathDecrypted, decrypted)

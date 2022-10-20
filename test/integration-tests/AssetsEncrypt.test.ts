@@ -1,7 +1,7 @@
 import { execOpts, baseCommands } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
-  parseDownloadPath,
+  parseDownloadFile,
   parsePasswordFromOrder,
   parseUrlAndPassword
 } from '../helpers/StdoutParser'
@@ -54,7 +54,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 0 --password abde --path /tmp`
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 1 --password abde --path /tmp`
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)
@@ -64,12 +64,12 @@ describe('Assets e2e Testing', () => {
     console.log(`Password: ${pass}`)
     expect(pass).toEqual(password)
 
-    downloadedPath = parseDownloadPath(getStdout)
+    downloadedPath = parseDownloadFile(getStdout)
     console.log(`Downloaded Path: ${downloadedPath}`)
   })
 
   test('Decrypt the content', async () => {
-    const decryptCommand = `${baseCommands.utils.decrypt} ${downloadedPath}0 --password ${password}`
+    const decryptCommand = `${baseCommands.utils.decrypt} ${downloadedPath} --password ${password}`
     console.debug(`COMMAND: ${decryptCommand}`)
 
     const decryptStdout = execCommand(decryptCommand, execOpts)
