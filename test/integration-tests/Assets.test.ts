@@ -16,17 +16,6 @@ describe('Assets e2e Testing', () => {
 
   beforeAll(async () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)
-    /*
-    if (
-      execOpts.env.NETWORK === 'spree' ||
-      execOpts.env.NETWORK === 'geth-localnet' ||
-      execOpts.env.NETWORK === 'polygon-localnet'
-    ) {
-      console.log(`Funding account: ${execOpts.accounts[0]}`)
-      const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-      console.debug(`COMMAND: ${fundCommand}`)
-      execCommand(fundCommand, execOpts)
-    }*/
 
     const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
