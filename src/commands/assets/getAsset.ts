@@ -25,32 +25,6 @@ export const getAsset = async (
 
   let agreementId
 
-  const instanceConfig = {
-    ...generateIntantiableConfigFromConfig(config.nvm),
-    nevermined: nvm,
-  }
-
-  const gatewayInfo = await nvm.gateway.getGatewayInfo()
-  const cryptoConfig: CryptoConfig = {
-    provider_key: '',
-    provider_password: '',
-    provider_rsa_public: gatewayInfo['rsa-public-key'],
-    provider_rsa_private: ''
-  }
-
-  logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
-
-  if (!argv.agreementId) {
-    logger.info(chalk.dim(`Ordering asset: ${did}`))
-    agreementId = await nvm.assets.order(did, 'access', account)
-  } else {
-    agreementId = argv.agreementId
-  }
-
-  logger.info(
-    chalk.dim(`Downloading asset: ${did} with agreement id: ${agreementId}`)
-  )
-
   const ddo = await nvm.assets.resolve(did)
   const metadata = ddo.findServiceByType('metadata')
 
@@ -63,10 +37,47 @@ export const getAsset = async (
         isDTP = true
     })
 
+  const instanceConfig = {
+    ...generateIntantiableConfigFromConfig(config.nvm),
+    nevermined: nvm,
+  }
+
+  const gatewayInfo = await nvm.gateway.getGatewayInfo()
+  const cryptoConfig: CryptoConfig = {
+    provider_key: '',
+    provider_password: '',
+    provider_rsa_public: gatewayInfo['rsa-public-key'],
+    provider_rsa_private: ''
+  }
+  const dtp = await Dtp.getInstance(instanceConfig, cryptoConfig)
+
+  logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
+  if (isDTP) {
+    logger.info(`Is a DTP asset`)
+    const babyAccount = await dtp.babyjubAccount(argv.password)
+    account.babySecret = babyAccount.babySecret
+    account.babyX = babyAccount.babyX
+    account.babyY = babyAccount.babyY
+  }
+
+  if (!argv.agreementId) {
+    logger.info(chalk.dim(`Ordering asset: ${did}`))
+    agreementId = await nvm.assets.order(did, 'access', account)
+  } else {
+    agreementId = argv.agreementId
+  }
+
+  logger.info(
+    chalk.dim(`Downloading asset: ${did} with agreement id: ${agreementId}`)
+  )
+
   let encryptionPassword
   if (isDTP) {
     logger.info(`Is a DTP asset`)
-    const dtp = await Dtp.getInstance(instanceConfig, cryptoConfig)
+    const babyAccount = await dtp.babyjubAccount(argv.password)
+    account.babySecret = babyAccount.babySecret
+    account.babyX = babyAccount.babyX
+    account.babyY = babyAccount.babyY
     logger.info(`Calling Consume Proof with ${agreementId}, ${ddo.id} & ${account.getId()}`)
     const key = await dtp.consumeProof(agreementId, ddo.id, account)
     logger.info(`KEY: ${key}`)
