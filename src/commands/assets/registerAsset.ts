@@ -29,8 +29,8 @@ export const registerAsset = async (
   const { verbose, metadata, assetType } = argv
   const token = await loadToken(nvm, config, verbose)
 
-  //const password = Buffer.from('passwd_32_letters_1234567890asdF').toString('hex')
-  const password = Buffer.from(argv.password).toString('hex')
+  let password = ''
+  const isDTP = argv.password ? true : false
   if (verbose) {
     printTokenBanner(token)
   }
@@ -46,12 +46,15 @@ export const registerAsset = async (
     : BigNumber.from(0)
   logger.debug(`With Price ${ddoPrice}`)
 
+  if (isDTP)
+      password = Buffer.from(argv.password).toString('hex')
+
 
   if (!metadata) {
 
     const _files: File[] = []
     let _fileIndex = 0
-    if (password) {
+    if (isDTP) {
       _files.push({
         index: _fileIndex,
         url: password,        
@@ -79,7 +82,7 @@ export const registerAsset = async (
         files: _files
       } as MetaDataMain
     }    
-    if (password) {
+    if (isDTP) {
       const gatewayInfo = await nvm.gateway.getGatewayInfo()
       const providerKey = gatewayInfo['babyjub-public-key']
 

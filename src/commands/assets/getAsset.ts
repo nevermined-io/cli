@@ -63,11 +63,6 @@ export const getAsset = async (
         isDTP = true
     })
 
-  const results = {
-    isDTP,
-    password: '',
-    path: ''
-  }
   let encryptionPassword
   if (isDTP) {
     logger.info(`Is a DTP asset`)
@@ -77,7 +72,6 @@ export const getAsset = async (
     logger.info(`KEY: ${key}`)
     encryptionPassword = Buffer.from(key as any, 'hex').toString()
     logger.info(`Got password ${encryptionPassword}`)
-    results.password = encryptionPassword
   }
 
   const path = await nvm.assets.consume(
@@ -88,7 +82,6 @@ export const getAsset = async (
     argv.fileIndex
   )
   logger.info(chalk.dim(`Files downloaded to: ${path}`))    
-  results.path = path
 
   if (isDTP)  {
     logger.info(`TODO: Decrypt the files using the password`)
@@ -96,6 +89,10 @@ export const getAsset = async (
 
   return {
     status: StatusCodes.OK,
-    results: JSON.stringify(results)
+    results: JSON.stringify({
+      isDTP,
+      password: encryptionPassword,
+      path
+    })
   }
 }
