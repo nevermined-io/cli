@@ -69,7 +69,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Decrypt the content', async () => {
-    const decryptCommand = `${baseCommands.utils.decrypt} ${downloadedPath}/0 --password ${password}`
+    const decryptCommand = `${baseCommands.utils.decrypt} ${downloadedPath}0 --password ${password}`
     console.debug(`COMMAND: ${decryptCommand}`)
 
     const decryptStdout = execCommand(decryptCommand, execOpts)

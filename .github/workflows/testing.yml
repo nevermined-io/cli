@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         network: ["--geth"]
-        node: ["16"]
+        node: ["16.17"]
         include:
           - network: "--geth"
             network-name: geth-localnet
