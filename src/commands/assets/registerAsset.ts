@@ -8,7 +8,6 @@ import {
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
-import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-dtp/dist/KeyTransfer'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import {
   zeroX
@@ -35,8 +34,7 @@ export const registerAsset = async (
     nevermined: nvm,
   }
   const dtp = await Dtp.getInstance(instanceConfig, null as any)
-
-  //const password = Buffer.from('passwd_32_letters_1234567890asdF').toString('hex')
+  
   const isDTP = argv.password ? true : false
   const password = argv.password ? Buffer.from(argv.password).toString('hex') : ''
   if (verbose) {
@@ -91,13 +89,9 @@ export const registerAsset = async (
     if (isDTP) {
       const gatewayInfo = await nvm.gateway.getGatewayInfo()
       const providerKey = gatewayInfo['babyjub-public-key']
-
-      const keyTransfer = await makeKeyTransfer()
       
-      const bufferHash = Buffer.from(password, 'hex')
-      console.log(`Trying to convert poseidon hash: ${bufferHash}`)
       ddoMetadata.additionalInformation = {
-        poseidonHash: await keyTransfer.hashKey(Buffer.from(password, 'hex')),
+        poseidonHash: await dtp.keytransfer.hashKey(Buffer.from(password, 'hex')),
         providerKey,
         links: argv.urls.map((url: string) => ({ name: 'public url', url }))
       }

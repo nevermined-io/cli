@@ -18,9 +18,13 @@ export const decryptFile = async (
 
   const salt = Buffer.from(encrypted.substring(8, 16), 'binary')
 
+  logger.info(`Using salt: ${salt}`)
+
   const keydata = crypto
     .pbkdf2Sync(password, salt, 10000, 48, 'sha256')
     .toString('binary')
+
+  logger.info(`We have keydata`)
   const key = Buffer.from(keydata.substring(0, 32), 'binary')
   const iv = Buffer.from(keydata.substring(32, 48), 'binary')
   const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv)
@@ -28,6 +32,7 @@ export const decryptFile = async (
   let decrypted = decipher.update(encrypted.substring(16), 'binary', 'binary')
   decrypted += decipher.final()
 
+  logger.info(`File decrypted`)
   logger.info(decrypted)
 
   return {

@@ -73,11 +73,6 @@ export const getAsset = async (
 
   let encryptionPassword
   if (isDTP) {
-    logger.info(`Is a DTP asset`)
-    const babyAccount = await dtp.babyjubAccount(argv.password)
-    account.babySecret = babyAccount.babySecret
-    account.babyX = babyAccount.babyX
-    account.babyY = babyAccount.babyY
     logger.info(`Calling Consume Proof with ${agreementId}, ${ddo.id} & ${account.getId()}`)
     const key = await dtp.consumeProof(agreementId, ddo.id, account)
     logger.info(`KEY: ${key}`)

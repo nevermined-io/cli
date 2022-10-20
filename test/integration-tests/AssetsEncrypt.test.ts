@@ -1,6 +1,7 @@
 import { execOpts, baseCommands } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
+  parseDownloadPath,
   parsePasswordFromOrder,
   parseUrlAndPassword
 } from '../helpers/StdoutParser'
@@ -11,6 +12,7 @@ describe('Assets e2e Testing', () => {
   let did = ''
   let url = ''
   let password = ''
+  let downloadedPath: string | null = ''
 
   beforeAll(async () => {
     try {
@@ -52,7 +54,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 0 --password abde`
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 0 --password abde --path /tmp`
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)
@@ -61,5 +63,18 @@ describe('Assets e2e Testing', () => {
     const pass = parsePasswordFromOrder(getStdout)
     console.log(`Password: ${pass}`)
     expect(pass).toEqual(password)
+
+    downloadedPath = parseDownloadPath(getStdout)
+    console.log(`Downloaded Path: ${downloadedPath}`)
+  })
+
+  test('Decrypt the content', async () => {
+    const decryptCommand = `${baseCommands.utils.decrypt} ${downloadedPath}/0 --password ${password}`
+    console.debug(`COMMAND: ${decryptCommand}`)
+
+    const decryptStdout = execCommand(decryptCommand, execOpts)
+    console.log(`STDOUT: ${decryptStdout}`)
+
+    expect(decryptStdout.includes(`File decrypted`))
   })
 })
