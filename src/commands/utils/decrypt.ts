@@ -32,13 +32,15 @@ export const decryptFile = async (
   let decrypted = decipher.update(encrypted.substring(16), 'binary', 'binary')
   decrypted += decipher.final()
 
-  logger.info(`File decrypted`)
-  logger.info(decrypted)
+  const filePathDecrypted = file + '.decrypted'
+  fs.writeFileSync(filePathDecrypted, decrypted)
+  logger.info(`File decrypted successfully`)
+  logger.info(filePathDecrypted)
 
   return {
     status: StatusCodes.OK,
     results: JSON.stringify({
-      decrypted
+      filePathDecrypted
     })
   }
 }

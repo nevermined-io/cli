@@ -75,6 +75,6 @@ describe('Assets e2e Testing', () => {
     const decryptStdout = execCommand(decryptCommand, execOpts)
     console.log(`STDOUT: ${decryptStdout}`)
 
-    expect(decryptStdout.includes(`File decrypted`))
+    expect(decryptStdout.includes(`File decrypted successfully`))
   })
 })
