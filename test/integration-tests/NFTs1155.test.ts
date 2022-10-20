@@ -40,7 +40,6 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
       }
     } catch (error) {
       console.warn(`Unable to fund accounts`)
-      console.trace((error as Error).message)
     }
   })
 

@@ -68,7 +68,8 @@ describe('Assets e2e Testing', () => {
     console.log(`Downloaded Path: ${downloadedPath}`)
   })
 
-  test('Decrypt the content', async () => {
+  // TODO: Enable this test when Gateway returns the file content instead of a URL
+  test.skip('Decrypt the content', async () => {
     const decryptCommand = `${baseCommands.utils.decrypt} ${downloadedPath}0 --password ${password}`
     console.debug(`COMMAND: ${decryptCommand}`)
 
