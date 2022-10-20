@@ -4,7 +4,8 @@ import {
   printTokenBanner,
   loadToken,
   loadNeverminedConfigContract,
-  getFeesFromBigNumber
+  getFeesFromBigNumber,
+  DEFAULT_ENCRYPTION_METHOD
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
@@ -29,6 +30,7 @@ export const registerAsset = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, metadata, assetType } = argv
   const token = await loadToken(nvm, config, verbose)
+  
   const instanceConfig = {
     ...generateIntantiableConfigFromConfig(config.nvm),
     nevermined: nvm,
@@ -133,7 +135,12 @@ export const registerAsset = async (
     ddoMetadata,
     account,
     assetRewards,
-    ['access']
+    ['access'],
+    [],
+    DEFAULT_ENCRYPTION_METHOD,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    [config.nvm.gatewayAddress!],
+    token ? token.getAddress() : config.erc20TokenAddress
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

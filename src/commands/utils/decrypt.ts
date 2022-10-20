@@ -19,7 +19,6 @@ export const decryptFile = async (
 
   const filePathDecrypted = file + '.decrypted'
   fs.writeFileSync(filePathDecrypted, decrypted)
-  logger.info(`File decrypted successfully`)
   logger.info(filePathDecrypted)
 
   return {

@@ -4,7 +4,7 @@
 		"envUrl": "https://nevermined.io/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "",
+			"nodeUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.network",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
@@ -28,7 +28,7 @@
 		"envUrl": "https://nevermined.io/",
 		"isProduction": true,
 		"nvm": {
-			"nodeUri": "",
+			"nodeUri": "https://polygon-rpc.com",
 			"marketplaceUri": "https://marketplace-api.matic.public.nevermined.network",
 			"faucetUri": "",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
@@ -166,7 +166,7 @@
 		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "",
+			"nodeUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api-public.nevermined.network/",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
@@ -177,7 +177,7 @@
 		"nativeToken": "MATIC",
 		"networkId": "80001",
 		"networkName": "mumbai",
-		"contractsVersion": "2.0.5",
+		"contractsVersion": "2.1.0",
 		"tagName": "public",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
@@ -190,7 +190,7 @@
 		"envUrl": "https://portal.autonomies.test.nevermined.rocks",
 		"isProduction": false,
 		"nvm": {
-			"nodeUri": "",
+			"nodeUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api.autonomies.test.nevermined.rocks",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",

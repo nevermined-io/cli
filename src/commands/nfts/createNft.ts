@@ -142,6 +142,7 @@ export const createNft = async (
       argv.nftAddress,
       token ? token.getAddress() : config.erc20TokenAddress,
       argv.preMint,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       [config.nvm.gatewayAddress!],
       royaltyAttributes,
       argv.nftMetadata,
@@ -157,6 +158,7 @@ export const createNft = async (
       assetRewards,
       DEFAULT_ENCRYPTION_METHOD,
       argv.cap,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       [config.nvm.gatewayAddress!],
       BigNumber.from(1),
       royaltyAttributes,

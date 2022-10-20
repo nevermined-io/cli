@@ -28,11 +28,7 @@ export const getAsset = async (
   const ddo = await nvm.assets.resolve(did)
   const metadata = ddo.findServiceByType('metadata')
 
-  let isDTP = false
-  metadata.attributes.main.files?.forEach( _f => {
-    if (_f.encryption === 'dtp')
-      isDTP = true
-  })
+  const isDTP = metadata.attributes.main.files?.some( _f => _f.encryption === 'dtp')
 
   const instanceConfig = {
     ...generateIntantiableConfigFromConfig(config.nvm),

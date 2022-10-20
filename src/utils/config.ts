@@ -137,7 +137,7 @@ export function getConfig(
 
   if (!defaultConfig) throw new Error(`Network '${network}' is not supported`)
 
-  const config = defaultConfig
+  const config = defaultConfig  
 
   if (process.env.NODE_URL) config.nvm.nodeUri = process.env.NODE_URL
   if (process.env.MARKETPLACE_API_URL)

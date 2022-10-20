@@ -54,14 +54,13 @@ export const accountsList = async (
 
   const loadedAccounts = await Promise.all(
     accounts.map(async (a, index) => {
-      // const ethBalance = BigNumber.parseEther(
-      //   (await a.getEtherBalance()).toString()
-      // )      
-      const nativeTokenBalance = BigNumber.parseEther(
-        (await a.getEtherBalance()).toString()
-      )
-      console.log(`NATIVE TOKEN BALANCE ${nativeTokenBalance}`)
-      const ethBalance = (await a.getEtherBalance()).toString()
+      
+      const balanceFormatted = BigNumber.formatEther(await a.getEtherBalance())
+      
+      const ethBalance = BigNumber.parseEther(
+        balanceFormatted
+      )      
+
       const tokenBalance = (
         token ? await token.balanceOf(a.getId()) : BigNumber.from(0)
       )
@@ -132,7 +131,7 @@ export const accountsList = async (
     logger.info(
       chalk.dim(
         `${config.nativeToken} Balance: ${chalk.whiteBright(
-          a.ethBalance
+          BigNumber.formatEther(a.ethBalance)
         )} ${config.nativeToken}`
       )
     )

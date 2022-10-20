@@ -8,7 +8,7 @@ const VERBOSE = '-v'
 export const metadataConfig = {
   name: 'CLI Testing Dataset #' + generateId(),
   author: 'Nevermined CLI',
-  price: 10,
+  price: 1,
   url: 'https://www.apache.org/licenses/LICENSE-2.0',
   contentType: 'text/plain',
   metadataFile: 'test/resources/example-1.json',
