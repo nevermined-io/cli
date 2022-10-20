@@ -18,6 +18,8 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+import { Dtp } from '@nevermined-io/nevermined-sdk-dtp/dist/Dtp'
+import { generateIntantiableConfigFromConfig } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -28,9 +30,14 @@ export const registerAsset = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, metadata, assetType } = argv
   const token = await loadToken(nvm, config, verbose)
+  const instanceConfig = {
+    ...generateIntantiableConfigFromConfig(config.nvm),
+    nevermined: nvm,
+  }
+  const dtp = await Dtp.getInstance(instanceConfig, null as any)
 
   //const password = Buffer.from('passwd_32_letters_1234567890asdF').toString('hex')
-  const password = Buffer.from(argv.password).toString('hex')
+  const password = argv.password ? Buffer.from(argv.password).toString('hex') : null
   if (verbose) {
     printTokenBanner(token)
   }
@@ -72,6 +79,7 @@ export const registerAsset = async (
     ddoMetadata = {
       main: {
         name: argv.name,
+        isDTP: !!password,
         type: assetType,
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,

@@ -71,6 +71,7 @@ export const resolveDID = async (
     }
     logger.info(chalk.dim(`${chalk.bgGreen('✅')} DID found and DDO resolved`))
     logger.debug(ddo)
+    logger.debug(ddo.findServiceByType('access'))
   } catch {
     logger.warn('Asset not found')
     return {

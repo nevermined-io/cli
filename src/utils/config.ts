@@ -144,6 +144,7 @@ export function getConfig(
     config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
   if (process.env.FAUCET_URL) config.nvm.faucetUri = process.env.FAUCET_URL
   if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
+  if (process.env.NO_GRAPH) config.nvm.graphHttpUri = undefined
   if (process.env.GATEWAY_URL) config.nvm.gatewayUri = process.env.GATEWAY_URL
   if (process.env.GATEWAY_ADDRESS)
     config.nvm.gatewayAddress = process.env.GATEWAY_ADDRESS
