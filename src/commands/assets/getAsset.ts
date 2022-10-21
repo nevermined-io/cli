@@ -83,7 +83,7 @@ export const getAsset = async (
   logger.info(chalk.dim(`Files downloaded to: ${path}`))    
 
   if (isDTP)  {
-    logger.info(`TODO: Decrypt the files using the password`)
+    logger.info(`File/s are encrypted. You can decrypt using the "ncli utils decrypt" command`)
   }
 
   return {
