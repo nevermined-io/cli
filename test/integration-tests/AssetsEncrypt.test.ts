@@ -1,6 +1,7 @@
 import { execOpts, baseCommands } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
+  parseDownloadFile,
   parsePasswordFromOrder,
   parseUrlAndPassword
 } from '../helpers/StdoutParser'
@@ -11,20 +12,22 @@ describe('Assets e2e Testing', () => {
   let did = ''
   let url = ''
   let password = ''
+  let downloadedPath: string | null = ''
 
   beforeAll(async () => {
-    console.log('pwd', execCommand('pwd', execOpts).toString())
-
-    console.log(`Funding account: ${execOpts.accounts[0]}`)
-    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-    console.debug(`COMMAND: ${fundCommand}`)
-
-    const stdout = execCommand(fundCommand, execOpts)
-    console.log(stdout.toString())
+    try {
+      console.log(`Funding account: ${execOpts.accounts[0]}`)
+      const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
+      console.debug(`COMMAND: ${fundCommand}`)
+  
+      execCommand(fundCommand, execOpts)
+    } catch {
+      console.error('Unable to fund account')
+    }
   })
 
-  test.skip('Upload a file', async () => {
-    const uploadCommand = `${baseCommands.utils.upload} --encrypt  --accountIndex 0 README.md`
+  test('Upload a file', async () => {
+    const uploadCommand = `${baseCommands.utils.upload} --encrypt --accountIndex 0 README.md`
     console.debug(`COMMAND: ${uploadCommand}`)
 
     const uploadStdout = execCommand(uploadCommand, execOpts)
@@ -32,8 +35,8 @@ describe('Assets e2e Testing', () => {
     ;({ url, password } = parseUrlAndPassword(uploadStdout))
   })
 
-  test.skip('Registering a new dataset and resolve the DID', async () => {
-    const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name a --author b --price 1 --urls ${url} --password '${password}' --contentType text/plain`
+  test('Registering a new dataset and resolve the DID', async () => {
+    const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name a --author b --price 1 --urls ${url} --password ${password} --contentType text/plain`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -50,8 +53,8 @@ describe('Assets e2e Testing', () => {
     expect(stdoutResolve.includes(did))
   })
 
-  test.skip('Order and download an asset', async () => {
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 0 --password abde`
+  test('Order and download an asset', async () => {
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 1 --password abde --path /tmp`
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)
@@ -60,5 +63,18 @@ describe('Assets e2e Testing', () => {
     const pass = parsePasswordFromOrder(getStdout)
     console.log(`Password: ${pass}`)
     expect(pass).toEqual(password)
+
+    downloadedPath = parseDownloadFile(getStdout)
+    console.log(`Downloaded Path: ${downloadedPath}`)
+  })
+
+  test('Decrypt the content', async () => {
+    const decryptCommand = `${baseCommands.utils.decrypt} ${downloadedPath} --password ${password}`
+    console.debug(`COMMAND: ${decryptCommand}`)
+
+    const decryptStdout = execCommand(decryptCommand, execOpts)
+    console.log(`STDOUT: ${decryptStdout}`)
+
+    expect(decryptStdout.includes(`File decrypted successfully`))
   })
 })

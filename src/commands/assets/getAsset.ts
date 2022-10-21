@@ -3,9 +3,11 @@ import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
 import { Logger } from 'log4js'
-// import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import { Dtp } from '@nevermined-io/nevermined-sdk-dtp/dist/Dtp'
+import { generateIntantiableConfigFromConfig } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
+import { CryptoConfig } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
 
 readline.createInterface({
   input: process.stdin,
@@ -21,12 +23,35 @@ export const getAsset = async (
 ): Promise<ExecutionOutput> => {
   const { did } = argv
 
-  // TODO: Enable DTP when `sdk-dtp` is ready
-  // const keyTransfer = await makeKeyTransfer()
-
   let agreementId
 
+  const ddo = await nvm.assets.resolve(did)
+  const metadata = ddo.findServiceByType('metadata')
+
+  const isDTP = metadata.attributes.main.files?.some( _f => _f.encryption === 'dtp')
+
+  const instanceConfig = {
+    ...generateIntantiableConfigFromConfig(config.nvm),
+    nevermined: nvm,
+  }
+
+  const gatewayInfo = await nvm.gateway.getGatewayInfo()
+  const cryptoConfig: CryptoConfig = {
+    provider_key: '',
+    provider_password: '',
+    provider_rsa_public: gatewayInfo['rsa-public-key'],
+    provider_rsa_private: ''
+  }
+  const dtp = await Dtp.getInstance(instanceConfig, cryptoConfig)
+
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
+  if (isDTP) {
+    logger.info(`Is a DTP asset`)
+    const babyAccount = await dtp.babyjubAccount(argv.password)
+    account.babySecret = babyAccount.babySecret
+    account.babyX = babyAccount.babyX
+    account.babyY = babyAccount.babyY
+  }
 
   if (!argv.agreementId) {
     logger.info(chalk.dim(`Ordering asset: ${did}`))
@@ -39,6 +64,15 @@ export const getAsset = async (
     chalk.dim(`Downloading asset: ${did} with agreement id: ${agreementId}`)
   )
 
+  let encryptionPassword
+  if (isDTP) {
+    logger.info(`Calling Consume Proof with ${agreementId}, ${ddo.id} & ${account.getId()}`)
+    const key = await dtp.consumeProof(agreementId, ddo.id, account)
+    logger.info(`KEY: ${key}`)
+    encryptionPassword = Buffer.from(key as any, 'hex').toString()
+    logger.info(`Got password ${encryptionPassword}`)
+  }
+
   const path = await nvm.assets.consume(
     agreementId,
     did,
@@ -46,12 +80,18 @@ export const getAsset = async (
     argv.path,
     argv.fileIndex
   )
-  logger.info(chalk.dim(`Files downloaded to: ${path}`))
-  const results = path
-  // }
+  logger.info(chalk.dim(`Files downloaded to: ${path}`))    
+
+  if (isDTP)  {
+    logger.info(`File/s are encrypted. You can decrypt using the "ncli utils decrypt" command`)
+  }
 
   return {
     status: StatusCodes.OK,
-    results
+    results: JSON.stringify({
+      isDTP,
+      password: encryptionPassword,
+      path
+    })
   }
 }

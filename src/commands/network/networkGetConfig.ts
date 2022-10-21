@@ -38,7 +38,7 @@ export const networkGetConfig = async (
 
     logger.info(
       chalk.dim(
-        ` Marketplace Fee: ${chalk.yellow(
+        ` Network Fee: ${chalk.yellow(
           await configContract.getMarketplaceFee()
         )}`
       )

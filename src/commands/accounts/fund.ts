@@ -22,7 +22,7 @@ export const accountsFund = async (
   logger.info(
     chalk.dim(`Funding account: '${chalk.whiteBright(account.getId())}'`)
   )
-
+  
   if (token === 'both' || token === 'native') {
     try {
       await nvm.faucet.requestEth(account.getId())
@@ -34,9 +34,8 @@ export const accountsFund = async (
       results.push('native')
     } catch (err) {
       errorMessage = `Funding Native token to ${chalk.whiteBright(
-        account.getId()
-      )} failed! ${(err as Error).message}`
-      logger.info(chalk.red(errorMessage))
+        account.getId())} failed!`
+      logger.error(errorMessage)
 
       if (verbose) {
         logger.debug(err)
@@ -67,12 +66,11 @@ export const accountsFund = async (
       results.push('erc20')
     } catch (err) {
       const erc20ErrorMessage = `Funding ERC20 Tokens to ${chalk.whiteBright(
-        account.getId()
-      )} failed! ${(err as Error).message}`
-      logger.info(chalk.red(erc20ErrorMessage))
+        account.getId())} failed!`
+      logger.error(erc20ErrorMessage)
       errorMessage = `${errorMessage}, ${erc20ErrorMessage}`
       if (verbose) {
-        logger.info(err)
+        logger.debug(err)
       }
     }
   }

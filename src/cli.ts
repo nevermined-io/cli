@@ -28,11 +28,15 @@ const cmdHandler = async (
   argv: any,
   requiresAccount = true
 ) => {
-  const { verbose, network, accountIndex } = argv
+  // eslint-disable-next-line prefer-const
+  let { verbose, network, accountIndex } = argv
 
   let config: ConfigEntry
   let nvm: Nevermined
   let userAccount: Account
+
+  if (process.env.NETWORK) network = process.env.NETWORK
+
   try {
     config = getConfig(network as string, requiresAccount, accountIndex)
     await configureLocalEnvironment(network as string, config)

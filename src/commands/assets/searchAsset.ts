@@ -15,7 +15,7 @@ export const searchAsset = async (
 ): Promise<ExecutionOutput> => {
   const { query, json, onlyMetadata } = argv
 
-  logger.info(chalk.dim(`Search using query: ${query}`))
+  logger.info(chalk.dim(`Search using query: ${chalk.green(query)}`))
 
   const queryResults = await nvm.assets.search(query, argv.offset, argv.page)
   let metadataResult

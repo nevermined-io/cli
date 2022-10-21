@@ -1,4 +1,8 @@
-import { Nevermined, Account, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import {
+  Nevermined,
+  Account,
+  Nft721
+} from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import {
@@ -18,13 +22,18 @@ export const accountsList = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, nftTokenAddress } = argv
+  const { verbose, nftTokenAddress, address } = argv
 
   const token = await loadToken(nvm, config, verbose)
 
-  logger.debug(chalk.dim('Loading account/s ...'))
-
-  const accounts = await nvm.accounts.list()
+  let accounts: Account[] = []
+  if (address) {
+    logger.info(`Getting balance of account ${address}`)
+    accounts = [new Account(address)]
+  } else {
+    logger.debug(chalk.dim('Loading account/s ...'))
+    accounts = await nvm.accounts.list()
+  }
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
@@ -45,9 +54,12 @@ export const accountsList = async (
 
   const loadedAccounts = await Promise.all(
     accounts.map(async (a, index) => {
+      
+      const balanceFormatted = BigNumber.formatEther(await a.getEtherBalance())
+      
       const ethBalance = BigNumber.parseEther(
-        (await a.getEtherBalance()).toString()
-      )
+        balanceFormatted
+      )      
 
       const tokenBalance = (
         token ? await token.balanceOf(a.getId()) : BigNumber.from(0)
@@ -118,14 +130,16 @@ export const accountsList = async (
     )
     logger.info(
       chalk.dim(
-        `${config.nativeToken} Balance: ${chalk.whiteBright(a.ethBalance)}`
+        `${config.nativeToken} Balance: ${chalk.whiteBright(
+          BigNumber.formatEther(a.ethBalance)
+        )} ${config.nativeToken}`
       )
     )
     if (token !== null) {
       logger.info(
         chalk.dim(
           `Token Balance: ${chalk.whiteBright(
-            a.tokenBalance
+            BigNumber.formatUnits(a.tokenBalance, decimals)
           )} ${chalk.whiteBright(symbol)}`
         )
       )
@@ -147,6 +161,11 @@ export const accountsList = async (
     }
 
     logger.info('\n')
+  }
+
+  if (!config.isProduction) {
+    logger.info('If you need ERC20 or Native tokens in a "testnet", you can see in the following link how to get some:')
+    logger.info(chalk.blueBright('https://docs.nevermined.io/docs/tutorials/faucets \n'))
   }
 
   return {

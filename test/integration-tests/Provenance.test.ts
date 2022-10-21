@@ -26,7 +26,6 @@ describe('Provenance e2e Testing', () => {
       }
     } catch (error) {
       console.warn(`Unable to fund accounts`)
-      console.trace((error as Error).message)
     }
 
     const registerAssetCommand = `${baseCommands.assets.registerAsset} --accountIndex 0 --name "CLI Testing service agreement" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`

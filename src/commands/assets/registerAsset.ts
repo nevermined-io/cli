@@ -1,15 +1,16 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
-  Constants,
   StatusCodes,
   printTokenBanner,
-  loadToken
+  loadToken,
+  loadNeverminedConfigContract,
+  getFeesFromBigNumber,
+  DEFAULT_ENCRYPTION_METHOD
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
 import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import {
-  // makeKeyTransfer,
   zeroX
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -17,6 +18,8 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+import { Dtp } from '@nevermined-io/nevermined-sdk-dtp/dist/Dtp'
+import { generateIntantiableConfigFromConfig } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -25,40 +28,42 @@ export const registerAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, metadata, assetType, password } = argv
+  const { verbose, metadata, assetType } = argv
   const token = await loadToken(nvm, config, verbose)
-
-  // TODO: Enable DTP when `sdk-dtp` is ready
-  // const keyTransfer = await makeKeyTransfer()
-
+  
+  const instanceConfig = {
+    ...generateIntantiableConfigFromConfig(config.nvm),
+    nevermined: nvm,
+  }
+  const dtp = await Dtp.getInstance(instanceConfig, null as any)
+  
+  const isDTP = argv.password ? true : false
+  const password = argv.password ? Buffer.from(argv.password).toString('hex') : ''
   if (verbose) {
     printTokenBanner(token)
   }
 
   logger.info(chalk.dim(`Registering asset (${assetType}) ...`))
 
-  logger.info(JSON.stringify(argv))
-
   logger.debug(chalk.dim(`Using creator: '${account.getId()}'\n`))
 
   let ddoMetadata: MetaData
-  let ddoPrice: BigNumber
+
+  const ddoPrice = BigNumber.from(argv.price).gt(0)
+    ? BigNumber.from(argv.price)
+    : BigNumber.from(0)
+  logger.debug(`With Price ${ddoPrice}`)
+
+
   if (!metadata) {
-    const decimals =
-      token !== null ? await token.decimals() : Constants.ETHDecimals
-
-    ddoPrice = BigNumber.from(argv.price).mul(BigNumber.from(10).pow(decimals))
-
-    logger.debug(`Using Price ${argv.price}`)
-
-    await nvm.gateway.getBabyjubPublicKey()
 
     const _files: File[] = []
     let _fileIndex = 0
-    if (password) {
+    if (isDTP) {
       _files.push({
         index: _fileIndex,
-        url: Buffer.from(password).toString('hex'),
+        url: password,
+        encryption: 'dtp',
         contentType: 'text/plain'
       })
       _fileIndex++
@@ -75,21 +80,25 @@ export const registerAsset = async (
     ddoMetadata = {
       main: {
         name: argv.name,
+        isDTP: !!password,
         type: assetType,
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
-        price: ddoPrice.toString(),
         files: _files
       } as MetaDataMain
+    }    
+    if (isDTP) {
+      const gatewayInfo = await nvm.gateway.getGatewayInfo()
+      const providerKey = gatewayInfo['babyjub-public-key']
+      
+      ddoMetadata.additionalInformation = {
+        poseidonHash: await dtp.keytransfer.hashKey(Buffer.from(password, 'hex')),
+        providerKey,
+        links: argv.urls.map((url: string) => ({ name: 'public url', url }))
+      }
+      logger.info(`We are here now ${JSON.stringify(ddoMetadata.additionalInformation)}`)
     }
-    // if (password) {
-    //   ddoMetadata.additionalInformation = {
-    //     poseidonHash: await keyTransfer.hashKey(Buffer.from(password)),
-    //     providerKey,
-    //     links: argv.urls.map((url: string) => ({ name: 'public url', url }))
-    //   }
-    // }
     if (assetType === 'algorithm') {
       const containerTokens = argv.container.split(':')
       ddoMetadata.main.algorithm = {
@@ -106,28 +115,32 @@ export const registerAsset = async (
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
+  }
 
-    ddoPrice = BigNumber.from(ddoMetadata.main.price).gt(0)
-      ? BigNumber.from(ddoMetadata.main.price)
-      : BigNumber.from(0)
+  const configContract = loadNeverminedConfigContract(config)
+  const networkFee = await configContract.getMarketplaceFee()
+
+  const assetRewards = new AssetRewards(account.getId(), ddoPrice)
+  if (networkFee.gt(0)) {
+    assetRewards.addNetworkFees(
+      await configContract.getFeeReceiver(),
+      networkFee
+    )
+    logger.info(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)
   }
 
   logger.info(chalk.dim('\nCreating Asset ...'))
-  // const feeData = await config.nvm.web3Provider.getFeeData()
-  // feeData.mul(gasLimit)
-  // (await provider.getFeeData()).maxFeePerGas.mul(gasLimit)
-  // const params: TxParameters= { gasMultiplier: 10 }
 
   const ddo = await nvm.assets.create(
     ddoMetadata,
     account,
-    new AssetRewards(account.getId(), ddoPrice),
-    ['access']
-    // undefined,
-    // undefined,
-    // undefined,
-    // undefined,
-    // params
+    assetRewards,
+    ['access'],
+    [],
+    DEFAULT_ENCRYPTION_METHOD,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    [config.nvm.gatewayAddress!],
+    token ? token.getAddress() : config.erc20TokenAddress
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

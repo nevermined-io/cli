@@ -8,7 +8,7 @@ const VERBOSE = '-v'
 export const metadataConfig = {
   name: 'CLI Testing Dataset #' + generateId(),
   author: 'Nevermined CLI',
-  price: 1,
+  price: 10,
   url: 'https://www.apache.org/licenses/LICENSE-2.0',
   contentType: 'text/plain',
   metadataFile: 'test/resources/example-1.json',
@@ -70,6 +70,7 @@ export const baseCommands = {
     burn: `${BASE_COMMAND} ${VERBOSE} nfts721 burn `,
     order: `${BASE_COMMAND} ${VERBOSE} nfts721 order `,
     transfer: `${BASE_COMMAND} ${VERBOSE} nfts721 transfer `,
+    access: `${BASE_COMMAND} ${VERBOSE} nfts721 access `,
     download: `${BASE_COMMAND} ${VERBOSE} nfts721 download `
   },
   nfts1155: {

@@ -1,4 +1,8 @@
-import { StatusCodes } from '../../utils'
+import {
+  getFeesFromBigNumber,
+  loadNeverminedConfigContract,
+  StatusCodes
+} from '../../utils'
 import { Logger } from 'log4js'
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -31,7 +35,26 @@ export const networkStatus = async (
       ` Network Name ${chalk.yellow(await nvm.keeper.getNetworkName())}`
     )
   )
-  logger.info('')
+
+  try {
+    const configContract = loadNeverminedConfigContract(configEntry)
+    const networkFee = await configContract.getMarketplaceFee()
+    logger.info(
+      chalk.dim(
+        ` Network Fee: ${chalk.yellow(getFeesFromBigNumber(networkFee))} %`
+      )
+    )
+
+    logger.info(
+      chalk.dim(
+        ` Fee Receiver: ${chalk.yellow(await configContract.getFeeReceiver())}`
+      )
+    )
+
+    logger.info('')
+  } catch (error) {
+    logger.warn(`Unable to get fee information: ${error}`)
+  }
 
   // Contracts
   logger.info(chalk.dim(`${chalk.whiteBright('Contracts')}:`))
@@ -176,7 +199,7 @@ export const networkStatus = async (
   // TODO: The Gateway provider address and the `GATEWAY_ADDRESS` env variable are the same
 
   logger.info('\n')
-
+  
   return {
     status: StatusCodes.OK,
     results: JSON.stringify(platformVersions)

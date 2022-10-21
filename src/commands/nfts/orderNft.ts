@@ -5,6 +5,7 @@ import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-j
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const orderNft = async (
   nvm: Nevermined,
@@ -28,10 +29,10 @@ export const orderNft = async (
     token !== null ? await token.decimals() : Constants.ETHDecimals
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  const price = getAssetRewardsFromDDOByService(ddo, 'nft-sales')
-    .getTotalPrice()
-    .div(10)
-    .mul(decimals)
+  const price = BigNumber.formatUnits(
+    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    decimals
+  )
 
   logger.info(
     chalk.dim(`Price: ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)

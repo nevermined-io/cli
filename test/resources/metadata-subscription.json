@@ -1,0 +1,24 @@
+{
+	"curation": {
+		"rating": 0,
+		"numVotes": 0,
+		"isListed": true
+	},
+	"main": {
+		"name": "Free Subscription",
+		"dateCreated": "2022-10-18T11:51:12Z",
+		"author": "Nevermined AG",
+		"license": "CC0: Public Domain",
+		"datePublished": "2022-04-15T00:00:00Z",		
+		"type": "dataset",
+		"files": [{
+			"index": 0,
+			"contentType": "text/csv",
+			"contentLength": "136",
+			"url": "cid://bafkreicvtwwwcoz4cjxlevokpwjysrmgfm5rtcmxtdzf55alg7nvwfhyte"
+		}]
+	},
+	"additionalInformation": {
+		"description": "Owning this subscription gives free access to some datasets"
+	}
+}

@@ -16,17 +16,26 @@ describe('Assets e2e Testing', () => {
 
   beforeAll(async () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)
-    if (
-      execOpts.env.NETWORK === 'spree' ||
-      execOpts.env.NETWORK === 'geth-localnet' ||
-      execOpts.env.NETWORK === 'polygon-localnet'
-    ) {
-      console.log(`Funding account: ${execOpts.accounts[0]}`)
-      const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-      console.debug(`COMMAND: ${fundCommand}`)
-      execCommand(fundCommand, execOpts)
+    try {
+      if (
+        execOpts.env.NETWORK === 'spree' ||
+        execOpts.env.NETWORK === 'geth-localnet' ||
+        execOpts.env.NETWORK === 'polygon-localnet'
+      ) {
+        console.log(
+          `Funding accounts: ${execOpts.accounts[0]} + ${execOpts.accounts[1]}`
+        )
+        
+        let fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token both`
+        console.log(fundCommand)
+        console.log(execCommand(fundCommand, execOpts))
+        fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token both`
+        console.log(fundCommand)
+        console.log(execCommand(fundCommand, execOpts))
+      }
+    } catch (error) {
+      console.warn(`Unable to fund accounts`)
     }
-
     const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
@@ -68,7 +77,7 @@ describe('Assets e2e Testing', () => {
     const randomMetadataFile = `${tempDir}/random_metadata.json`
     fs.writeFileSync(randomMetadataFile, JSON.stringify(jsonImported, null, 4))
 
-    const importCommand = `${baseCommands.assets.importMetadata} --metadata ${randomMetadataFile}`
+    const importCommand = `${baseCommands.assets.importMetadata} --metadata ${randomMetadataFile} --price 1`
     console.debug(`COMMAND: ${importCommand}`)
 
     const stdout = execCommand(importCommand, execOpts)
@@ -117,7 +126,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const orderCommand = `${baseCommands.assets.orderAsset} ${did}  --accountIndex 0  `
+    const orderCommand = `${baseCommands.assets.orderAsset} ${did}  --accountIndex 1  `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execCommand(orderCommand, execOpts)

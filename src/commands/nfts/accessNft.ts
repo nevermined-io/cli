@@ -27,28 +27,64 @@ export const accessNft = async (
   logger.debug(`Agreement Id: ${agreementId}`)
   logger.debug(`NFT Holder: ${seller}`)
   logger.debug(`NFT Receiver: ${consumerAccount.getId()}`)
+  logger.debug(`NFT ERC type: ${argv.nftType}`)
 
-  const isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
-    agreementId,
-    seller,
-    consumerAccount.getId(),
-    BigNumber.from(1)
-  )
+  let ownerOf = ''
+  let isOwner = false
+  const ddo = await nvm.assets.resolve(did)
+  const agreementData = await nvm.agreements.getAgreement(agreementId)
+  logger.debug(`The agreement refers to the DID: ${agreementData.did}`)
+  
+  if (argv.nftType == 721) {     
+    logger.info(`Checking owner`)
+    
+    const nftAddress = nvm.nfts.getNftContractAddress(ddo) as string
+    logger.info(`NFT Address ${nftAddress}`)
+  
+    ownerOf = await nvm.nfts.ownerOf(
+      agreementData.did,
+      nftAddress,
+      agreementId
+    )
 
-  if (!isSuccessfulTransfer) {
-    return {
-      status: StatusCodes.ERROR,
-      errorMessage: `Problem executing 'transferForDelegate' through the gateway`
-    }
+    logger.info(`For the NFT (ERC721) Contract ${nftAddress} the DID ${argv.subscriptionDid} owner is ${ownerOf}`)
+    isOwner = ownerOf === consumerAccount.getId()
+
+  } else {
+    logger.info(`Checking balance`)
+    const balance = await nvm.nfts.balance(
+      did,
+      consumerAccount
+    )
+    isOwner = balance.gt(0)
   }
+  
+  if (!isOwner) {
+    logger.info(`Not owner of the NFT, trying transfer`)
+    const isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
+      agreementId,
+      seller,
+      consumerAccount.getId(),
+      BigNumber.from(1),
+      argv.nftType === 721 ? 721 : 1155
+    )
 
-  logger.info(`NFT Access request through the gateway sucessfully`)
+    if (!isSuccessfulTransfer) {
+      return {
+        status: StatusCodes.ERROR,
+        errorMessage: `Problem executing 'transferForDelegate' through the gateway`
+      }
+    }
+    
+    logger.info(`NFT Access request through the gateway sucessfully`)
+  }
 
   const isSuccessful = await nvm.nfts.access(
     did,
     consumerAccount,
     destination,
-    undefined
+    undefined,
+    agreementId
   )
 
   if (isSuccessful) {

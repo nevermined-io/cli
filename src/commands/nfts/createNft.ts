@@ -1,10 +1,11 @@
 import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
 import {
-  Constants,
   StatusCodes,
   printNftTokenBanner,
   loadToken,
-  DEFAULT_ENCRYPTION_METHOD
+  DEFAULT_ENCRYPTION_METHOD,
+  loadNeverminedConfigContract,
+  getFeesFromBigNumber
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
@@ -19,6 +20,8 @@ import {
   getRoyaltyAttributes,
   RoyaltyKind
 } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Assets'
+import { NeverminedNFT721Type } from '@nevermined-io/nevermined-sdk-js/dist/node/models/NFTAttributes'
+import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -38,6 +41,9 @@ export const createNft = async (
     }
   }
 
+  const royaltiesAmount = BigNumber.parseUnits(String(argv.royalties), 4)
+  logger.info(`Royalties: ${royaltiesAmount}`)
+
   logger.info(chalk.dim('Loading token'))
 
   const token = await loadToken(nvm, config, verbose)
@@ -45,7 +51,10 @@ export const createNft = async (
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   let ddoMetadata
-  let ddoPrice: BigNumber
+  const ddoPrice = BigNumber.from(argv.price).gt(0)
+    ? BigNumber.from(argv.price)
+    : BigNumber.from(0)
+
   if (!metadata) {
     if (argv.name === '' || argv.author === '' || argv.urls === '') {
       return {
@@ -53,11 +62,6 @@ export const createNft = async (
         errorMessage: `If not metadata file is provided, the following parameters need to be given: name, author, urls, price`
       }
     }
-
-    const decimals =
-      token !== null ? await token.decimals() : Constants.ETHDecimals
-
-    ddoPrice = BigNumber.from(argv.price).mul(BigNumber.from(10).pow(decimals))
 
     logger.trace(`new BigNumber ${BigNumber.from(argv.price)}`)
     logger.trace(`DDO Price: ${ddoPrice}`)
@@ -87,14 +91,37 @@ export const createNft = async (
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
-    ddoPrice = BigNumber.from(ddoMetadata.main.price)
+    ddoMetadata.main.dateCreated = new Date().toISOString().replace(/\.[0-9]{3}/, '')
   }
 
   const royaltyAttributes = getRoyaltyAttributes(
     nvm,
     RoyaltyKind.Standard,
-    argv.royalties
+    royaltiesAmount.toNumber()
   )
+
+  const configContract = loadNeverminedConfigContract(config)
+  const networkFee = await configContract.getMarketplaceFee()
+  const assetRewards = new AssetRewards(creatorAccount.getId(), ddoPrice)
+  if (networkFee.gt(0)) {
+    assetRewards.addNetworkFees(
+      await configContract.getFeeReceiver(),
+      networkFee
+    )
+    logger.info(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)
+  }
+
+  const services: ServiceType[] = argv.services.filter(
+    (_key: string) => _key !== '' && _key !== undefined
+  )
+  if (services.length < 1)  {
+    logger.info(`Services not specified, using the default ..`)
+    services.push('nft-access')
+    services.push('nft-sales')
+  }
+
+
+  logger.info(`Attaching services to the asset: ${JSON.stringify(services)}`)
 
   logger.info(chalk.dim('\nCreating Asset ...'))
 
@@ -110,30 +137,36 @@ export const createNft = async (
     ddo = await nvm.assets.createNft721(
       ddoMetadata,
       creatorAccount,
-      new AssetRewards(creatorAccount.getId(), ddoPrice),
+      assetRewards,
       DEFAULT_ENCRYPTION_METHOD,
       argv.nftAddress,
       token ? token.getAddress() : config.erc20TokenAddress,
-      true,
+      argv.preMint,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       [config.nvm.gatewayAddress!],
       royaltyAttributes,
-      argv.nftMetadata
+      argv.nftMetadata,
+      services,
+      argv.transfer,
+      argv.subscription ? argv.duration: 0,
+      argv.subscription ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721
     )
   } else {
-    // erc-1155
     ddo = await nvm.assets.createNft(
       ddoMetadata,
       creatorAccount,
-      new AssetRewards(creatorAccount.getId(), ddoPrice),
+      assetRewards,
       DEFAULT_ENCRYPTION_METHOD,
       argv.cap,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       [config.nvm.gatewayAddress!],
       BigNumber.from(1),
       royaltyAttributes,
       token ? token.getAddress() : config.erc20TokenAddress,
       argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),
       argv.preMint,
-      argv.nftMetadata
+      argv.nftMetadata,
+      services
     )
 
     const isApproved = await nvm.keeper.nftUpgradeable.isApprovedForAll(
@@ -170,6 +203,10 @@ export const createNft = async (
   logger.info('Now please mint the token on the NFT Contract!')
 
   return {
-    status: StatusCodes.OK
+    status: StatusCodes.OK,
+    results: JSON.stringify({
+      did: ddo.id,
+      url: register.url
+    })
   }
 }

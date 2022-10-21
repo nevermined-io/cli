@@ -137,13 +137,14 @@ export function getConfig(
 
   if (!defaultConfig) throw new Error(`Network '${network}' is not supported`)
 
-  const config = defaultConfig
+  const config = defaultConfig  
 
   if (process.env.NODE_URL) config.nvm.nodeUri = process.env.NODE_URL
   if (process.env.MARKETPLACE_API_URL)
     config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
   if (process.env.FAUCET_URL) config.nvm.faucetUri = process.env.FAUCET_URL
   if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
+  if (process.env.NO_GRAPH) config.nvm.graphHttpUri = undefined
   if (process.env.GATEWAY_URL) config.nvm.gatewayUri = process.env.GATEWAY_URL
   if (process.env.GATEWAY_ADDRESS)
     config.nvm.gatewayAddress = process.env.GATEWAY_ADDRESS
@@ -158,9 +159,13 @@ export function getConfig(
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
 
   if (!config.nvm.nodeUri || config.nvm.nodeUri.length < 1) {
-    throw new Error(
-      `You need to configure a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
-    )
+    if (!process.env.NETWORK) {
+      throw new Error(
+        `You need to configure a 'NETWORK' or a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
+      )
+    } else {
+      config.nvm.nodeUri = defaultConfig.nvm.nodeUri
+    }
   }
 
   // TODO: Decommission the integration via Truffle HDWalletProvider

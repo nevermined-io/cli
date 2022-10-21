@@ -11,7 +11,7 @@ Nevermined is a web3 developers framework that allows to deploy and use it in se
 
  
 
-## testnet
+## mumbai
 Public testnet environment where users can interact with Nevermined protocol.<br/>
 
  **Testnet** 

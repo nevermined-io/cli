@@ -22,7 +22,7 @@ The `ncli` allows to pass different parameters depending on the command you want
 * `--help` - If given the CLI will parse information about how to use the `ncli` or a specific command
 * `--version` - If given the CLI will print the application version and will finish
 * `--verbose` or `-v` - It allows to run the `ncli` in debug mode printing more information about what is going on
-* `--network` or `-n` - It allows to specify to what network you want to connect (`spree`, `testnet`, `defiMumbai`, etc). If you want to see the full list of pre-configured environments please run `ncli network list`
+* `--network` or `-n` - It allows to specify to what network you want to connect (`geth-localnet`, `mumbai`, `defiMumbai`, etc). If you want to see the full list of pre-configured environments please run `ncli network list`
 * `--acount` or `-a` - If given, the `ncli` will try to use that specific `address` of the possible derived accounts from your `MNEMONIC`. If not given the `ncli` will try to load the first account derived (derivation path 0).
 * `--json` - If this flag is provided the `ncli` will print all the output in JSON format. This facilitates integrating the `ncli` with another application.
 
@@ -63,7 +63,7 @@ If you want to connect to any of them, we just need to configure your `NODE_URL`
 export NODE_URL=https://rpc-mumbai.matic.today
 ```
 
- Now you can use the parameter `--network` in the `ncli` commands allow to connect and use any of these environments:
+ Now you can use the parameter `--network` in the `ncli` commands or export the `NETWORK` environment variable to allow to connect and use any of these environments:
 
 ```bash
 ncli --network defiMumbai network status
@@ -73,6 +73,7 @@ ncli --network defiMumbai network status
 
 The following list of variables are related to the configuration of the Nevermined environment and how you interact with them:
 
+* `NETWORK` - Allows to uses one of the existing pre-configured Nevermined networks. Example: `geth-localnet`, `mumbai`, `matic`, `goerli`. You can see the full list of networks supported running `ncli network list`
 * `NODE_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
 * `TOKEN_ADDRESS` - The ERC20 token address to use for the transactions. If not given or if is `0x0000000000000000000000000000000000000000` the payments will be made in the network native token (ETH, Matic, ..)
 * `GATEWAY_URL` - The url of the gateway to use. If not given the default url is: `http://localhost:8030`
@@ -81,6 +82,7 @@ The following list of variables are related to the configuration of the Nevermin
 * `IPFS_GATEWAY` - The url of the IPFS gateway used to upload/download contents. By default is `https://ipfs.infura.io:5001`
 * `GATEWAY_ADDRESS` - The public address of the gateway. If not given the default address is: `0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0`
 * `GAS_MULTIPLIER` - For networks with some congestion, this parameter can help to increase the gas spent and speed up the transactions. If not given the default is `0`
+
 
 :::info
 

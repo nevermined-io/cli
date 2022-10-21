@@ -1,4 +1,4 @@
-import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
+import { execOpts, baseCommands } from '../helpers/Config'
 import {
   parseAddressOfContractDeployed,
   parseDIDFromNewNFT,
@@ -9,12 +9,12 @@ import * as fs from 'fs'
 import * as Path from 'path'
 import execCommand from '../helpers/ExecCommand'
 
-describe('NFTs (ERC-721) e2e Testing', () => {
-  const abiPath = 'test/resources/nfts/TestERC721.json'
+describe('Subscription NFTs (ERC-721) e2e Testing', () => {
+  const abiPathSubscription = 'test/resources/nfts/NFT721SubscriptionUpgradeable.json'
   let did = ''
-  let orderAgreementId = ''
+  let didDataset = ''
   let nftAddress = ''
-  const metadataUri = 'http://nevermined.io/xxx'
+  let orderAgreementId = ''
 
   beforeAll(async () => {
     try {
@@ -26,11 +26,11 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     } catch {
       console.error('Unable to fund account')
     }
+
   })
 
-  test('Deploy a new NFT (ERC-721) contract without params', async () => {
-    
-    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPath}  --accountIndex 0`
+  test('Deploy a new NFT (ERC-721) Subscription contract with parameters', async () => {
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPathSubscription}  --accountIndex 0 --params "Token Name" --params Symbol --subscription true `
     console.debug(`COMMAND: ${deployCommand}`)
 
     const stdout = execCommand(deployCommand, execOpts)
@@ -38,20 +38,20 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(`Contract deployed into address`))
     nftAddress = parseAddressOfContractDeployed(stdout)
-    console.debug(`Nft Address: ${nftAddress}`)
+    console.debug(`Subscription Nft Address: ${nftAddress}`)
     expect(nftAddress === '' ? false : nftAddress.startsWith('0x'))
   })
 
-  test('Register an asset with a NFT (ERC-721) attached to it', async () => {
-    const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress}  --accountIndex 0 --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
+  test('Register a Subscription NFT (ERC-721)', async () => {
+    const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress} --metadata test/resources/metadata-subscription.json --subscription true --duration 50000 --transfer false --services nft-sales`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
 
     console.debug(`STDOUT: ${registerStdout}`)
     did = parseDIDFromNewNFT(registerStdout)
-    console.debug(`DID: ${did}`)
-    expect(did === '' ? false : did.startsWith('did:nv:'))
+    console.debug(`DID (Subscription): ${did}`)
+    expect(did === '' ? false : did.startsWith('did:nv:'))    
   })
 
   test('Shows NFTs (721) information', async () => {
@@ -62,17 +62,6 @@ describe('NFTs (ERC-721) e2e Testing', () => {
 
     console.debug(`STDOUT: ${showStdout}`)
     expect(showStdout.includes(did))
-  })
-
-  test('It mints a NFT (ERC-721)', async () => {
-    const mintCommand = `${baseCommands.nfts721.mint} "${did}" --nftAddress ${nftAddress} --uri ${metadataUri}  --accountIndex 0  `
-    console.debug(`COMMAND: ${mintCommand}`)
-
-    const stdout = execCommand(mintCommand, execOpts)
-
-    console.debug(`STDOUT: ${stdout}`)
-    expect(stdout.includes(did))
-    expect(stdout.includes(`Minted NFT (ERC-721)`))
   })
 
   test('Order a NFT (ERC-721)', async () => {
@@ -100,15 +89,29 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     expect(stdout.includes(`Transfer done!`))
   })
 
-  test('As NFT holder I can download the files associated to an asset', async () => {
-    const destination = `/tmp/nevemined/cli/test/nft`
-    const downloadCommand = `${baseCommands.nfts721.download} "${did}" --destination "${destination}" --accountIndex 1  `
-    console.debug(`COMMAND: ${downloadCommand}`)
+  test('Register an Asset attached to a Subscription', async () => {
+    const registerDatasetCommand = `${baseCommands.nfts721.create} ${nftAddress} --metadata test/resources/metadata-dataset.json --services nft-access`
+    console.debug(`COMMAND DATASET: ${registerDatasetCommand}`)
 
-    const stdout = execCommand(downloadCommand, execOpts)
+    const registerDatasetStdout = execCommand(registerDatasetCommand, execOpts)
+
+    console.debug(`STDOUT DATASET: ${registerDatasetStdout}`)
+    const position = registerDatasetStdout.indexOf('did:nv:')
+    console.log(`DID found at position ${position}`)
+    didDataset = registerDatasetStdout.substring(position, position + 71)
+    console.debug(`DID (Dataset): ${didDataset}`)
+    expect(didDataset.startsWith('did:nv:'))    
+  })  
+
+  test('As NFT holder I can download the files associated to an asset', async () => {
+    const destination = `/tmp/nevemined/cli/test/nft-susbcription`
+    const accessCommand = `${baseCommands.nfts721.access} "${didDataset}" "${orderAgreementId}" --subscriptionDid ${did} --seller "${execOpts.accounts[0]}" --destination "${destination}" --accountIndex 1  `
+    console.debug(`COMMAND: ${accessCommand}`)
+
+    const stdout = execCommand(accessCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
-    expect(stdout.includes(did))
+    expect(stdout.includes(didDataset))
     expect(stdout.includes(`NFT Assets downloaded to: ${destination}`))
 
     const files = fs.readdirSync(destination || '')
@@ -119,14 +122,4 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     })
   })
 
-  test('It burns a NFT (ERC-721)', async () => {
-    const burnCommand = `${baseCommands.nfts721.burn} "${did}" ${nftAddress} --accountIndex 0  `
-    console.debug(`COMMAND: ${burnCommand}`)
-
-    const stdout = execCommand(burnCommand, execOpts)
-
-    console.debug(`STDOUT: ${stdout}`)
-    expect(stdout.includes(did))
-    expect(stdout.includes(`Burned NFT (ERC-721)`))
-  })
 })

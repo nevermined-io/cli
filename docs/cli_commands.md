@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Commands  Reference
 
-The Nevermined CLI (aka `ncli`) offers multiple options to facilitate the interaction of a user with a Nevermined network.
+The Nevermined CLI (aka `ncli`) offers multiple options to facilitate the interaction with the Nevermined network.
 
 
 ## CLI General Options
@@ -14,7 +14,7 @@ This are the optional parameters that apply to all `ncli` commands:
 | Name of the Argument | Type | Is required? | Default value | Description |
 |----------------------|------|-------------:|--------------:|-------------|
 | **verbose** | `boolean` |  |  `false`  | Run with verbose logging |
-| **network** | `string` |  |  `testnet`  | The network to use |
+| **network** | `string` |  |  `mumbai`  | The network to use |
 | **account** | `string` |  |    | The account to use |
 | **json** | `boolean` |  |  `false`  | If provided all the output will be in JSON format |
 
