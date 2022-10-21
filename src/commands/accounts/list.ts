@@ -163,6 +163,11 @@ export const accountsList = async (
     logger.info('\n')
   }
 
+  if (!config.isProduction) {
+    logger.info('If you need ERC20 or Native tokens in a "testnet", you can see in the following link how to get some:')
+    logger.info(chalk.blueBright('https://docs.nevermined.io/docs/tutorials/faucets \n'))
+  }
+
   return {
     status: StatusCodes.OK,
     results: JSON.stringify(loadedAccounts.map((a) => a.address))
