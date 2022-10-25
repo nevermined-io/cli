@@ -16,19 +16,19 @@ export const metadataConfig = {
   metadataNFT: 'cid://QmVT3wfySvZJqAvkBCyxoz3EvD3yeLqf3cvAssFDpFFXNm'
 }
 
-export const loadAddressesFromMnemonic = (
-  mnemonic: string | undefined,
+export const loadAddressesFromSeedWords = (
+  seedWords: string | undefined,
   numberOfAccounts = 10
 ): string[] => {
-  if (mnemonic) {
-    const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)
+  if (seedWords) {
+    const hdNode = ethers.utils.HDNode.fromMnemonic(seedWords)
     const addresses = []
     for (let index = 0; index < numberOfAccounts; index++) {
       addresses.push(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
     }
     return addresses
   }
-  // If no mnemonic we return a list of pre-defined addresses for testing purposes
+  // If no seed words we return a list of pre-defined addresses for testing purposes
   return [
     '0xe2DD09d719Da89e5a3D0F2549c7E24566e947260',
     '0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e',
@@ -44,10 +44,10 @@ export const execOpts = {
     NETWORK: NETWORK,
     NODE_URL: `${process.env.NODE_URL}` || 'http://localhost:8545',
     TOKEN_ADDRESS: process.env.TOKEN_ADDRESS,
-    MNEMONIC: process.env.MNEMONIC,
+    SEED_WORDS: process.env.SEED_WORDS,
     LOCAL_CONF_DIR: '/tmp/.nevermined'
   },
-  accounts: loadAddressesFromMnemonic(process.env.MNEMONIC)
+  accounts: loadAddressesFromSeedWords(process.env.SEED_WORDS)
 }
 
 export const baseCommands = {

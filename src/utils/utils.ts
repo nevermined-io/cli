@@ -101,19 +101,19 @@ export const getDidHash = (did: string): string => did.replace('did:nv:', '')
 
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
-export const loadHDWalletFromMnemonic = (
-  mnemonic: string,
+export const loadHDWalletFromSeedWords = (
+  seedWords: string,
   index = 0
 ): ethers.utils.HDNode => {
-  const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)
+  const hdNode = ethers.utils.HDNode.fromMnemonic(seedWords)
   return hdNode.derivePath(`m/44'/60'/0'/0/${index}`)
 }
 
-export const loadAccountFromMnemonic = (
-  mnemonic: string,
+export const loadAccountFromSeedWords = (
+  seedWords: string,
   index = 0
 ): Account => {
-  const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic)
+  const hdNode = ethers.utils.HDNode.fromMnemonic(seedWords)
   return new Account(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
 }
 

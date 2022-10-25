@@ -9,7 +9,7 @@ Once you have created your account and have some funds, you are ready to start u
 Let's first setup the main config we need:
 
 ```bash
-export MNEMONIC="YOUR 12 WORDS SEED PHRASE"
+export SEED_WORDS="YOUR 12 WORDS SEED PHRASE"
 export NETWORK=mumbai
 export NODE_URL="the node url valid for the network you are connecting"
 ```
@@ -42,12 +42,12 @@ Create a new account using the `ncli` by running:
 ncli accounts new
 ```
 
-This command will print all the relevant information like mnemonic, private key, public address of a derived account, etc. Make sure to save all this information if you want to use this account later.
+This command will print all the relevant information like seed words, private key, public address of a derived account, etc. Make sure to save all this information if you want to use this account later.
 
-To use the recently created account you just need to export the mnemonic in an environment variable:
+To use the recently created account you just need to export the seed words in an environment variable:
 
 ```bash
-export MNEMONIC="curious harsh offer relax choose reveal series actress message suspect today vocal"
+export SEED_WORDS="curious harsh offer relax choose reveal series actress message suspect today vocal"
 ```
 
 In the testnets with a faucet available, you can get some funds running:
@@ -149,7 +149,7 @@ Only the owner of the DID can use this command to download the assets. Other use
 So if you are not the owner, you can purchase access to the asset running the order command. But first you need to make sure you are using a different account to the owner one:
 
 ```bash
-export MNEMONIC="your awesome seed phrase that holds tokens on the network of choice"
+export SEED_WORDS="your awesome seed phrase that holds tokens on the network of choice"
 ncli assets order did:nv:e23aeb13dc398be20b6718237a60793d4491d7da8aef53182ad2f05d8666c8d8
 ```
 
@@ -208,7 +208,7 @@ ncli nfts721 mint "did:nv:b7b7a12fa80477d2c75fb730ec4c378445519bba7c816f10740ca5
 So now using a different account you can purchase that asset:
 
 ```
-export MNEMONIC="your awesome seed phrase that holds tokens on the network of choice"
+export SEED_WORDS="your awesome seed phrase that holds tokens on the network of choice"
 
 ncli nfts721 order did:nv:b7b7a12fa80477d2c75fb730ec4c378445519bba7c816f10740ca564acbea06c
 ```

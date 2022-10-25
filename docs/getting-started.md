@@ -40,12 +40,12 @@ $ ncli --help
 
 The `ncli` requires a wallet to connect with the blockchain network (EVM compatible). To use an existing wallet with the `ncli` there are 2 options:
 
-### Use a mnemonic
+### Use seed words
 
-You just need to export your **mnemonic** in the command line:
+You just need to export your **seed words** in the command line:
 
 ```bash
-export MNEMONIC="<your 12/24 words seed phrase>"
+export SEED_WORDS="<your 12/24 words seed phrase>"
 ```
 
 ### Use a keyfile
@@ -68,24 +68,24 @@ Creating wallet ...
 Wallet address: 0x37434d6673ff106446c9224884D54201e5Ae46A4
 Wallet public key: 0x0482d6aac219607b47c0a840784909e19694cf66d35262c0ddbf41d753962388812e5394e083a0c54bce10282b6ec0fd86be7f77d296868184e6fd999c4c1fa7e6
 Wallet private key: 0x0acb0253593fcbbd20e0fd82b8ff35c8a6e6c1f32c09d1bc8b41cec9031c0986
-Wallet Mnemonic:
+Wallet Seed Words:
   Phrase: street fever feed resource place adapt venue mobile hill try armed feature
   Path: m/44'/60'/0'/0/0
   Locale: en
 
 If you want to use it in the CLI run:
-export MNEMONIC="street fever feed resource place adapt venue mobile hill try armed feature"
+export SEED_WORDS="street fever feed resource place adapt venue mobile hill try armed feature"
 ```
 
-As the command output says, you just need to export the `MNEMONIC` environment variable and start using the `ncli`.
+As the command output says, you just need to export the `SEED_WORDS` environment variable and start using the `ncli`.
 
 ```bash
-export MNEMONIC="street fever feed resource place adapt venue mobile hill try armed feature"
+export SEED_WORDS="street fever feed resource place adapt venue mobile hill try armed feature"
 ```
 
 :::caution
 
-Remember to store your **MNEMONIC** in a secure place and don't share it with anyone.
+Remember to store your **SEED_WORDS** in a secure place and don't share it with anyone.
 
 :::
 

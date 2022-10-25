@@ -29,8 +29,8 @@ export const ARTIFACTS_REPOSITORY =
 export const USE_NEW_GATEWAY = process.env.USE_NEW_GATEWAY === 'true' || true
 export const DEFAULT_ENCRYPTION_METHOD = 'PSK-RSA'
 
-// INFO: This mnemonic is only used to initialize the HDWallet in commands not requiring network connectivity
-export const DUMMY_MNEMONIC =
+// INFO: This seed words is only used to initialize the HDWallet in commands not requiring network connectivity
+export const DUMMY_SEED_WORDS =
   'kitchen proud renew agent print clap trigger ladder poverty salad marriage hotel'
 
 export const execOpts = {
@@ -114,10 +114,10 @@ export function getConfig(
   requiresAccount = true,
   accountIndex = 0
 ): ConfigEntry {
-  if (!process.env.MNEMONIC) {
+  if (!process.env.SEED_WORDS) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
       const accountMessage =
-        "'MNEMONIC' or 'KEYFILE' not set in environment! Please see http://docs.nevermined.io/docs/tools/cli/getting-started#configure-your-account for details."
+        "'SEED_WORDS' or 'KEYFILE' not set in environment! Please see http://docs.nevermined.io/docs/tools/cli/getting-started#configure-your-account for details."
       if (requiresAccount) throw new Error(accountMessage)
     }
   }
@@ -154,7 +154,7 @@ export function getConfig(
     config.gasMultiplier = Number(process.env.GAS_MULTIPLIER)
   if (process.env.GAS_PRICE_MULTIPLIER)
     config.gasPriceMultiplier = Number(process.env.GAS_PRICE_MULTIPLIER)
-  config.seed = process.env.MNEMONIC
+  config.seed = process.env.SEED_WORDS
   config.keyfilePath = process.env.KEYFILE_PATH
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
 
@@ -173,7 +173,7 @@ export function getConfig(
   let hdWalletProvider: HDWalletProvider
   let signer: Signer
   if (requiresAccount) {
-    if (!process.env.MNEMONIC) {
+    if (!process.env.SEED_WORDS) {
       signer = Wallet.fromEncryptedJsonSync(
         process.env.KEYFILE_PATH!,
         process.env.KEYFILE_PASSWORD!
@@ -197,9 +197,9 @@ export function getConfig(
       )
     }
   } else {
-    signer = Wallet.fromMnemonic(DUMMY_MNEMONIC)
+    signer = Wallet.fromMnemonic(DUMMY_SEED_WORDS)
     hdWalletProvider = new HDWalletProvider(
-      DUMMY_MNEMONIC,
+      DUMMY_SEED_WORDS,
       config.nvm.nodeUri,
       0,
       1
