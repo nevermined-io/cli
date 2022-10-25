@@ -12,6 +12,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 export const downloadArtifacts = async (
   nvm: Nevermined,
   account: Account,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -27,7 +28,7 @@ export const downloadArtifacts = async (
   let packageFileName
   let destinationFolder
   let artifactPackageUrl = `${ARTIFACTS_REPOSITORY}`
-  if (destination && destination.length() > 0) {
+  if (destination && destination.length > 0) {
     packageFileName = `${destination}`
     destinationFolder = destination
   } else {

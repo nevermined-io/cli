@@ -11,7 +11,7 @@ import {
   logger,
   loginMarketplaceApi,
   configureLocalEnvironment,
-  loadAccountFromMnemonic
+  loadAccountFromSeedWords
 } from '../src/utils'
 import { StatusCodes } from './utils/enums'
 import { configure, addLayout } from 'log4js'
@@ -97,7 +97,7 @@ const cmdHandler = async (
           `Please, check if you are connected to the right node url. Currently using: ${config.nvm.nodeUri}\n`
         )
       }
-      userAccount = loadAccountFromMnemonic(config.seed!, accountIndex)
+      userAccount = loadAccountFromSeedWords(config.seed!, accountIndex)
 
       logger.debug(
         chalk.dim(

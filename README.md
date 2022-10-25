@@ -43,10 +43,10 @@ $ ncli --help
 
 **Setup Accounts**:
 
-- Option 1: Use a mnemonic
+- Option 1: Use the seed words
 
 ```
-export MNEMONIC="<your 12 words seed phrase>"
+export SEED_WORDS="<your 12 words seed phrase>"
 ```
 
 - Option 2: Use keyfiles

@@ -25,7 +25,7 @@ export const accountsNew = async (
   logger.info(
     chalk.dim(`Wallet private key: ${chalk.yellowBright(wallet.privateKey)}`)
   )
-  logger.info(chalk.dim(`Wallet Mnemonic:`))
+  logger.info(chalk.dim(`Wallet Seed Words:`))
 
   logger.info(
     chalk.dim(`  Phrase: ${chalk.yellowBright(wallet.mnemonic.phrase)}`)
@@ -38,7 +38,7 @@ export const accountsNew = async (
   logger.info(
     chalk.dim(
       `\nIf you want to use it in the CLI run:\n${chalk.yellow(
-        'export MNEMONIC="' + wallet.mnemonic.phrase + '"'
+        'export SEED_WORDS="' + wallet.mnemonic.phrase + '"'
       )}\n`
     )
   )

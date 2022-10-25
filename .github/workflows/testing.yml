@@ -54,7 +54,7 @@ jobs:
 
       - name: Run integration tests
         env:
-          MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
+          SEED_WORDS: ${{ secrets.TEST_MNEMONIC }}
           TOKEN_ADDRESS: "0x0000000000000000000000000000000000000000"
           NODE_URL: "http://localhost:8545"
           NETWORK: ${{ matrix.network-name }}

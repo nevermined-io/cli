@@ -138,7 +138,7 @@ ncli accounts new
 ### list
 List all accounts<br/>
 
-To work prorperly the `ncli` needs to use a wallet to interact with the blockchain network where the Nevermined Smart Contracts are deployed. This wallet is given to the `ncli` with the **seed phrase** exported into the `MNEMONIC` environment variable. This command list some of the accounts derived from the mnemonic given by the user.<br/>
+To work prorperly the `ncli` needs to use a wallet to interact with the blockchain network where the Nevermined Smart Contracts are deployed. This wallet is given to the `ncli` with the **seed phrase** exported into the `SEED_WORDS` environment variable. This command list some of the accounts derived from the seed words given by the user.<br/>
 
 #### Positional Arguments
 

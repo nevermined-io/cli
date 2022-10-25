@@ -23,7 +23,7 @@ The `ncli` allows to pass different parameters depending on the command you want
 * `--version` - If given the CLI will print the application version and will finish
 * `--verbose` or `-v` - It allows to run the `ncli` in debug mode printing more information about what is going on
 * `--network` or `-n` - It allows to specify to what network you want to connect (`geth-localnet`, `mumbai`, `defiMumbai`, etc). If you want to see the full list of pre-configured environments please run `ncli network list`
-* `--acount` or `-a` - If given, the `ncli` will try to use that specific `address` of the possible derived accounts from your `MNEMONIC`. If not given the `ncli` will try to load the first account derived (derivation path 0).
+* `--acount` or `-a` - If given, the `ncli` will try to use that specific `address` of the possible derived accounts from your `SEED_WORDS`. If not given the `ncli` will try to load the first account derived (derivation path 0).
 * `--json` - If this flag is provided the `ncli` will print all the output in JSON format. This facilitates integrating the `ncli` with another application.
 
 
@@ -33,12 +33,12 @@ The following list of variables are related to the account you use to connect to
 
 :::info
 
-By default, the `ncli` always try to use a `MNEMONIC` first and if this is not given will try to use a key file.
+By default, the `ncli` always try to use a `SEED_WORDS` first and if this is not given will try to use a key file.
 
 :::
 
-* `MNEMONIC` - Your seed phrase representing your account. With this seed phrase can be derived your different wallets.
-* `KEYFILE_PATH` - If the `MNEMONIC` is not provided, the `ncli` will try to use a local key file to load your account. This variable should include the path to that key file.
+* `SEED_WORDS` - Your seed phrase representing your account. With this seed phrase can be derived your different wallets.
+* `KEYFILE_PATH` - If the `SEED_WORDS` are not provided, the `ncli` will try to use a local key file to load your account. This variable should include the path to that key file.
 * `KEYFILE_PASSWORD` - If you are using a key file, this variable will be used to get the password of that key file
 
 :::warning
