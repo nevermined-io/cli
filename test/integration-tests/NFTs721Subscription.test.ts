@@ -30,7 +30,7 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Deploy a new NFT (ERC-721) Subscription contract with parameters', async () => {
-    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPathSubscription}  --accountIndex 0 --params "Token Name" --params Symbol --subscription true `
+    const deployCommand = `${baseCommands.nfts721.deploy} ${abiPathSubscription}  --accountIndex 0 --params "Token Name" --params Symbol --addMinter true `
     console.debug(`COMMAND: ${deployCommand}`)
 
     const stdout = execCommand(deployCommand, execOpts)
@@ -77,8 +77,8 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
     expect(stdout.includes(`NFT Agreement Created`))
   })
 
-  test('The seller transfer a NFT (ERC-721)', async () => {
-    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" --accountIndex 0 --buyerAccount "${execOpts.accounts[1]}" `
+  test('The buyer ask for transfer a NFT (ERC-721)', async () => {
+    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" "${execOpts.accounts[0]}" --accountIndex 1  `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execCommand(transferCommand, execOpts)

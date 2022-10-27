@@ -10,7 +10,7 @@ import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumbe
 
 export const transferNft = async (
   nvm: Nevermined,
-  sellerAccount: Account,
+  userAccount: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -28,7 +28,7 @@ export const transferNft = async (
     agreementData = await nvm.keeper.agreementStoreManager.getAgreement(
       agreementId
     )
-    logger.trace(JSON.stringify(agreementData))
+    logger.info(`Agreement Data = ${JSON.stringify(agreementData)}`)
   } catch (err) {
     return {
       status: StatusCodes.ERROR,
@@ -57,14 +57,14 @@ export const transferNft = async (
   )
 
   const ddo = await nvm.assets.resolve(agreementData.did)
-  const buyerAccount = new Account(argv.buyerAccount)
+  const buyerAddress = argv.buyerAddress ? argv.buyerAddress : userAccount.getId()
 
   logger.debug(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
   logger.debug(chalk.dim(`AgreementId: '${chalk.whiteBright(agreementId)}'`))
   logger.debug(
-    chalk.dim(`Seller: '${chalk.whiteBright(sellerAccount.getId())}'`)
+    chalk.dim(`Seller: '${chalk.whiteBright(argv.sellerAddress)}'`)
   )
-  logger.debug(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`))
+  logger.debug(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAddress)}'`))
 
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
@@ -80,14 +80,24 @@ export const transferNft = async (
     chalk.dim(`Price ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)
   )
 
+  let isSuccessfulTransfer = false
+
   if (argv.nftType === '721') {
     logger.info(
       chalk.dim(`Transferring NFT (ERC-721) '${chalk.whiteBright(ddo.id)}' ...`)
     )
-    await nvm.nfts.transfer721(agreementId, ddo.id, sellerAccount)
+    // await nvm.nfts.transfer721(agreementId, ddo.id, userAccount)
+    isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
+      agreementId,
+      argv.sellerAddress,
+      buyerAddress,
+      BigNumber.from(1),
+      721
+    )      
 
-    logger.info(chalk.dim('Releasing rewards ...'))
-    await nvm.nfts.release721Rewards(agreementId, ddo.id, sellerAccount)
+ 
+    // logger.info(chalk.dim('Releasing rewards ...'))
+    // await nvm.nfts.release721Rewards(agreementId, ddo.id, userAccount)
   } else {
     // ERC-1155
     logger.info(
@@ -95,16 +105,30 @@ export const transferNft = async (
         `Transferring NFT (ERC-1155) '${chalk.whiteBright(ddo.id)}' ...`
       )
     )
-    await nvm.nfts.transfer(agreementId, ddo.id, argv.amount, sellerAccount)
-
-    logger.info(chalk.dim('Releasing rewards ...'))
-    await nvm.nfts.releaseRewards(
+    isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
       agreementId,
-      ddo.id,
+      argv.sellerAddress,
+      buyerAddress,
       argv.amount,
-      buyerAccount
+      1155
     )
+    // await nvm.nfts.transfer(agreementId, ddo.id, argv.amount, userAccount)
+
+    // logger.info(chalk.dim('Releasing rewards ...'))
+    // await nvm.nfts.releaseRewards(
+    //   agreementId,
+    //   ddo.id,
+    //   argv.amount,
+    //   buyerAddress
+    // )
   }
+
+  if (!isSuccessfulTransfer) {
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Problem executing 'transferForDelegate' through the gateway`
+    }
+  }   
 
   logger.info(chalk.dim('Transfer done!'))
   return { status: StatusCodes.OK }

@@ -79,19 +79,18 @@ export const deployNft = async (
 
   logger.info(`Contract deployed into address: ${contractInstance.address}\n`)
 
-  if (argv.subscription)  {
-    // INFO: We allow transferNFT condition to mint NFTs
-    // Typically this only needs to happen once per NFT contract
-    const subscriptionNFT = await SubscriptionNft721.getInstance(
-      (nvm.keeper as any).instanceConfig,
-      contractInstance.address
-  )  
-    await subscriptionNFT.addMinter(
-      nvm.keeper.conditions.transferNft721Condition.address,
-      creatorAccount.getId()
-    )
-    logger.info(`Adding TransferNFT721Condition with address ${nvm.keeper.conditions.transferNft721Condition.address} as minter`)
-  }
+  
+  // INFO: We allow transferNFT condition to mint NFTs
+  // Typically this only needs to happen once per NFT contract
+  const erc721Contract = await SubscriptionNft721.getInstance(
+    (nvm.keeper as any).instanceConfig,
+    contractInstance.address
+)  
+  await erc721Contract.addMinter(
+    nvm.keeper.conditions.transferNft721Condition.address,
+    creatorAccount.getId()
+  )
+  logger.info(`Adding TransferNFT721Condition with address ${nvm.keeper.conditions.transferNft721Condition.address} as minter`)  
 
 
   // INFO: We allow the gateway to fulfill the transfer condition in behalf of the user

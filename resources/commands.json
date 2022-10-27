@@ -542,7 +542,7 @@
 				"name": "deploy [abiPath]",
 				"description": "It deploys a new NFT (ERC-721) contract",
 				"details": "A Smart Contract is represented by an ABI file that includes the definition of it interfaces and the bytecode of the contract. Having that file, this command allows to deploy a new instance of a ERC-721 contract in the network where the `ncli` is connected. As a result the `ncli` will return the address where the contract was deployed allowing further interaction with it.",
-				"examples": ["ncli nfts721 deploy test/resources/nfts/TestERC721.json", "ncli nfts721 deploy test/resources/nfts/NFT721SubscriptionUpgradeable.json --params 'Token Name' --params 'SYMBOL'"],
+				"examples": ["ncli nfts721 deploy test/resources/nfts/TestNFT721.json", "ncli nfts721 deploy test/resources/nfts/NFT721SubscriptionUpgradeable.json --params 'Token Name' --params 'SYMBOL'"],
 				"commandHandler": "deployNft",
 				"positionalArguments": [{
 					"name": "abiPath",
@@ -558,10 +558,10 @@
 					"type": "array",
 					"description": "A list of addresses to be approved to manage the NFT contract"
 				},{
-					"name": "subscription",
+					"name": "addMinter",
 					"type": "boolean",
-					"default": false,						
-					"description": "The NFT contract allows to mint NFTs as subscriptions"
+					"default": true,						
+					"description": "If true adds the Nevermined Transfer condition with permissions to mint NFTs"
 				}
 
 			]
@@ -780,22 +780,26 @@
 					"description": "The NFT type"
 				}]
 			}, {
-				"name": "transfer [agreementId]",
+				"name": "transfer [agreementId] [sellerAddress]",
 				"description": "It allows to transfer a NFT (ERC-721) to the account of the buyer",
-				"details": "This command requires a valid `serviceAgreementId` created by the `buyerAccount` that demonstrates that an asset was bought. The asset is then transferred to the buyer's account.",
-				"examples": ["ncli nfts721 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --buyerAccount 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
+				"details": "This command requires a valid `serviceAgreementId` and the `sellerAddress` that demonstrates that an asset was bought. The asset is then transferred to the buyer's account.",
+				"examples": ["ncli nfts721 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --sellerAddress 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
 				"commandHandler": "transferNft",
 				"positionalArguments": [{
 					"name": "agreementId",
 					"type": "string",
 					"description": "The identifier of the agreement created by the buyer"
 				}, {
-					"name": "buyerAccount",
+					"name": "sellerAddress",
 					"type": "string",
-					"demandOption": "true",
-					"description": "The address of the buyer (0x123..)"
+					"description": "The address of the seller (0x123..)"
 				}],
 				"optionalArguments": [{
+					"name": "buyerAddress",
+					"type": "string",
+					"description": "The address of the account who will receive the NFT"
+				},
+				{
 					"name": "nftType",
 					"type": "string",
 					"default": "721",
@@ -1037,7 +1041,7 @@
 					}
 				]
 			}, {
-				"name": "transfer [agreementId]",
+				"name": "transfer [agreementId] [sellerAddress]",
 				"description": "It allows to transfer a NFT (ERC-1155) to the account of the buyer",
 				"details": "This command requires a valid `serviceAgreementId` created by the `buyerAccount` that demonstrates that an asset was payed. Having that this command will allow to transfer the asset to the buyer account.",
 				"examples": ["ncli nfts1155 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --amount 1 --buyerAccount 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
@@ -1046,17 +1050,20 @@
 					"name": "agreementId",
 					"type": "string",
 					"description": "The identifier of the agreement created by the buyer"
+				}, {
+					"name": "sellerAddress",
+					"type": "string",
+					"description": "The address of the seller (0x123..)"
 				}],
 				"optionalArguments": [{
+					"name": "buyerAddress",
+					"type": "string",
+					"description": "The address of the account who will receive the NFT"
+				},{
 					"name": "amount",
 					"type": "number",
 					"default": "1",
 					"description": "The number of NFTs (ERC-1155) to transfer"
-				}, {
-					"name": "buyerAccount",
-					"type": "string",
-					"demandOption": "true",
-					"description": "The address of the buyer"
 				}, {
 					"name": "nftType",
 					"type": "string",
