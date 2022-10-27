@@ -13,25 +13,29 @@ export const accessNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { did, destination, agreementId, seller } = argv
+  const { did, destination, agreementId } = argv
 
   logger.info(
     chalk.dim(`Access & download NFT associated to ${chalk.whiteBright(did)}`)
   )
+
+  const ddo = await nvm.assets.resolve(did)
+  
+  const seller = argv.seller ? argv.seller : ddo.proof.creator
+
   logger.info(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
 
   logger.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
 
   logger.debug(chalk.dim(`Using agreementId: ${argv.agreementId}`))
 
-  logger.debug(`Agreement Id: ${agreementId}`)
   logger.debug(`NFT Holder: ${seller}`)
   logger.debug(`NFT Receiver: ${consumerAccount.getId()}`)
   logger.debug(`NFT ERC type: ${argv.nftType}`)
 
   let ownerOf = ''
   let isOwner = false
-  const ddo = await nvm.assets.resolve(did)
+  
   const agreementData = await nvm.agreements.getAgreement(agreementId)
   logger.debug(`The agreement refers to the DID: ${agreementData.did}`)
   

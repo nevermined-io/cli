@@ -101,7 +101,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     expect(orderStdout.includes(`NFT Agreement Created`))
 
     const destination = `/tmp/nevemined/cli/test-gateway/access`
-    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --seller "${execOpts.accounts[0]}" --accountIndex 1  `
+    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --accountIndex 1  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const stdout = execCommand(downloadCommand, execOpts)

@@ -780,26 +780,25 @@
 					"description": "The NFT type"
 				}]
 			}, {
-				"name": "transfer [agreementId] [sellerAddress]",
+				"name": "transfer [agreementId]",
 				"description": "It allows to transfer a NFT (ERC-721) to the account of the buyer",
 				"details": "This command requires a valid `serviceAgreementId` and the `sellerAddress` that demonstrates that an asset was bought. The asset is then transferred to the buyer's account.",
-				"examples": ["ncli nfts721 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --sellerAddress 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
+				"examples": ["ncli nfts721 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869"],
 				"commandHandler": "transferNft",
 				"positionalArguments": [{
 					"name": "agreementId",
 					"type": "string",
 					"description": "The identifier of the agreement created by the buyer"
-				}, {
+				}],
+				"optionalArguments": [{
 					"name": "sellerAddress",
 					"type": "string",
 					"description": "The address of the seller (0x123..)"
-				}],
-				"optionalArguments": [{
+				}, {
 					"name": "buyerAddress",
 					"type": "string",
 					"description": "The address of the account who will receive the NFT"
-				},
-				{
+				}, {
 					"name": "nftType",
 					"type": "string",
 					"default": "721",
@@ -823,13 +822,12 @@
 						"name": "agreementId",
 						"type": "string",
 						"description": "The identifier of the agreement created by the buyer"
-					}, {
-						"name": "seller",
-						"type": "string",
-						"demandOption": true,
-						"description": "The address of the seller (0x123..)"
 					}],
 					"optionalArguments": [{
+						"name": "seller",
+						"type": "string",						
+						"description": "The address of the seller (0x123..)"
+					}, {
 						"name": "destination",
 						"type": "string",
 						"demandOption": true,
@@ -1041,21 +1039,21 @@
 					}
 				]
 			}, {
-				"name": "transfer [agreementId] [sellerAddress]",
+				"name": "transfer [agreementId]",
 				"description": "It allows to transfer a NFT (ERC-1155) to the account of the buyer",
 				"details": "This command requires a valid `serviceAgreementId` created by the `buyerAccount` that demonstrates that an asset was payed. Having that this command will allow to transfer the asset to the buyer account.",
-				"examples": ["ncli nfts1155 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --amount 1 --buyerAccount 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
+				"examples": ["ncli nfts1155 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --amount 1 --buyerAddress 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
 				"commandHandler": "transferNft",
 				"positionalArguments": [{
 					"name": "agreementId",
 					"type": "string",
 					"description": "The identifier of the agreement created by the buyer"
-				}, {
+				}],
+				"optionalArguments": [{
 					"name": "sellerAddress",
 					"type": "string",
 					"description": "The address of the seller (0x123..)"
-				}],
-				"optionalArguments": [{
+				}, {
 					"name": "buyerAddress",
 					"type": "string",
 					"description": "The address of the account who will receive the NFT"
@@ -1085,11 +1083,6 @@
 					"name": "agreementId",
 					"type": "string",
 					"description": "The identifier of the agreement created by the buyer"
-				}, {
-					"name": "seller",
-					"type": "string",
-					"demandOption": true,
-					"description": "The address of the seller (0x123..)"
 				}],
 				"optionalArguments": [{
 					"name": "destination",

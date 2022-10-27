@@ -58,11 +58,12 @@ export const transferNft = async (
 
   const ddo = await nvm.assets.resolve(agreementData.did)
   const buyerAddress = argv.buyerAddress ? argv.buyerAddress : userAccount.getId()
+  const sellerAddress = argv.sellerAddress ? argv.sellerAddress : ddo.proof.creator
 
   logger.debug(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
   logger.debug(chalk.dim(`AgreementId: '${chalk.whiteBright(agreementId)}'`))
   logger.debug(
-    chalk.dim(`Seller: '${chalk.whiteBright(argv.sellerAddress)}'`)
+    chalk.dim(`Seller: '${chalk.whiteBright(sellerAddress)}'`)
   )
   logger.debug(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAddress)}'`))
 
@@ -89,15 +90,12 @@ export const transferNft = async (
     // await nvm.nfts.transfer721(agreementId, ddo.id, userAccount)
     isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
       agreementId,
-      argv.sellerAddress,
+      sellerAddress,
       buyerAddress,
       BigNumber.from(1),
       721
     )      
 
- 
-    // logger.info(chalk.dim('Releasing rewards ...'))
-    // await nvm.nfts.release721Rewards(agreementId, ddo.id, userAccount)
   } else {
     // ERC-1155
     logger.info(
@@ -107,20 +105,11 @@ export const transferNft = async (
     )
     isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
       agreementId,
-      argv.sellerAddress,
+      sellerAddress,
       buyerAddress,
       argv.amount,
       1155
     )
-    // await nvm.nfts.transfer(agreementId, ddo.id, argv.amount, userAccount)
-
-    // logger.info(chalk.dim('Releasing rewards ...'))
-    // await nvm.nfts.releaseRewards(
-    //   agreementId,
-    //   ddo.id,
-    //   argv.amount,
-    //   buyerAddress
-    // )
   }
 
   if (!isSuccessfulTransfer) {

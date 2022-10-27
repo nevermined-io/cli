@@ -105,7 +105,7 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
 
   test('As NFT holder I can download the files associated to an asset', async () => {
     const destination = `/tmp/nevemined/cli/test/nft-susbcription`
-    const accessCommand = `${baseCommands.nfts721.access} "${didDataset}" "${orderAgreementId}" --subscriptionDid ${did} --seller "${execOpts.accounts[0]}" --destination "${destination}" --accountIndex 1  `
+    const accessCommand = `${baseCommands.nfts721.access} "${didDataset}" "${orderAgreementId}" --subscriptionDid ${did} --seller ${execOpts.accounts[0]} --destination "${destination}" --accountIndex 1  `
     console.debug(`COMMAND: ${accessCommand}`)
 
     const stdout = execCommand(accessCommand, execOpts)
