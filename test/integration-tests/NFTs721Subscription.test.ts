@@ -102,7 +102,7 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
     console.debug(`DID (Dataset): ${didDataset}`)
     expect(didDataset.startsWith('did:nv:'))    
   })  
-
+ 
   test('As NFT holder I can download the files associated to an asset', async () => {
     const destination = `/tmp/nevemined/cli/test/nft-susbcription`
     const accessCommand = `${baseCommands.nfts721.access} "${didDataset}" "${orderAgreementId}" --subscriptionDid ${did} --seller ${execOpts.accounts[0]} --destination "${destination}" --accountIndex 1  `
@@ -121,6 +121,16 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
       expect(Path.extname(file) === '.md')
     })
   })
+
+  test('Check I am a holder', async () => {
+    const holdCommand = `${baseCommands.nfts721.hold} "${didDataset}" --accountIndex 1  `
+    console.debug(`COMMAND: ${holdCommand}`)
+
+    const stdout = execCommand(holdCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(`The user holds`))
+  }) 
 
   test('As NFT holder I can download without an agreementId', async () => {
     const destination = `/tmp/nevemined/cli/test/nft-susbcription-2`
