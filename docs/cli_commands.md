@@ -660,7 +660,7 @@ A Smart Contract is represented by an ABI file that includes the definition of i
 
 
 ```bash
-ncli nfts721 deploy test/resources/nfts/TestERC721.json
+ncli nfts721 deploy test/resources/nfts/TestNFT721.json
 ```
 
 

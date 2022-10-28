@@ -10,7 +10,7 @@ import * as Path from 'path'
 import execCommand from '../helpers/ExecCommand'
 
 describe('NFTs (ERC-721) e2e Testing', () => {
-  const abiPath = 'test/resources/nfts/TestERC721.json'
+  const abiPath = 'test/resources/nfts/TestNFT721.json'
   let did = ''
   let orderAgreementId = ''
   let nftAddress = ''
@@ -43,7 +43,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Register an asset with a NFT (ERC-721) attached to it', async () => {
-    const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress}  --accountIndex 0 --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} `
+    const registerAssetCommand = `${baseCommands.nfts721.create} ${nftAddress}  --accountIndex 0 --name " NFTs 721 test ${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType} --transfer false`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -88,8 +88,8 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     expect(stdout.includes(`NFT Agreement Created`))
   })
 
-  test('The seller transfer a NFT (ERC-721)', async () => {
-    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" --accountIndex 0 --buyerAccount "${execOpts.accounts[1]}" `
+  test('The buyer ask for transfer the NFT (ERC-721)', async () => {
+    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" "${execOpts.accounts[0]}" --accountIndex 1 `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execCommand(transferCommand, execOpts)

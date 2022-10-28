@@ -542,7 +542,7 @@
 				"name": "deploy [abiPath]",
 				"description": "It deploys a new NFT (ERC-721) contract",
 				"details": "A Smart Contract is represented by an ABI file that includes the definition of it interfaces and the bytecode of the contract. Having that file, this command allows to deploy a new instance of a ERC-721 contract in the network where the `ncli` is connected. As a result the `ncli` will return the address where the contract was deployed allowing further interaction with it.",
-				"examples": ["ncli nfts721 deploy test/resources/nfts/TestERC721.json", "ncli nfts721 deploy test/resources/nfts/NFT721SubscriptionUpgradeable.json --params 'Token Name' --params 'SYMBOL'"],
+				"examples": ["ncli nfts721 deploy test/resources/nfts/TestNFT721.json", "ncli nfts721 deploy test/resources/nfts/NFT721SubscriptionUpgradeable.json --params 'Token Name' --params 'SYMBOL'"],
 				"commandHandler": "deployNft",
 				"positionalArguments": [{
 					"name": "abiPath",
@@ -558,10 +558,10 @@
 					"type": "array",
 					"description": "A list of addresses to be approved to manage the NFT contract"
 				},{
-					"name": "subscription",
+					"name": "addMinter",
 					"type": "boolean",
-					"default": false,						
-					"description": "The NFT contract allows to mint NFTs as subscriptions"
+					"default": true,						
+					"description": "If true adds the Nevermined Transfer condition with permissions to mint NFTs"
 				}
 
 			]
@@ -782,20 +782,23 @@
 			}, {
 				"name": "transfer [agreementId]",
 				"description": "It allows to transfer a NFT (ERC-721) to the account of the buyer",
-				"details": "This command requires a valid `serviceAgreementId` created by the `buyerAccount` that demonstrates that an asset was bought. The asset is then transferred to the buyer's account.",
-				"examples": ["ncli nfts721 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --buyerAccount 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
+				"details": "This command requires a valid `serviceAgreementId` and the `sellerAddress` that demonstrates that an asset was bought. The asset is then transferred to the buyer's account.",
+				"examples": ["ncli nfts721 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869"],
 				"commandHandler": "transferNft",
 				"positionalArguments": [{
 					"name": "agreementId",
 					"type": "string",
 					"description": "The identifier of the agreement created by the buyer"
-				}, {
-					"name": "buyerAccount",
-					"type": "string",
-					"demandOption": "true",
-					"description": "The address of the buyer (0x123..)"
 				}],
 				"optionalArguments": [{
+					"name": "sellerAddress",
+					"type": "string",
+					"description": "The address of the seller (0x123..)"
+				}, {
+					"name": "buyerAddress",
+					"type": "string",
+					"description": "The address of the account who will receive the NFT"
+				}, {
 					"name": "nftType",
 					"type": "string",
 					"default": "721",
@@ -803,29 +806,28 @@
 					"description": "The NFT type"
 				}]
 				}, {
-					"name": "access [did] [agreementId]",
-					"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-721 NFT",
-					"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+					"name": "access [did]",
+					"description": "It allows to download the contents associated to a NFT if the user is a holder",
+					"details": "Providing a `DID` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
 					"examples": [
-						"ncli nfts721 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
-						"ncli nfts721 access did:nv:04c50282c7e297c019cea5368c3d7b9e757dfa5d6e28b3d666dd710572669586 0xf988eca804ed9af51653de290e71564dfbbf40afd0dd0a28b25fc95b18476c77 --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260 --destination /tmp/ --accountIndex 1"
+						"ncli nfts721 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ ",
+						"ncli nfts721 access did:nv:04c50282c7e297c019cea5368c3d7b9e757dfa5d6e28b3d666dd710572669586 0xf988eca804ed9af51653de290e71564dfbbf40afd0dd0a28b25fc95b18476c77  --destination /tmp/ --accountIndex 1"
 					],
 					"commandHandler": "accessNft",
 					"positionalArguments": [{
 						"name": "did",
 						"type": "string",
 						"description": "The DID of the asset"
-					}, {
+					}],
+					"optionalArguments": [{
 						"name": "agreementId",
 						"type": "string",
 						"description": "The identifier of the agreement created by the buyer"
 					}, {
 						"name": "seller",
-						"type": "string",
-						"demandOption": true,
+						"type": "string",						
 						"description": "The address of the seller (0x123..)"
-					}],
-					"optionalArguments": [{
+					}, {
 						"name": "destination",
 						"type": "string",
 						"demandOption": true,
@@ -1040,7 +1042,7 @@
 				"name": "transfer [agreementId]",
 				"description": "It allows to transfer a NFT (ERC-1155) to the account of the buyer",
 				"details": "This command requires a valid `serviceAgreementId` created by the `buyerAccount` that demonstrates that an asset was payed. Having that this command will allow to transfer the asset to the buyer account.",
-				"examples": ["ncli nfts1155 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --amount 1 --buyerAccount 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
+				"examples": ["ncli nfts1155 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --amount 1 --buyerAddress 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
 				"commandHandler": "transferNft",
 				"positionalArguments": [{
 					"name": "agreementId",
@@ -1048,15 +1050,18 @@
 					"description": "The identifier of the agreement created by the buyer"
 				}],
 				"optionalArguments": [{
+					"name": "sellerAddress",
+					"type": "string",
+					"description": "The address of the seller (0x123..)"
+				}, {
+					"name": "buyerAddress",
+					"type": "string",
+					"description": "The address of the account who will receive the NFT"
+				},{
 					"name": "amount",
 					"type": "number",
 					"default": "1",
 					"description": "The number of NFTs (ERC-1155) to transfer"
-				}, {
-					"name": "buyerAccount",
-					"type": "string",
-					"demandOption": "true",
-					"description": "The address of the buyer"
 				}, {
 					"name": "nftType",
 					"type": "string",
@@ -1065,7 +1070,7 @@
 					"description": "The NFT type"
 				}]
 			}, {
-				"name": "access [did] [agreementId]",
+				"name": "access [did]",
 				"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-1155 NFT",
 				"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
 				"examples": ["ncli nfts1155 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
@@ -1074,17 +1079,12 @@
 					"name": "did",
 					"type": "string",
 					"description": "The DID of the asset"
-				}, {
+				}],
+				"optionalArguments": [{
 					"name": "agreementId",
 					"type": "string",
 					"description": "The identifier of the agreement created by the buyer"
 				}, {
-					"name": "seller",
-					"type": "string",
-					"demandOption": true,
-					"description": "The address of the seller (0x123..)"
-				}],
-				"optionalArguments": [{
 					"name": "destination",
 					"type": "string",
 					"demandOption": true,
