@@ -28,7 +28,7 @@ export const transferNft = async (
     agreementData = await nvm.keeper.agreementStoreManager.getAgreement(
       agreementId
     )
-    logger.info(`Agreement Data = ${JSON.stringify(agreementData)}`)
+    logger.trace(`Agreement Data = ${JSON.stringify(agreementData)}`)
   } catch (err) {
     return {
       status: StatusCodes.ERROR,

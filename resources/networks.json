@@ -163,14 +163,14 @@
 	},
 	"defiMumbai": {
 		"envDescription": "Testnet environment for the DeFi Marketplace.",
-		"envUrl": "https://defi.v2.portal.mumbai.nevermined.rocks/",
+		"envUrl": "https://defi.public.nevermined.network/",
 		"isProduction": false,
 		"nvm": {
 			"nodeUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api-public.nevermined.network/",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
-			"gatewayUri": "https://gateway.defi.public.nevermined.network/",
+			"gatewayUri": "https://gateway.mumbai.public.nevermined.network/",
 			"gatewayAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
 			"verbose": true
 		},
