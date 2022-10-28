@@ -122,4 +122,20 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
     })
   })
 
+  test('As NFT holder I can download without an agreementId', async () => {
+    const destination = `/tmp/nevemined/cli/test/nft-susbcription-2`
+    const accessCommand = `${baseCommands.nfts721.access} "${didDataset}" --destination "${destination}" --accountIndex 1  `
+    console.debug(`COMMAND: ${accessCommand}`)
+
+    const stdout = execCommand(accessCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(didDataset))
+    expect(stdout.includes(`NFT Assets downloaded to: ${destination}`))
+
+    const files = fs.readdirSync(destination || '')
+    expect(files.length == 1)
+
+  })  
+
 })

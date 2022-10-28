@@ -1,10 +1,11 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { StatusCodes } from '../../utils'
+import { loadNFT1155Contract, StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 export const accessNft = async (
   nvm: Nevermined,
@@ -13,58 +14,49 @@ export const accessNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { did, destination, agreementId } = argv
+  const { did, destination } = argv
 
   logger.info(
     chalk.dim(`Access & download NFT associated to ${chalk.whiteBright(did)}`)
   )
 
-  const ddo = await nvm.assets.resolve(did)
+  const ddo = await nvm.assets.resolve(did)  
+  
+  let isHolder = false
+  let nftAddress = ''
+
+  try {
+    nftAddress = nvm.nfts.getNftContractAddress(ddo) as string  
+  } catch {
+    nftAddress = nvm.keeper.nftUpgradeable.address
+  }
   
   const seller = argv.seller ? argv.seller : ddo.proof.creator
+  const agreementId = argv.agreementId ? argv.agreementId : '0x'
 
   logger.info(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
-
   logger.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
-
-  logger.debug(chalk.dim(`Using agreementId: ${argv.agreementId}`))
-
+  logger.debug(`NFT Contract Address: ${nftAddress}`)
   logger.debug(`NFT Holder: ${seller}`)
   logger.debug(`NFT Receiver: ${consumerAccount.getId()}`)
   logger.debug(`NFT ERC type: ${argv.nftType}`)
 
-  let ownerOf = ''
-  let isOwner = false
-  
-  const agreementData = await nvm.agreements.getAgreement(agreementId)
-  logger.debug(`The agreement refers to the DID: ${agreementData.did}`)
-  
   if (argv.nftType == 721) {     
-    logger.info(`Checking owner`)
-    
-    const nftAddress = nvm.nfts.getNftContractAddress(ddo) as string
-    logger.info(`NFT Address ${nftAddress}`)
-  
-    ownerOf = await nvm.nfts.ownerOf(
-      agreementData.did,
-      nftAddress,
-      agreementId
-    )
-
-    logger.info(`For the NFT (ERC721) Contract ${nftAddress} the DID ${argv.subscriptionDid} owner is ${ownerOf}`)
-    isOwner = ownerOf === consumerAccount.getId()
+    const nft = await nvm.contracts.loadNft721(nftAddress)
+    const balance = await nft.balanceOf(consumerAccount)
+    isHolder = balance.gt(0)
 
   } else {
     logger.info(`Checking balance`)
-    const balance = await nvm.nfts.balance(
-      did,
-      consumerAccount
-    )
-    isOwner = balance.gt(0)
+    const nftContract = loadNFT1155Contract(config, nftAddress)
+    const balance = await nftContract.balanceOf(consumerAccount.getId(), zeroX(ddo.shortId()))
+    isHolder = balance.gt(0)
   }
   
-  if (!isOwner) {
+  if (!isHolder) {
     logger.info(`Not owner of the NFT, trying transfer`)
+    logger.debug(`Using AgreementId: ${agreementId}`)
+
     const isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
       agreementId,
       seller,

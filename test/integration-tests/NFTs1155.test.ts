@@ -101,7 +101,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     expect(orderStdout.includes(`NFT Agreement Created`))
 
     const destination = `/tmp/nevemined/cli/test-gateway/access`
-    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" "${orderAgreementId}" --destination "${destination}" --accountIndex 1  `
+    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" --agreementId "${orderAgreementId}" --destination "${destination}" --accountIndex 1  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const stdout = execCommand(downloadCommand, execOpts)
@@ -117,4 +117,25 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
       expect(Path.extname(file) === '.md')
     })
   })
+
+  test('As NFT holder the buyer can download contents without an agreementID', async () => {
+
+    const destination = `/tmp/nevemined/cli/test-gateway/access-2`
+    const downloadCommand = `${baseCommands.nfts1155.access} "${did}" --destination "${destination}" --accountIndex 1  `
+    console.debug(`COMMAND: ${downloadCommand}`)
+
+    const stdout = execCommand(downloadCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(did))
+    expect(stdout.includes(`NFT Assets downloaded`))
+
+    const files = fs.readdirSync(destination || '')
+    expect(files.length == 1)
+
+    files.forEach((file) => {
+      expect(Path.extname(file) === '.md')
+    })
+  })
+  
 })

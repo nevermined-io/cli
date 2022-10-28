@@ -806,24 +806,24 @@
 					"description": "The NFT type"
 				}]
 				}, {
-					"name": "access [did] [agreementId]",
-					"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-721 NFT",
-					"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+					"name": "access [did]",
+					"description": "It allows to download the contents associated to a NFT if the user is a holder",
+					"details": "Providing a `DID` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
 					"examples": [
-						"ncli nfts721 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260",
-						"ncli nfts721 access did:nv:04c50282c7e297c019cea5368c3d7b9e757dfa5d6e28b3d666dd710572669586 0xf988eca804ed9af51653de290e71564dfbbf40afd0dd0a28b25fc95b18476c77 --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260 --destination /tmp/ --accountIndex 1"
+						"ncli nfts721 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ ",
+						"ncli nfts721 access did:nv:04c50282c7e297c019cea5368c3d7b9e757dfa5d6e28b3d666dd710572669586 0xf988eca804ed9af51653de290e71564dfbbf40afd0dd0a28b25fc95b18476c77  --destination /tmp/ --accountIndex 1"
 					],
 					"commandHandler": "accessNft",
 					"positionalArguments": [{
 						"name": "did",
 						"type": "string",
 						"description": "The DID of the asset"
-					}, {
+					}],
+					"optionalArguments": [{
 						"name": "agreementId",
 						"type": "string",
 						"description": "The identifier of the agreement created by the buyer"
-					}],
-					"optionalArguments": [{
+					}, {
 						"name": "seller",
 						"type": "string",						
 						"description": "The address of the seller (0x123..)"
@@ -1070,7 +1070,7 @@
 					"description": "The NFT type"
 				}]
 			}, {
-				"name": "access [did] [agreementId]",
+				"name": "access [did]",
 				"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-1155 NFT",
 				"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
 				"examples": ["ncli nfts1155 access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
@@ -1079,12 +1079,12 @@
 					"name": "did",
 					"type": "string",
 					"description": "The DID of the asset"
-				}, {
+				}],
+				"optionalArguments": [{
 					"name": "agreementId",
 					"type": "string",
 					"description": "The identifier of the agreement created by the buyer"
-				}],
-				"optionalArguments": [{
+				}, {
 					"name": "destination",
 					"type": "string",
 					"demandOption": true,
