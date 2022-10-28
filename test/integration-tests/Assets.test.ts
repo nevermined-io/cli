@@ -111,7 +111,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Download my own asset', async () => {
-    const downloadCommand = `${baseCommands.assets.downloadAsset} ${did}  --accountIndex 0 --path /tmp --fileIndex 0`
+    const downloadCommand = `${baseCommands.assets.downloadAsset} ${did}  --accountIndex 0 --destination /tmp --fileIndex 0`
     console.debug(`COMMAND: ${downloadCommand}`)
 
     const downloadStdout = execCommand(downloadCommand, execOpts)
@@ -134,7 +134,7 @@ describe('Assets e2e Testing', () => {
     const serviceAgreementId = parseServiceAgreementId(orderStdout)
 
     const parentPath = '/tmp/nevermined/test-order'
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId}  --accountIndex 0 --path ${parentPath} --fileIndex 0 `
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId}  --accountIndex 0 --destination ${parentPath} --fileIndex 0 `
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)

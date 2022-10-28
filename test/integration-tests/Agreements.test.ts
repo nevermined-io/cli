@@ -35,7 +35,7 @@ describe('Agreements e2e Testing', () => {
     const serviceAgreementId = parseServiceAgreementId(orderStdout)
 
     const parentPath = '/tmp/nevermined/test-order-agreements'
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId}  --accountIndex 0 --path ${parentPath} --fileIndex 0 `
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --agreementId ${serviceAgreementId}  --accountIndex 0 --destination ${parentPath} --fileIndex 0 `
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)

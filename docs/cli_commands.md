@@ -372,7 +372,7 @@ When a user publishes some content into Nevermined this command allows to downlo
 
 
 ```bash
-ncli assets download  did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --path /tmp
+ncli assets download  did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --destination /tmp
 ```
 
 
@@ -431,12 +431,12 @@ This commands is the best entry point to get access to the files attached to a N
 
 
 ```bash
-ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --path /tmp
+ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --destination /tmp
 ```
 
 
 ```bash
-ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --agreementId 0x412dceaa0c5506095daa6b221be93c680e8a49bfd5b63ce54522d85d2b0e1384 --path /tmp
+ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --agreementId 0x412dceaa0c5506095daa6b221be93c680e8a49bfd5b63ce54522d85d2b0e1384 --destination /tmp
 ```
 
 
