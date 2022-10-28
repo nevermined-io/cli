@@ -14,7 +14,7 @@ export const accessNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { did, destination } = argv
+  const { did } = argv
 
   logger.info(
     chalk.dim(`Access & download NFT associated to ${chalk.whiteBright(did)}`)
@@ -34,6 +34,10 @@ export const accessNft = async (
   const seller = argv.seller ? argv.seller : ddo.proof.creator
   const agreementId = argv.agreementId ? argv.agreementId : '0x'
 
+  const destination = argv.destination.substring(argv.destination.length - 1) === '/' ?
+    argv.destination :
+    `${argv.destination}/`
+  
   logger.info(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
   logger.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
   logger.debug(`NFT Contract Address: ${nftAddress}`)
