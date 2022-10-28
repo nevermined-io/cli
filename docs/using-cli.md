@@ -137,7 +137,7 @@ ncli assets search  "John Doe"
 Now we know how to publish assets, we can examine how to interact with them. For example running the `assets download` option the publisher of the assets can download the files:
 
 ```bash
-ncli assets download  did:nv:e23aeb13dc398be20b6718237a60793d4491d7da8aef53182ad2f05d8666c8d8  --path /tmp 
+ncli assets download  did:nv:e23aeb13dc398be20b6718237a60793d4491d7da8aef53182ad2f05d8666c8d8  --destination /tmp 
 ```
 
 :::caution
@@ -156,7 +156,7 @@ ncli assets order did:nv:e23aeb13dc398be20b6718237a60793d4491d7da8aef53182ad2f05
 This command will return a unique service agreement id (or agreement id). This works as a receipt of your recent purchase. It gives you access to the files attached to the asset:
 
 ```bash
-ncli assets get did:nv:e23aeb13dc398be20b6718237a60793d4491d7da8aef53182ad2f05d8666c8d8 --agreementId 0x13d435886660cd2c411fd758db09db04b48ca1f1901b0bb449812e6e2eb603f3 --path /tmp
+ncli assets get did:nv:e23aeb13dc398be20b6718237a60793d4491d7da8aef53182ad2f05d8666c8d8 --agreementId 0x13d435886660cd2c411fd758db09db04b48ca1f1901b0bb449812e6e2eb603f3 --destination /tmp
 ```
 
 ## NFTs

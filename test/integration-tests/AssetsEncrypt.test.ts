@@ -54,7 +54,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 1 --password abde --path /tmp`
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 1 --password abde --destination /tmp`
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)

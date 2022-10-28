@@ -24,10 +24,14 @@ export const downloadAsset = async (
 
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
+  const destination = argv.destination.substring(argv.destination.length - 1) === '/' ?
+    argv.destination :
+    `${argv.destination}/`
+
   const path = await nvm.assets.download(
     did,
     account,
-    argv.path,
+    destination,
     argv.fileIndex
   )
 

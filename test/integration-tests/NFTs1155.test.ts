@@ -137,5 +137,15 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
       expect(Path.extname(file) === '.md')
     })
   })
+
+  test('Check I am a holder', async () => {
+    const holdCommand = `${baseCommands.nfts1155.hold} "${did}" --accountIndex 1  `
+    console.debug(`COMMAND: ${holdCommand}`)
+
+    const stdout = execCommand(holdCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(`The user holds`))
+  })   
   
 })

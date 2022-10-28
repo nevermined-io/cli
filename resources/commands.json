@@ -330,7 +330,7 @@
 				"name": "download [did]",
 				"description": "Download an asset owned by me",
 				"details": "When a user publishes content on Nevermined this command downloads the files attached to that asset without going through the service agreements (payment).",
-				"examples": ["ncli assets download  did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --path /tmp"],
+				"examples": ["ncli assets download  did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --destination /tmp"],
 				"commandHandler": "downloadAsset",
 				"positionalArguments": [{
 					"name": "did",
@@ -343,7 +343,7 @@
 					"default": "-1",
 					"description": "The index of the file to retrieve in the DDO"
 				}, {
-					"name": "path",
+					"name": "destination",
 					"type": "string",
 					"default": ".",
 					"description": "Local path where the asset files will be downloaded"
@@ -368,7 +368,7 @@
 				"name": "get [did]",
 				"description": "Order & download or download directly a previously purchased asset",
 				"details": "This commands is the best entry point to access the files attached to a Nevermined asset. Depending on the parameters provided, it allows to order and download the files of an asset, or if this was already purchased, provides the service agreement to download them.",
-				"examples": ["ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --path /tmp", "ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --agreementId 0x412dceaa0c5506095daa6b221be93c680e8a49bfd5b63ce54522d85d2b0e1384 --path /tmp"],
+				"examples": ["ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --destination /tmp", "ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --agreementId 0x412dceaa0c5506095daa6b221be93c680e8a49bfd5b63ce54522d85d2b0e1384 --destination /tmp"],
 				"commandHandler": "getAsset",
 				"positionalArguments": [{
 					"name": "did",
@@ -393,7 +393,7 @@
 						"description": "Password for receiving encrypted files"
 					},
 					{
-						"name": "path",
+						"name": "destination",
 						"type": "string",
 						"default": ".",
 						"description": "Local path where the asset files will be downloaded"
@@ -703,6 +703,31 @@
 					}
 				]
 			}, {
+				"name": "hold [did]",
+				"description": "It checks if an address is a holder of the NFT",
+				"details": "This command allows to check if an address is a holder of a specific NFT wrapped by a Nevermined DID",
+				"examples": ["ncli nfts721 hold did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "holdNft",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID to mint"
+				}],
+				"optionalArguments": [{
+						"name": "address",
+						"type": "string",
+						"default": "",
+						"description": "The address of the account to validate as holder"
+					},
+					{
+						"name": "nftType",
+						"type": "string",
+						"default": "721",
+						"hidden": true,
+						"description": "The NFT type"
+					}
+				]
+			}, {
 				"name": "mint [did]",
 				"description": "Mints a ERC-721 NFT",
 				"details": "This command allows to the owner of an asset to mint a ERC-721 based NFT",
@@ -961,6 +986,31 @@
 						"type": "boolean",
 						"default": "false",
 						"description": "Show if there are any NFT ERC-1155 attached to the DID"
+					}
+				]
+			}, {
+				"name": "hold [did]",
+				"description": "It checks if an address is a holder of the NFT",
+				"details": "This command allows to check if an address is a holder of a specific NFT wrapped by a Nevermined DID",
+				"examples": ["ncli nfts1155 hold did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "holdNft",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID to mint"
+				}],
+				"optionalArguments": [{
+						"name": "address",
+						"type": "string",
+						"default": "",
+						"description": "The address of the account to validate as holder"
+					},
+					{
+						"name": "nftType",
+						"type": "string",
+						"default": "1155",
+						"hidden": true,
+						"description": "The NFT type"
 					}
 				]
 			}, {

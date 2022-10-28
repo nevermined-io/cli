@@ -73,11 +73,15 @@ export const getAsset = async (
     logger.info(`Got password ${encryptionPassword}`)
   }
 
+  const destination = argv.destination.substring(argv.destination.length - 1) === '/' ?
+    argv.destination :
+    `${argv.destination}/`
+
   const path = await nvm.assets.consume(
     agreementId,
     did,
     account,
-    argv.path,
+    destination,
     argv.fileIndex
   )
   logger.info(chalk.dim(`Files downloaded to: ${path}`))    
