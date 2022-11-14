@@ -17,13 +17,15 @@ export const searchAsset = async (
 
   logger.info(chalk.dim(`Search using query: ${chalk.green(query)}`))
 
+  logger.debug(chalk.dim(`Using Marketplace API: ${config.nvm.marketplaceUri}`))  
+
   const queryResults = await nvm.assets.search(query, argv.offset, argv.page)
   let metadataResult
 
   if (onlyMetadata) {
     metadataResult = {
       page: queryResults.page,
-      totalPages: queryResults.page,
+      totalPages: queryResults.totalPages,
       totalResults: queryResults.totalResults,
       results: queryResults.results.map((ddo) => {
         const service: ServiceMetadata = ddo.findServiceByType(
