@@ -7,7 +7,7 @@ import * as fs from 'fs'
 import * as Path from 'path'
 import execCommand from '../helpers/ExecCommand'
 
-describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
+describe('NFTs (ERC-1155) e2e Testing (Nevermined Node transfer)', () => {
   let did = ''
   const nftCap = 10
   const nftRoyalties = 5
@@ -88,7 +88,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     expect(stdout.includes(`Burned 1 NFTs (ERC-1155)`))
   })
 
-  test('The buyer can order and get access to the files (through the gateway)', async () => {
+  test('The buyer can order and get access to the files (through the Nevermined Node)', async () => {
     const orderCommand = `${baseCommands.nfts1155.order} "${did}" --amount 1 --accountIndex 1  `
     console.debug(`COMMAND: ${orderCommand}`)
 
@@ -100,7 +100,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
     expect(orderStdout.includes(did))
     expect(orderStdout.includes(`NFT Agreement Created`))
 
-    const destination = `/tmp/nevemined/cli/test-gateway/access`
+    const destination = `/tmp/nevemined/cli/test-nevermined-node/access`
     const downloadCommand = `${baseCommands.nfts1155.access} "${did}" --agreementId "${orderAgreementId}" --destination "${destination}" --accountIndex 1  `
     console.debug(`COMMAND: ${downloadCommand}`)
 
@@ -120,7 +120,7 @@ describe('NFTs (ERC-1155) e2e Testing (Gateway transfer)', () => {
 
   test('As NFT holder the buyer can download contents without an agreementID', async () => {
 
-    const destination = `/tmp/nevemined/cli/test-gateway/access-2`
+    const destination = `/tmp/nevemined/cli/test-nevermined-node/access-2`
     const downloadCommand = `${baseCommands.nfts1155.access} "${did}" --destination "${destination}" --accountIndex 1  `
     console.debug(`COMMAND: ${downloadCommand}`)
 

@@ -98,7 +98,7 @@ export const deployNft = async (
 
 
 
-  // INFO: We allow the gateway to fulfill the transfer condition in behalf of the user
+  // INFO: We allow the Nevermined Node to fulfill the transfer condition in behalf of the user
   // Typically this only needs to happen once per NFT contract
   const addressesToApprove: string[] = argv.approve.filter(
     (_key: string) => _key !== '' && _key !== undefined

@@ -80,7 +80,7 @@ The following list of variables are related to the configuration of the Nevermin
 * `MARKETPLACE_API_URL` - The url of the marketplace api to use. If not given the default url is: `http://localhost:3100`
 * `FAUCET_URL` - The url of the faucet to use. If not given the default url is: `http://localhost:3001`
 * `IPFS_GATEWAY` - The url of the IPFS gateway used to upload/download contents. By default is `https://ipfs.infura.io:5001`
-* `NODE_ADDRESS` - The public address of the gateway. If not given the default address is: `0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0`
+* `NODE_ADDRESS` - The public address of the Nevermined Node. If not given the default address is: `0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0`
 * `GAS_MULTIPLIER` - For networks with some congestion, this parameter can help to increase the gas spent and speed up the transactions. If not given the default is `0`
 
 

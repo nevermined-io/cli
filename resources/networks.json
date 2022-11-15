@@ -8,7 +8,7 @@
 			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.network",
 			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://gateway.mumbai.public.nevermined.network",
+			"neverminedNodeUri": "https://node.mumbai.public.nevermined.network",
 			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
 			"verbose": true
 		},
@@ -32,7 +32,7 @@
 			"marketplaceUri": "https://marketplace-api.matic.public.nevermined.network",
 			"faucetUri": "",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://gateway.matic.public.nevermined.network",
+			"neverminedNodeUri": "https://node.matic.public.nevermined.network",
 			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
 			"verbose": true
 		},
@@ -56,7 +56,7 @@
 			"marketplaceUri": "https://marketplace-api.arbitrum-one.public.nevermined.rocks",
 			"faucetUri": "",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://gateway.arbitrum-one.public.nevermined.rocks",
+			"neverminedNodeUri": "https://node.arbitrum-one.public.nevermined.rocks",
 			"neverminedNodeAddress": "0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86",
 			"verbose": true
 		},
@@ -80,7 +80,7 @@
 			"marketplaceUri": "https://marketplace-api.goerli.public.nevermined.rocks",
 			"faucetUri": "https://faucet.goerli.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://gateway.goerli.public.nevermined.rocks",
+			"neverminedNodeUri": "https://node.goerli.public.nevermined.rocks",
 			"neverminedNodeAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
 			"verbose": true
 		},
@@ -104,7 +104,7 @@
 			"marketplaceUri": "https://marketplace-api.arbitrum-goerli.public.nevermined.rocks",
 			"faucetUri": "https://faucet.arbitrum-goerli.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://gateway.arbitrum-goerli.public.nevermined.rocks",
+			"neverminedNodeUri": "https://node.arbitrum-goerli.public.nevermined.rocks",
 			"neverminedNodeAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
 			"verbose": true
 		},

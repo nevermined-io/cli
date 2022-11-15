@@ -115,7 +115,7 @@ export const transferNft = async (
   if (!isSuccessfulTransfer) {
     return {
       status: StatusCodes.ERROR,
-      errorMessage: `Problem executing 'transferForDelegate' through the gateway`
+      errorMessage: `Problem executing 'transferForDelegate' through the Nevermined Node`
     }
   }   
 

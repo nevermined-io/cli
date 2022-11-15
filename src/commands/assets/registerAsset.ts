@@ -89,8 +89,8 @@ export const registerAsset = async (
       } as MetaDataMain
     }    
     if (isDTP) {
-      const gatewayInfo = await nvm.node.getNeverminedNodeInfo()
-      const providerKey = gatewayInfo['babyjub-public-key']
+      const nodeInfo = await nvm.node.getNeverminedNodeInfo()
+      const providerKey = nodeInfo['babyjub-public-key']
       
       ddoMetadata.additionalInformation = {
         poseidonHash: await dtp.keytransfer.hashKey(Buffer.from(password, 'hex')),

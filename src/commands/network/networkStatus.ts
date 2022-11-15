@@ -77,9 +77,9 @@ export const networkStatus = async (
     )
   })
 
-  // Gateway
+  // Nevermined Node
   logger.info('')
-  logger.info(chalk.dim(`${chalk.whiteBright('Gateway')}:`))
+  logger.info(chalk.dim(`${chalk.whiteBright('Nevermined Node')}:`))
   logger.info(chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.neverminedNodeUri)}`))
   if (platformVersions.node.status === PlatformTechStatus.Working)
     logger.info(
@@ -94,7 +94,7 @@ export const networkStatus = async (
       `  Version ${chalk.bgBlue(await platformVersions.node.version)}`
     )
   )
-  // TODO: Get Gateway Address from Gateway versions info
+  // TODO: Get Nevermined Node Address from Nevermined Node versions info
   logger.info(
     chalk.dim(`  Address ${chalk.bgBlue(configEntry.nvm.neverminedNodeAddress)}`)
   )
@@ -127,14 +127,14 @@ export const networkStatus = async (
   logger.info('')
   logger.info(chalk.dim(`${chalk.whiteBright('Validations')}:`))
 
-  // Contracts Versions are the same in the Gateway and SDK
+  // Contracts Versions are the same in the Nevermined Node and SDK
   if (
     platformVersions.sdk.keeperVersion ===
     platformVersions.node.keeperVersion
   )
     logger.info(
       chalk.dim(
-        `SDK and Gateway contract versions are the same: ${chalk.bgGreen(
+        `SDK and Nevermined Node contract versions are the same: ${chalk.bgGreen(
           platformVersions.sdk.keeperVersion
         )}`
       )
@@ -142,7 +142,7 @@ export const networkStatus = async (
   else
     logger.warn(
       chalk.dim(
-        `SDK and Gateway contract versions are NOT the same: ${chalk.bgYellow(
+        `SDK and Nevermined Node contract versions are NOT the same: ${chalk.bgYellow(
           platformVersions.sdk.keeperVersion
         )} != ${chalk.bgYellow(platformVersions.node.keeperVersion)}`
       )
@@ -158,7 +158,7 @@ export const networkStatus = async (
       errorContractsMatching = true
     } else if (!platformVersions.node.contracts![_name]) {
       logger.warn(
-        chalk.yellow(`Contract ${_name} not existing in Gateway configuration`)
+        chalk.yellow(`Contract ${_name} not existing in Nevermined Node configuration`)
       )
       errorContractsMatching = true
     } else {
@@ -191,12 +191,12 @@ export const networkStatus = async (
   if (errorContractsMatching)
     logger.error(
       chalk.red(
-        'Not all contract addresses match between the SDK and the Gateway'
+        'Not all contract addresses match between the SDK and the Nevermined Node'
       )
     )
-  else logger.info(chalk.green('SDK and Gateway contract addresses math'))
+  else logger.info(chalk.green('SDK and Nevermined Node contract addresses math'))
 
-  // TODO: The Gateway provider address and the `NODE_ADDRESS` env variable are the same
+  // TODO: The Nevermined Node provider address and the `NODE_ADDRESS` env variable are the same
 
   logger.info('\n')
   
