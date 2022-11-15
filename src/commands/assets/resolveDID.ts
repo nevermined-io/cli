@@ -83,14 +83,14 @@ export const resolveDID = async (
   // Check if Gateway is a provider
   const isProvider = await nvm.keeper.didRegistry.isDIDProvider(
     ddo.id,
-    config.nvm.gatewayAddress || ''
+    config.nvm.neverminedNodeAddress || ''
   )
 
   if (!isProvider) {
     logger.warn(
       chalk.dim(
         ` ${chalk.bgRed('WARNING :')} The Gateway with address ${
-          config.nvm.gatewayAddress
+          config.nvm.neverminedNodeAddress
         } ${chalk.bgRed(
           'is not listed as a provider'
         )} of this asset. This could cause problems during the purchase process\n\n`
@@ -100,7 +100,7 @@ export const resolveDID = async (
     logger.info(
       chalk.dim(
         `${chalk.bgGreen('✅')} The Gateway with address ${
-          config.nvm.gatewayAddress
+          config.nvm.neverminedNodeAddress
         } is a provider of the asset\n\n`
       )
     )

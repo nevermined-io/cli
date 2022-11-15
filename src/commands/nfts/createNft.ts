@@ -143,7 +143,7 @@ export const createNft = async (
       token ? token.getAddress() : config.erc20TokenAddress,
       argv.preMint,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      [config.nvm.gatewayAddress!],
+      [config.nvm.neverminedNodeAddress!],
       royaltyAttributes,
       argv.nftMetadata,
       services,
@@ -159,7 +159,7 @@ export const createNft = async (
       DEFAULT_ENCRYPTION_METHOD,
       argv.cap,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      [config.nvm.gatewayAddress!],
+      [config.nvm.neverminedNodeAddress!],
       BigNumber.from(1),
       royaltyAttributes,
       token ? token.getAddress() : config.erc20TokenAddress,
@@ -171,11 +171,11 @@ export const createNft = async (
 
     const isApproved = await nvm.keeper.nftUpgradeable.isApprovedForAll(
       creatorAccount.getId(),
-      config.nvm.gatewayAddress!
+      config.nvm.neverminedNodeAddress!
     )
     if (!isApproved) {
       const receipt = await nvm.nfts.setApprovalForAll(
-        config.nvm.gatewayAddress!,
+        config.nvm.neverminedNodeAddress!,
         true,
         creatorAccount
       )

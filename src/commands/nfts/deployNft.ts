@@ -103,7 +103,7 @@ export const deployNft = async (
   const addressesToApprove: string[] = argv.approve.filter(
     (_key: string) => _key !== '' && _key !== undefined
   )
-  if (config.nvm.gatewayAddress) addressesToApprove.push(config.nvm.gatewayAddress!)
+  if (config.nvm.neverminedNodeAddress) addressesToApprove.push(config.nvm.neverminedNodeAddress!)
 
   for await (const addr of addressesToApprove)  {
     await nft721.setApprovalForAll(addr, true, creatorAccount)        

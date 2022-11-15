@@ -31,10 +31,10 @@ export const networkList = async (
         )}`
       )
       logger.info(
-        `\n\tNode Uri: ${chalk.yellow(networksConfig[_key].nvm.nodeUri)}`
+        `\n\tNode Uri: ${chalk.yellow(networksConfig[_key].nvm.web3ProviderUri)}`
       )
       logger.info(
-        `\tGateway: ${chalk.yellow(networksConfig[_key].nvm.gatewayUri)}`
+        `\tGateway: ${chalk.yellow(networksConfig[_key].nvm.neverminedNodeUri)}`
       )
       logger.info(
         `\tMarketplace API: ${chalk.yellow(
@@ -52,7 +52,7 @@ export const networkList = async (
     results: JSON.stringify(
       networks.map((_key) =>
         JSON.stringify({
-          gatewayUri: networksConfig[_key].nvm.gatewayUri,
+          neverminedNodeUri: networksConfig[_key].nvm.neverminedNodeUri,
           marketplaceUri: networksConfig[_key].nvm.marketplaceUri,
           faucetUri: networksConfig[_key].nvm.faucetUri
         })

@@ -68,7 +68,7 @@ const cmdHandler = async (
   logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
   logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
   logger.debug(
-    chalk.dim(`Using node url: '${chalk.whiteBright(config.nvm.nodeUri)}'\n`)
+    chalk.dim(`Using node url: '${chalk.whiteBright(config.nvm.web3ProviderUri)}'\n`)
   )
 
   logger.debug(
@@ -94,7 +94,7 @@ const cmdHandler = async (
           `The network id obtained from the blockchain node (${networkId}), is not the same we have in the configuration for the network ${network} (${config.networkId}) `
         )
         logger.warn(
-          `Please, check if you are connected to the right node url. Currently using: ${config.nvm.nodeUri}\n`
+          `Please, check if you are connected to the right node url. Currently using: ${config.nvm.web3ProviderUri}\n`
         )
       }
       userAccount = loadAccountFromSeedWords(config.seed!, accountIndex)

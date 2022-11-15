@@ -65,7 +65,7 @@ export const networkStatus = async (
       )}`
     )
   )
-  logger.info(chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.nodeUri)}`))
+  logger.info(chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.web3ProviderUri)}`))
 
   Object.keys(platformVersions.sdk.contracts || {}).forEach((_name) => {
     logger.info(
@@ -80,23 +80,23 @@ export const networkStatus = async (
   // Gateway
   logger.info('')
   logger.info(chalk.dim(`${chalk.whiteBright('Gateway')}:`))
-  logger.info(chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.gatewayUri)}`))
-  if (platformVersions.gateway.status === PlatformTechStatus.Working)
+  logger.info(chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.neverminedNodeUri)}`))
+  if (platformVersions.node.status === PlatformTechStatus.Working)
     logger.info(
-      chalk.dim(`  Status: ${chalk.bgGreen(platformVersions.gateway.status)}`)
+      chalk.dim(`  Status: ${chalk.bgGreen(platformVersions.node.status)}`)
     )
   else
     logger.info(
-      chalk.dim(`  Status: ${chalk.bgRed(platformVersions.gateway.status)}`)
+      chalk.dim(`  Status: ${chalk.bgRed(platformVersions.node.status)}`)
     )
   logger.info(
     chalk.dim(
-      `  Version ${chalk.bgBlue(await platformVersions.gateway.version)}`
+      `  Version ${chalk.bgBlue(await platformVersions.node.version)}`
     )
   )
   // TODO: Get Gateway Address from Gateway versions info
   logger.info(
-    chalk.dim(`  Address ${chalk.bgBlue(configEntry.nvm.gatewayAddress)}`)
+    chalk.dim(`  Address ${chalk.bgBlue(configEntry.nvm.neverminedNodeAddress)}`)
   )
 
   // Metadata API
@@ -130,7 +130,7 @@ export const networkStatus = async (
   // Contracts Versions are the same in the Gateway and SDK
   if (
     platformVersions.sdk.keeperVersion ===
-    platformVersions.gateway.keeperVersion
+    platformVersions.node.keeperVersion
   )
     logger.info(
       chalk.dim(
@@ -144,7 +144,7 @@ export const networkStatus = async (
       chalk.dim(
         `SDK and Gateway contract versions are NOT the same: ${chalk.bgYellow(
           platformVersions.sdk.keeperVersion
-        )} != ${chalk.bgYellow(platformVersions.gateway.keeperVersion)}`
+        )} != ${chalk.bgYellow(platformVersions.node.keeperVersion)}`
       )
     )
 
@@ -156,7 +156,7 @@ export const networkStatus = async (
         chalk.yellow(`Contract ${_name} not existing in SDK configuration`)
       )
       errorContractsMatching = true
-    } else if (!platformVersions.gateway.contracts![_name]) {
+    } else if (!platformVersions.node.contracts![_name]) {
       logger.warn(
         chalk.yellow(`Contract ${_name} not existing in Gateway configuration`)
       )
@@ -165,21 +165,21 @@ export const networkStatus = async (
       logger.trace(
         `Comparing Contract ${_name}: ${platformVersions.sdk.contracts![
           _name
-        ].toLocaleLowerCase()} - ${platformVersions.gateway.contracts![
+        ].toLocaleLowerCase()} - ${platformVersions.node.contracts![
           _name
         ].toLocaleLowerCase()}`
       )
 
       if (
         platformVersions.sdk.contracts![_name].toLocaleLowerCase() !=
-        platformVersions.gateway.contracts![_name].toLowerCase()
+        platformVersions.node.contracts![_name].toLowerCase()
       ) {
         logger.warn(
           chalk.dim(
             `Addresses doesn't match for contract ${_name}: ${chalk.bgYellow(
               platformVersions.sdk.contracts![_name].toLocaleLowerCase()
             )} != ${chalk.bgYellow(
-              platformVersions.gateway.contracts![_name].toLocaleLowerCase()
+              platformVersions.node.contracts![_name].toLocaleLowerCase()
             )}`
           )
         )
@@ -196,7 +196,7 @@ export const networkStatus = async (
     )
   else logger.info(chalk.green('SDK and Gateway contract addresses math'))
 
-  // TODO: The Gateway provider address and the `GATEWAY_ADDRESS` env variable are the same
+  // TODO: The Gateway provider address and the `NODE_ADDRESS` env variable are the same
 
   logger.info('\n')
   

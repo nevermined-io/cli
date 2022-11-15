@@ -89,7 +89,7 @@ export const registerAsset = async (
       } as MetaDataMain
     }    
     if (isDTP) {
-      const gatewayInfo = await nvm.gateway.getGatewayInfo()
+      const gatewayInfo = await nvm.node.getNeverminedNodeInfo()
       const providerKey = gatewayInfo['babyjub-public-key']
       
       ddoMetadata.additionalInformation = {
@@ -139,7 +139,7 @@ export const registerAsset = async (
     [],
     DEFAULT_ENCRYPTION_METHOD,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    [config.nvm.gatewayAddress!],
+    [config.nvm.neverminedNodeAddress!],
     token ? token.getAddress() : config.erc20TokenAddress
   )
 
