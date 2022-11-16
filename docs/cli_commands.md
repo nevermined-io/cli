@@ -47,7 +47,7 @@ ncli network list
 ### status
 List all the information about a Nevermined deployment<br/>
 
-If the `ncli` is connected to a Nevermined network correctly this command will return information about that network. This will include information about the contracts (version, addresses, etc), Gateway, Marketplace API.<br/>
+If the `ncli` is connected to a Nevermined network correctly this command will return information about that network. This will include information about the contracts (version, addresses, etc), Nevermined Node, Marketplace API.<br/>
 
 
 

@@ -49,7 +49,7 @@
 			}, {
 				"name": "status",
 				"description": "List all the information about a Nevermined deployment",
-				"details": "If the `ncli` is connected to a Nevermined network correctly this command will return information about that specific network. This will include data about the contracts (version, addresses, etc), Gateway, Marketplace API.",
+				"details": "If the `ncli` is connected to a Nevermined network correctly this command will return information about that specific network. This will include data about the contracts (version, addresses, etc), Nevermined Node, Marketplace API.",
 				"examples": ["ncli network status"],
 				"commandHandler": "networkStatus",
 				"requiresAccount": true

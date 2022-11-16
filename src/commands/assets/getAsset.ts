@@ -35,11 +35,11 @@ export const getAsset = async (
     nevermined: nvm,
   }
 
-  const gatewayInfo = await nvm.gateway.getGatewayInfo()
+  const nodeInfo = await nvm.node.getNeverminedNodeInfo()
   const cryptoConfig: CryptoConfig = {
     provider_key: '',
     provider_password: '',
-    provider_rsa_public: gatewayInfo['rsa-public-key'],
+    provider_rsa_public: nodeInfo['rsa-public-key'],
     provider_rsa_private: ''
   }
   const dtp = await Dtp.getInstance(instanceConfig, cryptoConfig)

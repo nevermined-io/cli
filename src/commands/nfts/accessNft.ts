@@ -72,11 +72,11 @@ export const accessNft = async (
     if (!isSuccessfulTransfer) {
       return {
         status: StatusCodes.ERROR,
-        errorMessage: `Problem executing 'transferForDelegate' through the gateway`
+        errorMessage: `Problem executing 'transferForDelegate' through the Nevermined Node`
       }
     }
     
-    logger.info(`NFT Access request through the gateway sucessfully`)
+    logger.info(`NFT Access request through the Nevermined Node sucessfully`)
   }
 
   const isSuccessful = await nvm.nfts.access(

@@ -139,15 +139,15 @@ export function getConfig(
 
   const config = defaultConfig  
 
-  if (process.env.NODE_URL) config.nvm.nodeUri = process.env.NODE_URL
+  if (process.env.WEB3_PROVIDER_URL) config.nvm.web3ProviderUri = process.env.WEB3_PROVIDER_URL
   if (process.env.MARKETPLACE_API_URL)
     config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
   if (process.env.FAUCET_URL) config.nvm.faucetUri = process.env.FAUCET_URL
   if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
   if (process.env.NO_GRAPH) config.nvm.graphHttpUri = undefined
-  if (process.env.GATEWAY_URL) config.nvm.gatewayUri = process.env.GATEWAY_URL
-  if (process.env.GATEWAY_ADDRESS)
-    config.nvm.gatewayAddress = process.env.GATEWAY_ADDRESS
+  if (process.env.NVM_NODE_URL) config.nvm.neverminedNodeUri = process.env.NVM_NODE_URL
+  if (process.env.NODE_ADDRESS)
+    config.nvm.neverminedNodeAddress = process.env.NODE_ADDRESS
   if (process.env.TOKEN_ADDRESS)
     config.erc20TokenAddress = process.env.TOKEN_ADDRESS
   if (process.env.GAS_MULTIPLIER)
@@ -158,13 +158,13 @@ export function getConfig(
   config.keyfilePath = process.env.KEYFILE_PATH
   config.keyfilePassword = process.env.KEYFILE_PASSWORD
 
-  if (!config.nvm.nodeUri || config.nvm.nodeUri.length < 1) {
+  if (!config.nvm.web3ProviderUri || config.nvm.web3ProviderUri.length < 1) {
     if (!process.env.NETWORK) {
       throw new Error(
-        `You need to configure a 'NETWORK' or a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
+        `You need to configure a 'NETWORK' or a 'WEB3_PROVIDER_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
       )
     } else {
-      config.nvm.nodeUri = defaultConfig.nvm.nodeUri
+      config.nvm.web3ProviderUri = defaultConfig.nvm.web3ProviderUri
     }
   }
 
@@ -185,13 +185,13 @@ export function getConfig(
             process.env.KEYFILE_PASSWORD!
           )
         ],
-        config.nvm.nodeUri
+        config.nvm.web3ProviderUri
       )
     } else {
       signer = Wallet.fromMnemonic(config.seed!)
       hdWalletProvider = new HDWalletProvider(
         config.seed!,
-        config.nvm.nodeUri,
+        config.nvm.web3ProviderUri,
         accountIndex,
         10
       )
@@ -200,7 +200,7 @@ export function getConfig(
     signer = Wallet.fromMnemonic(DUMMY_SEED_WORDS)
     hdWalletProvider = new HDWalletProvider(
       DUMMY_SEED_WORDS,
-      config.nvm.nodeUri,
+      config.nvm.web3ProviderUri,
       0,
       1
     )

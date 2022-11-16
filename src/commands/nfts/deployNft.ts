@@ -98,12 +98,12 @@ export const deployNft = async (
 
 
 
-  // INFO: We allow the gateway to fulfill the transfer condition in behalf of the user
+  // INFO: We allow the Nevermined Node to fulfill the transfer condition in behalf of the user
   // Typically this only needs to happen once per NFT contract
   const addressesToApprove: string[] = argv.approve.filter(
     (_key: string) => _key !== '' && _key !== undefined
   )
-  if (config.nvm.gatewayAddress) addressesToApprove.push(config.nvm.gatewayAddress!)
+  if (config.nvm.neverminedNodeAddress) addressesToApprove.push(config.nvm.neverminedNodeAddress!)
 
   for await (const addr of addressesToApprove)  {
     await nft721.setApprovalForAll(addr, true, creatorAccount)        

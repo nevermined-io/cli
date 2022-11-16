@@ -27,7 +27,7 @@ jobs:
           LOCAL_CONF_DIR: "/tmp/.nevermined"
           SEED_WORDS: ${{ secrets.MNEMONIC_TESTING_MUMBAI }}
           TOKEN_ADDRESS: "0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F"
-          NODE_URL: https://polygon-mumbai.infura.io/v3/${{ secrets.INFURA_TOKEN }}
+          WEB3_PROVIDER_URL: https://polygon-mumbai.infura.io/v3/${{ secrets.INFURA_TOKEN }}
           NETWORK: "mumbai"
           IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}

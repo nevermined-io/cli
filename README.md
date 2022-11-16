@@ -59,9 +59,9 @@ export KEYFILE_PASSWORD="<keyfile password>"
 ---
 
 ```
-export NODE_URL="https://rinkeby.infura.io/v3/INFURA_TOKEN"
+export WEB3_PROVIDER_URL="https://rinkeby.infura.io/v3/INFURA_TOKEN"
 or
-export NODE_URL="https://eth-rinkeby.alchemyapi.io/v2/-ALCHEMY_TOKEN"
+export WEB3_PROVIDER_URL="https://eth-rinkeby.alchemyapi.io/v2/-ALCHEMY_TOKEN"
 
 to switch the token address (optional):
 export TOKEN_ADDRESS="<your erc20 compatible token address>"
@@ -73,13 +73,13 @@ export TOKEN_ADDRESS=0x0
 ## Environment variables
 
 * `NETWORK` - Allows to uses one of the existing pre-configured Nevermined networks. Example: `geth-localnet`, `mumbai`, `matic`, `goerli`. You can see the full list of networks supported running `ncli network list`
-* `NODE_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
+* `WEB3_PROVIDER_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
 * `TOKEN_ADDRESS` - The ERC20 token address to use for the transactions. If not given or if is `0x0` the payments will be made in the network native token (ETH, Matic, ..)
-* `GATEWAY_URL` - The url of the gateway to use. If not given the default url is: `http://localhost:8030`
+* `NVM_NODE_URL` - The url of the Nevermined Node to use. If not given the default url is: `http://localhost:8030`
 * `MARKETPLACE_API_URL` - The url of the marketplace api to use. If not given the default url is: `http://localhost:3100`
 * `FAUCET_URL` - The url of the faucet to use. If not given the default url is: `http://localhost:3001`
 * `IPFS_GATEWAY` - The url of the IPFS gateway used to upload/download contents. By default is `https://ipfs.infura.io:5001`
-* `GATEWAY_ADDRESS` - The public address of the gateway. If not given the default address is: `0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0`
+* `NODE_ADDRESS` - The public address of the Nevermined Node. If not given the default address is: `0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0`
 * `GAS_MULTIPLIER` - For networks with some congestion, this parameter can help to increase the gas spent and speed up the transactions. If not given the default is `0`. 
 
 
@@ -121,28 +121,8 @@ Nevermined pre-configured networks:
         Is a Production environment? false
 
         Node Uri: https://rpc-mumbai.maticvigil.com
-        Gateway: https://gateway.mumbai.public.nevermined.rocks
+        Nevermined Node: https://node.mumbai.public.nevermined.rocks
         Marketplace API: https://marketplace-api.mumbai.public.nevermined.rocks
-        Faucet: https://faucet.mumbai.public.nevermined.rocks
-
-
- defiMumbai:
-        Testnet environment for the DeFi Marketplace.
-        Is a Production environment? false
-
-        Node Uri: https://rpc-mumbai.maticvigil.com
-        Gateway: https://defi.v2.gateway.mumbai.nevermined.rocks
-        Marketplace API: https://defi.v2.marketplace-api.mumbai.nevermined.rocks
-        Faucet: https://faucet.mumbai.public.nevermined.rocks
-
-
- autonomiesMumbai:
-        Testnet environment for the Autonomies Marketplace.
-        Is a Production environment? false
-
-        Node Uri: https://rpc-mumbai.maticvigil.com
-        Gateway: https://gateway.autonomies.test.nevermined.rocks
-        Marketplace API: https://marketplace-api.autonomies.test.nevermined.rocks
         Faucet: https://faucet.mumbai.public.nevermined.rocks
 
 
@@ -150,7 +130,7 @@ Nevermined pre-configured networks:
 
 A part of these networks you can connect to any other network using the environment variables described above.
 
-When you want to connect and interact with a different network of the default (`mumbai`), make sure you have exported the `NODE_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
+When you want to connect and interact with a different network of the default (`mumbai`), make sure you have exported the `WEB3_PROVIDER_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
 
 
 ## License
