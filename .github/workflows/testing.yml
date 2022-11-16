@@ -31,6 +31,9 @@ jobs:
       - name: Lint
         run: |
           yarn lint
+      - name: Build
+        run: |
+          yarn build                    
       - name: Reclaim some disk space
         run: |
           docker system prune --all --volumes -f
@@ -46,8 +49,8 @@ jobs:
 
           export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
 
-          rm -rf "${HOME}/.nevermined/nevermined-contracts/artifacts"
-          ./start_nevermined.sh ${{ matrix.network }} 2>&1 | tee nevermined_tools.txt &
+          rm -rf "${LOCAL_CONF_DIR}/nevermined-contracts/artifacts"
+          ./start_nevermined.sh 2>&1 | tee nevermined_tools.txt &
           cd ..
           ./scripts/wait-nevermined.sh
           ./scripts/wait-subgraphs.sh ${{ matrix.network-name }}
@@ -60,11 +63,9 @@ jobs:
           NETWORK: ${{ matrix.network-name }}
           IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
-          USE_NEW_GATEWAY: true
         run: |
           export ${{ matrix.delay }}=true
           sleep 10
-          yarn build
           yarn test
       - name: Upload logs
         uses: actions/upload-artifact@v3
