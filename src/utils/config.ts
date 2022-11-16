@@ -139,13 +139,13 @@ export function getConfig(
 
   const config = defaultConfig  
 
-  if (process.env.NODE_URL) config.nvm.web3ProviderUri = process.env.NODE_URL
+  if (process.env.WEB3_PROVIDER_URL) config.nvm.web3ProviderUri = process.env.WEB3_PROVIDER_URL
   if (process.env.MARKETPLACE_API_URL)
     config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
   if (process.env.FAUCET_URL) config.nvm.faucetUri = process.env.FAUCET_URL
   if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
   if (process.env.NO_GRAPH) config.nvm.graphHttpUri = undefined
-  if (process.env.NODE_URL) config.nvm.neverminedNodeUri = process.env.NODE_URL
+  if (process.env.NVM_NODE_URL) config.nvm.neverminedNodeUri = process.env.NVM_NODE_URL
   if (process.env.NODE_ADDRESS)
     config.nvm.neverminedNodeAddress = process.env.NODE_ADDRESS
   if (process.env.TOKEN_ADDRESS)
@@ -161,7 +161,7 @@ export function getConfig(
   if (!config.nvm.web3ProviderUri || config.nvm.web3ProviderUri.length < 1) {
     if (!process.env.NETWORK) {
       throw new Error(
-        `You need to configure a 'NETWORK' or a 'NODE_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
+        `You need to configure a 'NETWORK' or a 'WEB3_PROVIDER_URL' environment variable pointing to the right network. \nFor complete reference please visit: \nhttp://docs.nevermined.io/docs/cli/advanced_configuration#connecting-to-different-environments documentation \n`
       )
     } else {
       config.nvm.web3ProviderUri = defaultConfig.nvm.web3ProviderUri

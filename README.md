@@ -59,9 +59,9 @@ export KEYFILE_PASSWORD="<keyfile password>"
 ---
 
 ```
-export NODE_URL="https://rinkeby.infura.io/v3/INFURA_TOKEN"
+export WEB3_PROVIDER_URL="https://rinkeby.infura.io/v3/INFURA_TOKEN"
 or
-export NODE_URL="https://eth-rinkeby.alchemyapi.io/v2/-ALCHEMY_TOKEN"
+export WEB3_PROVIDER_URL="https://eth-rinkeby.alchemyapi.io/v2/-ALCHEMY_TOKEN"
 
 to switch the token address (optional):
 export TOKEN_ADDRESS="<your erc20 compatible token address>"
@@ -73,9 +73,9 @@ export TOKEN_ADDRESS=0x0
 ## Environment variables
 
 * `NETWORK` - Allows to uses one of the existing pre-configured Nevermined networks. Example: `geth-localnet`, `mumbai`, `matic`, `goerli`. You can see the full list of networks supported running `ncli network list`
-* `NODE_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
+* `WEB3_PROVIDER_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
 * `TOKEN_ADDRESS` - The ERC20 token address to use for the transactions. If not given or if is `0x0` the payments will be made in the network native token (ETH, Matic, ..)
-* `NODE_URL` - The url of the Nevermined Node to use. If not given the default url is: `http://localhost:8030`
+* `NVM_NODE_URL` - The url of the Nevermined Node to use. If not given the default url is: `http://localhost:8030`
 * `MARKETPLACE_API_URL` - The url of the marketplace api to use. If not given the default url is: `http://localhost:3100`
 * `FAUCET_URL` - The url of the faucet to use. If not given the default url is: `http://localhost:3001`
 * `IPFS_GATEWAY` - The url of the IPFS gateway used to upload/download contents. By default is `https://ipfs.infura.io:5001`
@@ -130,7 +130,7 @@ Nevermined pre-configured networks:
 
 A part of these networks you can connect to any other network using the environment variables described above.
 
-When you want to connect and interact with a different network of the default (`mumbai`), make sure you have exported the `NODE_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
+When you want to connect and interact with a different network of the default (`mumbai`), make sure you have exported the `WEB3_PROVIDER_URL` environment variable connected to the right environment, and pass the `-n NETWORK_NAME` parameter to your commands.
 
 
 ## License

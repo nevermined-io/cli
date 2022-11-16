@@ -11,12 +11,12 @@ Let's first setup the main config we need:
 ```bash
 export SEED_WORDS="YOUR 12 WORDS SEED PHRASE"
 export NETWORK=mumbai
-export NODE_URL="the node url valid for the network you are connecting"
+export WEB3_PROVIDER_URL="the node url valid for the network you are connecting"
 ```
 
 :::tip
 
-If you don't know what **NODE_URL** use, we recommend get a free account on [Infura](https://infura.io/) or [Alchemy](https://alchemyapi.io/).
+If you don't know what **WEB3_PROVIDER_URL** use, we recommend get a free account on [Infura](https://infura.io/) or [Alchemy](https://alchemyapi.io/).
 
 :::
 

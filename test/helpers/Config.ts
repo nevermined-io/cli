@@ -42,7 +42,7 @@ export const execOpts = {
   env: {
     ...process.env,
     NETWORK: NETWORK,
-    NODE_URL: `${process.env.NODE_URL}` || 'http://localhost:8545',
+    WEB3_PROVIDER_URL: `${process.env.WEB3_PROVIDER_URL}` || 'http://localhost:8545',
     TOKEN_ADDRESS: process.env.TOKEN_ADDRESS,
     SEED_WORDS: process.env.SEED_WORDS,
     LOCAL_CONF_DIR: '/tmp/.nevermined'

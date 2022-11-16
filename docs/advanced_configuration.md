@@ -57,10 +57,10 @@ ncli network list
 ```
 
 This will return a list of all the existing environments grouped by **name**. 
-If you want to connect to any of them, we just need to configure your `NODE_URL` environmnet variable (using the "Node Uri" printed our using your own Infura or similar provider):
+If you want to connect to any of them, we just need to configure your `WEB3_PROVIDER_URL` environmnet variable (using the "Node Uri" printed our using your own Infura or similar provider):
 
 ```bash
-export NODE_URL=https://rpc-mumbai.matic.today
+export WEB3_PROVIDER_URL=https://rpc-mumbai.matic.today
 ```
 
  Now you can use the parameter `--network` in the `ncli` commands or export the `NETWORK` environment variable to allow to connect and use any of these environments:
@@ -74,9 +74,9 @@ ncli --network defiMumbai network status
 The following list of variables are related to the configuration of the Nevermined environment and how you interact with them:
 
 * `NETWORK` - Allows to uses one of the existing pre-configured Nevermined networks. Example: `geth-localnet`, `mumbai`, `matic`, `goerli`. You can see the full list of networks supported running `ncli network list`
-* `NODE_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
+* `WEB3_PROVIDER_URL` - JSON-RPC server. It could be an Infura or Alchemy url too. Example: `http://localhost:8545`
 * `TOKEN_ADDRESS` - The ERC20 token address to use for the transactions. If not given or if is `0x0000000000000000000000000000000000000000` the payments will be made in the network native token (ETH, Matic, ..)
-* `NODE_URL` - The url of the Nevermined Node to use. If not given the default url is: `http://localhost:8030`
+* `NVM_NODE_URL` - The url of the Nevermined Node to use. If not given the default url is: `http://localhost:8030`
 * `MARKETPLACE_API_URL` - The url of the marketplace api to use. If not given the default url is: `http://localhost:3100`
 * `FAUCET_URL` - The url of the faucet to use. If not given the default url is: `http://localhost:3001`
 * `IPFS_GATEWAY` - The url of the IPFS gateway used to upload/download contents. By default is `https://ipfs.infura.io:5001`
@@ -86,6 +86,6 @@ The following list of variables are related to the configuration of the Nevermin
 
 :::info
 
-Finding a decent `NODE_URL` is some times difficult. We recommend to open an Infura or Alchemy account to have a better experience.
+Finding a decent `WEB3_PROVIDER_URL` is some times difficult. We recommend to open an Infura or Alchemy account to have a better experience.
 
 :::
