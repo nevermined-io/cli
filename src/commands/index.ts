@@ -19,6 +19,11 @@ export * from './nfts/transferNft'
 export * from './nfts/downloadNft'
 export * from './nfts/accessNft'
 
+// compute
+export * from './compute/execCompute'
+export * from './compute/statusJob'
+export * from './compute/logsJob'
+
 // accounts
 export * from './accounts/new'
 export * from './accounts/list'

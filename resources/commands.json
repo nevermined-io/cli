@@ -278,6 +278,44 @@
 					}
 				]
 			}, {
+				"name": "register-workflow",
+				"description": "Register a new workflow",
+				"details": "This command registers a new workflow on the Nevermined network. The workflow allows to specify a an operation that needs to be executed. This typically involve the execution of an algorithm (referenced by a DID) and the input data that is given to that algorithm (referenced by DIDs too).",
+				"examples": ["ncli assets register-workflow --name 'Word count of English Enciclopedia'  --input did:nv:abc --algorithm did:nv:012 "],
+				"commandHandler": "registerAsset",
+				"optionalArguments": [{
+						"name": "name",
+						"type": "string",
+						"demandOption": true,
+						"description": "The asset name"
+					},
+					{
+						"name": "author",
+						"type": "string",
+						"demandOption": false,
+						"description": "The author of the asset"
+					},
+					{
+						"name": "input",
+						"type": "array",
+						"demandOption": true,
+						"description": "The DID of the input asset"
+					},
+					{
+						"name": "algorithm",
+						"type": "string",
+						"demandOption": true,
+						"description": "The DID of the algorithm asset to process the input"
+					},
+					{
+						"name": "assetType",
+						"type": "string",
+						"default": "workflow",
+						"hidden": true,
+						"description": "The type of the asset to register"
+					}
+				]
+			}, {
 				"name": "import [metadata]",
 				"description": "Import an asset using the metadata in JSON format",
 				"details": "An asset in the Nevermined network can be described by different level of metadata (title, description, tags, etc). This command registers a new asset importing all this metadata from a JSON file, instead of adding all the information in the command line.",
@@ -421,6 +459,81 @@
 					"type": "string",
 					"description": "The asset DID"
 				}]
+			}]
+		}, {
+			"name": "compute",
+			"description": "Allows the execution of remote computation",
+			"usage": "usage: $0 compute <command> parameters [options]",
+			"subcommands": [{
+				"name": "order [did]",
+				"description": "Order a compute asset given a DID",
+				"details": "This method makes the payment and retrieve a serviceAgreementId that can be used later to execute a compute job",
+				"examples": ["ncli compute order did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f"],
+				"commandHandler": "orderAsset",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}],
+				"optionalArguments": [{
+					"name": "orderType",
+					"type": "string",
+					"default": "compute",
+					"hidden": true,
+					"description": "The type of asset to order"
+				}]
+			}, {
+				"name": "execute [did]",
+				"description": "Order & download or download directly a previously purchased asset",
+				"details": "This commands is the best entry point to access the files attached to a Nevermined asset. Depending on the parameters provided, it allows to order and download the files of an asset, or if this was already purchased, provides the service agreement to download them.",
+				"examples": ["ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --destination /tmp", "ncli assets get did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f --agreementId 0x412dceaa0c5506095daa6b221be93c680e8a49bfd5b63ce54522d85d2b0e1384 --destination /tmp"],
+				"commandHandler": "execCompute",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}],
+				"optionalArguments": [{
+						"name": "agreementId",
+						"type": "string",
+						"default": "",
+						"description": "Agreement Id of a previously purchased asset. If not given a new purchase will be executed"
+					}
+				]
+			}, {
+				"name": "status [agreementId] [jobId]",
+				"description": "Shows the status about the execution of a job",
+				"details": "When a user triggers an execution Nevermined orchestrates the infrastructure allowing to put together the input data and the algorithm. This process can require some time and this command checks the status of that operation.",
+				"examples": ["ncli compute status 0xf29bebaeacf865b4f57373aeb84635cc68c7719761607aec2802f1ad87213777 abxckdsaofksdadsa"],
+				"commandHandler": "statusJob",
+				"positionalArguments": [{
+					"name": "agreementId",
+					"type": "string",
+					"default": "",
+					"description": "Agreement Id of a previously purchased asset"
+				}, {
+					"name": "jobId",
+					"type": "string",
+					"description": "The id of the user execution"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "logs [agreementId] [jobId]",
+				"description": "Shows the logs about the execution of a job",
+				"details": "When a user triggers an execution Nevermined orchestrates the infrastructure allowing to put together the input data and the algorithm. This command fetches the logs generated by the execution of the algorithm.",
+				"examples": ["ncli compute logs 0xf29bebaeacf865b4f57373aeb84635cc68c7719761607aec2802f1ad87213777 abxckdsaofksdadsa"],
+				"commandHandler": "logsJob",
+				"positionalArguments": [{
+					"name": "agreementId",
+					"type": "string",
+					"default": "",
+					"description": "Agreement Id of a previously purchased asset"
+				}, {
+					"name": "jobId",
+					"type": "string",
+					"description": "The id of the user execution"
+				}],
+				"optionalArguments": []
 			}]
 		}, {
 			"name": "agreements",
