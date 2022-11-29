@@ -18,19 +18,24 @@ export const statusJob = async (
     chalk.dim(`Fetching status of jobId: ${jobId} and agreement id: ${agreementId}`)
   )
 
-  ///////////////////////////////////////////////
-  //////// TODO :                     ///////////
-  //////// INTEGRATE COMPUTE SDK HERE ///////////
-  ///////////////////////////////////////////////
+  try{
 
-  const computeStatus = {}
+    const computeStatus = nvm.assets.computeStatus(agreementId, jobId, account)
 
-  return {
-    status: StatusCodes.OK,
-    results: JSON.stringify({      
-      agreementId,
-      jobId,
-      computeStatus
-    })
+    return {
+      status: StatusCodes.OK,
+      results: JSON.stringify({      
+        agreementId,
+        jobId,
+        computeStatus
+      })
+    }
+  } catch (error) {
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Unable to fetch the status of jobId: ${jobId} and agreement id: ${agreementId}: ${
+        (error as Error).message
+      }`
+    }
   }
 }
