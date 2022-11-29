@@ -29,23 +29,22 @@ export const execCompute = async (
     chalk.dim(`Executing asset: ${did} with agreement id: ${agreementId}`)
   )
 
-  ///////////////////////////////////////////////
-  //////// TODO :                     ///////////
-  //////// INTEGRATE COMPUTE SDK HERE ///////////
-  ///////////////////////////////////////////////
-
-
-
-
-
-  const jobId = 'hey sucker!'
-
-  return {
-    status: StatusCodes.OK,
-    results: JSON.stringify({
-      did,
-      agreementId,
-      jobId
-    })
+  try {
+    const jobId = nvm.assets.execute(agreementId, did, account)
+    return {
+      status: StatusCodes.OK,
+      results: JSON.stringify({
+        did,
+        agreementId,
+        jobId
+      })
+    }
+  } catch (error) {
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Unable to execute the asset: ${
+        (error as Error).message
+      }`
+    }
   }
 }
