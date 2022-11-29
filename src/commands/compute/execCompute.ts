@@ -42,7 +42,7 @@ export const execCompute = async (
   } catch (error) {
     return {
       status: StatusCodes.ERROR,
-      errorMessage: `Unable to execute the asset: ${
+      errorMessage: `Unable to execute the asset ${did} with agreement id: ${agreementId}: ${
         (error as Error).message
       }`
     }

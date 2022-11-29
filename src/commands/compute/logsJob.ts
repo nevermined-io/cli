@@ -18,19 +18,22 @@ export const logsJob = async (
     chalk.dim(`Fetching logs of jobId: ${jobId} and agreement id: ${agreementId}`)
   )
 
-  ///////////////////////////////////////////////
-  //////// TODO :                     ///////////
-  //////// INTEGRATE COMPUTE SDK HERE ///////////
-  ///////////////////////////////////////////////
-
-  const computeLogs = {}
-
-  return {
-    status: StatusCodes.OK,
-    results: JSON.stringify({      
-      agreementId,
-      jobId,
-      computeLogs
-    })
+  try {
+    const computeLogs = nvm.assets.computeLogs(agreementId, jobId, account)
+    return {
+      status: StatusCodes.OK,
+      results: JSON.stringify({      
+        agreementId,
+        jobId,
+        computeLogs
+      })
+    }
+  }catch (error) {
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Unable to fetch the logs of jobId: ${jobId} and agreement id: ${agreementId}: ${
+        (error as Error).message
+      }`
+    }
   }
 }
