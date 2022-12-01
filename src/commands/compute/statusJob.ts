@@ -20,7 +20,7 @@ export const statusJob = async (
 
   try{
 
-    const computeStatus = nvm.assets.computeStatus(agreementId, jobId, account)
+    const computeStatus = await nvm.assets.computeStatus(agreementId, jobId, account)
 
     return {
       status: StatusCodes.OK,

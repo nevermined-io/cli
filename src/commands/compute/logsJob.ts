@@ -19,7 +19,7 @@ export const logsJob = async (
   )
 
   try {
-    const computeLogs = nvm.assets.computeLogs(agreementId, jobId, account)
+    const computeLogs = await nvm.assets.computeLogs(agreementId, jobId, account)
     return {
       status: StatusCodes.OK,
       results: JSON.stringify({      

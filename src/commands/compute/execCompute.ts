@@ -30,7 +30,7 @@ export const execCompute = async (
   )
 
   try {
-    const jobId = nvm.assets.execute(agreementId, did, account)
+    const jobId = await nvm.assets.execute(agreementId, did, account)
     return {
       status: StatusCodes.OK,
       results: JSON.stringify({
