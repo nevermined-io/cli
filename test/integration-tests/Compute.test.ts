@@ -1,11 +1,16 @@
 import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
 import {
-  parseDIDFromNewAsset
+  parseDIDFromNewAsset,
+  parseServiceAgreementId
 } from '../helpers/StdoutParser'
 import execCommand from '../helpers/ExecCommand'
 
 describe('Compute e2e Testing', () => {
   let did = ''
+  let algoDid = ''
+  let workflowDid = ''
+  let agreementId: string | null= ''
+  let jobId = ''
 
   beforeAll(async () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)
@@ -56,22 +61,48 @@ describe('Compute e2e Testing', () => {
     const stdout = execCommand(registerAlgorithmCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    const algoDid = parseDIDFromNewAsset(stdout)
+    algoDid = parseDIDFromNewAsset(stdout)
     console.log(`DID: ${algoDid}`)
     expect(algoDid === null ? false : algoDid.startsWith('did:nv:'))
   })
 
   test('Registering a workflow associating the data and the algorithm', async () => {
-    console.error(`PENDING TO IMPLEMENT`)
+
+    const registerWorkflowCommand = `${baseCommands.assets.registerWorkflow} --name "Test Worfklow" --author "${metadataConfig.author}" --input ${did}  --algorithm ${algoDid}`
+
+    const stdout = execCommand(registerWorkflowCommand, execOpts)
+
+    console.log(`STDOUT: ${stdout}`)
+    workflowDid = parseDIDFromNewAsset(stdout)
+    console.log(`DID: ${workflowDid}`)
+    expect(workflowDid === null ? false : workflowDid.startsWith('did:nv:'))
+
   })
 
   test('Order a compute job', async () => {    
-    console.error(`PENDING TO IMPLEMENT`)
-    
+
+    const orderComputeCommand = `${baseCommands.compute.order} ${did}`
+
+    const stdout = execCommand(orderComputeCommand, execOpts)
+
+    console.log(`STDOUT: ${stdout}`)
+    agreementId = parseServiceAgreementId(stdout)
+    console.log(`Agreement Id: ${agreementId}`)
+    expect(agreementId === null ? false : agreementId.startsWith('0x'))
+      
   })
 
   test('Executing a compute job', async () => {    
-    console.error(`PENDING TO IMPLEMENT`)
+
+    const execComputeCommand = `${baseCommands.compute.execute} ${did} --agremmentId ${agreementId}`
+
+    const stdout = execCommand(execComputeCommand, execOpts)
+
+    console.log(`STDOUT: ${stdout}`)
+    //jobId = parseServiceAgreementId(stdout)
+    console.log(`jobId: ${jobId}`)
+    expect(jobId !== null)
+
     
   })
 

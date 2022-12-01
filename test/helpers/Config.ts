@@ -109,5 +109,11 @@ export const baseCommands = {
     decrypt: `${BASE_COMMAND} ${VERBOSE} utils decrypt `,
     publishMetadata: `${BASE_COMMAND} ${VERBOSE} utils publish-nft-metadata `,
     getMetadata: `${BASE_COMMAND} ${VERBOSE} utils get-nft-metadata `
+  },
+  compute: {
+    order: `${BASE_COMMAND} ${VERBOSE} compute order`,
+    execute: `${BASE_COMMAND} ${VERBOSE} compute execute`,
+    status: `${BASE_COMMAND} ${VERBOSE} compute status`,
+    logs: `${BASE_COMMAND} ${VERBOSE} compute logs`
   }
 }
