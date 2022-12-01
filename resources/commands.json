@@ -327,6 +327,34 @@
                     "description": "True if we only want to get metadata"
                 }]
 			}, {
+				"name": "query [query]",
+				"description": "Searching for assets in a Nevermined environment using Elasticsearch query",
+				"details": "All user metadata for registering assets in Nevermined can be searched and indexed later. Typically different assets can be organized in independent Marketplaces grouped by topic or domain. This command allows to query one of the Marketplace environments searching for data using a query provided by the user.",
+				"examples": ["ncli assets query {query}"],
+				"commandHandler": "queryAsset",
+				"positionalArguments": [{
+					"name": "query",
+					"type": "string",
+					"description": "The search query"
+				}],
+				"optionalArguments": [{
+					"name": "offset",
+					"type": "number",
+					"default": "10",
+					"description": "The number of elements to obtain from the search query"
+				}, {
+					"name": "page",
+					"type": "number",
+					"default": "1",
+					"description": "The page to show"
+				}, {
+                    "name": "onlyMetadata",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "True if we only want to get metadata"
+                }]
+			},
+			{
 				"name": "download [did]",
 				"description": "Download an asset owned by me",
 				"details": "When a user publishes content on Nevermined this command downloads the files attached to that asset without going through the service agreements (payment).",

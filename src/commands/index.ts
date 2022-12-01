@@ -1,6 +1,7 @@
 // assets
 export * from './assets/registerAsset'
 export * from './assets/searchAsset'
+export * from './assets/queryAsset'
 export * from './assets/downloadAsset'
 export * from './assets/orderAsset'
 export * from './assets/getAsset'
