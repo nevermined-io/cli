@@ -2,7 +2,9 @@ import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
   parseServiceAgreementId,
-  parseComputeJobId
+  parseComputeJobId,
+  parseDIDFromNewAlgorithm,
+  parseDIDFromNewWorkflow
 } from '../helpers/StdoutParser'
 import execCommand from '../helpers/ExecCommand'
 
@@ -78,19 +80,19 @@ describe('Compute e2e Testing', () => {
     const stdout = execCommand(registerAlgorithmCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    algoDid = parseDIDFromNewAsset(stdout)
+    algoDid = parseDIDFromNewAlgorithm(stdout)
     console.log(`ALGO DID: ${algoDid}`)
     expect(algoDid === null ? false : algoDid.startsWith('did:nv:'))
   })
 
   test.skip('Registering a workflow associating the data and the algorithm', async () => {
 
-    const registerWorkflowCommand = `${baseCommands.assets.registerWorkflow} --name "Test Worfklow" --author "${metadataConfig.author}" --input ${did}  --algorithm ${algoDid}`
+    const registerWorkflowCommand = `${baseCommands.assets.registerWorkflow} --name "Test Worfklow" --author "${metadataConfig.author}" --price "0" --input ${did}  --algorithm ${algoDid}`
 
     const stdout = execCommand(registerWorkflowCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    workflowDid = parseDIDFromNewAsset(stdout)
+    workflowDid = parseDIDFromNewWorkflow(stdout)
     console.log(`WORKFLOW DID: ${workflowDid}`)
     expect(workflowDid === null ? false : workflowDid.startsWith('did:nv:'))
 
