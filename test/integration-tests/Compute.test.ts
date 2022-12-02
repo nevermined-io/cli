@@ -37,7 +37,7 @@ describe('Compute e2e Testing', () => {
    
   })
 
-  test('Registering a new compute asset and resolve the DID', async () => {
+  test.skip('Registering a new compute asset and resolve the DID', async () => {
 
     const registerAssetCommand = `${baseCommands.assets.registerAsset} --assetType compute --accountIndex 0 --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
@@ -57,7 +57,7 @@ describe('Compute e2e Testing', () => {
     expect(stdoutResolve.includes(did))
   })
 
-  test('Order a compute DDO', async () => {    
+  test.skip('Order a compute DDO', async () => {    
 
     const orderComputeCommand = `${baseCommands.compute.order} ${did}`
 
@@ -70,7 +70,7 @@ describe('Compute e2e Testing', () => {
       
   })
 
-  test('Registering a new algorithm', async () => {
+  test.skip('Registering a new algorithm', async () => {
     const registerAlgorithmCommand = `${baseCommands.assets.registerAlgorithm} --name "Test Algorithm" --author "${metadataConfig.author}" --price "0" --language "python" --entrypoint "python word_count.py" --container "python:3.8-alpine"  --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAlgorithmCommand}`)
 
@@ -82,7 +82,7 @@ describe('Compute e2e Testing', () => {
     expect(algoDid === null ? false : algoDid.startsWith('did:nv:'))
   })
 
-  test('Registering a workflow associating the data and the algorithm', async () => {
+  test.skip('Registering a workflow associating the data and the algorithm', async () => {
 
     const registerWorkflowCommand = `${baseCommands.assets.registerWorkflow} --name "Test Worfklow" --author "${metadataConfig.author}" --input ${did}  --algorithm ${algoDid}`
 
@@ -96,7 +96,7 @@ describe('Compute e2e Testing', () => {
   })
 
   
-  test('Executing a compute job', async () => {    
+  test.skip('Executing a compute job', async () => {    
 
     const execComputeCommand = `${baseCommands.compute.execute} ${workflowDid} --agremmentId ${agreementId}`
 
@@ -109,12 +109,12 @@ describe('Compute e2e Testing', () => {
     
   })
 
-  test('Fetching status of a compute job', async () => {    
+  test.skip('Fetching status of a compute job', async () => {    
     console.error(`PENDING TO IMPLEMENT`)
     
   })
 
-  test('Fetching logs of a compute job', async () => {    
+  test.skip('Fetching logs of a compute job', async () => {    
     console.error(`PENDING TO IMPLEMENT`)
     
   })
