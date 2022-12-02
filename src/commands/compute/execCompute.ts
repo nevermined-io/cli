@@ -33,7 +33,7 @@ export const execCompute = async (
     const jobId = await nvm.assets.execute(agreementId, did, account)
 
     logger.info(
-      chalk.dim(`Created Job ${jobId}.`)
+      chalk.dim(`Created Job ${jobId}`)
     )
 
     return {
