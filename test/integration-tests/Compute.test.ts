@@ -34,7 +34,12 @@ describe('Compute e2e Testing', () => {
     } catch (error) {
       console.warn(`Unable to fund accounts`)
     }
-    const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+   
+  })
+
+  test('Registering a new compute asset and resolve the DID', async () => {
+
+    const registerAssetCommand = `${baseCommands.assets.registerAsset} --assetType compute --accountIndex 0 --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
     const registerStdout = execCommand(registerAssetCommand, execOpts)
@@ -43,9 +48,7 @@ describe('Compute e2e Testing', () => {
     did = parseDIDFromNewAsset(registerStdout)
     console.log(`DID: ${did}`)
     expect(did === '' ? false : did.startsWith('did:nv:'))
-  })
 
-  test('Registering a new dataset and resolve the DID', async () => {
     const resolveDIDCommand = `${baseCommands.assets.resolveDID} ${did}`
     const stdoutResolve = execCommand(resolveDIDCommand, execOpts)
 
@@ -54,32 +57,7 @@ describe('Compute e2e Testing', () => {
     expect(stdoutResolve.includes(did))
   })
 
-  test('Registering a new algorithm', async () => {
-    const registerAlgorithmCommand = `${baseCommands.assets.registerAlgorithm} --name "Test Algorithm" --author "${metadataConfig.author}" --price "0" --language "python" --entrypoint "python word_count.py" --container "python:3.8-alpine"  --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
-    console.debug(`COMMAND: ${registerAlgorithmCommand}`)
-
-    const stdout = execCommand(registerAlgorithmCommand, execOpts)
-
-    console.log(`STDOUT: ${stdout}`)
-    algoDid = parseDIDFromNewAsset(stdout)
-    console.log(`DID: ${algoDid}`)
-    expect(algoDid === null ? false : algoDid.startsWith('did:nv:'))
-  })
-
-  test('Registering a workflow associating the data and the algorithm', async () => {
-
-    const registerWorkflowCommand = `${baseCommands.assets.registerWorkflow} --name "Test Worfklow" --author "${metadataConfig.author}" --input ${did}  --algorithm ${algoDid}`
-
-    const stdout = execCommand(registerWorkflowCommand, execOpts)
-
-    console.log(`STDOUT: ${stdout}`)
-    workflowDid = parseDIDFromNewAsset(stdout)
-    console.log(`DID: ${workflowDid}`)
-    expect(workflowDid === null ? false : workflowDid.startsWith('did:nv:'))
-
-  })
-
-  test('Order a compute job', async () => {    
+  test('Order a compute DDO', async () => {    
 
     const orderComputeCommand = `${baseCommands.compute.order} ${did}`
 
@@ -92,6 +70,32 @@ describe('Compute e2e Testing', () => {
       
   })
 
+  test('Registering a new algorithm', async () => {
+    const registerAlgorithmCommand = `${baseCommands.assets.registerAlgorithm} --name "Test Algorithm" --author "${metadataConfig.author}" --price "0" --language "python" --entrypoint "python word_count.py" --container "python:3.8-alpine"  --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
+    console.debug(`COMMAND: ${registerAlgorithmCommand}`)
+
+    const stdout = execCommand(registerAlgorithmCommand, execOpts)
+
+    console.log(`STDOUT: ${stdout}`)
+    algoDid = parseDIDFromNewAsset(stdout)
+    console.log(`ALGO DID: ${algoDid}`)
+    expect(algoDid === null ? false : algoDid.startsWith('did:nv:'))
+  })
+
+  test('Registering a workflow associating the data and the algorithm', async () => {
+
+    const registerWorkflowCommand = `${baseCommands.assets.registerWorkflow} --name "Test Worfklow" --author "${metadataConfig.author}" --input ${did}  --algorithm ${algoDid}`
+
+    const stdout = execCommand(registerWorkflowCommand, execOpts)
+
+    console.log(`STDOUT: ${stdout}`)
+    workflowDid = parseDIDFromNewAsset(stdout)
+    console.log(`WORKFLOW DID: ${workflowDid}`)
+    expect(workflowDid === null ? false : workflowDid.startsWith('did:nv:'))
+
+  })
+
+  
   test('Executing a compute job', async () => {    
 
     const execComputeCommand = `${baseCommands.compute.execute} ${workflowDid} --agremmentId ${agreementId}`
@@ -102,7 +106,6 @@ describe('Compute e2e Testing', () => {
     //jobId = parseServiceAgreementId(stdout)
     console.log(`jobId: ${jobId}`)
     expect(jobId !== null)
-
     
   })
 

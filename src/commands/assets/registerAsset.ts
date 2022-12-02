@@ -174,7 +174,7 @@ export const registerAsset = async (
     ddoMetadata,
     account,
     assetRewards,
-    ['access'],
+    assetType ==='compute'?['compute']:['access'],
     [],
     DEFAULT_ENCRYPTION_METHOD,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
