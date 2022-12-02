@@ -115,9 +115,9 @@ describe('Compute e2e Testing', () => {
   test.skip('Fetching status of a compute job', async () => {    
 
     // wait a couple of seconds to make sure the status of the job is created
-    await sleep(2000);
+    await sleep(4000);
 
-    const execComputeCommand = `${baseCommands.compute.status} ${agreementId} ${jobId}`
+    const execComputeCommand = `${baseCommands.compute.status} --jobId ${jobId} --agreementId ${agreementId}`
     const stdout = execCommand(execComputeCommand, execOpts)
     expect(stdout.includes('Status fetched:'))
     
@@ -125,7 +125,7 @@ describe('Compute e2e Testing', () => {
 
   test.skip('Fetching logs of a compute job', async () => {    
    
-    const execComputeCommand = `${baseCommands.compute.logs} ${agreementId} ${jobId}`
+    const execComputeCommand = `${baseCommands.compute.logs} --jobId ${jobId} --agreementId ${agreementId}`
     const stdout = execCommand(execComputeCommand, execOpts)
     expect(stdout.includes(`Logs for ${jobId} fetched correctly`))
     
