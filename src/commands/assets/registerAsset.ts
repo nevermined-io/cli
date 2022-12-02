@@ -68,14 +68,16 @@ export const registerAsset = async (
       })
       _fileIndex++
     }
-    argv.urls.forEach((_url: string) => {
-      _files.push({
-        index: _fileIndex,
-        url: _url,
-        contentType: argv.contentType
+    if (assetType!== 'workflow') {
+      argv.urls.forEach((_url: string) => {
+        _files.push({
+          index: _fileIndex,
+          url: _url,
+          contentType: argv.contentType
+        })
+        _fileIndex++
       })
-      _fileIndex++
-    })
+    }
 
     ddoMetadata = {
       main: {
