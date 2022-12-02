@@ -113,9 +113,9 @@ describe('Assets e2e Testing', () => {
 
   test('Search for an asset by query', async () => {
 
-    const query = "{\"bool\":{\"must\":[{\"query_string\":{\"query\":\"**\",\"fields\":[\"service.attributes.main.name\"]}}]}}"
+    const query = '{"bool":{"must":[{"query_string":{"query":"**","fields":["service.attributes.main.name"]}}]}}'
 
-    const queryAssetCommand = `${baseCommands.assets.queryAsset} ${query} `
+    const queryAssetCommand = `${baseCommands.assets.queryAsset} ${JSON.stringify(query)} `
     console.debug(`COMMAND: ${queryAssetCommand}`)
 
     const searchStdout = execCommand(queryAssetCommand, execOpts)
