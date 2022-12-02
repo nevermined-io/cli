@@ -110,6 +110,22 @@ describe('Assets e2e Testing', () => {
     expect(numberResults === null ? false : Number(numberResults) > 0)
   })
 
+
+  test('Search for an asset by query', async () => {
+
+    const query = '{"bool":{"must":[{"query_string":{"query":"*searching test*","fields":["service.attributes.main.name"]}}]}}'
+
+    const queryAssetCommand = `${baseCommands.assets.queryAsset} ${JSON.stringify(query)} `
+    console.debug(`COMMAND: ${queryAssetCommand}`)
+
+    const searchStdout = execCommand(queryAssetCommand, execOpts)
+    console.log(`STDOUT: ${searchStdout}`)
+
+    const numberResults = parseNumberResultsFromSearch(searchStdout)
+    console.log(`Number of Results: ${numberResults}`)
+    expect(Number(numberResults) > 0)
+  })
+
   test('Download my own asset', async () => {
     const downloadCommand = `${baseCommands.assets.downloadAsset} ${did}  --accountIndex 0 --destination /tmp --fileIndex 0`
     console.debug(`COMMAND: ${downloadCommand}`)
