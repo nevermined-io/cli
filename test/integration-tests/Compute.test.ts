@@ -94,7 +94,7 @@ describe('Compute e2e Testing', () => {
 
   test('Executing a compute job', async () => {    
 
-    const execComputeCommand = `${baseCommands.compute.execute} ${did} --agremmentId ${agreementId}`
+    const execComputeCommand = `${baseCommands.compute.execute} ${workflowDid} --agremmentId ${agreementId}`
 
     const stdout = execCommand(execComputeCommand, execOpts)
 

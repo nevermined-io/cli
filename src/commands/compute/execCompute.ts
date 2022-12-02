@@ -31,6 +31,11 @@ export const execCompute = async (
 
   try {
     const jobId = await nvm.assets.execute(agreementId, did, account)
+
+    logger.info(
+      chalk.dim(`Created Job ${jobId}.`)
+    )
+
     return {
       status: StatusCodes.OK,
       results: JSON.stringify({

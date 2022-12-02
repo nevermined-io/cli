@@ -20,6 +20,11 @@ export const logsJob = async (
 
   try {
     const computeLogs = await nvm.assets.computeLogs(agreementId, jobId, account)
+
+    logger.info(
+      chalk.dim(`Logs for ${jobId} fetched correctly`)
+    )
+
     return {
       status: StatusCodes.OK,
       results: JSON.stringify({      

@@ -22,6 +22,10 @@ export const statusJob = async (
 
     const computeStatus = await nvm.assets.computeStatus(agreementId, jobId, account)
 
+    logger.info(
+      chalk.dim(`Status fetched: ${computeStatus}`)
+    )
+
     return {
       status: StatusCodes.OK,
       results: JSON.stringify({      
