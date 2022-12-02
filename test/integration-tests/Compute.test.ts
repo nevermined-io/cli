@@ -1,7 +1,8 @@
 import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
-  parseServiceAgreementId
+  parseServiceAgreementId,
+  parseComputeJobId
 } from '../helpers/StdoutParser'
 import execCommand from '../helpers/ExecCommand'
 
@@ -103,19 +104,30 @@ describe('Compute e2e Testing', () => {
     const stdout = execCommand(execComputeCommand, execOpts)
 
     console.log(`STDOUT: ${stdout}`)
-    //jobId = parseServiceAgreementId(stdout)
+    jobId = parseComputeJobId(stdout)
     console.log(`jobId: ${jobId}`)
     expect(jobId !== null)
     
   })
 
+  const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
   test.skip('Fetching status of a compute job', async () => {    
-    console.error(`PENDING TO IMPLEMENT`)
+
+    // wait a couple of seconds to make sure the status of the job is created
+    await sleep(2000);
+
+    const execComputeCommand = `${baseCommands.compute.status} ${agreementId} ${jobId}`
+    const stdout = execCommand(execComputeCommand, execOpts)
+    expect(stdout.includes('Status fetched:'))
     
   })
 
   test.skip('Fetching logs of a compute job', async () => {    
-    console.error(`PENDING TO IMPLEMENT`)
+   
+    const execComputeCommand = `${baseCommands.compute.logs} ${agreementId} ${jobId}`
+    const stdout = execCommand(execComputeCommand, execOpts)
+    expect(stdout.includes(`Logs for ${jobId} fetched correctly`))
     
   })
 })

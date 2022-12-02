@@ -30,6 +30,9 @@ export const commandRegex = {
   },
   utils: {
     upload: new RegExp('URL: (.*)\\nPassword: (.*)\\n', 'gm')
+  },
+  compute: {
+    execute: new RegExp('.*Created Job (.*)', 'gm')
   }
 }
 
@@ -149,3 +152,12 @@ export const parseAddressOfContractDeployed = (stdout: string): string => {
   }
   return ''
 }
+
+export const parseComputeJobId = (stdout: string): string  => {
+  const jobId = commandRegex.compute.execute.exec(stdout)
+  if (jobId != null) {
+    return jobId[1]
+  }
+  return ''
+}
+
