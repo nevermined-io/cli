@@ -113,6 +113,43 @@ export const registerAsset = async (
         }
       }
     }
+
+    // TODO Add support for multiple stages/inputs when ComputePods does
+    if (assetType === 'workflow') {
+      const input = argv.input
+      const algorithm = argv.algorithm
+      ddoMetadata.main.workflow = {
+        coordinationType: 'argo',
+        stages: [
+          {
+            index: 0,
+            // TODO - irrelevant. this info is included in algorithm ddo. update sdk-js to remove this from metadata
+            requirements: {
+              container: {
+                image: '',
+                tag: '',
+                checksum:
+                    ''
+              }
+            },
+            input: [
+              {
+                index: 0,
+                id: input
+              }
+            ],
+            transformation: {
+              id: algorithm
+            },
+            output: {
+              metadataUrl: `${config.nvm.marketplaceUri}/api/v1/metadata/assets/ddo/`,
+              accessProxyUrl: `${config.nvm.neverminedNodeUri}/api/v1/node/`,
+              metadata: {} as any
+            }
+          }
+        ]             
+      }
+    }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
   }
