@@ -1231,6 +1231,23 @@
 					"description": "The password to be used to decrypt the file"
 				}]
 			}, {
+				"name": "encrypt [file]",
+				"description": "Encrypt a file",
+				"details": "It encrypts a previously encrypted file using the password provided.",
+				"examples": ["ncli utils encrypt README.md --password 12345678"],
+				"commandHandler": "encryptFile",
+				"positionalArguments": [{
+					"name": "file",
+					"type": "string",
+					"description": "The path to the file to encrypt"
+				}],
+				"optionalArguments": [{
+					"name": "password",
+					"type": "string",
+					"default": "",
+					"description": "The password to be used to encrypt the file"
+				}]
+			}, {
 				"name": "publish-nft-metadata",
 				"description": "It publish the metadata associated to a NFT into external storage",
 				"details": "The NFTs use some basic metadata allowing to some external Marketplaces to discover them and provide some additional information. This command allows to publish NFT metadata in the regular format supported by most popular marketplaces.",

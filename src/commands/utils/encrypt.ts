@@ -4,9 +4,9 @@ import fs from 'fs'
 import { Logger } from 'log4js'
 import { StatusCodes } from '../../utils'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { aes_decryption_256 } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
+import { aes_encryption_256 } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
 
-export const decryptFile = async (
+export const encryptFile = async (
   nvm: Nevermined,
   account: Account,
   argv: any,
@@ -15,16 +15,16 @@ export const decryptFile = async (
 ): Promise<ExecutionOutput> => {
   const { file, password } = argv
   const encrypted = fs.readFileSync(file).toString('binary')
-  const decrypted = aes_decryption_256(encrypted, password)
+  const decrypted = aes_encryption_256(encrypted, password)
 
-  const filePathDecrypted = file + '.decrypted'
-  fs.writeFileSync(filePathDecrypted, Buffer.from(decrypted, 'binary'))
-  logger.info(filePathDecrypted)
+  const filePathEncrypted = file + '.encrypted'
+  fs.writeFileSync(filePathEncrypted, Buffer.from(decrypted, 'binary'))
+  logger.info(filePathEncrypted, 'password:', password)
 
   return {
     status: StatusCodes.OK,
     results: JSON.stringify({
-      filePathDecrypted
+      filePathEncrypted
     })
   }
 }
