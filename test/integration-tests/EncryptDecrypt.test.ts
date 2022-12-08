@@ -1,10 +1,4 @@
 import { execOpts, baseCommands } from '../helpers/Config'
-import {
-  parseDIDFromNewAsset,
-  parseDownloadFile,
-  parsePasswordFromOrder,
-  parseUrlAndPassword
-} from '../helpers/StdoutParser'
 import execCommand from '../helpers/ExecCommand'
 
 // TODO: Re-enable DTP tests when `sdk-dtp` is published back
