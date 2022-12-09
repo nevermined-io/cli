@@ -112,12 +112,12 @@ describe('Compute e2e Testing', () => {
     
   })
 
-  const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+  const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
   test.skip('Fetching status of a compute job', async () => {    
 
     // wait a couple of seconds to make sure the status of the job is created
-    await sleep(4000);
+    await sleep(4000)
 
     const execComputeCommand = `${baseCommands.compute.status} --jobId ${jobId} --agreementId ${agreementId}`
     const stdout = execCommand(execComputeCommand, execOpts)
