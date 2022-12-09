@@ -57,6 +57,7 @@ export const baseCommands = {
     registerWorkflow: `${BASE_COMMAND} ${VERBOSE} assets register-workflow `,
     importMetadata: `${BASE_COMMAND} ${VERBOSE} assets import `,
     searchAsset: `${BASE_COMMAND} ${VERBOSE} assets search `,
+    queryAsset: `${BASE_COMMAND} ${VERBOSE} assets query `,
     downloadAsset: `${BASE_COMMAND} ${VERBOSE} assets download `,
     orderAsset: `${BASE_COMMAND} ${VERBOSE} assets order `,
     getAsset: `${BASE_COMMAND} ${VERBOSE} assets get `,
