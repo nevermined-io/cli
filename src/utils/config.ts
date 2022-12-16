@@ -178,32 +178,52 @@ export function getConfig(
         process.env.KEYFILE_PATH!,
         process.env.KEYFILE_PASSWORD!
       )
-      hdWalletProvider = new HDWalletProvider(
-        [
+      hdWalletProvider = new HDWalletProvider({
+        privateKeys: [
           getPrivateKey(
             process.env.KEYFILE_PATH!,
             process.env.KEYFILE_PASSWORD!
           )
         ],
-        config.nvm.web3ProviderUri
-      )
+        providerOrUrl: config.nvm.web3ProviderUri,
+      })
+      // hdWalletProvider = new HDWalletProvider(
+      //   [
+      //     getPrivateKey(
+      //       process.env.KEYFILE_PATH!,
+      //       process.env.KEYFILE_PASSWORD!
+      //     )
+      //   ],
+      //   config.nvm.web3ProviderUri
+      // )
     } else {
       signer = Wallet.fromMnemonic(config.seed!)
-      hdWalletProvider = new HDWalletProvider(
-        config.seed!,
-        config.nvm.web3ProviderUri,
-        accountIndex,
-        10
-      )
+      hdWalletProvider = new HDWalletProvider({
+        mnemonic: config.seed!,
+        providerOrUrl: config.nvm.web3ProviderUri,
+        addressIndex: accountIndex,
+        numberOfAddresses: 10
+      })      
+      // hdWalletProvider = new HDWalletProvider(
+        // config.seed!,
+        // config.nvm.web3ProviderUri,
+        // accountIndex,
+        // 10
+      // )
     }
   } else {
     signer = Wallet.fromMnemonic(DUMMY_SEED_WORDS)
-    hdWalletProvider = new HDWalletProvider(
-      DUMMY_SEED_WORDS,
-      config.nvm.web3ProviderUri,
-      0,
-      1
-    )
+    hdWalletProvider = new HDWalletProvider({
+      mnemonic: DUMMY_SEED_WORDS,
+      providerOrUrl: config.nvm.web3ProviderUri,
+      addressIndex: 0,
+      numberOfAddresses: 1
+    })
+    //   DUMMY_SEED_WORDS,
+    //   config.nvm.web3ProviderUri,
+    //   0,
+    //   1
+    // )
   }
 
   return {
