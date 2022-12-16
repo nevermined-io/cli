@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, StageInput } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printTokenBanner,
@@ -118,8 +118,9 @@ export const registerAsset = async (
 
     // TODO Add support for multiple stages/inputs when ComputePods does
     if (assetType === 'workflow') {
-      const input = argv.input
+      const argvInput = argv.input as string
       const algorithm = argv.algorithm
+
       ddoMetadata.main.workflow = {
         coordinationType: 'argo',
         stages: [
@@ -130,16 +131,13 @@ export const registerAsset = async (
               container: {
                 image: '',
                 tag: '',
-                checksum:
-                    ''
+                checksum: ''
               }
             },
-            input: [
-              {
-                index: 0,
-                id: input
-              }
-            ],
+            input: [{
+              index: 0, 
+              id: argvInput
+            }],
             transformation: {
               id: algorithm
             },
