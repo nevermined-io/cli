@@ -1,4 +1,4 @@
-import { Account, Nevermined, StageInput } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printTokenBanner,
