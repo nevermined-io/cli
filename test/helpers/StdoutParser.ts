@@ -30,6 +30,11 @@ export const commandRegex = {
   },
   utils: {
     upload: new RegExp('URL: (.*)\\nPassword: (.*)\\n', 'gm')
+  },
+  compute: {
+    execute: new RegExp('.*Created Job (.*)', 'gm'),
+    algorithm: new RegExp('.*Created Asset.(.{71}).*', 'g'),
+    workflow: new RegExp('.*Created Asset.(.{71}).*', 'g')
   }
 }
 
@@ -149,3 +154,28 @@ export const parseAddressOfContractDeployed = (stdout: string): string => {
   }
   return ''
 }
+
+export const parseComputeJobId = (stdout: string): string  => {
+  const jobId = commandRegex.compute.execute.exec(stdout)
+  if (jobId != null) {
+    return jobId[1]
+  }
+  return ''
+}
+
+export const parseDIDFromNewAlgorithm = (stdout: string): string => {
+  const did = commandRegex.compute.algorithm.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+
+export const parseDIDFromNewWorkflow = (stdout: string): string => {
+  const did = commandRegex.compute.workflow.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+

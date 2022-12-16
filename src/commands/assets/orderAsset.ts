@@ -19,7 +19,7 @@ export const orderAsset = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { did } = argv
+  const { did, orderType } = argv
 
   // TODO: Enable DTP when `sdk-dtp` is ready
   // const keyTransfer = await makeKeyTransfer()
@@ -28,7 +28,10 @@ export const orderAsset = async (
 
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
-  const agreementId = await nvm.assets.order(did, 'access', account)
+  const agreementId = await nvm.assets.order(
+    did, 
+    orderType === 'compute'?'compute':'access', 
+    account)
   // }
 
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))

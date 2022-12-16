@@ -68,14 +68,16 @@ export const registerAsset = async (
       })
       _fileIndex++
     }
-    argv.urls.forEach((_url: string) => {
-      _files.push({
-        index: _fileIndex,
-        url: _url,
-        contentType: argv.contentType
+    if (assetType!== 'workflow') {
+      argv.urls.forEach((_url: string) => {
+        _files.push({
+          index: _fileIndex,
+          url: _url,
+          contentType: argv.contentType
+        })
+        _fileIndex++
       })
-      _fileIndex++
-    })
+    }
 
     ddoMetadata = {
       main: {
@@ -113,6 +115,41 @@ export const registerAsset = async (
         }
       }
     }
+
+    // TODO Add support for multiple stages/inputs when ComputePods does
+    if (assetType === 'workflow') {
+      const argvInput = argv.input as string
+      const algorithm = argv.algorithm
+
+      ddoMetadata.main.workflow = {
+        coordinationType: 'argo',
+        stages: [
+          {
+            index: 0,
+            // TODO - irrelevant. this info is included in algorithm ddo. update sdk-js to remove this from metadata
+            requirements: {
+              container: {
+                image: '',
+                tag: '',
+                checksum: ''
+              }
+            },
+            input: [{
+              index: 0, 
+              id: argvInput
+            }],
+            transformation: {
+              id: algorithm
+            },
+            output: {
+              metadataUrl: `${config.nvm.marketplaceUri}/api/v1/metadata/assets/ddo/`,
+              accessProxyUrl: `${config.nvm.neverminedNodeUri}/api/v1/node/`,
+              metadata: {} as any
+            }
+          }
+        ]             
+      }
+    }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
   }
@@ -135,7 +172,7 @@ export const registerAsset = async (
     ddoMetadata,
     account,
     assetRewards,
-    ['access'],
+    assetType ==='compute'?['compute']:['access'],
     [],
     DEFAULT_ENCRYPTION_METHOD,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

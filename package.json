@@ -1,6 +1,6 @@
 {
   "name": "@nevermined-io/cli",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "main": "index.js",
   "repository": "git@github.com:nevermined-io/cli.git",
   "author": "Nevermined",
@@ -22,9 +22,9 @@
     "ncli": "./dist/src/index.js"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "0.26.0",
-    "@nevermined-io/nevermined-sdk-dtp": "0.2.2",
-    "@truffle/hdwallet-provider": "^2.0.9",
+    "@nevermined-io/nevermined-sdk-js": "0.27.3",
+    "@nevermined-io/nevermined-sdk-dtp": "0.2.4",
+    "@truffle/hdwallet-provider": "^2.1.3",
     "chalk": "^4.1.2",
     "cross-fetch": "~3.1.5",
     "dotenv": "^16.0.1",
