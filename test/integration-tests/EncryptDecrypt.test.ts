@@ -1,5 +1,6 @@
 import { execOpts, baseCommands } from '../helpers/Config'
 import execCommand from '../helpers/ExecCommand'
+import fs from 'fs'
 
 // TODO: Re-enable DTP tests when `sdk-dtp` is published back
 describe('Assets e2e Testing', () => {
@@ -22,5 +23,8 @@ describe('Assets e2e Testing', () => {
     console.log(`STDOUT: ${decryptStdout}`)
 
     expect(decryptStdout.includes(`File decrypted successfully`))
+
+    expect(fs.readFileSync('README.md.encrypted.decrypted') == fs.readFileSync('README.md'))
+
   })
 })

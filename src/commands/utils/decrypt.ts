@@ -14,7 +14,7 @@ export const decryptFile = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  logger.info(chalk.dim(`Encrypting file`))
+  logger.info(chalk.dim(`Decrypting file`))
   const { file, password } = argv
   const encrypted = fs.readFileSync(file).toString('binary')
   const decrypted = aes_decryption_256(encrypted, password)

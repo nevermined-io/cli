@@ -1223,17 +1223,18 @@
 					"name": "file",
 					"type": "string",
 					"description": "The path to the file to decrypt"
-				}],
-				"optionalArguments": [{
+				},
+				{
 					"name": "password",
 					"type": "string",
 					"default": "",
 					"description": "The password to be used to decrypt the file"
-				}]
+				}],
+				"optionalArguments": []
 			}, {
 				"name": "encrypt [file]",
 				"description": "Encrypt a file",
-				"details": "It encrypts a previously encrypted file using the password provided.",
+				"details": "It encrypts a file using the password provided.",
 				"examples": ["ncli utils encrypt README.md --password 12345678"],
 				"commandHandler": "encryptFile",
 				"positionalArguments": [{
@@ -1245,7 +1246,7 @@
 					"name": "password",
 					"type": "string",
 					"default": "",
-					"description": "The password to be used to encrypt the file"
+					"description": "The password to be used to encrypt the file. If empty, a new password will be generated"
 				}]
 			}, {
 				"name": "publish-nft-metadata",
