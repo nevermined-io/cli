@@ -1,4 +1,4 @@
-import { Config } from '@nevermined-io/nevermined-sdk-js'
+import { NeverminedOptions } from '@nevermined-io/nevermined-sdk-js'
 import { Signer } from 'ethers'
 
 export interface CliConfig {
@@ -6,7 +6,7 @@ export interface CliConfig {
 }
 
 export interface ConfigEntry {
-  nvm: Config
+  nvm: NeverminedOptions
   signer: Signer
   envDescription?: string
   envUrl?: string

@@ -18,8 +18,8 @@ export const searchAsset = async (
   logger.info(chalk.dim(`Search using query: ${chalk.green(query)}`))
 
   logger.debug(chalk.dim(`Using Marketplace API: ${config.nvm.marketplaceUri}`))  
-
-  const queryResults = await nvm.assets.search(query, argv.offset, argv.page)
+  
+  const queryResults = await nvm.search.byText(query, argv.offset, argv.page)
   let metadataResult
 
   if (onlyMetadata) {

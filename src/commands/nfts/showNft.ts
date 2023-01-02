@@ -1,4 +1,4 @@
-import { DDO, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
@@ -10,7 +10,7 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import {
-  getAssetRewardsFromDDOByService,
+  getAssetPriceFromDDOByService,
   zeroX
 } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
@@ -92,7 +92,7 @@ export const showNft = async (
   )
 
   const price = BigNumber.formatUnits(
-    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    getAssetPriceFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
     decimals
   )
 
@@ -103,16 +103,16 @@ export const showNft = async (
   )
 
   // TODO: Implement get `_contract` NFT address from DID/DDO
-  const nftDetails = await nvm.nfts.details(did)
-
+  let nftDetails
   let nftAddress = ''
   // Showing ERC-721 NFT information
-  if (metadata.attributes.main.ercType === 721) {
+  if (metadata.attributes.main.ercType == 721) {
+    nftDetails = await nvm.nfts721.details(did)
     nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
-    const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
+    const nft = await nvm.contracts.loadNft721(nftAddress)
 
     if (verbose) {
-      await printNftTokenBanner(nft)
+      await printNftTokenBanner(nft.getContract)
     }
 
     logger.info(
@@ -132,12 +132,13 @@ export const showNft = async (
     )
 
     try {
-      const contractTokenUri = await nft.contract.tokenURI(zeroX(ddo.shortId()))
+      const contractTokenUri = await nft.getContract.tokenURI(zeroX(ddo.shortId()))
       logger.info(chalk.dim(`Url: ${chalk.whiteBright(contractTokenUri)}`))
     } catch {
       logger.warn(`Token Id not found`)
     }
   } else {
+    nftDetails = await nvm.nfts1155.details(did)
     const storedDIDRegister: any = await nvm.keeper.didRegistry.getDIDRegister(
       did
     )

@@ -1,5 +1,5 @@
-import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
-import SubscriptionNft721 from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/SubscriptionNft721'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import Nft721Contract from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Nft721Contract'
 import { ContractReceipt, ethers } from 'ethers'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import {
@@ -71,11 +71,11 @@ export const deployNft = async (
       }
     }
   }
-  const nft721: Nft721 = await nvm.contracts.loadNft721(
+  const nft721 = await nvm.contracts.loadNft721(
     contractInstance.address
   )
 
-  await printNftTokenBanner(nft721)
+  await printNftTokenBanner(nft721.getContract)
 
   logger.info(`Contract deployed into address: ${contractInstance.address}\n`)
 
@@ -83,13 +83,13 @@ export const deployNft = async (
   try {
     // INFO: We allow transferNFT condition to mint NFTs
     // Typically this only needs to happen once per NFT contract
-    const erc721Contract = await SubscriptionNft721.getInstance(
+    const erc721Contract = await Nft721Contract.getInstance(
       (nvm.keeper as any).instanceConfig,
       contractInstance.address
   )  
     await erc721Contract.addMinter(
       nvm.keeper.conditions.transferNft721Condition.address,
-      creatorAccount.getId()
+      creatorAccount
     )
     logger.info(`Adding TransferNFT721Condition with address ${nvm.keeper.conditions.transferNft721Condition.address} as minter`)  
   } catch (error) {

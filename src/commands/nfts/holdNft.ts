@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, NFT1155Api, NFT721Api } from '@nevermined-io/nevermined-sdk-js'
 import { loadNFT1155Contract, StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -13,7 +13,7 @@ export const holdNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { did } = argv
+  const { did, nftType } = argv
 
   logger.info(
     chalk.dim(`Checks if an address is a NFT holder of the ${chalk.whiteBright(did)}`)
@@ -26,8 +26,10 @@ export const holdNft = async (
   let nftAddress = ''
   const userAddress = argv.address ? argv.address : consumerAccount.getId()
 
+  const nftApi = nftType == '721' ? NFT721Api : NFT1155Api
+
   try {
-    nftAddress = nvm.nfts.getNftContractAddress(ddo) as string  
+    nftAddress = nftApi.getNFTContractAddress(ddo) as string  
   } catch {
     nftAddress = nvm.keeper.nftUpgradeable.address
   }
@@ -35,7 +37,7 @@ export const holdNft = async (
   logger.info(`NFT Contract Address: ${nftAddress}`)
   logger.info(`Address to check: ${userAddress}`)
 
-  if (argv.nftType == 721) {     
+  if (nftType == 721) {     
     const nft = await nvm.contracts.loadNft721(nftAddress)
     balance = await nft.balanceOf(new Account(userAddress))
     isHolder = balance.gt(0)

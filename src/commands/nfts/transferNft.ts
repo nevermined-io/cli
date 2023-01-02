@@ -1,7 +1,7 @@
 import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { Constants, StatusCodes, loadToken } from '../../utils'
 import chalk from 'chalk'
-import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { getAssetPriceFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 import { Account } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -73,7 +73,7 @@ export const transferNft = async (
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
   const price = BigNumber.formatUnits(
-    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    getAssetPriceFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
     decimals
   )
 
@@ -88,7 +88,7 @@ export const transferNft = async (
       chalk.dim(`Transferring NFT (ERC-721) '${chalk.whiteBright(ddo.id)}' ...`)
     )
     // await nvm.nfts.transfer721(agreementId, ddo.id, userAccount)
-    isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
+    isSuccessfulTransfer = await nvm.nfts721.transferForDelegate(
       agreementId,
       sellerAddress,
       buyerAddress,
@@ -103,7 +103,7 @@ export const transferNft = async (
         `Transferring NFT (ERC-1155) '${chalk.whiteBright(ddo.id)}' ...`
       )
     )
-    isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
+    isSuccessfulTransfer = await nvm.nfts1155.transferForDelegate(
       agreementId,
       sellerAddress,
       buyerAddress,

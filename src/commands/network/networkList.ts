@@ -40,10 +40,7 @@ export const networkList = async (
         `\tMarketplace API: ${chalk.yellow(
           networksConfig[_key].nvm.marketplaceUri
         )}`
-      )
-      logger.info(
-        `\tFaucet: ${chalk.yellow(networksConfig[_key].nvm.faucetUri)}`
-      )
+      )      
       logger.info('\n')
     })
 
@@ -53,8 +50,7 @@ export const networkList = async (
       networks.map((_key) =>
         JSON.stringify({
           neverminedNodeUri: networksConfig[_key].nvm.neverminedNodeUri,
-          marketplaceUri: networksConfig[_key].nvm.marketplaceUri,
-          faucetUri: networksConfig[_key].nvm.faucetUri
+          marketplaceUri: networksConfig[_key].nvm.marketplaceUri
         })
       )
     )

@@ -1,7 +1,7 @@
 import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { Constants, StatusCodes, loadToken } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
-import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { getAssetPriceFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
@@ -30,7 +30,7 @@ export const orderNft = async (
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
   const price = BigNumber.formatUnits(
-    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    getAssetPriceFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
     decimals
   )
 
@@ -41,9 +41,9 @@ export const orderNft = async (
   let agreementId = ''
   if (argv.nftType === '721') {
     logger.info(`Lets order the did`)
-    agreementId = await nvm.nfts.order721(did, buyerAccount)
+    agreementId = await nvm.nfts721.order(did, buyerAccount)
   } else {
-    agreementId = await nvm.nfts.order(did, argv.amount, buyerAccount)
+    agreementId = await nvm.nfts1155.order(did, argv.amount, buyerAccount)
   }
 
   logger.info(

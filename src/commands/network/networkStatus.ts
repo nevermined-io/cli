@@ -19,7 +19,7 @@ export const networkStatus = async (
 ): Promise<ExecutionOutput> => {
   const { network } = argv
 
-  const platformVersions = await nvm.versions.get()
+  const platformVersions = await nvm.utils.versions.get()
 
   logger.info(
     chalk.dim(
@@ -118,11 +118,6 @@ export const networkStatus = async (
       `  Version ${chalk.bgBlue(await platformVersions.metadata.version)}`
     )
   )
-
-  // Faucet
-  logger.info('')
-  logger.info(chalk.dim(`${chalk.whiteBright('Faucet')}:`))
-  logger.info(chalk.dim(`  URL: ${chalk.yellow(configEntry.nvm.faucetUri)}`))
 
   logger.info('')
   logger.info(chalk.dim(`${chalk.whiteBright('Validations')}:`))

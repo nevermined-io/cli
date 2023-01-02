@@ -26,7 +26,7 @@ export const uploadFile = async (
 
   try {
     const stream = fs.createReadStream(file)
-    const { url, password } = await nvm.files.uploadFilecoin(stream, encrypt)
+    const { url, password } = await nvm.utils.files.uploadFilecoin(stream, encrypt)
     logger.info(`File uploaded to URL: ${url}`)
     if (password) {
       logger.info(`Password: ${password}`)

@@ -1,27 +1,23 @@
-import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printNftTokenBanner,
   loadToken,
-  DEFAULT_ENCRYPTION_METHOD,
   loadNeverminedConfigContract,
   getFeesFromBigNumber
 } from '../../utils'
 import chalk from 'chalk'
 import { File, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
-import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
-import {
-  getRoyaltyAttributes,
-  RoyaltyKind
-} from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/Assets'
-import { NeverminedNFT721Type } from '@nevermined-io/nevermined-sdk-js/dist/node/models/NFTAttributes'
+import { NeverminedNFT1155Type, NeverminedNFT721Type, NFTAttributes } from '@nevermined-io/nevermined-sdk-js/dist/node/models/NFTAttributes'
 import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
+import { getRoyaltyAttributes, RoyaltyKind } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/api/AssetsApi'
+import AssetPrice from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetPrice'
 
 export const createNft = async (
   nvm: Nevermined,
@@ -102,9 +98,10 @@ export const createNft = async (
 
   const configContract = loadNeverminedConfigContract(config)
   const networkFee = await configContract.getMarketplaceFee()
-  const assetRewards = new AssetRewards(creatorAccount.getId(), ddoPrice)
+  const assetPrice = new AssetPrice(creatorAccount.getId(), ddoPrice)
+    .setTokenAddress(token ? token.getAddress() : config.erc20TokenAddress)
   if (networkFee.gt(0)) {
-    assetRewards.addNetworkFees(
+    assetPrice.addNetworkFees(
       await configContract.getFeeReceiver(),
       networkFee
     )
@@ -128,53 +125,91 @@ export const createNft = async (
   let ddo
 
   if (argv.nftType === '721') {
-    const nft: Nft721 = await nvm.contracts.loadNft721(argv.nftAddress)
+    const nft721Api = await nvm.contracts.loadNft721(argv.nftAddress)
 
     if (verbose) {
-      await printNftTokenBanner(nft)
+      await printNftTokenBanner(nft721Api.getContract)
     }
 
-    ddo = await nvm.assets.createNft721(
-      ddoMetadata,
-      creatorAccount,
-      assetRewards,
-      DEFAULT_ENCRYPTION_METHOD,
-      argv.nftAddress,
-      token ? token.getAddress() : config.erc20TokenAddress,
-      argv.preMint,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      [config.nvm.neverminedNodeAddress!],
+    const nftAttributes = NFTAttributes.getNFT721Instance({
+      metadata,
+      price: assetPrice,
+      ercType: 721,
+      nftType: argv.subscription ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721,
+      serviceTypes: services,
+      nftContractAddress: nft721Api.nftContract.address,
+      preMint: argv.preMint,
+      providers: [config.nvm.neverminedNodeAddress!],
       royaltyAttributes,
-      argv.nftMetadata,
-      services,
-      argv.transfer,
-      argv.subscription ? argv.duration: 0,
-      argv.subscription ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721
-    )
+      nftMetadataUrl: argv.nftMetadata,
+      nftTransfer: argv.transfer,
+      isSubscription: argv.subscription ? argv.duration: 0
+    })            
+    ddo = await nvm.nfts721.create(
+        nftAttributes,
+        creatorAccount
+    )    
+    // ddo = await nvm.nfts721.create(
+    //   ddoMetadata,
+    //   creatorAccount,
+    //   assetRewards,
+    //   DEFAULT_ENCRYPTION_METHOD,
+    //   argv.nftAddress,
+    //   token ? token.getAddress() : config.erc20TokenAddress,
+    //   argv.preMint,
+    //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    //   [config.nvm.neverminedNodeAddress!],
+    //   royaltyAttributes,
+    //   argv.nftMetadata,
+    //   services,
+    //   argv.transfer,
+    //   argv.subscription ? argv.duration: 0,
+    //   argv.subscription ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721
+    // )
   } else {
-    ddo = await nvm.assets.createNft(
-      ddoMetadata,
-      creatorAccount,
-      assetRewards,
-      DEFAULT_ENCRYPTION_METHOD,
-      argv.cap,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      [config.nvm.neverminedNodeAddress!],
-      BigNumber.from(1),
+    const nftAttributes = NFTAttributes.getNFT721Instance({
+      metadata,
+      price: assetPrice,
+      ercType: 1155,
+      nftType: NeverminedNFT1155Type.nft1155,
+      serviceTypes: services,
+      nftContractAddress: argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),
+      cap: argv.cap,
+      preMint: argv.preMint,
+      providers: [config.nvm.neverminedNodeAddress!],
       royaltyAttributes,
-      token ? token.getAddress() : config.erc20TokenAddress,
-      argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),
-      argv.preMint,
-      argv.nftMetadata,
-      services
-    )
+      nftMetadataUrl: argv.nftMetadata,
+      nftTransfer: argv.transfer,
+      isSubscription: argv.subscription ? argv.duration: 0
+    })            
+    ddo = await nvm.nfts1155.create(
+        nftAttributes,
+        creatorAccount
+    ) 
+
+    // ddo = await nvm.assets.createNft(
+    //   ddoMetadata,
+    //   creatorAccount,
+    //   assetPrice,
+    //   DEFAULT_ENCRYPTION_METHOD,
+    //   argv.cap,
+    //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    //   [config.nvm.neverminedNodeAddress!],
+    //   BigNumber.from(1),
+    //   royaltyAttributes,
+    //   token ? token.getAddress() : config.erc20TokenAddress,
+    //   argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),
+    //   argv.preMint,
+    //   argv.nftMetadata,
+    //   services
+    // )
 
     const isApproved = await nvm.keeper.nftUpgradeable.isApprovedForAll(
       creatorAccount.getId(),
       config.nvm.neverminedNodeAddress!
     )
     if (!isApproved) {
-      const receipt = await nvm.nfts.setApprovalForAll(
+      const receipt = await nvm.nfts1155.setApprovalForAll(
         config.nvm.neverminedNodeAddress!,
         true,
         creatorAccount

@@ -35,7 +35,7 @@ export const getAsset = async (
     nevermined: nvm,
   }
 
-  const nodeInfo = await nvm.node.getNeverminedNodeInfo()
+  const nodeInfo = await nvm.services.node.getNeverminedNodeInfo()
   const cryptoConfig: CryptoConfig = {
     provider_key: '',
     provider_password: '',
@@ -55,7 +55,7 @@ export const getAsset = async (
 
   if (!argv.agreementId) {
     logger.info(chalk.dim(`Ordering asset: ${did}`))
-    agreementId = await nvm.assets.order(did, 'access', account)
+    agreementId = await nvm.assets.order(did, account)
   } else {
     agreementId = argv.agreementId
   }
@@ -77,7 +77,7 @@ export const getAsset = async (
     argv.destination :
     `${argv.destination}/`
 
-  const path = await nvm.assets.consume(
+  const path = await nvm.assets.access(
     agreementId,
     did,
     account,

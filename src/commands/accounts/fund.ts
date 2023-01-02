@@ -15,63 +15,40 @@ export const accountsFund = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, token } = argv
+  const { verbose } = argv
 
   let errorMessage = ''
   const results: string[] = []
   logger.info(
-    chalk.dim(`Funding account: '${chalk.whiteBright(account.getId())}'`)
+    chalk.dim(`Funding account with ERC20: '${chalk.whiteBright(account.getId())}'`)
   )
   
-  if (token === 'both' || token === 'native') {
-    try {
-      await nvm.faucet.requestEth(account.getId())
-      logger.info(
-        chalk.dim(
-          `Funded Native token to ${chalk.whiteBright(account.getId())}`
-        )
+  try {
+    logger.info(
+      chalk.dim(
+        `Calling Dispenser with address ${nvm.keeper.dispenser.getAddress()} to get 
+        ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(account.getId())}`
       )
-      results.push('native')
-    } catch (err) {
-      errorMessage = `Funding Native token to ${chalk.whiteBright(
-        account.getId())} failed!`
-      logger.error(errorMessage)
-
-      if (verbose) {
-        logger.debug(err)
-      }
-    }
-  }
-
-  if (token === 'both' || token === 'erc20') {
-    try {
-      logger.info(
-        chalk.dim(
-          `Calling Dispenser to get ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(
-            account.getId()
-          )}`
-        )
+    )
+    await nvm.keeper.dispenser.requestTokens(
+      ERC20_DISPENSED_AMOUNT,
+      account.getId()
+    )
+    logger.info(
+      chalk.dim(
+        `Funded ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(
+          account.getId()
+        )}`
       )
-      await nvm.keeper.dispenser.requestTokens(
-        ERC20_DISPENSED_AMOUNT,
-        account.getId()
-      )
-      logger.info(
-        chalk.dim(
-          `Funded ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(
-            account.getId()
-          )}`
-        )
-      )
-      results.push('erc20')
-    } catch (err) {
-      const erc20ErrorMessage = `Funding ERC20 Tokens to ${chalk.whiteBright(
-        account.getId())} failed!`
-      logger.error(erc20ErrorMessage)
-      errorMessage = `${errorMessage}, ${erc20ErrorMessage}`
-      if (verbose) {
-        logger.debug(err)
-      }
+    )
+    results.push('erc20')
+  } catch (err) {
+    const erc20ErrorMessage = `Funding ERC20 Tokens to ${chalk.whiteBright(
+      account.getId())} failed!`
+    logger.error(erc20ErrorMessage)
+    errorMessage = `${errorMessage}, ${erc20ErrorMessage}`
+    if (verbose) {
+      logger.debug(err)
     }
   }
 

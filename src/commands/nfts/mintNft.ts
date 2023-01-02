@@ -1,4 +1,4 @@
-import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -50,13 +50,13 @@ export const mintNft = async (
 
     const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
 
-    const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
+    const nft = await nvm.contracts.loadNft721(nftAddress)
     if (verbose) {
-      await printNftTokenBanner(nft)
+      await printNftTokenBanner(nft.getContract)
     }
 
     // We check the number of parameters expected by the mint function to adapt the parameters
-    const mintAbiDefinition = nft.contract.contract.interface.fragments
+    const mintAbiDefinition = nft.getContract.contract.interface.fragments
       .filter((item: { name: string }) => item.name === 'mint')
       .map((entry: { inputs: any }) => entry.inputs)
 

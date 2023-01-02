@@ -6,22 +6,21 @@ import {
 import {
   Account,
   DDO,
-  Nevermined,
-  Nft721,
-  ProvenanceMethod,
-  ProvenanceRegistry
+  Nevermined
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import { Constants } from './enums'
 import { ARTIFACTS_PATH, logger } from './config'
-import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
+import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/services/metadata/MetadataService'
 import { Configuration, Logger } from 'log4js'
 import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 import { ethers } from 'ethers'
 import { ConfigEntry } from '../models/ConfigDefinition'
 import * as fs from 'fs'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
+import { ProvenanceMethod, ProvenanceRegistry } from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Provenance'
+import Nft721Contract from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Nft721Contract'
 
 export const loadNevermined = async (
   config: ConfigEntry,
@@ -46,7 +45,7 @@ export const loginMarketplaceApi = async (
   account: Account
 ): Promise<boolean> => {
   const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)
-  await nvm.marketplace.login(clientAssertion)
+  await nvm.services.marketplace.login(clientAssertion)
   return true
 }
 
@@ -164,7 +163,7 @@ export const findAccountOrFirst = (
   return accounts[0]
 }
 
-export const printNftTokenBanner = async (nft721: Nft721) => {
+export const printNftTokenBanner = async (nft721: Nft721Contract) => {
   const { address } = nft721
 
   logger.info('\n')
@@ -313,7 +312,7 @@ export const getContractNameFromAddress = async (
   nvm: Nevermined,
   contractAddress: string
 ): Promise<string | undefined> => {
-  const platformVersions = await nvm.versions.get()
+  const platformVersions = await nvm.utils.versions.get()
 
   let contractName = undefined
   Object.keys(platformVersions.sdk.contracts || {}).forEach((_name) => {

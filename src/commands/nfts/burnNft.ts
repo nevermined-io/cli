@@ -1,4 +1,4 @@
-import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -45,17 +45,17 @@ export const burnNft = async (
 
     const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
 
-    const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
+    const nft721Api = await nvm.contracts.loadNft721(nftAddress)
 
     if (verbose) {
-      await printNftTokenBanner(nft)
+      await printNftTokenBanner(nft721Api.getContract)
     }
 
     const to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
 
     // Some ERC-721 NFT contracts don't implement the burn function
     // Se we are checking if it's already there
-    const burnAbiDefinition = nft.contract.contract.interface.fragments.filter(
+    const burnAbiDefinition = nft721Api.nftContract.contract.interface.fragments.filter(
       (item: { name: string }) => item.name === 'burn'
     )
 
@@ -66,7 +66,7 @@ export const burnNft = async (
       }
     }
 
-    await nft.contract.call(
+    await nft721Api.nftContract.call(
       'burn',
       [zeroX(ddo.shortId())],
       burnerAccount.getId()

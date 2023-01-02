@@ -12,7 +12,7 @@ export const downloadNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { did, agreementId } = argv
+  const { did, agreementId, nftType } = argv
 
   const destination = argv.destination.substring(argv.destination.length - 1) === '/' ?
     argv.destination :
@@ -25,7 +25,9 @@ export const downloadNft = async (
 
   console.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
 
-  await nvm.nfts.access(
+  const nftApi = nftType == '721' ? nvm.nfts721 : nvm.nfts1155
+
+  await nftApi.access(
     did,
     consumerAccount,
     destination,

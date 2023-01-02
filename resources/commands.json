@@ -124,7 +124,7 @@
 				}]
 			}, {
 				"name": "fund [account]",
-				"description": "Funds an account on a testnet",
+				"description": "Funds an account with ERC20 tokens on a testnet",
 				"details": "In the test environments all tokens lack real value. Typically in Nevermined you need to use different type of tokens. The Native token (`ETH`, `MATIC`, etc) to pay for the gas resulting to write into a blockchain network, and optionally with a `ERC20` token to do some payments. This command allows to get some funds in a testnet environment allowing to a user to run different processes on a testnet. This command will not work in production environments where the tokens have actual value.",
 				"examples": ["ncli accounts fund 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
 				"commandHandler": "accountsFund",
@@ -133,12 +133,7 @@
 					"type": "string",
 					"description": "The account to fund"
 				}],
-				"optionalArguments": [{
-					"name": "token",
-					"type": "string",
-					"default": "both",
-					"description": "What kind of tokens you want to fund the account (native, erc20 or both)"
-				}]
+				"optionalArguments": []
 			}]
 		}, {
 			"name": "assets",
@@ -880,6 +875,12 @@
 					"type": "string",
 					"demandOption": true,
 					"description": "The destination of the files"
+				}, {
+					"name": "nftType",
+					"type": "number",
+					"default": "721",
+					"hidden": true,
+					"description": "The NFT type"
 				}]
 			}]
 		}, {
@@ -1162,6 +1163,12 @@
 					"type": "string",
 					"demandOption": true,
 					"description": "The destination of the files"
+				}, {
+					"name": "nftType",
+					"type": "number",
+					"default": "1155",
+					"hidden": true,
+					"description": "The NFT type"
 				}]
 			}]
 		}, {

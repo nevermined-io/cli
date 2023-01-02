@@ -6,6 +6,7 @@ import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+import { NFTsBaseApi } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/api/nfts/NFTsBaseApi'
 
 export const accessNft = async (
   nvm: Nevermined,
@@ -26,8 +27,8 @@ export const accessNft = async (
   let nftAddress = ''
 
   try {
-    nftAddress = nvm.nfts.getNftContractAddress(ddo) as string  
-  } catch {
+    nftAddress = NFTsBaseApi.getNFTContractAddress(ddo) as string  
+  } catch {    
     nftAddress = nvm.keeper.nftUpgradeable.address
   }
   
@@ -45,23 +46,25 @@ export const accessNft = async (
   logger.debug(`NFT Receiver: ${consumerAccount.getId()}`)
   logger.debug(`NFT ERC type: ${argv.nftType}`)
 
+  let nftApi: NFTsBaseApi
   if (argv.nftType == 721) {     
     const nft = await nvm.contracts.loadNft721(nftAddress)
     const balance = await nft.balanceOf(consumerAccount)
     isHolder = balance.gt(0)
-
+    nftApi = nvm.nfts721
   } else {
     logger.info(`Checking balance`)
     const nftContract = loadNFT1155Contract(config, nftAddress)
     const balance = await nftContract.balanceOf(consumerAccount.getId(), zeroX(ddo.shortId()))
     isHolder = balance.gt(0)
+    nftApi = nvm.nfts1155
   }
   
   if (!isHolder) {
     logger.info(`Not owner of the NFT, trying transfer`)
     logger.debug(`Using AgreementId: ${agreementId}`)
 
-    const isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
+    const isSuccessfulTransfer = await nftApi.transferForDelegate(
       agreementId,
       seller,
       consumerAccount.getId(),
@@ -79,7 +82,7 @@ export const accessNft = async (
     logger.info(`NFT Access request through the Nevermined Node sucessfully`)
   }
 
-  const isSuccessful = await nvm.nfts.access(
+  const isSuccessful = await nftApi.access(
     did,
     consumerAccount,
     destination,
