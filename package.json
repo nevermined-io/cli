@@ -24,7 +24,7 @@
   "dependencies": {
     "@nevermined-io/nevermined-sdk-js": "0.26.0",
     "@nevermined-io/nevermined-sdk-dtp": "0.2.2",
-    "@truffle/hdwallet-provider": "^2.0.9",
+    "@truffle/hdwallet-provider": "2.0.17",
     "chalk": "^4.1.2",
     "cross-fetch": "~3.1.5",
     "dotenv": "^16.0.1",
