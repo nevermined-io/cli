@@ -13,7 +13,7 @@
     "format": "prettier --parser typescript --ignore-path .gitignore --write '**/*.{js,jsx,ts,tsx}'",
     "clean": "rm -rf ./dist/ ./doc/ ./.nyc_output",
     "build:watch": "npm build --watch",
-    "start": "ts-node src/index.ts",
+    "start": "node dist/src/index.js",
     "generate-doc": "ts-node src/generateDoc.ts",
     "test": "jest --coverage --rootDir test -w 1",
     "test:watch": "jest --watch --rootDir test"
@@ -22,8 +22,8 @@
     "ncli": "./dist/src/index.js"
   },
   "dependencies": {
-    "@nevermined-io/nevermined-sdk-js": "0.26.0",
-    "@nevermined-io/nevermined-sdk-dtp": "0.2.2",
+    "@nevermined-io/nevermined-sdk-js": "0.27.4",
+    "@nevermined-io/nevermined-sdk-dtp": "0.2.5",
     "@truffle/hdwallet-provider": "^2.0.9",
     "chalk": "^4.1.2",
     "cross-fetch": "~3.1.5",

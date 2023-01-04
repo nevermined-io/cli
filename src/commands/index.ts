@@ -42,6 +42,7 @@ export * from './provenance/registerProvenance'
 
 //utils
 export * from './utils/decrypt'
+export * from './utils/encrypt'
 export * from './utils/upload'
 export * from './utils/publishNftMetadata'
 export * from './utils/getNftMetadata'
