@@ -185,13 +185,13 @@ export function getConfig(
             process.env.KEYFILE_PASSWORD!
           )
         ],
-        config.nvm.web3ProviderUri
+        config.nvm.web3ProviderUri!
       )
     } else {
       signer = Wallet.fromMnemonic(config.seed!)
       hdWalletProvider = new HDWalletProvider(
         config.seed!,
-        config.nvm.web3ProviderUri,
+        config.nvm.web3ProviderUri!,
         accountIndex,
         10
       )
@@ -200,7 +200,7 @@ export function getConfig(
     signer = Wallet.fromMnemonic(DUMMY_SEED_WORDS)
     hdWalletProvider = new HDWalletProvider(
       DUMMY_SEED_WORDS,
-      config.nvm.web3ProviderUri,
+      config.nvm.web3ProviderUri!,
       0,
       1
     )
