@@ -1,4 +1,4 @@
-import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils/GeneratorHelpers'
+import { generateId } from '@nevermined-io/nevermined-sdk-js'
 import { ethers } from 'ethers'
 
 const NETWORK = process.env.NETWORK || 'geth-localnet'

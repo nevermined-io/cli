@@ -1,10 +1,9 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes } from '../../utils'
 import { Logger } from 'log4js'
 import chalk from 'chalk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 const ERC20_DISPENSED_AMOUNT = BigNumber.from(100)
 

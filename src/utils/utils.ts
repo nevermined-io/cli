@@ -1,26 +1,26 @@
 import { Contract } from 'ethers'
 import {
-  findServiceConditionByName,
-  noZeroX
-} from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import {
   Account,
   DDO,
-  Nevermined
+  Nevermined,  
+  BigNumber,
+  findServiceConditionByName,
+  Nft721Contract,
+  noZeroX,
+  ProvenanceMethod,
+  ProvenanceRegistry,
+  QueryResult,
+  ServiceType,
+  Token
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
-import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import { Constants } from './enums'
 import { ARTIFACTS_PATH, logger } from './config'
-import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/services/metadata/MetadataService'
+
 import { Configuration, Logger } from 'log4js'
-import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 import { ethers } from 'ethers'
 import { ConfigEntry } from '../models/ConfigDefinition'
 import * as fs from 'fs'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
-import { ProvenanceMethod, ProvenanceRegistry } from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Provenance'
-import Nft721Contract from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Nft721Contract'
 
 export const loadNevermined = async (
   config: ConfigEntry,

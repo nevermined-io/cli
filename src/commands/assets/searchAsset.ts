@@ -1,5 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { ServiceMetadata } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
+import { Account, Nevermined, ServiceMetadata } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, printSearchResult } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'

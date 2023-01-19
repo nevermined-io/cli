@@ -1,12 +1,9 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, getAssetPriceFromDDOByService, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { Constants, StatusCodes, loadToken } from '../../utils'
 import chalk from 'chalk'
-import { getAssetPriceFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
-import { Account } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const transferNft = async (
   nvm: Nevermined,

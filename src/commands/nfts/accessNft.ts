@@ -1,12 +1,10 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, Nevermined, NFTsBaseApi, zeroX } from '@nevermined-io/nevermined-sdk-js'
 import { loadNFT1155Contract, StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
-import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import { NFTsBaseApi } from '@nevermined-io/nevermined-sdk-js/dist/node/nevermined/api/nfts/NFTsBaseApi'
+
 
 export const accessNft = async (
   nvm: Nevermined,

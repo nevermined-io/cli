@@ -9,8 +9,8 @@ import fetch from 'cross-fetch'
 import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
-import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import { Wallet, Signer } from 'ethers'
+import { Web3Provider } from '@nevermined-io/nevermined-sdk-js'
 
 dotenv.config()
 

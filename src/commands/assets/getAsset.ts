@@ -1,13 +1,11 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, generateIntantiableConfigFromConfig, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
 import { Logger } from 'log4js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { Dtp } from '@nevermined-io/nevermined-sdk-dtp/dist/Dtp'
-import { generateIntantiableConfigFromConfig } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
-import { CryptoConfig } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
+import { CryptoConfig, Dtp } from '@nevermined-io/nevermined-sdk-dtp'
 
 readline.createInterface({
   input: process.stdin,

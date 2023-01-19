@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, zeroX } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -6,7 +6,6 @@ import {
 } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
-import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import { ethers } from 'ethers'

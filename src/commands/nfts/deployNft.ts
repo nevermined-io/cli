@@ -1,5 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import Nft721Contract from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Nft721Contract'
+import { Account, Nevermined, Nft721Contract, Web3Provider } from '@nevermined-io/nevermined-sdk-js'
 import { ContractReceipt, ethers } from 'ethers'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import {
@@ -10,7 +9,6 @@ import {
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
-import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import * as fs from 'fs'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
@@ -87,7 +85,7 @@ export const deployNft = async (
       (nvm.keeper as any).instanceConfig,
       contractInstance.address
   )  
-    await erc721Contract.addMinter(
+    await erc721Contract.grantOperatorRole(
       nvm.keeper.conditions.transferNft721Condition.address,
       creatorAccount
     )

@@ -1,4 +1,4 @@
-import { DDO, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, DDO, getAssetPriceFromDDOByService, Nevermined, zeroX } from '@nevermined-io/nevermined-sdk-js'
 import {
   Constants,
   StatusCodes,
@@ -7,15 +7,10 @@ import {
   loadToken
 } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
-import { Account } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
-import {
-  getAssetPriceFromDDOByService,
-  zeroX
-} from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
+
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const showNft = async (
   nvm: Nevermined,

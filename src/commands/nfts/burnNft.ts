@@ -1,11 +1,10 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, zeroX } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printNftTokenBanner,
   getNFTAddressFromInput
 } from '../../utils'
 import chalk from 'chalk'
-import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
