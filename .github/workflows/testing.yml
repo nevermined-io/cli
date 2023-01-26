@@ -21,7 +21,7 @@ jobs:
       - name: Run linters
         run: yarn lint
 
-      - uses: nevermined-io/nvm-tools-actions@v0.4.0
+      - uses: nevermined-io/nvm-tools-actions@v0.6.0
         with:
           token: ${{ secrets.API_TOKEN_GITHUB }}
           opengsn: "true"
