@@ -31,7 +31,7 @@ jobs:
       - name: Check artifacts
         run: |
           nvm-tools copy-artifacts /tmp/.nevermined
-          ls -l artifacts
+          ls -l /tmp/.nevermined
 
       - name: Run integration tests
         env:
