@@ -20,7 +20,11 @@ jobs:
           yarn
       - name: Run linters
         run: yarn lint
-
+      - name: Build
+        run: |
+          yarn build
+          yarn start --help
+          
       - uses: nevermined-io/nvm-tools-actions@v0.6.0
         with:
           token: ${{ secrets.API_TOKEN_GITHUB }}
