@@ -5,7 +5,7 @@ HTTP_CODE=0
 CONF_DIR=${LOCAL_CONF_DIR:-~/.nevermined}
 NETWORK=${NETWORK:-geth-localnet}
 
-ARTIFACTS_DIR=$CONF_DIR/nevermined-contracts/artifacts
+ARTIFACTS_DIR=$CONF_DIR
 GRAPH_NODE_URL=${GRAPH_NODE_URL:-http://localhost:9000}
 
 echo "Loading artifact from ABI: $ARTIFACTS_DIR/DIDRegistry.$NETWORK.json"

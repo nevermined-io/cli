@@ -102,9 +102,10 @@ export const showNft = async (
   let nftAddress = ''
   // Showing ERC-721 NFT information
   if (metadata.attributes.main.ercType == 721) {
-    nftDetails = await nvm.nfts721.details(did)
-    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
+    console.log(`Loading NFT-721 details ...`)
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.getAddress()
     const nft = await nvm.contracts.loadNft721(nftAddress)
+     nftDetails = await nft.details(did)
 
     if (verbose) {
       await printNftTokenBanner(nft.getContract)
@@ -133,7 +134,10 @@ export const showNft = async (
       logger.warn(`Token Id not found`)
     }
   } else {
-    nftDetails = await nvm.nfts1155.details(did)
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.getAddress()
+    const nft = await nvm.contracts.loadNft1155(nftAddress)
+    nftDetails = await nft.details(did)
+
     const storedDIDRegister: any = await nvm.keeper.didRegistry.getDIDRegister(
       did
     )

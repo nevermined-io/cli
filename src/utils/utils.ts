@@ -11,7 +11,8 @@ import {
   ProvenanceRegistry,
   QueryResult,
   ServiceType,
-  Token
+  Token,
+  ConditionType
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import { Constants } from './enums'
@@ -27,6 +28,7 @@ export const loadNevermined = async (
   network: string,
   verbose = false
 ): Promise<Nevermined> => {
+  
   const nvm = await Nevermined.getInstance({
     ...config.nvm,
     verbose: verbose ? verbose : config.nvm.verbose
@@ -61,7 +63,7 @@ export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
 }
 
 export const loadNFT1155Contract = (config: ConfigEntry, address: string | undefined): Contract => {
-  const abiPath = `${ARTIFACTS_PATH}/NFTUpgradeable.${config.networkName?.toLowerCase()}.json`
+  const abiPath = `${ARTIFACTS_PATH}/NFT1155Upgradeable.${config.networkName?.toLowerCase()}.json`
   const contractAbi = JSON.parse(fs.readFileSync(abiPath).toString())
 
   return new ethers.Contract(
@@ -72,19 +74,23 @@ export const loadNFT1155Contract = (config: ConfigEntry, address: string | undef
 }
 
 export const getNFTAddressFromInput = (
-  nftAddress: string,
+  nftAddress: string | undefined,
   ddo: DDO,
-  serviceType: ServiceType
-): string => {
-  if (nftAddress === '' || !nftAddress.startsWith('0x')) {
-    const salesService = ddo.findServiceByType(serviceType)
+  serviceType: ServiceType = 'nft-sales',
+  conditionType: ConditionType = 'transferNFT'
+): string | undefined => {
 
+  if (!nftAddress || !ethers.utils.isAddress(nftAddress)) {
+
+    const salesService = ddo.findServiceByType(serviceType)
     if (!salesService) throw new Error(`No NFT contract address found`)
 
-    const transfer = findServiceConditionByName(salesService, 'transferNFT')
-    const _contractParam = transfer.parameters.find(
-      (p) => p.name === '_contract'
+    const condition = findServiceConditionByName(salesService, conditionType)
+
+    const _contractParam = condition.parameters.find(
+      (p) => p.name === '_contractAddress' || p.name === '_contract'
     )
+    
     return _contractParam?.value as string
   } else {
     return nftAddress

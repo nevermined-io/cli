@@ -1,4 +1,4 @@
-import { Account, Nevermined, zeroX } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, Nevermined, zeroX } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -40,14 +40,14 @@ export const mintNft = async (
     )
   )
 
-  let to
-  if (ethers.utils.isAddress(argv.receiver)) to = argv.receiver
-  else to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
+  let receiver
+  if (ethers.utils.isAddress(argv.receiver)) receiver = argv.receiver
+  else receiver = minterAccount.getId()
 
-  if (argv.nftType === '721') {
+  if (argv.nftType == 721) {
     // Minting NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.getAddress()
 
     const nft = await nvm.contracts.loadNft721(nftAddress)
     if (verbose) {
@@ -62,7 +62,7 @@ export const mintNft = async (
     if (mintAbiDefinition.length == 3) {
       logger.debug(`Minting using the To address + tokenId + tokenURI`)
       await nft.mintWithURL(
-        to,
+        receiver,
         zeroX(ddo.shortId()),
         uri || register.url,
         minterAccount
@@ -76,7 +76,7 @@ export const mintNft = async (
       chalk.dim(
         `Minted NFT (ERC-721) '${chalk.whiteBright(
           ddo.id
-        )}' to '${chalk.whiteBright(to)}'!`
+        )}' to '${chalk.whiteBright(receiver)}'!`
       )
     )
   } else {
@@ -85,11 +85,15 @@ export const mintNft = async (
     if (argv.amount < 1 || argv.amount > register.mintCap) {
       return {
         status: StatusCodes.ERROR,
-        errorMessage: `Invalid number of ERC-1155 NFTs to mint. It should be >=1 and <cap`
+        errorMessage: `Invalid number of ERC-1155 NFTs to mint. It should be >=1 and < cap`
       }
     }
 
-    await nvm.keeper.didRegistry.mint(did, argv.amount, minterAccount.getId())
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.getAddress()
+    const nft = await nvm.contracts.loadNft1155(nftAddress)
+
+    await nft.mint(did, BigNumber.from(argv.amount), receiver, minterAccount)
+    
 
     logger.info(
       chalk.dim(

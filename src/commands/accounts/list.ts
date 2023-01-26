@@ -29,11 +29,13 @@ export const accountsList = async (
   let accounts: Account[] = []
   if (address) {
     logger.info(`Getting balance of account ${address}`)
-    accounts = [new Account(address)]
+    accounts = [await nvm.accounts.getAccount(address)]
   } else {
     logger.debug(chalk.dim('Loading account/s ...'))
     accounts = await nvm.accounts.list()
   }
+
+  console.log(`We use the account ${accounts[0].getId()}`)
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
@@ -56,7 +58,6 @@ export const accountsList = async (
     accounts.map(async (a, index) => {
       
       const balanceFormatted = BigNumber.formatEther(await a.getEtherBalance())
-      
       const ethBalance = BigNumber.parseEther(
         balanceFormatted
       )      

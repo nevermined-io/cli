@@ -6,8 +6,8 @@ RETRY_COUNT=0
 COMMAND_STATUS=1
 CONF_DIR=${LOCAL_CONF_DIR:-~/.nevermined}
 
-ARTIFACTS_DIR=$CONF_DIR/nevermined-contracts/artifacts/
-CIRCUITS_DIR=$CONF_DIR/nevermined-contracts/circuits/
+ARTIFACTS_DIR=$CONF_DIR/
+CIRCUITS_DIR=$CONF_DIR/circuits/
 
 mkdir -p $ARTIFACTS_DIR
 mkdir -p $CIRCUITS_DIR

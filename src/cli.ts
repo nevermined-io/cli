@@ -84,10 +84,12 @@ const cmdHandler = async (
 
   try {
     if (requiresAccount) {
+      
       nvm = await loadNevermined(config, network, verbose)
       if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
 
       const networkId = await nvm.keeper.getNetworkId()
+      
       if (networkId !== Number(config.networkId)) {
         logger.warn(chalk.red(`\nWARNING: Network connectivity issue`))
         logger.warn(

@@ -18,13 +18,13 @@ export const logger = getLogger()
 
 export const LOCAL_CONF_DIR =
   process.env.LOCAL_CONF_DIR || `${os.homedir()}/.nevermined`
-export const ARTIFACTS_PATH = `${LOCAL_CONF_DIR}/nevermined-contracts/artifacts`
+export const ARTIFACTS_PATH = `${LOCAL_CONF_DIR}`
 export const CLI_PATH = `${LOCAL_CONF_DIR}/cli`
-export const CLI_ENV = `${LOCAL_CONF_DIR}/nevermined-contracts/cli/.env`
+export const CLI_ENV = `${LOCAL_CONF_DIR}/cli/.env`
 
 export const ARTIFACTS_REPOSITORY =
   process.env.ARTIFACTS_REPO ||
-  'https://artifacts-nevermined-rocks.s3.amazonaws.com'
+  'https://artifacts.nevermined.network'
 
 export const DEFAULT_ENCRYPTION_METHOD = 'PSK-RSA'
 

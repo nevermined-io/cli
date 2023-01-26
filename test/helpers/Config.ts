@@ -42,7 +42,7 @@ export const execOpts = {
   env: {
     ...process.env,
     NETWORK: NETWORK,
-    WEB3_PROVIDER_URL: `${process.env.WEB3_PROVIDER_URL}` || 'http://localhost:8545',
+    WEB3_PROVIDER_URL: `${process.env.WEB3_PROVIDER_URL}` || 'http://contracts.nevermined.localnet',
     TOKEN_ADDRESS: process.env.TOKEN_ADDRESS,
     SEED_WORDS: process.env.SEED_WORDS,
     LOCAL_CONF_DIR: '/tmp/.nevermined'
@@ -64,6 +64,7 @@ export const baseCommands = {
   },
   nfts721: {
     deploy: `${BASE_COMMAND} ${VERBOSE} nfts721 deploy `,
+    clone: `${BASE_COMMAND} ${VERBOSE} nfts721 clone `,
     create: `${BASE_COMMAND} ${VERBOSE} nfts721 create `,
     show: `${BASE_COMMAND} ${VERBOSE} nfts721 show `,
     mint: `${BASE_COMMAND} ${VERBOSE} nfts721 mint `,
@@ -75,6 +76,8 @@ export const baseCommands = {
     download: `${BASE_COMMAND} ${VERBOSE} nfts721 download `
   },
   nfts1155: {
+    deploy: `${BASE_COMMAND} ${VERBOSE} nfts1155 deploy `,
+    clone: `${BASE_COMMAND} ${VERBOSE} nfts1155 clone `,
     create: `${BASE_COMMAND} ${VERBOSE} nfts1155 create `,
     show: `${BASE_COMMAND} ${VERBOSE} nfts1155 show `,
     hold: `${BASE_COMMAND} ${VERBOSE} nfts1155 hold `,

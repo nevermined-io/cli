@@ -1,4 +1,4 @@
-import { Account, AssetPrice, AssetAttributes, MetaDataFile, Nevermined, MetaData, MetaDataMain, zeroX, generateIntantiableConfigFromConfig, BigNumber } from '@nevermined-io/nevermined-sdk-js'
+import { Account, AssetPrice, AssetAttributes, MetaDataFile, Nevermined, MetaData, MetaDataMain, zeroX, generateIntantiableConfigFromConfig, BigNumber, PublishMetadata } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printTokenBanner,
@@ -131,9 +131,15 @@ export const registerAsset = async (
     providers: [config.nvm.neverminedNodeAddress!]
   })
 
+  let publishMetadata = PublishMetadata.OnlyMetadataAPI
+
+  if (argv.publishMetadata && argv.publishMetadata.toLowerCase() === 'ipfs')
+    publishMetadata = PublishMetadata.IPFS  
+
   const ddo = await nvm.assets.create(
     assetAttributes,
-    account
+    account,
+    publishMetadata
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(

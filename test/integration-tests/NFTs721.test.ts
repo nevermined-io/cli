@@ -8,6 +8,7 @@ import {
 import * as fs from 'fs'
 import * as Path from 'path'
 import execCommand from '../helpers/ExecCommand'
+import { didZeroX } from '@nevermined-io/nevermined-sdk-js'
 
 describe('NFTs (ERC-721) e2e Testing', () => {
   const abiPath = 'test/resources/nfts/TestNFT721.json'
@@ -40,6 +41,17 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     nftAddress = parseAddressOfContractDeployed(stdout)
     console.debug(`Nft Address: ${nftAddress}`)
     expect(nftAddress === '' ? false : nftAddress.startsWith('0x'))
+  })
+
+  test('Clone a NFT contract (ERC-721) from another already deployed contract', async () => {
+    
+    const deployCommand = `${baseCommands.nfts721.clone} ${nftAddress}  --accountIndex 0`
+    console.debug(`COMMAND: ${deployCommand}`)
+
+    const stdout = execCommand(deployCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(`Contract cloned into address`))    
   })
 
   test('Register an asset with a NFT (ERC-721) attached to it', async () => {
@@ -120,7 +132,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('It burns a NFT (ERC-721)', async () => {
-    const burnCommand = `${baseCommands.nfts721.burn} "${did}" ${nftAddress} --accountIndex 0  `
+    const burnCommand = `${baseCommands.nfts721.burn} "${didZeroX(did)}" ${nftAddress} --accountIndex 0  `
     console.debug(`COMMAND: ${burnCommand}`)
 
     const stdout = execCommand(burnCommand, execOpts)

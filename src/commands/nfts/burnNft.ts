@@ -1,4 +1,4 @@
-import { Account, Nevermined, zeroX } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -16,7 +16,9 @@ export const burnNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { verbose, did} = argv
+  const { verbose, did, nftType} = argv
+
+  const tokenId = nftType == 721 && argv.tokenId ? argv.tokenId : argv.did
 
   logger.info(chalk.dim(`Burning NFT: '${chalk.whiteBright(did)}'`))
 
@@ -25,58 +27,21 @@ export const burnNft = async (
   )
 
   const ddo = await nvm.assets.resolve(did)
-  const register = (await nvm.keeper.didRegistry.getDIDRegister(
-    zeroX(ddo.shortId())
-  )) as {
-    owner: string
-    url: string
-    mintCap: number
-  }
 
-  logger.info(
-    chalk.dim(
-      `Burning NFT with service Endpoint! ${chalk.whiteBright(register.url)}`
-    )
-  )
-
-  if (argv.nftType === '721') {
+  if (nftType == 721) {
     // Burning NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.getAddress()
 
-    const nft721Api = await nvm.contracts.loadNft721(nftAddress)
+    await nvm.contracts.loadNft721(nftAddress)
 
     if (verbose) {
-      await printNftTokenBanner(nft721Api.getContract)
+      await printNftTokenBanner(nvm.nfts721.getContract)
     }
-
-    const to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
-
-    // Some ERC-721 NFT contracts don't implement the burn function
-    // Se we are checking if it's already there
-    const burnAbiDefinition = nft721Api.nftContract.contract.interface.fragments.filter(
-      (item: { name: string }) => item.name === 'burn'
-    )
-
-    if (burnAbiDefinition.length === 0) {
-      return {
-        status: StatusCodes.OK,
-        errorMessage: `The NFT contract doesn't expose a 'burn' method`
-      }
-    }
-
-    await nft721Api.nftContract.call(
-      'burn',
-      [zeroX(ddo.shortId())],
-      burnerAccount.getId()
-    )
+    await nvm.nfts721.burn(tokenId, burnerAccount)
 
     logger.info(
-      chalk.dim(
-        `Burned NFT (ERC-721) '${chalk.whiteBright(
-          ddo.id
-        )}' to '${chalk.whiteBright(to)}'!`
-      )
+      chalk.dim(`Burned NFT (ERC-721) with tokenId: ${chalk.whiteBright(tokenId)} `)
     )
   } else {
     // Burning NFT (ERC-1155)
@@ -84,17 +49,20 @@ export const burnNft = async (
     if (argv.amount < 1) {
       return {
         status: StatusCodes.ERROR,
-        errorMessage: `Invalid number of ERC-1155 NFTs to burn. It should be >1`
+        errorMessage: `Invalid number of ERC-1155 NFTs to burn. It should be >= 1`
       }
     }
 
-    await nvm.keeper.didRegistry.burn(did, argv.amount, burnerAccount.getId())
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.getAddress()
+    const nft = await nvm.contracts.loadNft1155(nftAddress)
 
+    await nft.burn(tokenId, BigNumber.from(argv.amount), burnerAccount)
+    
     logger.info(
       chalk.dim(
         `Burned  ${chalk.whiteBright(
           argv.amount
-        )}' NFTs (ERC-1155) '${chalk.whiteBright(ddo.id)}'!`
+        )}' NFTs (ERC-1155) '${chalk.whiteBright(tokenId)}'!`
       )
     )
   }
