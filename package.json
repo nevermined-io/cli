@@ -13,7 +13,7 @@
     "format": "prettier --parser typescript --ignore-path .gitignore --write '**/*.{js,jsx,ts,tsx}'",
     "clean": "rm -rf ./dist/ ./doc/ ./.nyc_output",
     "build:watch": "npm build --watch",
-    "start": "ts-node src/index.ts",
+    "start": "node dist/src/index.js",
     "generate-doc": "ts-node src/generateDoc.ts",
     "test": "jest --coverage --rootDir test -w 1",
     "test:watch": "jest --watch --rootDir test"

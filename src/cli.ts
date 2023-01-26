@@ -113,7 +113,7 @@ const cmdHandler = async (
     logger.error(`Error Connecting to Nevermined: ${(err as Error).message}`)
     return process.exit(StatusCodes.ERROR)
   }
-
+  
   try {
     const executionOutput: ExecutionOutput = await CliCommands[cmd](
       nvm!,

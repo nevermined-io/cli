@@ -5,6 +5,7 @@ import { Logger } from 'log4js'
 import { StatusCodes } from '../../utils'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import { aes_decryption_256 } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
+import chalk from 'chalk'
 
 export const decryptFile = async (
   nvm: Nevermined,
@@ -13,12 +14,13 @@ export const decryptFile = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
+  logger.info(chalk.dim(`Decrypting file`))
   const { file, password } = argv
   const encrypted = fs.readFileSync(file).toString('binary')
   const decrypted = aes_decryption_256(encrypted, password)
 
   const filePathDecrypted = file + '.decrypted'
-  fs.writeFileSync(filePathDecrypted, decrypted)
+  fs.writeFileSync(filePathDecrypted, Buffer.from(decrypted, 'binary'))
   logger.info(filePathDecrypted)
 
   return {

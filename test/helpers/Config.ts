@@ -57,6 +57,7 @@ export const baseCommands = {
     registerWorkflow: `${BASE_COMMAND} ${VERBOSE} assets register-workflow `,
     importMetadata: `${BASE_COMMAND} ${VERBOSE} assets import `,
     searchAsset: `${BASE_COMMAND} ${VERBOSE} assets search `,
+    queryAsset: `${BASE_COMMAND} ${VERBOSE} assets query `,
     downloadAsset: `${BASE_COMMAND} ${VERBOSE} assets download `,
     orderAsset: `${BASE_COMMAND} ${VERBOSE} assets order `,
     getAsset: `${BASE_COMMAND} ${VERBOSE} assets get `,
@@ -110,6 +111,7 @@ export const baseCommands = {
   utils: {
     upload: `${BASE_COMMAND} ${VERBOSE} utils upload `,
     decrypt: `${BASE_COMMAND} ${VERBOSE} utils decrypt `,
+    encrypt: `${BASE_COMMAND} ${VERBOSE} utils encrypt `,
     publishMetadata: `${BASE_COMMAND} ${VERBOSE} utils publish-nft-metadata `,
     getMetadata: `${BASE_COMMAND} ${VERBOSE} utils get-nft-metadata `
   }

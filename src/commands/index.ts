@@ -1,6 +1,7 @@
 // assets
 export * from './assets/registerAsset'
 export * from './assets/searchAsset'
+export * from './assets/queryAsset'
 export * from './assets/downloadAsset'
 export * from './assets/orderAsset'
 export * from './assets/getAsset'
@@ -42,6 +43,7 @@ export * from './provenance/registerProvenance'
 
 //utils
 export * from './utils/decrypt'
+export * from './utils/encrypt'
 export * from './utils/upload'
 export * from './utils/publishNftMetadata'
 export * from './utils/getNftMetadata'
