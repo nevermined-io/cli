@@ -115,7 +115,7 @@ export const accountsList = async (
         tokenBalance,
         url: `${config.etherscanUrl}/address/${a.getId()}`,
         nftTokenUrl: `${config.etherscanUrl}/token/${nftTokenAddress}`,
-        nftBalance: withInventory ? await nft721Api.balanceOf(a) : 0,
+        nftBalance: withInventory ? await nft721Api.balanceOf(a) : BigNumber.from(0),
         inventory
       }
     })
