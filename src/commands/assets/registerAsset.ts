@@ -133,7 +133,7 @@ export const registerAsset = async (
 
   let publishMetadata = PublishMetadata.OnlyMetadataAPI
 
-  if (argv.publishMetadata && argv.publishMetadata.toLowerCase() === 'ipfs')
+  if (argv.publishMetadata?.toLowerCase() === 'ipfs')
     publishMetadata = PublishMetadata.IPFS  
 
   const ddo = await nvm.assets.create(
