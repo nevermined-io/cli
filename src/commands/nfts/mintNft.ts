@@ -19,6 +19,8 @@ export const mintNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, did, uri } = argv
 
+  const nftType = argv.nftType as number
+
   logger.info(chalk.dim(`Minting NFT: '${chalk.whiteBright(did)}'`))
 
   logger.debug(
@@ -44,7 +46,7 @@ export const mintNft = async (
   if (ethers.utils.isAddress(argv.receiver)) receiver = argv.receiver
   else receiver = minterAccount.getId()
 
-  if (argv.nftType == 721) {
+  if (nftType === 721) {
     // Minting NFT (ERC-721)
 
     const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.getAddress()

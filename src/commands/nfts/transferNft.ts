@@ -14,6 +14,8 @@ export const transferNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, agreementId } = argv
 
+  const nftType = argv.nftType as number
+  
   const token = await loadToken(nvm, config, verbose)
 
   logger.debug(
@@ -80,7 +82,7 @@ export const transferNft = async (
 
   let isSuccessfulTransfer = false
 
-  if (argv.nftType == 721) {
+  if (nftType === 721) {
     logger.info(
       chalk.dim(`Transferring NFT (ERC-721) '${chalk.whiteBright(ddo.id)}' ...`)
     )

@@ -14,6 +14,8 @@ export const orderNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, did } = argv
 
+  const nftType = argv.nftType as number
+
   logger.info(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
 
   const token = await loadToken(nvm, config, verbose)
@@ -39,7 +41,7 @@ export const orderNft = async (
   const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
 
   let agreementId = ''
-  if (argv.nftType == 721) {
+  if (nftType === 721) {
     await nvm.contracts.loadNft721(nftAddress!)
     agreementId = await nvm.nfts721.order(did, buyerAccount)
   } else {

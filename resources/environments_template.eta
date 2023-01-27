@@ -27,7 +27,6 @@ The Native token is **<%= it._env[name].nativeToken %>**. This environment has t
 
 The Marketplace API used can be found on <%= it._env[name].nvm.marketplaceUri %>. <br/>
 The Nevermined Node can be found on <%= it._env[name].nvm.neverminedNodeUri %> and uses the public address **<%= it._env[name].nvm.neverminedNodeAddress %>**.<br/>
-<% if(it._env[name].nvm.faucetUri !== '') { %> There is deployed a faucet on <%= it._env[name].nvm.faucetUri %> .<br/><% } %>
 <% if(it._env[name].nvm.graphHttpUri !== '') { %> The subgraphs to fetch contracts events can be found on <%= it._env[name].nvm.graphHttpUri %> .<br/><% } %>
 
 <% } %>

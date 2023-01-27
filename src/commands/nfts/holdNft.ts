@@ -12,7 +12,9 @@ export const holdNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { did, nftType } = argv
+  const { did } = argv
+
+  const nftType = argv.nftType as number
 
   logger.info(
     chalk.dim(`Checks if an address is a NFT holder of the ${chalk.whiteBright(did)}`)
@@ -25,7 +27,7 @@ export const holdNft = async (
   let nftAddress = ''
   const userAddress = argv.address ? argv.address : consumerAccount.getId()
 
-  const nftApi = nftType == '721' ? NFT721Api : NFT1155Api
+  const nftApi = nftType === 721 ? NFT721Api : NFT1155Api
 
   try {
     nftAddress = nftApi.getNFTContractAddress(ddo) as string  
@@ -36,7 +38,7 @@ export const holdNft = async (
   logger.info(`NFT Contract Address: ${nftAddress}`)
   logger.info(`Address to check: ${userAddress}`)
 
-  if (nftType == 721) {     
+  if (nftType === 721) {     
     const nft = await nvm.contracts.loadNft721(nftAddress)
     balance = await nft.balanceOf(new Account(userAddress))
     isHolder = balance.gt(0)
@@ -49,9 +51,9 @@ export const holdNft = async (
   }
 
   if (isHolder)
-    logger.info(`The user holds ${balance} edition/s of the ERC-${argv.nftType} NFT`)
+    logger.info(`The user holds ${balance} edition/s of the ERC-${nftType} NFT`)
   else
-    logger.info(`The user doesnt hold any ERC-${argv.nftType} NFT`)
+    logger.info(`The user doesnt hold any ERC-${nftType} NFT`)
 
   return {
     status: StatusCodes.OK,

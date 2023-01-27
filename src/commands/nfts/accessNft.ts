@@ -45,7 +45,7 @@ export const accessNft = async (
   logger.debug(`NFT Receiver: ${consumerAccount.getId()}`)
   logger.debug(`NFT ERC type: ${nftType}`)
 
-  if (argv.nftType == 721) {
+  if (nftType === 721) {
 
     const nft = await nvm.contracts.loadNft721(nftAddress)
     const balance = await nft.balanceOf(consumerAccount)
@@ -69,7 +69,7 @@ export const accessNft = async (
     logger.debug(`Claiming NFT (ERC-${nftType})`)   
 
     let isSuccessfulTransfer = false
-    if (nftType == 721)      
+    if (nftType === 721)      
       isSuccessfulTransfer = await nvm.nfts721.claim(agreementId, seller, consumerAccount.getId())      
     else
       isSuccessfulTransfer = await nvm.nfts1155.claim(agreementId, seller, consumerAccount.getId(), BigNumber.from(1))
@@ -87,7 +87,7 @@ export const accessNft = async (
   }
 
   let isSuccessful = false 
-  if (argv.nftType == 721)
+  if (argv.nftType === 721)
     isSuccessful = await nvm.nfts721.access(
       did,
       consumerAccount,

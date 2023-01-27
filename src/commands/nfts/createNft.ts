@@ -24,6 +24,8 @@ export const createNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, metadata } = argv
 
+  const nftType = argv.nftType as number
+
   logger.info(chalk.dim('Creating NFT ...'))
 
   if (argv.royalties < 0 || argv.royalties > 100) {
@@ -41,11 +43,6 @@ export const createNft = async (
   const token = await loadToken(nvm, config, verbose)
 
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
-
-  // const clientAssertion = await nvm.utils.jwt.generateClientAssertion(creatorAccount)
-  // await nvm.services.marketplace.login(clientAssertion)
-  // const payload = decodeJwt(config.marketplaceAuthToken)
-  // metadata.userId = payload.sub
 
   let ddoMetadata
   const ddoPrice = BigNumber.from(argv.price).gt(0)
@@ -146,7 +143,7 @@ export const createNft = async (
   })
   let nftAttributes: NFTAttributes
   
-  if (argv.nftType == 721) {
+  if (nftType === 721) {
     
     const nft721Api = await nvm.contracts.loadNft721(argv.nftAddress)
 
@@ -176,17 +173,6 @@ export const createNft = async (
     logger.debug(`Transfer address? ${transferCondAddress}`)
     const isOperator = await nvm.nfts721.getContract.isOperator(transferCondAddress)
     logger.debug(`Is Transfer NFT721 Operator? ${isOperator}`)
-    // await nftContract.grantOperatorRole(
-    //   transferNft721Condition.address,
-    //   nftContractOwner
-    // )
-
-    // logger.debug(`Adding permissions to providers`)
-    // providers.map(async _provider => {
-    //   await nvm.nfts721.setApprovalForAll(
-    //     _provider, true, creatorAccount
-    //   )
-    // })
 
   } else {
     nftAttributes = NFTAttributes.getNFT1155Instance({

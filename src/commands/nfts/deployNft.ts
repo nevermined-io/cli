@@ -21,6 +21,8 @@ export const deployNft = async (
 ): Promise<ExecutionOutput> => {
   const { account, abiPath } = argv
 
+  const nftType = argv.nftType as number
+  
   logger.info(chalk.dim('Deploying NFT contract...'))
 
   const web3 = Web3Provider.getWeb3(config.nvm)
@@ -49,7 +51,7 @@ export const deployNft = async (
   args.push(argv.symbol)
   args.push(argv.uri)
 
-  if (argv.nftType == 721)  {
+  if (nftType === 721)  {
     args.push(argv.cap)
   }
 
@@ -87,7 +89,7 @@ export const deployNft = async (
   if (config.nvm.neverminedNodeAddress) addressesToApprove.push(config.nvm.neverminedNodeAddress!)
 
 
-  if (argv.nftType == 721)  {
+  if (nftType === 721)  {
     const nft721 = await nvm.contracts.loadNft721(
       contractInstance.address
     )
