@@ -18,7 +18,8 @@ export const logger = getLogger()
 
 export const LOCAL_CONF_DIR =
   process.env.LOCAL_CONF_DIR || `${os.homedir()}/.nevermined`
-export const ARTIFACTS_PATH = `${LOCAL_CONF_DIR}`
+export const ARTIFACTS_PATH = `${LOCAL_CONF_DIR}/artifacts`
+export const CIRCUITS_PATH = `${LOCAL_CONF_DIR}/circuits`
 export const CLI_PATH = `${LOCAL_CONF_DIR}/cli`
 export const CLI_ENV = `${LOCAL_CONF_DIR}/cli/.env`
 
@@ -136,7 +137,7 @@ export function getConfig(
 
   if (!defaultConfig) throw new Error(`Network '${network}' is not supported`)
 
-  const config = defaultConfig  
+  const config = defaultConfig
 
   if (process.env.WEB3_PROVIDER_URL) config.nvm.web3ProviderUri = process.env.WEB3_PROVIDER_URL
   if (process.env.MARKETPLACE_API_URL)
@@ -192,7 +193,7 @@ export function getConfig(
         providerOrUrl: config.nvm.web3ProviderUri,
         addressIndex: accountIndex,
         numberOfAddresses: 10
-      })      
+      })
     }
   } else {
     signer = Wallet.fromMnemonic(DUMMY_SEED_WORDS)
@@ -210,6 +211,7 @@ export function getConfig(
     nvm: {
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,
+      circuitsFolder: CIRCUITS_PATH,
       web3Provider: hdWalletProvider
     }
   }

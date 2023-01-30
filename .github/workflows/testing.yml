@@ -24,18 +24,21 @@ jobs:
         run: |
           yarn build
           yarn start --help
-          
-      - uses: nevermined-io/nvm-tools-actions@v0.6.0
+
+      - uses: nevermined-io/nvm-tools-actions@v0.6.1
         with:
           token: ${{ secrets.API_TOKEN_GITHUB }}
           opengsn: "true"
           estuary: "true"
           contracts-version: "v3.0.0"
           node-version: "develop"
-      - name: Check artifacts
+      - name: Check artifacts and circuits
         run: |
-          nvm-tools copy-artifacts /tmp/.nevermined
-          ls -l /tmp/.nevermined
+          nvm-tools copy-artifacts /tmp/.nevermined/artifacts
+          ls -l /tmp/.nevermined/artifacts/ready
+
+          nvm-tools copy-circuits /tmp/.nevermined/circuits
+          ls -l /tmp/.nevermined/circuits/keytransfer.wasm
 
       - name: Run integration tests
         env:
