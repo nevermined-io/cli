@@ -24,7 +24,7 @@ export const createNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, metadata } = argv
 
-  const nftType = argv.nftType as number
+  const nftType = Number(argv.nftType)
 
   logger.info(chalk.dim('Creating NFT ...'))
 

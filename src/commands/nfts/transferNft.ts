@@ -14,7 +14,7 @@ export const transferNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, agreementId } = argv
 
-  const nftType = argv.nftType as number
+  const nftType = Number(argv.nftType)
   
   const token = await loadToken(nvm, config, verbose)
 

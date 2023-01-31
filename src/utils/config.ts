@@ -48,6 +48,7 @@ export async function configureLocalEnvironment(
   }
 
   const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
+
   if (
     network.toLowerCase() === 'spree' ||
     network.toLowerCase() === 'geth-localnet'

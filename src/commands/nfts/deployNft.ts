@@ -21,7 +21,7 @@ export const deployNft = async (
 ): Promise<ExecutionOutput> => {
   const { account, abiPath } = argv
 
-  const nftType = argv.nftType as number
+  const nftType = Number(argv.nftType)
   
   logger.info(chalk.dim('Deploying NFT contract...'))
 
@@ -54,6 +54,9 @@ export const deployNft = async (
   if (nftType === 721)  {
     args.push(argv.cap)
   }
+
+  logger.debug(`NFT Type: ${typeof nftType}`)
+  logger.debug(`Params : ${JSON.stringify(args)}`)
 
   const argument = isZos ? [] : args
   const contractInstance: ethers.Contract = await contract.deploy(...argument)

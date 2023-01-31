@@ -20,7 +20,7 @@ export const accessNft = async (
   )
 
   const ddo = await nvm.assets.resolve(did)  
-  const nftType = argv.nftType as number
+  const nftType = Number(argv.nftType)
 
   let isHolder = false
   let nftAddress = ''

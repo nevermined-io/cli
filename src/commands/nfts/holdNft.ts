@@ -14,7 +14,7 @@ export const holdNft = async (
 ): Promise<ExecutionOutput> => {
   const { did } = argv
 
-  const nftType = argv.nftType as number
+  const nftType = Number(argv.nftType)
 
   logger.info(
     chalk.dim(`Checks if an address is a NFT holder of the ${chalk.whiteBright(did)}`)

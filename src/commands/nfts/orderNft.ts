@@ -14,7 +14,7 @@ export const orderNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, did } = argv
 
-  const nftType = argv.nftType as number
+  const nftType = Number(argv.nftType)
 
   logger.info(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
 

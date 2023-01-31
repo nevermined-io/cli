@@ -19,7 +19,7 @@ export const mintNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, did, uri } = argv
 
-  const nftType = argv.nftType as number
+  const nftType = Number(argv.nftType)
 
   logger.info(chalk.dim(`Minting NFT: '${chalk.whiteBright(did)}'`))
 
