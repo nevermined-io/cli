@@ -1,5 +1,5 @@
 import { Account, Nevermined, NFT1155Api, NFT721Api, zeroX } from '@nevermined-io/nevermined-sdk-js'
-import { loadNFT1155Contract, StatusCodes } from '../../utils'
+import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -45,8 +45,8 @@ export const holdNft = async (
 
   } else {
     logger.info(`Checking balance`)
-    const nftContract = loadNFT1155Contract(config, nftAddress)
-    balance = await nftContract.balanceOf(userAddress, zeroX(ddo.shortId()))
+    const nft = await nvm.contracts.loadNft1155Contract(nftAddress)
+    balance = await nft.balance(userAddress, zeroX(ddo.shortId()))
     isHolder = balance.gt(0)
   }
 

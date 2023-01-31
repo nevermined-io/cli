@@ -62,17 +62,6 @@ export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
   )
 }
 
-export const loadNFT1155Contract = (config: ConfigEntry, address: string | undefined): Contract => {
-  const abiPath = `${ARTIFACTS_PATH}/NFT1155Upgradeable.${config.networkName?.toLowerCase()}.json`
-  const contractAbi = JSON.parse(fs.readFileSync(abiPath).toString())
-
-  return new ethers.Contract(
-    address ? address : contractAbi.address,
-    contractAbi.abi,
-    config.signer
-  )
-}
-
 export const getNFTAddressFromInput = (
   nftAddress: string | undefined,
   ddo: DDO,
