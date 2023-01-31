@@ -620,7 +620,7 @@
 					"description": "If true adds the Nevermined Transfer condition with permissions to mint NFTs"
 				},{
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "721",
 					"hidden": "true",
 					"description": "The NFT type"
@@ -663,7 +663,7 @@
 					"description": "A list of addresses to be approved to operate the NFT contract"
 				},{
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "721",
 					"hidden": "true",
 					"description": "The NFT type"
@@ -775,7 +775,7 @@
 					},						
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "721",
 						"hidden": "true",
 						"description": "The NFT type"
@@ -837,7 +837,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "721",
 						"hidden": true,
 						"description": "The NFT type"
@@ -874,7 +874,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "721",
 						"hidden": true,
 						"description": "The NFT type"
@@ -901,7 +901,7 @@
 					"description": "The token Id to burn"
 				}, {
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "721",
 					"hidden": true,
 					"description": "The NFT type"
@@ -919,7 +919,7 @@
 				}],
 				"optionalArguments": [{
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "721",
 					"hidden": true,
 					"description": "The NFT type"
@@ -945,7 +945,7 @@
 					"description": "The address of the account who will receive the NFT"
 				}, {
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "721",
 					"hidden": true,
 					"description": "The NFT type"
@@ -1049,7 +1049,7 @@
 					"description": "If true adds the Nevermined Transfer condition with permissions to mint NFTs"
 				},{
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "1155",
 					"hidden": "true",
 					"description": "The NFT type"
@@ -1087,7 +1087,7 @@
 					"description": "A list of addresses to be approved to operate the NFT contract"
 				},{
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "1155",
 					"hidden": "true",
 					"description": "The NFT type"
@@ -1183,7 +1183,7 @@
 					},						
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": "true",
 						"description": "The NFT type"
@@ -1232,7 +1232,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": true,
 						"description": "The NFT type"
@@ -1257,7 +1257,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": true,
 						"description": "The NFT type"
@@ -1282,7 +1282,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": true,
 						"description": "The NFT type"
@@ -1307,7 +1307,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": true,
 						"description": "The NFT type"
@@ -1339,7 +1339,7 @@
 					"description": "The number of NFTs (ERC-1155) to transfer"
 				}, {
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "1155",
 					"hidden": true,
 					"description": "The NFT type"
