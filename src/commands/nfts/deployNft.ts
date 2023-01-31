@@ -1,5 +1,4 @@
-import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
-import SubscriptionNft721 from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/SubscriptionNft721'
+import { Account, Nevermined, Nft1155Contract, Nft721Contract, Web3Provider } from '@nevermined-io/nevermined-sdk-js'
 import { ContractReceipt, ethers } from 'ethers'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import {
@@ -10,7 +9,6 @@ import {
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
-import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import * as fs from 'fs'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
@@ -23,7 +21,9 @@ export const deployNft = async (
 ): Promise<ExecutionOutput> => {
   const { account, abiPath } = argv
 
-  logger.info(chalk.dim('Deploying NFT (ERC-721) contract...'))
+  const nftType = Number(argv.nftType)
+  
+  logger.info(chalk.dim('Deploying NFT contract...'))
 
   const web3 = Web3Provider.getWeb3(config.nvm)
 
@@ -43,15 +43,25 @@ export const deployNft = async (
     (f) => f.name === 'initialize'
   )
 
-  const args: string[] = argv.params.filter(
-    (_key: string) => _key !== '' && _key !== undefined
-  )
+  const args: string[] = []
 
-  if (args.length > 0) logger.info(`Using Params: ${JSON.stringify(args)}`)
+  args.push(creatorAccount.getId())
+  args.push(nvm.keeper.didRegistry.getAddress())
+  args.push(argv.name)
+  args.push(argv.symbol)
+  args.push(argv.uri)
+
+  if (nftType === 721)  {
+    args.push(argv.cap)
+  }
+
+  logger.debug(`NFT Type: ${typeof nftType}`)
+  logger.debug(`Params : ${JSON.stringify(args)}`)
 
   const argument = isZos ? [] : args
   const contractInstance: ethers.Contract = await contract.deploy(...argument)
   await contractInstance.deployTransaction.wait()
+  
 
   if (isZos) {
     const methodSignature = getSignatureOfMethod(
@@ -71,32 +81,8 @@ export const deployNft = async (
       }
     }
   }
-  const nft721: Nft721 = await nvm.contracts.loadNft721(
-    contractInstance.address
-  )
-
-  await printNftTokenBanner(nft721)
 
   logger.info(`Contract deployed into address: ${contractInstance.address}\n`)
-
-  
-  try {
-    // INFO: We allow transferNFT condition to mint NFTs
-    // Typically this only needs to happen once per NFT contract
-    const erc721Contract = await SubscriptionNft721.getInstance(
-      (nvm.keeper as any).instanceConfig,
-      contractInstance.address
-  )  
-    await erc721Contract.addMinter(
-      nvm.keeper.conditions.transferNft721Condition.address,
-      creatorAccount.getId()
-    )
-    logger.info(`Adding TransferNFT721Condition with address ${nvm.keeper.conditions.transferNft721Condition.address} as minter`)  
-  } catch (error) {
-    logger.warn(`Unable to add TransferNFT721Condition as minter: ${(error as Error).message}`)
-  }
-
-
 
   // INFO: We allow the Nevermined Node to fulfill the transfer condition in behalf of the user
   // Typically this only needs to happen once per NFT contract
@@ -105,14 +91,71 @@ export const deployNft = async (
   )
   if (config.nvm.neverminedNodeAddress) addressesToApprove.push(config.nvm.neverminedNodeAddress!)
 
-  for await (const addr of addressesToApprove)  {
-    await nft721.setApprovalForAll(addr, true, creatorAccount)        
-    const isApproved = await nft721.isApprovedForAll(
-      creatorAccount.getId(),
-      addr
+
+  if (nftType === 721)  {
+    const nft721 = await nvm.contracts.loadNft721(
+      contractInstance.address
     )
-    logger.info(`Address (${addr}) Approved: ${isApproved}\n`)
+  
+    await printNftTokenBanner(nft721.getContract) 
+    
+    try {
+      // INFO: We allow transferNFT condition to mint NFTs
+      // Typically this only needs to happen once per NFT contract
+      const erc721Contract = await Nft721Contract.getInstance(
+        (nvm.keeper as any).instanceConfig,
+        contractInstance.address
+    )  
+      await erc721Contract.grantOperatorRole(
+        nvm.keeper.conditions.transferNft721Condition.address,
+        creatorAccount
+      )
+      logger.info(`Adding TransferNFT721Condition with address ${nvm.keeper.conditions.transferNft721Condition.address} as operator`)  
+    } catch (error) {
+      logger.warn(`Unable to add TransferNFT721Condition as operator: ${(error as Error).message}`)
+    }
+    
+    for await (const addr of addressesToApprove)  {
+      await nft721.setApprovalForAll(addr, true, creatorAccount)        
+      const isApproved = await nft721.isApprovedForAll(
+        creatorAccount.getId(),
+        addr
+      )
+      logger.info(`Address (${addr}) Approved: ${isApproved}\n`)
+    }
+  } else {
+
+    const nft1155 = await nvm.contracts.loadNft1155(
+      contractInstance.address
+    )    
+    
+    try {
+      // INFO: We allow transferNFT condition to mint NFTs
+      // Typically this only needs to happen once per NFT contract
+      const erc1155Contract = await Nft1155Contract.getInstance(
+        (nvm.keeper as any).instanceConfig,
+        contractInstance.address
+    )  
+      await erc1155Contract.grantOperatorRole(
+        nvm.keeper.conditions.transferNftCondition.address,
+        creatorAccount
+      )
+      logger.info(`Adding TransferNFTCondition with address ${nvm.keeper.conditions.transferNftCondition.address} as operator`)  
+    } catch (error) {
+      logger.warn(`Unable to add TransferNFTCondition as operator: ${(error as Error).message}`)
+    }
+    
+    for await (const addr of addressesToApprove)  {
+      await nft1155.setApprovalForAll(addr, true, creatorAccount)        
+      const isApproved = await nft1155.isApprovedForAll(
+        creatorAccount.getId(),
+        addr
+      )
+      logger.info(`Address (${addr}) Approved: ${isApproved}\n`)
+    }
+
   }
+
   
 
   return {

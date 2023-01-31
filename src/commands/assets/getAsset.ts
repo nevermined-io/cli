@@ -1,13 +1,11 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, generateIntantiableConfigFromConfig, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
 import { Logger } from 'log4js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { Dtp } from '@nevermined-io/nevermined-sdk-dtp/dist/Dtp'
-import { generateIntantiableConfigFromConfig } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
-import { CryptoConfig } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
+import { CryptoConfig, Dtp } from '@nevermined-io/nevermined-sdk-dtp'
 
 readline.createInterface({
   input: process.stdin,
@@ -35,7 +33,7 @@ export const getAsset = async (
     nevermined: nvm,
   }
 
-  const nodeInfo = await nvm.node.getNeverminedNodeInfo()
+  const nodeInfo = await nvm.services.node.getNeverminedNodeInfo()
   const cryptoConfig: CryptoConfig = {
     provider_key: '',
     provider_password: '',
@@ -55,7 +53,7 @@ export const getAsset = async (
 
   if (!argv.agreementId) {
     logger.info(chalk.dim(`Ordering asset: ${did}`))
-    agreementId = await nvm.assets.order(did, 'access', account)
+    agreementId = await nvm.assets.order(did, account)
   } else {
     agreementId = argv.agreementId
   }
@@ -77,7 +75,7 @@ export const getAsset = async (
     argv.destination :
     `${argv.destination}/`
 
-  const path = await nvm.assets.consume(
+  const path = await nvm.assets.access(
     agreementId,
     did,
     account,

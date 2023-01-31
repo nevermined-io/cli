@@ -1,9 +1,8 @@
-import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { Account, didZeroX, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, getNFTAddressFromInput } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import IpfsHelper from '../../utils/IpfsHelper'
 import { getDidHash } from '../../utils/utils'
-import { didZeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import fetch from 'cross-fetch'
@@ -67,8 +66,8 @@ export const getNftMetadata = async (
   if (is1155) {
     metadataUrl = await nvm.keeper.nftUpgradeable.uri(did)
   } else {
-    const nftContract: Nft721 = await nvm.contracts.loadNft721(nftAddress)
-    metadataUrl = await nftContract.contract.tokenURI(didHash)
+    const nftContract = await nvm.contracts.loadNft721(nftAddress || nvm.nfts721.getContract.getAddress())
+    metadataUrl = await nftContract.getContract.tokenURI(didHash)
   }
 
   // Resolve the metadata

@@ -1,4 +1,4 @@
-import { Account, Nevermined, Nft721 } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, Nevermined, zeroX } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -6,7 +6,6 @@ import {
 } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
-import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import { ethers } from 'ethers'
@@ -19,6 +18,8 @@ export const mintNft = async (
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { verbose, did, uri } = argv
+
+  const nftType = Number(argv.nftType)
 
   logger.info(chalk.dim(`Minting NFT: '${chalk.whiteBright(did)}'`))
 
@@ -41,29 +42,29 @@ export const mintNft = async (
     )
   )
 
-  let to
-  if (ethers.utils.isAddress(argv.receiver)) to = argv.receiver
-  else to = await nvm.keeper.didRegistry.getDIDOwner(ddo.id)
+  let receiver
+  if (ethers.utils.isAddress(argv.receiver)) receiver = argv.receiver
+  else receiver = minterAccount.getId()
 
-  if (argv.nftType === '721') {
+  if (nftType === 721) {
     // Minting NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.getAddress()
 
-    const nft: Nft721 = await nvm.contracts.loadNft721(nftAddress)
+    const nft = await nvm.contracts.loadNft721(nftAddress)
     if (verbose) {
-      await printNftTokenBanner(nft)
+      await printNftTokenBanner(nft.getContract)
     }
 
     // We check the number of parameters expected by the mint function to adapt the parameters
-    const mintAbiDefinition = nft.contract.contract.interface.fragments
+    const mintAbiDefinition = nft.getContract.contract.interface.fragments
       .filter((item: { name: string }) => item.name === 'mint')
       .map((entry: { inputs: any }) => entry.inputs)
 
     if (mintAbiDefinition.length == 3) {
       logger.debug(`Minting using the To address + tokenId + tokenURI`)
       await nft.mintWithURL(
-        to,
+        receiver,
         zeroX(ddo.shortId()),
         uri || register.url,
         minterAccount
@@ -77,7 +78,7 @@ export const mintNft = async (
       chalk.dim(
         `Minted NFT (ERC-721) '${chalk.whiteBright(
           ddo.id
-        )}' to '${chalk.whiteBright(to)}'!`
+        )}' to '${chalk.whiteBright(receiver)}'!`
       )
     )
   } else {
@@ -86,11 +87,15 @@ export const mintNft = async (
     if (argv.amount < 1 || argv.amount > register.mintCap) {
       return {
         status: StatusCodes.ERROR,
-        errorMessage: `Invalid number of ERC-1155 NFTs to mint. It should be >=1 and <cap`
+        errorMessage: `Invalid number of ERC-1155 NFTs to mint. It should be >=1 and < cap`
       }
     }
 
-    await nvm.keeper.didRegistry.mint(did, argv.amount, minterAccount.getId())
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.getAddress()
+    const nft = await nvm.contracts.loadNft1155(nftAddress)
+
+    await nft.mint(did, BigNumber.from(argv.amount), receiver, minterAccount)
+    
 
     logger.info(
       chalk.dim(

@@ -124,7 +124,7 @@
 				}]
 			}, {
 				"name": "fund [account]",
-				"description": "Funds an account on a testnet",
+				"description": "Funds an account with ERC20 tokens on a testnet",
 				"details": "In the test environments all tokens lack real value. Typically in Nevermined you need to use different type of tokens. The Native token (`ETH`, `MATIC`, etc) to pay for the gas resulting to write into a blockchain network, and optionally with a `ERC20` token to do some payments. This command allows to get some funds in a testnet environment allowing to a user to run different processes on a testnet. This command will not work in production environments where the tokens have actual value.",
 				"examples": ["ncli accounts fund 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
 				"commandHandler": "accountsFund",
@@ -133,12 +133,7 @@
 					"type": "string",
 					"description": "The account to fund"
 				}],
-				"optionalArguments": [{
-					"name": "token",
-					"type": "string",
-					"default": "both",
-					"description": "What kind of tokens you want to fund the account (native, erc20 or both)"
-				}]
+				"optionalArguments": []
 			}]
 		}, {
 			"name": "assets",
@@ -196,6 +191,12 @@
 						"type": "string",
 						"description": "The password for encrypted files"
 					},
+					{
+						"name": "publishMetadata",
+						"type": "string",
+						"default": "metadata-api",
+						"description": "Allows to store the metadata in the Metadata API only (metadata-api) or in IPFS too (passing ipfs as value here)."
+					},					
 					{
 						"name": "assetType",
 						"type": "string",
@@ -270,6 +271,12 @@
 						"description": "The docker container where the algorithm can be executed. Example: python:3.8-alpine"
 					},
 					{
+						"name": "publishMetadata",
+						"type": "string",
+						"default": "metadata-api",
+						"description": "Allows to store the metadata in the Metadata API only (metadata-api) or in IPFS too (passing ipfs as value here)."
+					},						
+					{
 						"name": "assetType",
 						"type": "string",
 						"default": "algorithm",
@@ -298,6 +305,11 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Use encrypted service endpoint"
+				}, {
+					"name": "publishMetadata",
+					"type": "string",
+					"default": "metadata-api",
+					"description": "Allows to store the metadata in the Metadata API only (metadata-api) or in IPFS too (passing ipfs as value here)."
 				}]
 			}, {
 				"name": "search [query]",
@@ -578,20 +590,84 @@
 					"description": "The path to the ABI representing the ERC-721 contract"
 				}],
 				"optionalArguments": [{
-					"name": "params",
-					"type": "array",
-					"description": "A list of parameters to be given during the contract initialization"
+					"name": "name",
+					"type": "string",
+					"default": "NVM NFT",
+					"description": "The nft contract name"
+				},{
+					"name": "symbol",
+					"type": "string",
+					"default": "NVM",
+					"description": "The nft contract symbol"
+				},{
+					"name": "uri",
+					"type": "string",
+					"default": "",
+					"description": "The nft metadata uri"
+				},{
+					"name": "cap",
+					"type": "number",
+					"default": "0",
+					"description": "The max number of tokens created in this NFT contract. If 0 means unlimitted"
 				},{
 					"name": "approve",
 					"type": "array",
 					"description": "A list of addresses to be approved to manage the NFT contract"
 				},{
-					"name": "addMinter",
+					"name": "addOperator",
 					"type": "boolean",
 					"default": true,						
 					"description": "If true adds the Nevermined Transfer condition with permissions to mint NFTs"
+				},{
+					"name": "nftType",
+					"type": "number",
+					"default": "721",
+					"hidden": "true",
+					"description": "The NFT type"
 				}
-
+			]
+			}, {
+				"name": "clone [nftAddress]",
+				"description": "It clones an existing NFT (ERC-721) contract",
+				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract clonned will be owned by the user doing that clonning action.",
+				"examples": ["ncli nfts721 clone 0x37BB53e3d293494DE59fBe1FF78500423dcFd43B --params 'Token Name' --params 'SYMBOL'"],
+				"commandHandler": "cloneNft",
+				"positionalArguments": [{
+					"name": "nftAddress",
+					"type": "string",
+					"description": "The address of an already deployed ERC-721 NFT contract"
+				}],
+				"optionalArguments": [{
+					"name": "name",
+					"type": "string",
+					"default": "NVM ERC-721",
+					"description": "The nft contract name"
+				},{
+					"name": "symbol",
+					"type": "string",
+					"default": "NVM",
+					"description": "The nft contract symbol"
+				},{
+					"name": "uri",
+					"type": "string",
+					"default": "",
+					"description": "The nft metadata uri"
+				},{
+					"name": "cap",
+					"type": "number",
+					"default": "0",
+					"description": "The max number of tokens created in this NFT contract. If 0 means unlimitted"
+				},{
+					"name": "operators",
+					"type": "array",
+					"description": "A list of addresses to be approved to operate the NFT contract"
+				},{
+					"name": "nftType",
+					"type": "number",
+					"default": "721",
+					"hidden": "true",
+					"description": "The NFT type"
+				}
 			]
 			}, {
 				"name": "create [nftAddress]",				
@@ -636,6 +712,12 @@
 						"type": "array",
 						"default": "",
 						"description": "The asset urls. It can be a comma separated list of urls for multiple files."
+					},
+					{
+						"name": "providers",
+						"type": "array",
+						"demand": false,
+						"description": "Public addresses of Node providers that user delegates some permissions."
 					},
 					{
 						"name": "services",
@@ -686,8 +768,14 @@
 						"description": "The royalties (between 0 and 100%) to reward to the original creator in the secondary market."
 					},
 					{
-						"name": "nftType",
+						"name": "publishMetadata",
 						"type": "string",
+						"default": "metadata-api",
+						"description": "Allows to store the metadata in the Metadata API only (metadata-api) or in IPFS too (passing ipfs as value here)."
+					},						
+					{
+						"name": "nftType",
+						"type": "number",
 						"default": "721",
 						"hidden": "true",
 						"description": "The NFT type"
@@ -749,7 +837,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "721",
 						"hidden": true,
 						"description": "The NFT type"
@@ -786,7 +874,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "721",
 						"hidden": true,
 						"description": "The NFT type"
@@ -801,15 +889,19 @@
 				"positionalArguments": [{
 					"name": "did",
 					"type": "string",
-					"description": "The DID to burn"
+					"description": "The identifier of the asset"
 				}, {
 					"name": "nftAddress",
 					"type": "string",
 					"description": "The address of the NFT (ERC-721) contract"
 				}],
 				"optionalArguments": [{
-					"name": "nftType",
+					"name": "tokenId",
 					"type": "string",
+					"description": "The token Id to burn"
+				}, {
+					"name": "nftType",
+					"type": "number",
 					"default": "721",
 					"hidden": true,
 					"description": "The NFT type"
@@ -827,7 +919,7 @@
 				}],
 				"optionalArguments": [{
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "721",
 					"hidden": true,
 					"description": "The NFT type"
@@ -853,7 +945,7 @@
 					"description": "The address of the account who will receive the NFT"
 				}, {
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "721",
 					"hidden": true,
 					"description": "The NFT type"
@@ -908,6 +1000,12 @@
 					"type": "string",
 					"demandOption": true,
 					"description": "The destination of the files"
+				}, {
+					"name": "nftType",
+					"type": "number",
+					"default": "721",
+					"hidden": true,
+					"description": "The NFT type"
 				}]
 			}]
 		}, {
@@ -915,6 +1013,87 @@
 			"description": "Create and manage NFTs (ERC-1155) attached to Nevermined assets",
 			"usage": "usage: $0 nfts1155 <command> parameters [options]",
 			"subcommands": [{
+				"name": "deploy [abiPath]",
+				"description": "It deploys a new NFT (ERC-1155) contract",
+				"details": "A Smart Contract is represented by an ABI file that includes the definition of it interfaces and the bytecode of the contract. Having that file, this command allows to deploy a new instance of a ERC-721 contract in the network where the `ncli` is connected. As a result the `ncli` will return the address where the contract was deployed allowing further interaction with it.",
+				"examples": ["ncli nfts1155 deploy NFT1155.json", "ncli nfts1155 deploy test/resources/nfts/NFT1155.json --params 'Token Name' --params 'SYMBOL'"],
+				"commandHandler": "deployNft",
+				"positionalArguments": [{
+					"name": "abiPath",
+					"type": "string",
+					"description": "The path to the ABI representing the ERC-1155 contract"
+				}],
+				"optionalArguments": [{
+					"name": "name",
+					"type": "string",
+					"default": "NVM NFT",
+					"description": "The nft contract name"
+				},{
+					"name": "symbol",
+					"type": "string",
+					"default": "NVM",
+					"description": "The nft contract symbol"
+				},{
+					"name": "uri",
+					"type": "string",
+					"default": "",
+					"description": "The nft metadata uri"
+				},{
+					"name": "approve",
+					"type": "array",
+					"description": "A list of addresses to be approved to manage the NFT contract"
+				},{
+					"name": "addOperator",
+					"type": "boolean",
+					"default": true,						
+					"description": "If true adds the Nevermined Transfer condition with permissions to mint NFTs"
+				},{
+					"name": "nftType",
+					"type": "number",
+					"default": "1155",
+					"hidden": "true",
+					"description": "The NFT type"
+				}
+			]
+			}, {
+				"name": "clone [nftAddress]",
+				"description": "It clones an existing NFT (ERC-1155) contract",
+				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract clonned will be owned by the user doing that clonning action.",
+				"examples": ["ncli nfts1155 clone 0x37BB53e3d293494DE59fBe1FF78500423dcFd43B --params 'Token Name' --params 'SYMBOL'"],
+				"commandHandler": "cloneNft",
+				"positionalArguments": [{
+					"name": "nftAddress",
+					"type": "string",
+					"description": "The address of an already deployed ERC-1155 NFT contract"
+				}],
+				"optionalArguments": [{
+					"name": "name",
+					"type": "string",
+					"default": "NVM ERC-721",
+					"description": "The nft contract name"
+				},{
+					"name": "symbol",
+					"type": "string",
+					"default": "NVM",
+					"description": "The nft contract symbol"
+				},{
+					"name": "uri",
+					"type": "string",
+					"default": "",
+					"description": "The nft metadata uri"
+				},{
+					"name": "operators",
+					"type": "array",
+					"description": "A list of addresses to be approved to operate the NFT contract"
+				},{
+					"name": "nftType",
+					"type": "number",
+					"default": "1155",
+					"hidden": "true",
+					"description": "The NFT type"
+				}
+			]
+			}, {
 				"name": "create",
 				"description": "Registers a new asset and associates a NFT (ERC-1155) to it",
 				"details": "This command registers a new asset that allows the publisher to provide access to some exclusive contents when users purchase the price of that NFT.",
@@ -952,6 +1131,12 @@
 						"description": "The asset urls. It can be a comma separated list of urls for multiple files."
 					},
 					{
+						"name": "providers",
+						"type": "array",
+						"demand": false,
+						"description": "Public addresses of Node providers that user delegates some permissions."
+					},
+					{
 						"name": "services",
 						"type": "array",
 						"demand": false,
@@ -979,14 +1164,26 @@
 						"description": "If true the NFTs will be minted during creation"
 					},
 					{
+						"name": "transfer",
+						"type": "boolean",
+						"default": true,						
+						"description": "It allows to transfer a NFT when purchased or mint"
+					},					
+					{
 						"name": "royalties",
 						"type": "number",
 						"default": "0",
 						"description": "The royalties (between 0 and 100%) to reward to the original creator in the secondary market"
 					},
 					{
-						"name": "nftType",
+						"name": "publishMetadata",
 						"type": "string",
+						"default": "metadata-api",
+						"description": "Allows to store the metadata in the Metadata API only (metadata-api) or in IPFS too (passing ipfs as value here)."
+					},						
+					{
+						"name": "nftType",
+						"type": "number",
 						"default": "1155",
 						"hidden": "true",
 						"description": "The NFT type"
@@ -1035,7 +1232,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": true,
 						"description": "The NFT type"
@@ -1060,7 +1257,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": true,
 						"description": "The NFT type"
@@ -1085,7 +1282,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": true,
 						"description": "The NFT type"
@@ -1110,7 +1307,7 @@
 					},
 					{
 						"name": "nftType",
-						"type": "string",
+						"type": "number",
 						"default": "1155",
 						"hidden": true,
 						"description": "The NFT type"
@@ -1142,7 +1339,7 @@
 					"description": "The number of NFTs (ERC-1155) to transfer"
 				}, {
 					"name": "nftType",
-					"type": "string",
+					"type": "number",
 					"default": "1155",
 					"hidden": true,
 					"description": "The NFT type"
@@ -1190,6 +1387,12 @@
 					"type": "string",
 					"demandOption": true,
 					"description": "The destination of the files"
+				}, {
+					"name": "nftType",
+					"type": "number",
+					"default": "1155",
+					"hidden": true,
+					"description": "The NFT type"
 				}]
 			}]
 		}, {

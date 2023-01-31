@@ -1,5 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { ServiceMetadata } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
+import { Account, Nevermined, ServiceMetadata } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes, printSearchResult } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -18,8 +17,8 @@ export const searchAsset = async (
   logger.info(chalk.dim(`Search using query: ${chalk.green(query)}`))
 
   logger.debug(chalk.dim(`Using Marketplace API: ${config.nvm.marketplaceUri}`))  
-
-  const queryResults = await nvm.assets.search(query, argv.offset, argv.page)
+  
+  const queryResults = await nvm.search.byText(query, argv.offset, argv.page)
   let metadataResult
 
   if (onlyMetadata) {

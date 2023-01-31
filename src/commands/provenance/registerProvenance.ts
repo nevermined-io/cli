@@ -1,6 +1,5 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, generateId, Nevermined } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes } from '../../utils'
-import { generateId } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
 import chalk from 'chalk'

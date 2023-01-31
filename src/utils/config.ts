@@ -9,8 +9,8 @@ import fetch from 'cross-fetch'
 import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
-import Web3Provider from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/Web3Provider'
 import { Wallet, Signer } from 'ethers'
+import { Web3Provider } from '@nevermined-io/nevermined-sdk-js'
 
 dotenv.config()
 
@@ -18,15 +18,15 @@ export const logger = getLogger()
 
 export const LOCAL_CONF_DIR =
   process.env.LOCAL_CONF_DIR || `${os.homedir()}/.nevermined`
-export const ARTIFACTS_PATH = `${LOCAL_CONF_DIR}/nevermined-contracts/artifacts`
+export const ARTIFACTS_PATH = `${LOCAL_CONF_DIR}/artifacts`
+export const CIRCUITS_PATH = `${LOCAL_CONF_DIR}/circuits`
 export const CLI_PATH = `${LOCAL_CONF_DIR}/cli`
-export const CLI_ENV = `${LOCAL_CONF_DIR}/nevermined-contracts/cli/.env`
+export const CLI_ENV = `${LOCAL_CONF_DIR}/cli/.env`
 
 export const ARTIFACTS_REPOSITORY =
   process.env.ARTIFACTS_REPO ||
-  'https://artifacts-nevermined-rocks.s3.amazonaws.com'
+  'https://artifacts.nevermined.network'
 
-export const USE_NEW_GATEWAY = process.env.USE_NEW_GATEWAY === 'true' || true
 export const DEFAULT_ENCRYPTION_METHOD = 'PSK-RSA'
 
 // INFO: This seed words is only used to initialize the HDWallet in commands not requiring network connectivity
@@ -48,6 +48,7 @@ export async function configureLocalEnvironment(
   }
 
   const abiTestPath = `${ARTIFACTS_PATH}/DIDRegistry.${config.networkName?.toLowerCase()}.json`
+
   if (
     network.toLowerCase() === 'spree' ||
     network.toLowerCase() === 'geth-localnet'
@@ -137,12 +138,11 @@ export function getConfig(
 
   if (!defaultConfig) throw new Error(`Network '${network}' is not supported`)
 
-  const config = defaultConfig  
+  const config = defaultConfig
 
   if (process.env.WEB3_PROVIDER_URL) config.nvm.web3ProviderUri = process.env.WEB3_PROVIDER_URL
   if (process.env.MARKETPLACE_API_URL)
     config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
-  if (process.env.FAUCET_URL) config.nvm.faucetUri = process.env.FAUCET_URL
   if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
   if (process.env.NO_GRAPH) config.nvm.graphHttpUri = undefined
   if (process.env.NVM_NODE_URL) config.nvm.neverminedNodeUri = process.env.NVM_NODE_URL
@@ -178,32 +178,32 @@ export function getConfig(
         process.env.KEYFILE_PATH!,
         process.env.KEYFILE_PASSWORD!
       )
-      hdWalletProvider = new HDWalletProvider(
-        [
+      hdWalletProvider = new HDWalletProvider({
+        privateKeys: [
           getPrivateKey(
             process.env.KEYFILE_PATH!,
             process.env.KEYFILE_PASSWORD!
           )
         ],
-        config.nvm.web3ProviderUri!
-      )
+        providerOrUrl: config.nvm.web3ProviderUri,
+      })
     } else {
       signer = Wallet.fromMnemonic(config.seed!)
-      hdWalletProvider = new HDWalletProvider(
-        config.seed!,
-        config.nvm.web3ProviderUri!,
-        accountIndex,
-        10
-      )
+      hdWalletProvider = new HDWalletProvider({
+        mnemonic: config.seed!,
+        providerOrUrl: config.nvm.web3ProviderUri,
+        addressIndex: accountIndex,
+        numberOfAddresses: 10
+      })
     }
   } else {
     signer = Wallet.fromMnemonic(DUMMY_SEED_WORDS)
-    hdWalletProvider = new HDWalletProvider(
-      DUMMY_SEED_WORDS,
-      config.nvm.web3ProviderUri!,
-      0,
-      1
-    )
+    hdWalletProvider = new HDWalletProvider({
+      mnemonic: DUMMY_SEED_WORDS,
+      providerOrUrl: config.nvm.web3ProviderUri,
+      addressIndex: 0,
+      numberOfAddresses: 1
+    })
   }
 
   return {
@@ -212,7 +212,7 @@ export function getConfig(
     nvm: {
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,
-      newGateway: USE_NEW_GATEWAY,
+      circuitsFolder: CIRCUITS_PATH,
       web3Provider: hdWalletProvider
     }
   }

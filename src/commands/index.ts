@@ -9,11 +9,12 @@ export * from './assets/resolveDID'
 export * from './assets/retireDID'
 
 // nfts (ERC-721 & ERC-1155)
-export * from './nfts/showNft'
+export * from './nfts/cloneNft'
 export * from './nfts/deployNft'
 export * from './nfts/createNft'
 export * from './nfts/holdNft'
 export * from './nfts/mintNft'
+export * from './nfts/showNft'
 export * from './nfts/burnNft'
 export * from './nfts/orderNft'
 export * from './nfts/transferNft'

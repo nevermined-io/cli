@@ -3,7 +3,6 @@ import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
 import { Logger } from 'log4js'
-// import { makeKeyTransfer } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
@@ -28,7 +27,7 @@ export const orderAsset = async (
 
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
-  const agreementId = await nvm.assets.order(did, 'access', account)
+  const agreementId = await nvm.assets.order(did, account)
   // }
 
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))

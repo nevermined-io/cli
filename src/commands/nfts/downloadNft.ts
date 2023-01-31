@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, NFTsBaseApi } from '@nevermined-io/nevermined-sdk-js'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -12,7 +12,7 @@ export const downloadNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { did, agreementId } = argv
+  const { did, agreementId, nftType } = argv
 
   const destination = argv.destination.substring(argv.destination.length - 1) === '/' ?
     argv.destination :
@@ -25,13 +25,29 @@ export const downloadNft = async (
 
   console.debug(chalk.dim(`Using account: '${consumerAccount.getId()}'`))
 
-  await nvm.nfts.access(
-    did,
-    consumerAccount,
-    destination,
-    undefined,
-    agreementId
-  )
+  const ddo = await nvm.assets.resolve(did)
+
+  const nftAddress = NFTsBaseApi.getNFTContractAddress(ddo) as string
+
+  if (nftType == 721) {
+    await nvm.contracts.loadNft721(nftAddress)
+    await nvm.nfts721.access(
+      did,
+      consumerAccount,
+      destination,
+      undefined,
+      agreementId
+    )
+  } else {
+    await nvm.contracts.loadNft1155(nftAddress)
+    await nvm.nfts1155.access(
+      did,
+      consumerAccount,
+      destination,
+      undefined,
+      agreementId
+    )
+  }
 
   logger.info(
     chalk.dim(`NFT Assets downloaded to: ${chalk.whiteBright(destination)}`)

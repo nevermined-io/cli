@@ -1,33 +1,34 @@
 import { Contract } from 'ethers'
 import {
-  findServiceConditionByName,
-  noZeroX
-} from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
-import {
   Account,
   DDO,
-  Nevermined,
-  Nft721,
+  Nevermined,  
+  BigNumber,
+  findServiceConditionByName,
+  Nft721Contract,
+  noZeroX,
   ProvenanceMethod,
-  ProvenanceRegistry
+  ProvenanceRegistry,
+  QueryResult,
+  ServiceType,
+  Token,
+  ConditionType
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
-import Token from '@nevermined-io/nevermined-sdk-js/dist/node/keeper/contracts/Token'
 import { Constants } from './enums'
 import { ARTIFACTS_PATH, logger } from './config'
-import { QueryResult } from '@nevermined-io/nevermined-sdk-js/dist/node/metadata/Metadata'
+
 import { Configuration, Logger } from 'log4js'
-import { ServiceType } from '@nevermined-io/nevermined-sdk-js/dist/node/ddo/Service'
 import { ethers } from 'ethers'
 import { ConfigEntry } from '../models/ConfigDefinition'
 import * as fs from 'fs'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const loadNevermined = async (
   config: ConfigEntry,
   network: string,
   verbose = false
 ): Promise<Nevermined> => {
+  
   const nvm = await Nevermined.getInstance({
     ...config.nvm,
     verbose: verbose ? verbose : config.nvm.verbose
@@ -46,7 +47,7 @@ export const loginMarketplaceApi = async (
   account: Account
 ): Promise<boolean> => {
   const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)
-  await nvm.marketplace.login(clientAssertion)
+  await nvm.services.marketplace.login(clientAssertion)
   return true
 }
 
@@ -61,31 +62,24 @@ export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
   )
 }
 
-export const loadNFT1155Contract = (config: ConfigEntry, address: string | undefined): Contract => {
-  const abiPath = `${ARTIFACTS_PATH}/NFTUpgradeable.${config.networkName?.toLowerCase()}.json`
-  const contractAbi = JSON.parse(fs.readFileSync(abiPath).toString())
-
-  return new ethers.Contract(
-    address ? address : contractAbi.address,
-    contractAbi.abi,
-    config.signer
-  )
-}
-
 export const getNFTAddressFromInput = (
-  nftAddress: string,
+  nftAddress: string | undefined,
   ddo: DDO,
-  serviceType: ServiceType
-): string => {
-  if (nftAddress === '' || !nftAddress.startsWith('0x')) {
-    const salesService = ddo.findServiceByType(serviceType)
+  serviceType: ServiceType = 'nft-sales',
+  conditionType: ConditionType = 'transferNFT'
+): string | undefined => {
 
+  if (!nftAddress || !ethers.utils.isAddress(nftAddress)) {
+
+    const salesService = ddo.findServiceByType(serviceType)
     if (!salesService) throw new Error(`No NFT contract address found`)
 
-    const transfer = findServiceConditionByName(salesService, 'transferNFT')
-    const _contractParam = transfer.parameters.find(
-      (p) => p.name === '_contract'
+    const condition = findServiceConditionByName(salesService, conditionType)
+
+    const _contractParam = condition.parameters.find(
+      (p) => p.name === '_contractAddress' || p.name === '_contract'
     )
+    
     return _contractParam?.value as string
   } else {
     return nftAddress
@@ -164,7 +158,7 @@ export const findAccountOrFirst = (
   return accounts[0]
 }
 
-export const printNftTokenBanner = async (nft721: Nft721) => {
+export const printNftTokenBanner = async (nft721: Nft721Contract) => {
   const { address } = nft721
 
   logger.info('\n')
@@ -313,7 +307,7 @@ export const getContractNameFromAddress = async (
   nvm: Nevermined,
   contractAddress: string
 ): Promise<string | undefined> => {
-  const platformVersions = await nvm.versions.get()
+  const platformVersions = await nvm.utils.versions.get()
 
   let contractName = undefined
   Object.keys(platformVersions.sdk.contracts || {}).forEach((_name) => {

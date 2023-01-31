@@ -1,11 +1,9 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { Constants, StatusCodes, loadToken } from '../../utils'
+import { Account, BigNumber, getAssetPriceFromDDOByService, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Constants, StatusCodes, loadToken, getNFTAddressFromInput } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
-import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const orderNft = async (
   nvm: Nevermined,
@@ -15,6 +13,8 @@ export const orderNft = async (
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { verbose, did } = argv
+
+  const nftType = Number(argv.nftType)
 
   logger.info(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
 
@@ -30,7 +30,7 @@ export const orderNft = async (
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
   const price = BigNumber.formatUnits(
-    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    getAssetPriceFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
     decimals
   )
 
@@ -38,12 +38,15 @@ export const orderNft = async (
     chalk.dim(`Price: ${chalk.whiteBright(price)} ${chalk.whiteBright(symbol)}`)
   )
 
+  const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
+
   let agreementId = ''
-  if (argv.nftType === '721') {
-    logger.info(`Lets order the did`)
-    agreementId = await nvm.nfts.order721(did, buyerAccount)
+  if (nftType === 721) {
+    await nvm.contracts.loadNft721(nftAddress!)
+    agreementId = await nvm.nfts721.order(did, buyerAccount)
   } else {
-    agreementId = await nvm.nfts.order(did, argv.amount, buyerAccount)
+    await nvm.contracts.loadNft1155(nftAddress!)
+    agreementId = await nvm.nfts1155.order(did, argv.amount, buyerAccount)
   }
 
   logger.info(

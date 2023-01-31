@@ -6,7 +6,6 @@
 		"nvm": {
 			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.network",
-			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
 			"neverminedNodeUri": "https://node.mumbai.public.nevermined.network",
 			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
@@ -15,7 +14,7 @@
 		"nativeToken": "MATIC",
 		"networkId": "80001",
 		"networkName": "mumbai",
-		"contractsVersion": "2.1.0",
+		"contractsVersion": "3.0.0",
 		"tagName": "public",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
@@ -30,7 +29,6 @@
 		"nvm": {
 			"web3ProviderUri": "https://polygon-rpc.com",
 			"marketplaceUri": "https://marketplace-api.matic.public.nevermined.network",
-			"faucetUri": "",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
 			"neverminedNodeUri": "https://node.matic.public.nevermined.network",
 			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
@@ -54,7 +52,6 @@
 		"nvm": {
 			"web3ProviderUri": "https://arb1.arbitrum.io/rpc",
 			"marketplaceUri": "https://marketplace-api.arbitrum-one.public.nevermined.rocks",
-			"faucetUri": "",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
 			"neverminedNodeUri": "https://node.arbitrum-one.public.nevermined.rocks",
 			"neverminedNodeAddress": "0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86",
@@ -78,7 +75,6 @@
 		"nvm": {
 			"web3ProviderUri": "",
 			"marketplaceUri": "https://marketplace-api.goerli.public.nevermined.rocks",
-			"faucetUri": "https://faucet.goerli.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
 			"neverminedNodeUri": "https://node.goerli.public.nevermined.rocks",
 			"neverminedNodeAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
@@ -102,7 +98,6 @@
 		"nvm": {
 			"web3ProviderUri": "https://goerli-rollup.arbitrum.io/rpc",
 			"marketplaceUri": "https://marketplace-api.arbitrum-goerli.public.nevermined.rocks",
-			"faucetUri": "https://faucet.arbitrum-goerli.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
 			"neverminedNodeUri": "https://node.arbitrum-goerli.public.nevermined.rocks",
 			"neverminedNodeAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
@@ -123,11 +118,10 @@
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running on your computer, please visit https://github.com/nevermined-io/tools/",
 		"isProduction": false,
 		"nvm": {
-			"web3ProviderUri": "http://localhost:8545",
-			"marketplaceUri": "http://172.17.0.1:3100",
-			"faucetUri": "http://localhost:3001",
+			"web3ProviderUri": "http://contracts.nevermined.localnet",
+			"marketplaceUri": "http://marketplace.nevermined.localnet",
 			"graphHttpUri": "http://localhost:9000/subgraphs/name/nevermined-io/development",
-			"neverminedNodeUri": "http://localhost:8030",
+			"neverminedNodeUri": "http://node.nevermined.localnet",
 			"neverminedNodeAddress": "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0",
 			"verbose": true
 		},
@@ -144,11 +138,10 @@
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
 		"isProduction": false,
 		"nvm": {
-			"web3ProviderUri": "http://localhost:8545",
-			"marketplaceUri": "http://172.17.0.1:3100",
-			"faucetUri": "http://localhost:3001",
+			"web3ProviderUri": "http://contracts.nevermined.localnet",
+			"marketplaceUri": "http://marketplace.nevermined.localnet",
 			"graphHttpUri": "http://localhost:9000/subgraphs/name/nevermined-io/development",
-			"neverminedNodeUri": "http://localhost:8030",
+			"neverminedNodeUri": "http://node.nevermined.localnet",
 			"neverminedNodeAddress": "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0",
 			"verbose": true
 		},
@@ -168,7 +161,6 @@
 		"nvm": {
 			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api-public.nevermined.network/",
-			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
 			"neverminedNodeUri": "https://gateway.mumbai.public.nevermined.network/",
 			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
@@ -192,7 +184,6 @@
 		"nvm": {
 			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api.autonomies.test.nevermined.rocks",
-			"faucetUri": "https://faucet.mumbai.public.nevermined.rocks",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
 			"neverminedNodeUri": "https://gateway.autonomies.test.nevermined.rocks",
 			"neverminedNodeAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
@@ -215,7 +206,6 @@
 		"nvm": {
 			"web3ProviderUri": "https://alfajores-forno.celo-testnet.org",
 			"marketplaceUri": "https://marketplace-api.alfajores.nevermined.rocks",
-			"faucetUri": "https://faucet.alfajores.nevermined.rocks",
 			"graphHttpUri": "",
 			"neverminedNodeUri": "https://gateway.alfajores.nevermined.rocks",
 			"neverminedNodeAddress": "0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0",
@@ -239,7 +229,6 @@
 		"nvm": {
 			"web3ProviderUri": "https://forno.celo.org",
 			"marketplaceUri": "https://marketplace-api.alities.celo.nevermined.rocks",
-			"faucetUri": "https://faucet.alities.celo.nevermined.rocks",
 			"graphHttpUri": "",
 			"neverminedNodeUri": "https://gateway.alities.celo.nevermined.rocks",
 			"neverminedNodeAddress": "0x7f3661d22E89Ad3549c7fC034D94B53da731D36A",

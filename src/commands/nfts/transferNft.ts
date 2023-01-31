@@ -1,12 +1,9 @@
-import { Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { Constants, StatusCodes, loadToken } from '../../utils'
+import { Account, BigNumber, getAssetPriceFromDDOByService, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Constants, StatusCodes, loadToken, getNFTAddressFromInput } from '../../utils'
 import chalk from 'chalk'
-import { getAssetRewardsFromDDOByService } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { Logger } from 'log4js'
-import { Account } from '@nevermined-io/nevermined-sdk-js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const transferNft = async (
   nvm: Nevermined,
@@ -17,6 +14,8 @@ export const transferNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, agreementId } = argv
 
+  const nftType = Number(argv.nftType)
+  
   const token = await loadToken(nvm, config, verbose)
 
   logger.debug(
@@ -73,7 +72,7 @@ export const transferNft = async (
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
   const price = BigNumber.formatUnits(
-    getAssetRewardsFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+    getAssetPriceFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
     decimals
   )
 
@@ -83,17 +82,24 @@ export const transferNft = async (
 
   let isSuccessfulTransfer = false
 
-  if (argv.nftType === '721') {
+  if (nftType === 721) {
     logger.info(
       chalk.dim(`Transferring NFT (ERC-721) '${chalk.whiteBright(ddo.id)}' ...`)
     )
-    // await nvm.nfts.transfer721(agreementId, ddo.id, userAccount)
-    isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
+    let nftAddress
+    try {
+      nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
+      await nvm.contracts.loadNft721(nftAddress!)
+    } catch {
+      return {
+        status: StatusCodes.ERROR,
+        errorMessage: `No NFT Contract Address found`
+      }
+    }    
+    isSuccessfulTransfer = await nvm.nfts721.claim(
       agreementId,
       sellerAddress,
-      buyerAddress,
-      BigNumber.from(1),
-      721
+      buyerAddress
     )      
 
   } else {
@@ -103,12 +109,11 @@ export const transferNft = async (
         `Transferring NFT (ERC-1155) '${chalk.whiteBright(ddo.id)}' ...`
       )
     )
-    isSuccessfulTransfer = await nvm.nfts.transferForDelegate(
+    isSuccessfulTransfer = await nvm.nfts1155.claim(
       agreementId,
       sellerAddress,
       buyerAddress,
-      argv.amount,
-      1155
+      argv.amount
     )
   }
 

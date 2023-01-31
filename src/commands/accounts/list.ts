@@ -1,7 +1,8 @@
 import {
   Nevermined,
   Account,
-  Nft721
+  NFT721Api,
+  BigNumber
 } from '@nevermined-io/nevermined-sdk-js'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -13,7 +14,6 @@ import {
 } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
 
 export const accountsList = async (
   nvm: Nevermined,
@@ -29,11 +29,13 @@ export const accountsList = async (
   let accounts: Account[] = []
   if (address) {
     logger.info(`Getting balance of account ${address}`)
-    accounts = [new Account(address)]
+    accounts = [await nvm.accounts.getAccount(address)]
   } else {
     logger.debug(chalk.dim('Loading account/s ...'))
     accounts = await nvm.accounts.list()
   }
+
+  console.log(`We use the account ${accounts[0].getId()}`)
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =
@@ -42,13 +44,13 @@ export const accountsList = async (
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
   let withInventory = false
-  let nft: Nft721
+  let nft721Api: NFT721Api
   if (nftTokenAddress != '') {
     withInventory = true
-    nft = await nvm.contracts.loadNft721(nftTokenAddress)
+    nft721Api = await nvm.contracts.loadNft721(nftTokenAddress)
 
     if (verbose) {
-      await printNftTokenBanner(nft)
+      await printNftTokenBanner(nft721Api.getContract)
     }
   }
 
@@ -56,7 +58,6 @@ export const accountsList = async (
     accounts.map(async (a, index) => {
       
       const balanceFormatted = BigNumber.formatEther(await a.getEtherBalance())
-      
       const ethBalance = BigNumber.parseEther(
         balanceFormatted
       )      
@@ -70,8 +71,8 @@ export const accountsList = async (
       const inventory = withInventory
         ? (
             await Promise.all(
-              (
-                await nft.contract.events.getPastEvents({
+              (                
+                await nft721Api.nftContract.events.getPastEvents({
                   eventName: 'Transfer',
                   methodName: 'getTransfers',
                   filterJsonRpc: { to: a.getId() },
@@ -90,7 +91,7 @@ export const accountsList = async (
                   // check if the account is still the owner
                   if (
                     (
-                      (await nft.contract.call('ownerOf', [
+                      (await nft721Api.nftContract.call('ownerOf', [
                         l.returnValues.tokenId
                       ])) as string
                     ).toLowerCase() === a.getId().toLowerCase()
@@ -114,7 +115,7 @@ export const accountsList = async (
         tokenBalance,
         url: `${config.etherscanUrl}/address/${a.getId()}`,
         nftTokenUrl: `${config.etherscanUrl}/token/${nftTokenAddress}`,
-        nftBalance: withInventory ? await nft.balanceOf(a) : 0,
+        nftBalance: withInventory ? await nft721Api.balanceOf(a) : BigNumber.from(0),
         inventory
       }
     })

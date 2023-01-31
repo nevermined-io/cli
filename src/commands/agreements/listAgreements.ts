@@ -27,27 +27,31 @@ export const listAgreements = async (
   }
 
   for (const agreement of agreements) {
-    const status = await nvm.agreements.status(agreement.agreementId)
+    try {
+      const status = await nvm.agreements.status(agreement.agreementId, true)
+      const contractName = await nvm.keeper.getTemplateByAddress(agreement.templateId).contractName
 
-    logger.info(
-      chalk.dim(
-        `Template: ${chalk.whiteBright(
-          await nvm.keeper.getTemplateByAddress(agreement.templateId)
-            .contractName
-        )} AgreementID: '${chalk.whiteBright(agreement.agreementId)}'`
+      logger.info(
+        chalk.dim(
+          `Template: ${chalk.whiteBright(contractName
+          )} AgreementID: '${chalk.whiteBright(agreement.agreementId)}'`
+        )
       )
-    )
-
-    logger.info(
-      chalk.dim(
-        `Status: ${chalk.whiteBright(
-          Object.keys(status)
-            .map((s) => `${s}: ${ConditionState[status[s]]}`)
-            .join(' ')
-        )}`
+      
+      logger.info(
+        chalk.dim(
+          `Status: ${chalk.whiteBright(
+            Object.keys(status)
+              .map((s) => `${s}: ${ConditionState[status[s]]}`)
+              .join(' ')
+          )}`
+        )
       )
-    )
 
+    } catch (err) {
+      logger.info(`Error getting status for agreement: ${agreement.agreementId} - ${err} `)
+    }
+  
     logger.info('\n')
   }
 

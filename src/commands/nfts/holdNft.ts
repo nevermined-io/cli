@@ -1,10 +1,9 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
-import { loadNFT1155Contract, StatusCodes } from '../../utils'
+import { Account, Nevermined, NFT1155Api, NFT721Api, zeroX } from '@nevermined-io/nevermined-sdk-js'
+import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { zeroX } from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 
 export const holdNft = async (
   nvm: Nevermined,
@@ -14,6 +13,8 @@ export const holdNft = async (
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv
+
+  const nftType = Number(argv.nftType)
 
   logger.info(
     chalk.dim(`Checks if an address is a NFT holder of the ${chalk.whiteBright(did)}`)
@@ -26,8 +27,10 @@ export const holdNft = async (
   let nftAddress = ''
   const userAddress = argv.address ? argv.address : consumerAccount.getId()
 
+  const nftApi = nftType === 721 ? NFT721Api : NFT1155Api
+
   try {
-    nftAddress = nvm.nfts.getNftContractAddress(ddo) as string  
+    nftAddress = nftApi.getNFTContractAddress(ddo) as string  
   } catch {
     nftAddress = nvm.keeper.nftUpgradeable.address
   }
@@ -35,22 +38,22 @@ export const holdNft = async (
   logger.info(`NFT Contract Address: ${nftAddress}`)
   logger.info(`Address to check: ${userAddress}`)
 
-  if (argv.nftType == 721) {     
+  if (nftType === 721) {     
     const nft = await nvm.contracts.loadNft721(nftAddress)
     balance = await nft.balanceOf(new Account(userAddress))
     isHolder = balance.gt(0)
 
   } else {
     logger.info(`Checking balance`)
-    const nftContract = loadNFT1155Contract(config, nftAddress)
-    balance = await nftContract.balanceOf(userAddress, zeroX(ddo.shortId()))
+    const nft = await nvm.contracts.loadNft1155Contract(nftAddress)
+    balance = await nft.balance(userAddress, zeroX(ddo.shortId()))
     isHolder = balance.gt(0)
   }
 
   if (isHolder)
-    logger.info(`The user holds ${balance} edition/s of the ERC-${argv.nftType} NFT`)
+    logger.info(`The user holds ${balance} edition/s of the ERC-${nftType} NFT`)
   else
-    logger.info(`The user doesnt hold any ERC-${argv.nftType} NFT`)
+    logger.info(`The user doesnt hold any ERC-${nftType} NFT`)
 
   return {
     status: StatusCodes.OK,

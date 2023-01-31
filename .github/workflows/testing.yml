@@ -9,63 +9,48 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        network: ["--geth"]
-        node: ["16.17"]
-        include:
-          - network: "--geth"
-            network-name: geth-localnet
-            chainId: 1337
-            delay: GRAPH_DELAY
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 16
+
       - name: Install dependencies
         run: |
-          yarn install --ignore-engines
-      - name: Lint
-        run: |
-          yarn lint
+          yarn
+      - name: Run linters
+        run: yarn lint
       - name: Build
         run: |
-          yarn build                    
-      - name: Reclaim some disk space
-        run: |
-          docker system prune --all --volumes -f
-      - name: Run Nevermined Tools
-        env:
-          LOCAL_CONF_DIR: "/tmp/.nevermined"
-        run: |
-          docker login -u ${{ secrets.NEVERMINED_DOCKER_USERNAME }} -p ${{ secrets.NEVERMINED_DOCKER_TOKEN}}
-          sudo chmod go+r /etc/hosts
-          sudo echo "127.0.0.1  nevermined-metadata" | sudo tee -a /etc/hosts
-          git clone https://github.com/nevermined-io/tools
-          cd tools
+          yarn build
+          yarn start --help
 
-          export KEEPER_OWNER_ROLE_ADDRESS="0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"
+      - uses: nevermined-io/nvm-tools-actions@v0.6.1
+        with:
+          token: ${{ secrets.API_TOKEN_GITHUB }}
+          opengsn: "true"
+          estuary: "true"
+          contracts-version: "v3.0.0"
+          node-version: "develop"
+      - name: Check artifacts and circuits
+        run: |
+          nvm-tools copy-artifacts /tmp/.nevermined/artifacts
+          ls -l /tmp/.nevermined/artifacts/ready
 
-          rm -rf "${LOCAL_CONF_DIR}/nevermined-contracts/artifacts"
-          ./start_nevermined.sh 2>&1 | tee nevermined_tools.txt &
-          cd ..
-          ./scripts/wait-nevermined.sh
-          ./scripts/wait-subgraphs.sh ${{ matrix.network-name }}
+          nvm-tools copy-circuits /tmp/.nevermined/circuits
+          ls -l /tmp/.nevermined/circuits/keytransfer.wasm
 
       - name: Run integration tests
         env:
+          LOCAL_CONF_DIR: "/tmp/.nevermined"
           SEED_WORDS: ${{ secrets.TEST_MNEMONIC }}
           TOKEN_ADDRESS: "0x0000000000000000000000000000000000000000"
-          WEB3_PROVIDER_URL: "http://localhost:8545"
-          NETWORK: ${{ matrix.network-name }}
+          WEB3_PROVIDER_URL: "http://contracts.nevermined.localnet"
+          NETWORK: "geth-localnet"
           IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
+          NO_GRAPH: "true"
         run: |
-          export ${{ matrix.delay }}=true
-          sleep 10
           yarn test
       - name: Upload logs
         uses: actions/upload-artifact@v3

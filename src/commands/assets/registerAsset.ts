@@ -1,25 +1,17 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, AssetPrice, AssetAttributes, MetaDataFile, Nevermined, MetaData, MetaDataMain, zeroX, generateIntantiableConfigFromConfig, BigNumber, PublishMetadata } from '@nevermined-io/nevermined-sdk-js'
 import {
   StatusCodes,
   printTokenBanner,
   loadToken,
   loadNeverminedConfigContract,
-  getFeesFromBigNumber,
-  DEFAULT_ENCRYPTION_METHOD
+  getFeesFromBigNumber
 } from '../../utils'
 import chalk from 'chalk'
-import { File, MetaData, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
-import AssetRewards from '@nevermined-io/nevermined-sdk-js/dist/node/models/AssetRewards'
-import {
-  zeroX
-} from '@nevermined-io/nevermined-sdk-js/dist/node/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import BigNumber from '@nevermined-io/nevermined-sdk-js/dist/node/utils/BigNumber'
-import { Dtp } from '@nevermined-io/nevermined-sdk-dtp/dist/Dtp'
-import { generateIntantiableConfigFromConfig } from '@nevermined-io/nevermined-sdk-js/dist/node/Instantiable.abstract'
+import { Dtp } from '@nevermined-io/nevermined-sdk-dtp'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -57,7 +49,7 @@ export const registerAsset = async (
 
   if (!metadata) {
 
-    const _files: File[] = []
+    const _files: MetaDataFile[] = []
     let _fileIndex = 0
     if (isDTP) {
       _files.push({
@@ -89,7 +81,7 @@ export const registerAsset = async (
       } as MetaDataMain
     }    
     if (isDTP) {
-      const nodeInfo = await nvm.node.getNeverminedNodeInfo()
+      const nodeInfo = await nvm.services.node.getNeverminedNodeInfo()
       const providerKey = nodeInfo['babyjub-public-key']
       
       ddoMetadata.additionalInformation = {
@@ -120,9 +112,11 @@ export const registerAsset = async (
   const configContract = loadNeverminedConfigContract(config)
   const networkFee = await configContract.getMarketplaceFee()
 
-  const assetRewards = new AssetRewards(account.getId(), ddoPrice)
+  const assetPrice = new AssetPrice(account.getId(), ddoPrice)
+    .setTokenAddress(token ? token.getAddress() : config.erc20TokenAddress)
+
   if (networkFee.gt(0)) {
-    assetRewards.addNetworkFees(
+    assetPrice.addNetworkFees(
       await configContract.getFeeReceiver(),
       networkFee
     )
@@ -131,16 +125,21 @@ export const registerAsset = async (
 
   logger.info(chalk.dim('\nCreating Asset ...'))
 
+  const assetAttributes = AssetAttributes.getInstance({
+    metadata: ddoMetadata,
+    price: assetPrice,
+    providers: [config.nvm.neverminedNodeAddress!]
+  })
+
+  let publishMetadata = PublishMetadata.OnlyMetadataAPI
+
+  if (argv.publishMetadata?.toLowerCase() === 'ipfs')
+    publishMetadata = PublishMetadata.IPFS  
+
   const ddo = await nvm.assets.create(
-    ddoMetadata,
+    assetAttributes,
     account,
-    assetRewards,
-    ['access'],
-    [],
-    DEFAULT_ENCRYPTION_METHOD,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    [config.nvm.neverminedNodeAddress!],
-    token ? token.getAddress() : config.erc20TokenAddress
+    publishMetadata
   )
 
   const register = (await nvm.keeper.didRegistry.getDIDRegister(
