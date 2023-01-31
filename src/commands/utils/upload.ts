@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, NodeUploadBackends } from '@nevermined-io/nevermined-sdk-js'
 import fs from 'fs'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { StatusCodes } from '../../utils'
@@ -26,7 +26,7 @@ export const uploadFile = async (
 
   try {
     const stream = fs.createReadStream(file)
-    const { url, password } = await nvm.utils.files.uploadFilecoin(stream, encrypt)
+    const { url, password } = await nvm.services.node.uploadContent(stream, encrypt, NodeUploadBackends.IPFS)    
     logger.info(`File uploaded to URL: ${url}`)
     if (password) {
       logger.info(`Password: ${password}`)
