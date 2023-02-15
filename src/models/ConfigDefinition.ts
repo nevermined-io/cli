@@ -1,4 +1,4 @@
-import { NeverminedOptions } from '@nevermined-io/nevermined-sdk-js'
+import { NeverminedOptions } from '@nevermined-io/sdk'
 import { Signer } from 'ethers'
 
 export interface CliConfig {

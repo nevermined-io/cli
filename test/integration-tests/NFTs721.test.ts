@@ -8,7 +8,7 @@ import {
 import * as fs from 'fs'
 import * as Path from 'path'
 import execCommand from '../helpers/ExecCommand'
-import { didZeroX } from '@nevermined-io/nevermined-sdk-js'
+import { didZeroX } from '@nevermined-io/sdk'
 
 describe('NFTs (ERC-721) e2e Testing', () => {
   const abiPath = 'test/resources/nfts/TestNFT721.json'

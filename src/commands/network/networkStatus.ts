@@ -4,7 +4,7 @@ import {
   StatusCodes
 } from '../../utils'
 import { Logger } from 'log4js'
-import { Account, Nevermined, PlatformTechStatus } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, PlatformTechStatus } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'

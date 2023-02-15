@@ -1,4 +1,4 @@
-import { Account, Nevermined, NFTsBaseApi } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, NFTsBaseApi } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'

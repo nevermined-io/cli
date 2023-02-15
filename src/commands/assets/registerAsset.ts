@@ -1,4 +1,4 @@
-import { Account, AssetPrice, AssetAttributes, MetaDataFile, Nevermined, MetaData, MetaDataMain, zeroX, generateIntantiableConfigFromConfig, BigNumber, PublishMetadata } from '@nevermined-io/nevermined-sdk-js'
+import { Account, AssetPrice, AssetAttributes, Nevermined, MetaData, MetaDataMain, zeroX, generateIntantiableConfigFromConfig, BigNumber, PublishMetadata, MetaDataExternalResource } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printTokenBanner,
@@ -11,7 +11,7 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { Dtp } from '@nevermined-io/nevermined-sdk-dtp'
+import { Dtp } from '@nevermined-io/sdk-dtp'
 
 export const registerAsset = async (
   nvm: Nevermined,
@@ -49,7 +49,7 @@ export const registerAsset = async (
 
   if (!metadata) {
 
-    const _files: MetaDataFile[] = []
+    const _files: MetaDataExternalResource[] = []
     let _fileIndex = 0
     if (isDTP) {
       _files.push({

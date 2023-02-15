@@ -1,4 +1,4 @@
-import { Account, AssetPrice, getRoyaltyAttributes, Nevermined, NeverminedNFT1155Type, NeverminedNFT721Type, NFTAttributes, RoyaltyKind, ServiceType, BigNumber, zeroX, PublishMetadata, AssetAttributes } from '@nevermined-io/nevermined-sdk-js'
+import { Account, AssetPrice, getRoyaltyAttributes, Nevermined, NeverminedNFT1155Type, NeverminedNFT721Type, NFTAttributes, RoyaltyKind, ServiceType, BigNumber, zeroX, PublishMetadata, AssetAttributes, MetaDataExternalResource } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -7,7 +7,7 @@ import {
   getFeesFromBigNumber
 } from '../../utils'
 import chalk from 'chalk'
-import { MetaDataFile, MetaDataMain } from '@nevermined-io/nevermined-sdk-js'
+import { MetaDataMain } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
@@ -61,7 +61,7 @@ export const createNft = async (
     logger.trace(`DDO Price: ${ddoPrice}`)
     logger.trace(`to Fixed: ${ddoPrice.toString()}`)
 
-    const _files: MetaDataFile[] = []
+    const _files: MetaDataExternalResource[] = []
     let _fileIndex = 0
     argv.urls.forEach((_url: string) => {
       _files.push({

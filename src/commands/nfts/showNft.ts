@@ -1,4 +1,4 @@
-import { Account, BigNumber, DDO, getAssetPriceFromDDOByService, Nevermined, zeroX } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, DDO, getAssetPriceFromDDOByService, Nevermined, zeroX } from '@nevermined-io/sdk'
 import {
   Constants,
   StatusCodes,

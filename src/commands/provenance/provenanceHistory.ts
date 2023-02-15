@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { printProvenanceEvents } from '../../utils/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'

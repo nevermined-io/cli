@@ -13,7 +13,7 @@ import {
   ServiceType,
   Token,
   ConditionType
-} from '@nevermined-io/nevermined-sdk-js'
+} from '@nevermined-io/sdk'
 import chalk from 'chalk'
 import { Constants } from './enums'
 import { ARTIFACTS_PATH, logger } from './config'
