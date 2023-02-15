@@ -1,4 +1,4 @@
-import { Account, didZeroX, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, didZeroX, Nevermined } from '@nevermined-io/sdk'
 import { StatusCodes, getNFTAddressFromInput } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import IpfsHelper from '../../utils/IpfsHelper'

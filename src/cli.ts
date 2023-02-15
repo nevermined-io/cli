@@ -19,7 +19,7 @@ import { ExecutionOutput } from './models/ExecutionOutput'
 import fs from 'fs'
 import * as CliCommands from './commands'
 import { CLICommandsDefinition } from './models/CLICommandsDefinition'
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/sdk'
 import { ConfigEntry } from './models/ConfigDefinition'
 type CliCommands = typeof CliCommands
 

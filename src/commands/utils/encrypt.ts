@@ -1,10 +1,10 @@
-import { Account, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
 import { StatusCodes } from '../../utils'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { aes_encryption_256 } from '@nevermined-io/nevermined-sdk-dtp/dist/utils'
+import { aes_encryption_256 } from '@nevermined-io/sdk-dtp/dist/utils'
 import chalk from 'chalk'
 import crypto from 'crypto'
 

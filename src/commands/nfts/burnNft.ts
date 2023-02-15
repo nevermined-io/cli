@@ -1,4 +1,4 @@
-import { Account, BigNumber, Nevermined } from '@nevermined-io/nevermined-sdk-js'
+import { Account, BigNumber, Nevermined } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,

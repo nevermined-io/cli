@@ -8,7 +8,7 @@ import {
 import * as fs from 'fs'
 import { mkdtempSync } from 'fs'
 import * as Path from 'path'
-import { generateId } from '@nevermined-io/nevermined-sdk-js'
+import { generateId } from '@nevermined-io/sdk'
 import execCommand from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {

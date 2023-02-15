@@ -1,4 +1,4 @@
-import { Account, Nevermined, Nft1155Contract, Nft721Contract, Web3Provider } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, Nft1155Contract, Nft721Contract, Web3Provider } from '@nevermined-io/sdk'
 import { ContractReceipt, ethers } from 'ethers'
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import {

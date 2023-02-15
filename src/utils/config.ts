@@ -10,7 +10,7 @@ import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
 import { Wallet, Signer } from 'ethers'
-import { Web3Provider } from '@nevermined-io/nevermined-sdk-js'
+import { Web3Provider } from '@nevermined-io/sdk'
 
 dotenv.config()
 

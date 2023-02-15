@@ -1,4 +1,4 @@
-import { Account, Nevermined, NodeUploadBackends } from '@nevermined-io/nevermined-sdk-js'
+import { Account, Nevermined, NodeUploadBackends } from '@nevermined-io/sdk'
 import fs from 'fs'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { StatusCodes } from '../../utils'

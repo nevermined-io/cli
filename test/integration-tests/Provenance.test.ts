@@ -1,4 +1,4 @@
-import { generateId } from '@nevermined-io/nevermined-sdk-js'
+import { generateId } from '@nevermined-io/sdk'
 import { execOpts, metadataConfig, baseCommands } from '../helpers/Config'
 import {
   parseDIDFromNewAsset,
