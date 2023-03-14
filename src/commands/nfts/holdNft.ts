@@ -35,7 +35,7 @@ export const holdNft = async (
     nftAddress = nvm.keeper.nftUpgradeable.address
   }
   
-  logger.info(`NFT Contract Address: ${nftAddress}`)
+  logger.info(`NFT Contract Address [${nftType}]: ${nftAddress}`)
   logger.info(`Address to check: ${userAddress}`)
 
   if (nftType === 721) {     

@@ -51,7 +51,7 @@ jobs:
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
           NO_GRAPH: "true"
         run: |
-          yarn test
+          yarn test:integration
       - name: Upload logs
         uses: actions/upload-artifact@v3
         if: failure()

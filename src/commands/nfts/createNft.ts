@@ -161,8 +161,13 @@ export const createNft = async (
       royaltyAttributes,
       nftMetadataUrl: argv.nftMetadata,
       nftTransfer: argv.transfer,
-      isSubscription: argv.subscription ? argv.duration: 0
-    })            
+      isSubscription: argv.subscription
+    })
+    if (argv.subscription)
+      nftAttributes = {
+        ...nftAttributes,
+        duration: argv.duration
+      }
     ddo = await nvm.nfts721.create(
         nftAttributes,
         creatorAccount,
