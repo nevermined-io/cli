@@ -326,7 +326,7 @@
 				"name": "register-service",
 				"description": "Register a new web service",
 				"details": "This command registers a new web service on the Nevermined network. The service can be the representation of any regular Web Service (REST, JSON-RPC, etc).",
-				"examples": ["ncli assets register-service --name 'My AI Bot' --author 'John Doe' --price 0 --language python --entrypoint 'python word_count.py' --container python:3.8-alpine --urls https://www.apache.org/licenses/LICENSE-2.0 --contentType text/plain"],
+				"examples": ["ncli assets  --name 'My Open AI' --author 'John Doe' --subscriptionNFT 0x736DCC96D89cB2F9E2316cD826668f4E1c4861B0 --urls https://api.openai.com/v1/completions --authToken sk-xxxxxx"],
 				"commandHandler": "registerAsset",
 				"optionalArguments": [{
 						"name": "name",
@@ -347,8 +347,9 @@
 					},
 					{
 						"name": "access",
-						"type": "string",						
-						"default": "direct",
+						"type": "string",
+						"hidden": true,						
+						"default": "subscription",
 						"description": "The type of access control associated to the asset. If `direct` the asset will allow direct payment, if `susbcription` it will allow access via NFT susbcription, if both it will configure both methods."
 					},					
 					{
