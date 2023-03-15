@@ -424,6 +424,11 @@
 					"type": "string",
 					"default": "metadata-api",
 					"description": "Allows to store the metadata in the Metadata API only (metadata-api) or in IPFS too (passing ipfs as value here)."
+				}, {
+					"name": "access",
+					"type": "string",						
+					"default": "direct",
+					"description": "The type of access control associated to the asset. If `direct` the asset will allow direct payment, if `susbcription` it will allow access via NFT susbcription, if both it will configure both methods."
 				}]
 			}, {
 				"name": "search [query]",
