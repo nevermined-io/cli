@@ -251,6 +251,16 @@ export const printProvenanceEvents = (
   })
 }
 
+export const getExtraInputParams = (argv: any) => {
+  const _extra: { [k: string]: any } = {}
+  process.argv.filter( (k: string) => k.startsWith('--+'))
+  .forEach( (k: string) => {
+    const paramKey = k.replace('--+', '')
+     _extra[paramKey] = argv[`+${paramKey}`]
+  })  
+  return _extra
+}
+
 export const printSearchResult = async (
   queryResult: QueryResult,
   logger: Logger

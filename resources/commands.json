@@ -163,6 +163,12 @@
 						"description": "When the asset was created"
 					},
 					{
+						"name": "tags",
+						"type": "string",
+						"demandOption": false,
+						"description": "Comma separated list of tags"
+					},					
+					{
 						"name": "access",
 						"type": "string",						
 						"default": "direct",
@@ -247,6 +253,12 @@
 						"type": "string",
 						"description": "When the asset was created"
 					},
+					{
+						"name": "tags",
+						"type": "string",
+						"demandOption": false,
+						"description": "Comma separated list of tags"
+					},					
 					{
 						"name": "access",
 						"type": "string",						
@@ -345,6 +357,12 @@
 						"type": "string",
 						"description": "When the asset was created"
 					},
+					{
+						"name": "tags",
+						"type": "string",
+						"demandOption": false,
+						"description": "Comma separated list of tags"
+					},					
 					{
 						"name": "access",
 						"type": "string",
@@ -1532,19 +1550,24 @@
 			"usage": "usage: $0 utils <command> parameters [options]",
 			"subcommands": [{
 				"name": "upload [file]",
-				"description": "Upload file to Filecoin",
-				"details": "It uploads a local file to the decentralized storage network Filecoin. It returns a `CID` identifying that file into the storage network. If the `--password` flag is provided, it will encrypts the file before uploading it and will return the password used.",
+				"description": "Upload file to IPFS or Filecoin",
+				"details": "It uploads a local file to the decentralized storage network like IPFS or Filecoin. It returns a `CID` identifying that file into the storage network. If the `--password` flag is provided, it will encrypts the file before uploading it and will return the password used.",
 				"examples": ["ncli utils upload README.md"],
 				"commandHandler": "uploadFile",
 				"positionalArguments": [{
 					"name": "file",
 					"type": "string",
-					"description": "The path to the file to upload to Filecoin"
+					"description": "The path to the file to upload"
 				}],
 				"optionalArguments": [{
+					"name": "where",
+					"type": "string",
+					"default": "ipfs",
+					"description": "The network where upload the file (ipfs or filecoin)."
+				}, {
 					"name": "encrypt",
 					"type": "boolean",
-					"default": "false",
+					"default": false,
 					"description": "If given it encrypts the file with AES and return password"
 				}]
 			}, {

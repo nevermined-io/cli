@@ -4,7 +4,8 @@ import {
   printTokenBanner,
   loadToken,
   loadNeverminedConfigContract,
-  getFeesFromBigNumber
+  getFeesFromBigNumber,
+  getExtraInputParams
 } from '../../utils'
 import chalk from 'chalk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -94,6 +95,7 @@ export const registerAsset = async (
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
+        tags: argv.tags.split(','),
         files: _files
       } as MetaDataMain
     }    
@@ -140,6 +142,14 @@ export const registerAsset = async (
     }
   } else {
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
+  }
+
+  // Parsing extra parameters (`--+extraParam xxx`) given to add as additional information
+  const customData = getExtraInputParams(argv)
+
+  ddoMetadata.additionalInformation = {
+    ...ddoMetadata.additionalInformation,
+    customData
   }
 
   console.log(`DDO Metadata = ${JSON.stringify(ddoMetadata)}`)
