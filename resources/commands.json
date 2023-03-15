@@ -163,11 +163,17 @@
 						"description": "When the asset was created"
 					},
 					{
+						"name": "access",
+						"type": "string",						
+						"default": "direct",
+						"description": "The type of access control associated to the asset. If `direct` the asset will allow direct payment, if `susbcription` it will allow access via NFT susbcription, if both it will configure both methods."
+					},					
+					{
 						"name": "price",
 						"type": "number",
-						"demandOption": true,
+						"default": "0",
 						"description": "The asset price"
-					},
+					},				
 					{
 						"name": "urls",
 						"type": "array",
@@ -203,7 +209,20 @@
 						"default": "dataset",
 						"hidden": true,
 						"description": "The type of the asset to register"
-					}
+					},
+					{
+						"name": "subscriptionNFT",
+						"type": "string",
+						"default": "",
+						"description": "The address of the subscription NFT used to protect the access to the asset"
+					},					
+					{
+						"name": "nftType",
+						"type": "number",
+						"default": "721",
+						"hidden": true,
+						"description": "The NFT type"
+					}					
 				]
 			}, {
 				"name": "register-algorithm",
@@ -229,11 +248,17 @@
 						"description": "When the asset was created"
 					},
 					{
+						"name": "access",
+						"type": "string",						
+						"default": "direct",
+						"description": "The type of access control associated to the asset. If `direct` the asset will allow direct payment, if `susbcription` it will allow access via NFT susbcription, if both it will configure both methods."
+					},					
+					{
 						"name": "price",
 						"type": "number",
-						"demandOption": true,
+						"default": "0",
 						"description": "The asset price"
-					},
+					},				
 					{
 						"name": "urls",
 						"type": "array",
@@ -282,6 +307,95 @@
 						"default": "algorithm",
 						"hidden": true,
 						"description": "The type of the asset to register"
+					},
+					{
+						"name": "subscriptionNFT",
+						"type": "string",
+						"default": "",
+						"description": "The address of the subscription NFT used to protect the access to the asset"
+					},					
+					{
+						"name": "nftType",
+						"type": "number",
+						"default": "721",
+						"hidden": true,
+						"description": "The NFT type"
+					}					
+				]
+			}, {
+				"name": "register-service",
+				"description": "Register a new web service",
+				"details": "This command registers a new web service on the Nevermined network. The service can be the representation of any regular Web Service (REST, JSON-RPC, etc).",
+				"examples": ["ncli assets  --name 'My Open AI' --author 'John Doe' --subscriptionNFT 0x736DCC96D89cB2F9E2316cD826668f4E1c4861B0 --urls https://api.openai.com/v1/completions --authToken sk-xxxxxx"],
+				"commandHandler": "registerAsset",
+				"optionalArguments": [{
+						"name": "name",
+						"type": "string",
+						"demandOption": true,
+						"description": "The asset name"
+					},
+					{
+						"name": "author",
+						"type": "string",
+						"demandOption": true,
+						"description": "The author of the asset"
+					},
+					{
+						"name": "dateCreated",
+						"type": "string",
+						"description": "When the asset was created"
+					},
+					{
+						"name": "access",
+						"type": "string",
+						"hidden": true,						
+						"default": "subscription",
+						"description": "The type of access control associated to the asset. If `direct` the asset will allow direct payment, if `susbcription` it will allow access via NFT susbcription, if both it will configure both methods."
+					},					
+					{
+						"name": "price",
+						"type": "number",
+						"default": "0",
+						"description": "The asset price"
+					},
+					{
+						"name": "urls",
+						"type": "array",
+						"demandOption": true,
+						"description": "The asset urls. It can be a comma separated list of urls for multiple files"
+					},
+					{
+						"name": "authToken",
+						"type": "string",
+						"default": "",
+						"demandOption": false,
+						"description": "Authorization token of the service"
+					},					
+					{
+						"name": "publishMetadata",
+						"type": "string",
+						"default": "metadata-api",
+						"description": "Allows to store the metadata in the Metadata API only (metadata-api) or in IPFS too (passing ipfs as value here)."
+					},						
+					{
+						"name": "assetType",
+						"type": "string",
+						"default": "service",
+						"hidden": true,
+						"description": "The type of the asset to register"
+					},
+					{
+						"name": "subscriptionNFT",
+						"type": "string",
+						"default": "",
+						"description": "The address of the subscription NFT used to protect the access to the asset"
+					},					
+					{
+						"name": "nftType",
+						"type": "number",
+						"default": "721",
+						"hidden": true,
+						"description": "The NFT type"
 					}
 				]
 			}, {
@@ -310,6 +424,11 @@
 					"type": "string",
 					"default": "metadata-api",
 					"description": "Allows to store the metadata in the Metadata API only (metadata-api) or in IPFS too (passing ipfs as value here)."
+				}, {
+					"name": "access",
+					"type": "string",						
+					"default": "direct",
+					"description": "The type of access control associated to the asset. If `direct` the asset will allow direct payment, if `susbcription` it will allow access via NFT susbcription, if both it will configure both methods."
 				}]
 			}, {
 				"name": "search [query]",
@@ -1007,6 +1126,18 @@
 					"hidden": true,
 					"description": "The NFT type"
 				}]
+			}, {
+				"name": "get-jwt [did]",
+				"description": "It returns a JWT access token related with a subscription NFT",
+				"details": "This command allows to get a JWT token that gives access through the proxy to certain services that only can be accessed via subscription NFT",
+				"examples": ["ncli nfts721 get-jwt did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "getJWT",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID of the service to be accessed"
+				}],
+				"optionalArguments": []
 			}]
 		}, {
 			"name": "nfts1155",

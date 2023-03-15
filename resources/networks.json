@@ -177,72 +177,27 @@
 		"gasPriceMultiplier": 0,
 		"externalNetwork": false
 	},
-	"autonomiesMumbai": {
-		"envDescription": "Testnet environment for the Autonomies Marketplace.",
-		"envUrl": "https://portal.autonomies.test.nevermined.rocks",
+	"oneMumbai": {
+		"envDescription": "Nevermined One testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://nevermined.io/",
 		"isProduction": false,
 		"nvm": {
 			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
-			"marketplaceUri": "https://marketplace-api.autonomies.test.nevermined.rocks",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
-			"neverminedNodeUri": "https://gateway.autonomies.test.nevermined.rocks",
-			"neverminedNodeAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+			"marketplaceUri": "https://marketplace-api.mumbai.nevermined.one",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"neverminedNodeUri": "https://node.mumbai.nevermined.one/",
+			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
 			"verbose": true
 		},
 		"nativeToken": "MATIC",
 		"networkId": "80001",
 		"networkName": "mumbai",
-		"contractsVersion": "2.0.0",
-		"tagName": "common",
+		"contractsVersion": "3.0.0",
+		"tagName": "public",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"externalNetwork": false
-	},
-	"alitiesAlfajores": {
-		"envDescription": "Testnet environment for the Alities Marketplace.",
-		"isProduction": false,
-		"nvm": {
-			"web3ProviderUri": "https://alfajores-forno.celo-testnet.org",
-			"marketplaceUri": "https://marketplace-api.alfajores.nevermined.rocks",
-			"graphHttpUri": "",
-			"neverminedNodeUri": "https://gateway.alfajores.nevermined.rocks",
-			"neverminedNodeAddress": "0x7DFa856BC27b67bfA83F190755D6C7D0A0D7BBC0",
-			"verbose": true
-		},
-		"nativeToken": "CELO",
-		"networkId": "44787",
-		"networkName": "alfajores",
-		"contractsVersion": "1.3.5",
-		"tagName": "common",
-		"etherscanUrl": "https://alfajores-blockscout.celo-testnet.org",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": false
-	},
-	"alitiesMainnet": {
-		"envDescription": "Public environment for the Alities Marketplace.",
-		"envUrl": "https://alities.io",
-		"isProduction": true,
-		"nvm": {
-			"web3ProviderUri": "https://forno.celo.org",
-			"marketplaceUri": "https://marketplace-api.alities.celo.nevermined.rocks",
-			"graphHttpUri": "",
-			"neverminedNodeUri": "https://gateway.alities.celo.nevermined.rocks",
-			"neverminedNodeAddress": "0x7f3661d22E89Ad3549c7fC034D94B53da731D36A",
-			"verbose": true
-		},
-		"nativeToken": "CELO",
-		"networkId": "42220",
-		"networkName": "celo",
-		"contractsVersion": "1.3.5",
-		"tagName": "common",
-		"etherscanUrl": "https://explorer.celo.org",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": false
+		"externalNetwork": true
 	}
 }

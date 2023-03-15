@@ -5,7 +5,8 @@ export const commandRegex = {
     totalResultsQuery: new RegExp('.*Total Results:.(.*) - (.*)\\n', 'g'),
     downloadPath: new RegExp('.*Files downloaded to:.(.*)', 'gm'),
     downloadFile: new RegExp('.*Downloaded:.(.*)', 'gm'),
-    serviceAgreement: new RegExp('.*Agreement Id:.(.*)\\n', 'g')
+    serviceAgreement: new RegExp('.*Agreement Id:.(.*)\\n', 'g'),
+    jwtToken: new RegExp('.*JWT Token:.(.*)\\n', 'g'),
     //
   },
   nfts: {
@@ -41,6 +42,14 @@ export const parseDIDFromNewAsset = (stdout: string): string => {
   const did = commandRegex.assets.did.exec(stdout)
   if (did != null) {
     return did[1]
+  }
+  return ''
+}
+
+export const parseJWTToken = (stdout: string): string => {
+  const token = commandRegex.assets.jwtToken.exec(stdout)
+  if (token != null) {
+    return token[1]
   }
   return ''
 }

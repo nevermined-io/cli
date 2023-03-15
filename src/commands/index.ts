@@ -20,6 +20,7 @@ export * from './nfts/orderNft'
 export * from './nfts/transferNft'
 export * from './nfts/downloadNft'
 export * from './nfts/accessNft'
+export * from './nfts/getJWT'
 
 // accounts
 export * from './accounts/new'

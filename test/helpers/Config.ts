@@ -54,6 +54,7 @@ export const baseCommands = {
   assets: {
     registerAsset: `${BASE_COMMAND} ${VERBOSE} assets register-asset `,
     registerAlgorithm: `${BASE_COMMAND} ${VERBOSE} assets register-algorithm `,
+    registerService: `${BASE_COMMAND} ${VERBOSE} assets register-service `,
     registerWorkflow: `${BASE_COMMAND} ${VERBOSE} assets register-workflow `,
     importMetadata: `${BASE_COMMAND} ${VERBOSE} assets import `,
     searchAsset: `${BASE_COMMAND} ${VERBOSE} assets search `,
@@ -74,6 +75,7 @@ export const baseCommands = {
     order: `${BASE_COMMAND} ${VERBOSE} nfts721 order `,
     transfer: `${BASE_COMMAND} ${VERBOSE} nfts721 transfer `,
     access: `${BASE_COMMAND} ${VERBOSE} nfts721 access `,
+    jwt: `${BASE_COMMAND} ${VERBOSE} nfts721 get-jwt `,
     download: `${BASE_COMMAND} ${VERBOSE} nfts721 download `
   },
   nfts1155: {
