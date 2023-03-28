@@ -22,6 +22,7 @@ export const getJWT = async (
   
   try {
     ddo = await nvm.assets.resolve(did)
+    // Get the subscription token of the asset 
     
     const subscriptionToken = await nvm.services.node.getSubscriptionToken(ddo.id, userAccount)
   
