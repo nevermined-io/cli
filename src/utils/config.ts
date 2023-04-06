@@ -118,7 +118,7 @@ export function getConfig(
   if (!process.env.SEED_WORDS) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
       const accountMessage =
-        "'SEED_WORDS' or 'KEYFILE' not set in environment! Please see http://docs.nevermined.io/docs/tools/cli/getting-started#configure-your-account for details."
+        "'SEED_WORDS' or 'KEYFILE' not set in environment! Please see http://docs.nevermined.io/docs/cli/getting-started/#configure-your-account for details."
       if (requiresAccount) throw new Error(accountMessage)
     }
   }
