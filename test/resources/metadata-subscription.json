@@ -10,7 +10,7 @@
 		"author": "Nevermined AG",
 		"license": "CC0: Public Domain",
 		"datePublished": "2022-04-15T00:00:00Z",		
-		"type": "dataset",
+		"type": "subscription",
 		"files": [{
 			"index": 0,
 			"contentType": "text/csv",

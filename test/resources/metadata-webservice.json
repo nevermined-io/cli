@@ -1,0 +1,43 @@
+{
+	"curation": {
+		"rating": 0,
+		"numVotes": 0,
+		"isListed": true
+	},
+	"main": {
+		"type": "service",
+		"name": "My OpenAI Elvis Context",
+		"dateCreated": "2023-04-04T11:51:12Z",
+		"author": "Nevermined AG",
+		"license": "CC0: Public Domain",
+		"datePublished": "2023-04-04T11:51:12Z",		
+		"files": [{
+			"index": 0,
+			"contentType": "text/html",
+			"url": "https://platform.openai.com/docs/api-reference"
+		}],
+		"webService": {			
+			"type": "RESTful",
+			"endpoints": [{
+				"(.*)": "https://api.openai.com/v1/(.*)"
+			  }],
+			"internalAttributes": {
+			  "authentication": {
+				"type": "oauth",
+				"token": "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"
+			  },
+			  "headers": [{
+				  "Authorization": "Bearer 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"
+				}
+			  ]
+			}
+		}		
+	},
+	"additionalInformation": {
+		"description": "OpenAI API",
+		"links": [{
+			"name": "OpenAI API",
+			"url": "https://platform.openai.com/docs/api-reference"
+		}]
+	}
+}

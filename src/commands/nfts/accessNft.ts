@@ -64,7 +64,7 @@ export const accessNft = async (
   
 
   if (!isHolder) {
-    logger.info(`Not owner of the NFT, trying transfer`)
+    logger.info(`Not owner of the NFT, trying to claim it`)
     logger.debug(`Using AgreementId: ${agreementId}`)
     logger.debug(`Claiming NFT (ERC-${nftType})`)   
 

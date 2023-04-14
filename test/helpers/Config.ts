@@ -73,7 +73,7 @@ export const baseCommands = {
     hold: `${BASE_COMMAND} ${VERBOSE} nfts721 hold `,
     burn: `${BASE_COMMAND} ${VERBOSE} nfts721 burn `,
     order: `${BASE_COMMAND} ${VERBOSE} nfts721 order `,
-    transfer: `${BASE_COMMAND} ${VERBOSE} nfts721 transfer `,
+    claim: `${BASE_COMMAND} ${VERBOSE} nfts721 claim `,
     access: `${BASE_COMMAND} ${VERBOSE} nfts721 access `,
     jwt: `${BASE_COMMAND} ${VERBOSE} nfts721 get-jwt `,
     download: `${BASE_COMMAND} ${VERBOSE} nfts721 download `
@@ -88,7 +88,7 @@ export const baseCommands = {
     burn: `${BASE_COMMAND} ${VERBOSE} nfts1155 burn `,
     order: `${BASE_COMMAND} ${VERBOSE} nfts1155 order `,
     access: `${BASE_COMMAND} ${VERBOSE} nfts1155 access `,
-    transfer: `${BASE_COMMAND} ${VERBOSE} nfts1155 transfer `,
+    claim: `${BASE_COMMAND} ${VERBOSE} nfts1155 claim `,
     download: `${BASE_COMMAND} ${VERBOSE} nfts1155 download `
   },
   accounts: {

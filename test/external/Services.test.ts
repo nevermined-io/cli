@@ -67,14 +67,14 @@ describe('Services e2e Testing', () => {
   })
 
   test('The buyer ask for transfer a NFT (ERC-721)', async () => {
-    const transferCommand = `${baseCommands.nfts721.transfer} "${orderAgreementId}" "${execOpts.accounts[0]}" --accountIndex 1  `
+    const transferCommand = `${baseCommands.nfts721.claim} "${orderAgreementId}" "${execOpts.accounts[0]}" --accountIndex 1  `
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execCommand(transferCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(didSubscription))
-    expect(stdout.includes(`Transferring NFT (ERC-721)`))
+    expect(stdout.includes(`Claiming NFT (ERC-721)`))
     expect(stdout.includes(`Transfer done!`))
   })
 

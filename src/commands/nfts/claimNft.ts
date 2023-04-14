@@ -5,7 +5,7 @@ import { Logger } from 'log4js'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
-export const transferNft = async (
+export const claimNft = async (
   nvm: Nevermined,
   userAccount: Account,
   argv: any,
@@ -18,8 +18,8 @@ export const transferNft = async (
   
   const token = await loadToken(nvm, config, verbose)
 
-  logger.debug(
-    chalk.dim(`Executing agreement: '${chalk.whiteBright(agreementId)}'`)
+  logger.info(
+    chalk.dim(`Claiming NFT order by agreement: '${chalk.whiteBright(agreementId)}'`)
   )
 
   let agreementData
@@ -36,7 +36,7 @@ export const transferNft = async (
       }`
     }
   }
-  logger.trace(
+  logger.debug(
     chalk.dim(
       `Agreement Data: '${chalk.whiteBright(JSON.stringify(agreementData))}'`
     )
@@ -49,13 +49,13 @@ export const transferNft = async (
   const conditionData = await nvm.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
   )
-  logger.trace(
+  logger.debug(
     chalk.dim(
       `Lock Condition Id: '${chalk.whiteBright(JSON.stringify(conditionData))}'`
     )
   )
 
-  const ddo = await nvm.assets.resolve(agreementData.did)
+  const ddo = await nvm.assets.resolve(agreementData.did)  
   const buyerAddress = argv.buyerAddress ? argv.buyerAddress : userAccount.getId()
   const sellerAddress = argv.sellerAddress ? argv.sellerAddress : ddo.proof.creator
 
@@ -83,8 +83,8 @@ export const transferNft = async (
   let isSuccessfulTransfer = false
 
   if (nftType === 721) {
-    logger.info(
-      chalk.dim(`Transferring NFT (ERC-721) '${chalk.whiteBright(ddo.id)}' ...`)
+    logger.debug(
+      chalk.dim(`Claiming NFT (ERC-721) associated to asset: '${chalk.whiteBright(ddo.id)}' ...`)
     )
     let nftAddress
     try {
@@ -106,7 +106,7 @@ export const transferNft = async (
     // ERC-1155
     logger.info(
       chalk.dim(
-        `Transferring NFT (ERC-1155) '${chalk.whiteBright(ddo.id)}' ...`
+        `Claiming NFT (ERC-1155) '${chalk.whiteBright(ddo.id)}' ...`
       )
     )
     isSuccessfulTransfer = await nvm.nfts1155.claim(
@@ -120,7 +120,7 @@ export const transferNft = async (
   if (!isSuccessfulTransfer) {
     return {
       status: StatusCodes.ERROR,
-      errorMessage: `Problem executing 'transferForDelegate' through the Nevermined Node`
+      errorMessage: `Problem executing 'claim' through the Nevermined Node`
     }
   }   
 
