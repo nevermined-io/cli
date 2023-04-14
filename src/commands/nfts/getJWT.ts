@@ -17,14 +17,10 @@ export const getJWT = async (
   logger.info(
     chalk.dim(`Gets JWT Access Token ${chalk.whiteBright(did)}`)
   )
-
-  let ddo
   
   try {
-    ddo = await nvm.assets.resolve(did)
-    // Get the subscription token of the asset 
-    
-    const subscriptionToken = await nvm.services.node.getSubscriptionToken(ddo.id, userAccount)
+    // Get the subscription token of the asset     
+    const subscriptionToken = await nvm.services.node.getSubscriptionToken(did, userAccount)
   
     logger.info(
       chalk.dim(`JWT Token: ${chalk.whiteBright(subscriptionToken.accessToken)}`)
