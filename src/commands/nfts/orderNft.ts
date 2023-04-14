@@ -23,7 +23,7 @@ export const orderNft = async (
   const ddo = await nvm.assets.resolve(did)
 
   logger.debug(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
-  logger.debug(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`))
+  logger.info(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`))
 
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
@@ -39,6 +39,7 @@ export const orderNft = async (
   )
 
   const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
+  logger.info(chalk.dim(`Purchase associated to NFT Contract: '${chalk.whiteBright(nftAddress)}'`))
 
   let agreementId = ''
   if (nftType === 721) {

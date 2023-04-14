@@ -16,26 +16,7 @@ describe('Assets e2e Testing', () => {
 
   beforeAll(async () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)
-    try {
-      if (
-        execOpts.env.NETWORK === 'spree' ||
-        execOpts.env.NETWORK === 'geth-localnet' ||
-        execOpts.env.NETWORK === 'polygon-localnet'
-      ) {
-        console.log(
-          `Funding accounts: ${execOpts.accounts[0]} + ${execOpts.accounts[1]}`
-        )
-        
-        let fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token both`
-        console.log(fundCommand)
-        console.log(execCommand(fundCommand, execOpts))
-        fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[1]}" --token both`
-        console.log(fundCommand)
-        console.log(execCommand(fundCommand, execOpts))
-      }
-    } catch (error) {
-      console.warn(`Unable to fund accounts`)
-    }
+    
     const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 

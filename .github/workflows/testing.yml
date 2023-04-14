@@ -31,7 +31,6 @@ jobs:
           opengsn: "true"
           estuary: "true"
           contracts-version: "v3.0.0"
-          node-version: "develop"
       - name: Check artifacts and circuits
         run: |
           nvm-tools copy-artifacts /tmp/.nevermined/artifacts

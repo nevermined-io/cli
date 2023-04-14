@@ -251,6 +251,16 @@ export const printProvenanceEvents = (
   })
 }
 
+export const getExtraInputParams = (argv: any) => {
+  const _extra: { [k: string]: any } = {}
+  process.argv.filter( (k: string) => k.startsWith('--+'))
+  .forEach( (k: string) => {
+    const paramKey = k.replace('--+', '')
+     _extra[paramKey] = argv[`+${paramKey}`]
+  })  
+  return _extra
+}
+
 export const printSearchResult = async (
   queryResult: QueryResult,
   logger: Logger
@@ -282,25 +292,30 @@ export const printNativeTokenBanner = async () => {
 }
 
 export const printErc20TokenBanner = async (token: Token) => {
-  const { address } = token
+  try {
+    const { address } = token
 
-  const [name, symbol, decimals, totalSupply] = await Promise.all([
-    token.contract.name(),
-    token.contract.symbol(),
-    token.contract.decimals(),
-    token.contract.totalSupply()
-  ])
-
-  logger.info(chalk.dim('\n===== ERC20 Contract ====='))
-  logger.info(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
-  logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
-  logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
-  logger.info(chalk.dim(`Decimals: ${chalk.whiteBright(decimals)}`))
-  logger.info(
-    chalk.dim(
-      `Total Supply: ${chalk.whiteBright(totalSupply / 10 ** decimals)}`
+    const [name, symbol, decimals, totalSupply] = await Promise.all([
+      token.contract.name(),
+      token.contract.symbol(),
+      token.contract.decimals(),
+      token.contract.totalSupply()
+    ])
+  
+    logger.info(chalk.dim('\n===== ERC20 Contract ====='))
+    logger.info(chalk.dim(`Address: ${chalk.whiteBright(address)}`))
+    logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
+    logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
+    logger.info(chalk.dim(`Decimals: ${chalk.whiteBright(decimals)}`))
+    logger.info(
+      chalk.dim(
+        `Total Supply: ${chalk.whiteBright(totalSupply / 10 ** decimals)}`
+      )
     )
-  )
+  } catch (error) {
+    logger.warn(`Error printing ERC20 token banner: ${(error as Error).message}`)
+  }
+
 }
 
 export const getContractNameFromAddress = async (

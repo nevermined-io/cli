@@ -63,14 +63,14 @@ describe('NFTs (ERC-1155) e2e Testing (Seller transfer)', () => {
 
     expect(orderAgreementId.length > 0)
 
-    const transferCommand = `${baseCommands.nfts1155.transfer} "${orderAgreementId}" "${execOpts.accounts[0]}" --amount 1 --accountIndex 0 --buyerAddress "${execOpts.accounts[2]}"`
+    const transferCommand = `${baseCommands.nfts1155.claim} "${orderAgreementId}" "${execOpts.accounts[0]}" --amount 1 --accountIndex 0 --buyerAddress "${execOpts.accounts[2]}"`
     console.debug(`COMMAND: ${transferCommand}`)
 
     const stdout = execCommand(transferCommand, execOpts)
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
-    expect(stdout.includes(`Transferring NFT (ERC-1155)`))
+    expect(stdout.includes(`Claiming NFT (ERC-1155)`))
     expect(stdout.includes(`Transfer done!`))
   })
 

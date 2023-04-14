@@ -163,6 +163,13 @@
 						"description": "When the asset was created"
 					},
 					{
+						"name": "tags",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Comma separated list of tags"
+					},					
+					{
 						"name": "access",
 						"type": "string",						
 						"default": "direct",
@@ -247,6 +254,13 @@
 						"type": "string",
 						"description": "When the asset was created"
 					},
+					{
+						"name": "tags",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Comma separated list of tags"
+					},					
 					{
 						"name": "access",
 						"type": "string",						
@@ -345,6 +359,13 @@
 						"type": "string",
 						"description": "When the asset was created"
 					},
+					{
+						"name": "tags",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Comma separated list of tags"
+					},					
 					{
 						"name": "access",
 						"type": "string",
@@ -861,12 +882,12 @@
 						"type": "boolean",
 						"default": false,
 						"description": "If true the NFTs will be minted during creation"
-					},					
+					},									
 					{
-						"name": "subscription",
-						"type": "boolean",
-						"default": false,						
-						"description": "The NFT contract allows to mint NFTs as subscriptions"
+						"name": "type",
+						"type": "string",
+						"default": "dataset",						
+						"description": "The type of asset to register (dataset, algorithm, workflow, container, subscription)"
 					},
 					{
 						"name": "transfer",
@@ -1044,11 +1065,11 @@
 					"description": "The NFT type"
 				}]
 			}, {
-				"name": "transfer [agreementId]",
-				"description": "It allows to transfer a NFT (ERC-721) to the account of the buyer",
+				"name": "claim [agreementId]",
+				"description": "It allows to claim a NFT (ERC-721) to the account of the buyer",
 				"details": "This command requires a valid `serviceAgreementId` and the `sellerAddress` that demonstrates that an asset was bought. The asset is then transferred to the buyer's account.",
-				"examples": ["ncli nfts721 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869"],
-				"commandHandler": "transferNft",
+				"examples": ["ncli nfts721 claim 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869"],
+				"commandHandler": "claimNft",
 				"positionalArguments": [{
 					"name": "agreementId",
 					"type": "string",
@@ -1272,7 +1293,13 @@
 						"type": "array",
 						"demand": false,
 						"description": "The list of services attached to the asset"
-					},					
+					},
+					{
+						"name": "type",
+						"type": "string",
+						"default": "dataset",						
+						"description": "The type of asset to register (dataset, algorithm, workflow, container, subscription)"
+					},										
 					{
 						"name": "license",
 						"type": "string",
@@ -1445,11 +1472,11 @@
 					}
 				]
 			}, {
-				"name": "transfer [agreementId]",
-				"description": "It allows to transfer a NFT (ERC-1155) to the account of the buyer",
+				"name": "claim [agreementId]",
+				"description": "It allows to claim a NFT (ERC-1155) to the account of the buyer",
 				"details": "This command requires a valid `serviceAgreementId` created by the `buyerAccount` that demonstrates that an asset was payed. Having that this command will allow to transfer the asset to the buyer account.",
-				"examples": ["ncli nfts1155 transfer 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --amount 1 --buyerAddress 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
-				"commandHandler": "transferNft",
+				"examples": ["ncli nfts1155 claim 0x44dba17d62dd4004c109921cb976ac7c5ec6e4c07d24cc82182b0c49c6381869 --amount 1 --buyerAddress 0xBE5449a6A97aD46c8558A3356267Ee5D2731ab5e"],
+				"commandHandler": "claimNft",
 				"positionalArguments": [{
 					"name": "agreementId",
 					"type": "string",
@@ -1467,7 +1494,7 @@
 					"name": "amount",
 					"type": "number",
 					"default": "1",
-					"description": "The number of NFTs (ERC-1155) to transfer"
+					"description": "The number of NFTs (ERC-1155) to claim"
 				}, {
 					"name": "nftType",
 					"type": "number",
@@ -1532,19 +1559,24 @@
 			"usage": "usage: $0 utils <command> parameters [options]",
 			"subcommands": [{
 				"name": "upload [file]",
-				"description": "Upload file to Filecoin",
-				"details": "It uploads a local file to the decentralized storage network Filecoin. It returns a `CID` identifying that file into the storage network. If the `--password` flag is provided, it will encrypts the file before uploading it and will return the password used.",
+				"description": "Upload file to IPFS or Filecoin",
+				"details": "It uploads a local file to the decentralized storage network like IPFS or Filecoin. It returns a `CID` identifying that file into the storage network. If the `--password` flag is provided, it will encrypts the file before uploading it and will return the password used.",
 				"examples": ["ncli utils upload README.md"],
 				"commandHandler": "uploadFile",
 				"positionalArguments": [{
 					"name": "file",
 					"type": "string",
-					"description": "The path to the file to upload to Filecoin"
+					"description": "The path to the file to upload"
 				}],
 				"optionalArguments": [{
+					"name": "where",
+					"type": "string",
+					"default": "ipfs",
+					"description": "The network where upload the file (ipfs or filecoin)."
+				}, {
 					"name": "encrypt",
 					"type": "boolean",
-					"default": "false",
+					"default": false,
 					"description": "If given it encrypts the file with AES and return password"
 				}]
 			}, {

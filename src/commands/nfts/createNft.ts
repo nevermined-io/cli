@@ -75,7 +75,7 @@ export const createNft = async (
     ddoMetadata = {
       main: {
         name: argv.name,
-        type: 'dataset',
+        type: argv.type,
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
@@ -136,6 +136,8 @@ export const createNft = async (
   if (argv.publishMetadata.toLowerCase() === 'ipfs')
     publishMetadata = PublishMetadata.IPFS  
 
+  if (argv.type) ddoMetadata.main.type = argv.type
+  
   const assetAttributes = AssetAttributes.getInstance({
       metadata: ddoMetadata,
       price: assetPrice,
@@ -154,14 +156,14 @@ export const createNft = async (
     nftAttributes = NFTAttributes.getNFT721Instance({
       ...assetAttributes,
       ercType: 721,
-      nftType: argv.subscription ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721,
+      nftType: argv.type === 'subscription' ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721,
       nftContractAddress: argv.nftAddress,
       preMint: argv.preMint,
       providers,
       royaltyAttributes,
       nftMetadataUrl: argv.nftMetadata,
       nftTransfer: argv.transfer,
-      isSubscription: argv.subscription
+      isSubscription: argv.type === 'subscription'
     })
     if (argv.subscription)
       nftAttributes = {
@@ -183,7 +185,7 @@ export const createNft = async (
     nftAttributes = NFTAttributes.getNFT1155Instance({
       ...assetAttributes,
       ercType: 1155,
-      nftType: NeverminedNFT1155Type.nft1155,
+      nftType: NeverminedNFT1155Type.nft1155,      
       nftContractAddress: argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),
       cap: argv.cap,
       preMint: argv.preMint,
@@ -191,7 +193,7 @@ export const createNft = async (
       royaltyAttributes,
       nftMetadataUrl: argv.nftMetadata,
       nftTransfer: argv.transfer,
-      isSubscription: argv.subscription ? argv.duration: 0
+      isSubscription: argv.type === 'subscription' ? argv.duration: 0
     })            
     ddo = await nvm.nfts1155.create(
         nftAttributes,
@@ -219,8 +221,6 @@ export const createNft = async (
     )
   )
   
-  logger.info('Now please mint the token on the NFT Contract!')
-
   return {
     status: StatusCodes.OK,
     results: JSON.stringify({

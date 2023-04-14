@@ -16,8 +16,10 @@ export const uploadFile = async (
 ): Promise<ExecutionOutput> => {
   const { file, encrypt } = argv
 
-  logger.info(chalk.dim('Uploading File to Filecoin ...'))
+  const uploadBackend = argv.where === 'filecoin' ? NodeUploadBackends.Filecoin : NodeUploadBackends.IPFS  
 
+  logger.info(chalk.dim(`Uploading File to ${uploadBackend.toString()}...`))
+  
   if (!fs.existsSync(file))
     return {
       status: StatusCodes.ERROR,
@@ -26,7 +28,8 @@ export const uploadFile = async (
 
   try {
     const stream = fs.createReadStream(file)
-    const { url, password } = await nvm.services.node.uploadContent(stream, encrypt, NodeUploadBackends.IPFS)    
+    
+    const { url, password } = await nvm.services.node.uploadContent(stream, encrypt, uploadBackend)
     logger.info(`File uploaded to URL: ${url}`)
     if (password) {
       logger.info(`Password: ${password}`)
