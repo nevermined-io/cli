@@ -86,6 +86,7 @@ export const registerAsset = async (
       })
       _fileIndex++
     })
+    logger.debug(`We have metadata`)
 
     ddoMetadata = {
       main: {
@@ -95,7 +96,7 @@ export const registerAsset = async (
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
         license: argv.license,
-        tags: argv.tags.split(','),
+        tags: argv.tags ? argv.tags.split(',') : [],
         files: _files
       } as MetaDataMain
     }    
@@ -111,7 +112,7 @@ export const registerAsset = async (
       logger.info(`We are here now ${JSON.stringify(ddoMetadata.additionalInformation)}`)
     }
     if (assetType === 'algorithm') {
-      const containerTokens = argv.container.split(':')
+      const containerTokens = argv.cointaer ? argv.container.split(':') : []
       ddoMetadata.main.algorithm = {
         language: argv.language,
         version: '0.1',
@@ -144,6 +145,7 @@ export const registerAsset = async (
     ddoMetadata = JSON.parse(fs.readFileSync(metadata).toString())
   }
 
+  logger.debug(`Parsing extra metadata parameters`)
   // Parsing extra parameters (`--+extraParam xxx`) given to add as additional information
   const customData = getExtraInputParams(argv)
 

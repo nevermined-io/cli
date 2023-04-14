@@ -166,6 +166,7 @@
 						"name": "tags",
 						"type": "string",
 						"demandOption": false,
+						"default": "",
 						"description": "Comma separated list of tags"
 					},					
 					{
@@ -257,6 +258,7 @@
 						"name": "tags",
 						"type": "string",
 						"demandOption": false,
+						"default": "",
 						"description": "Comma separated list of tags"
 					},					
 					{
@@ -361,6 +363,7 @@
 						"name": "tags",
 						"type": "string",
 						"demandOption": false,
+						"default": "",
 						"description": "Comma separated list of tags"
 					},					
 					{
