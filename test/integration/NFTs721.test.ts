@@ -112,6 +112,16 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     expect(stdout.includes(`Transfer done!`))
   })
 
+  test('The buyer can see the NFT balance (ERC-721)', async () => {
+    const balanceCommand = `${baseCommands.nfts721.balance} "${nftAddress}" "${execOpts.accounts[1]}" --accountIndex 1 `
+    console.debug(`COMMAND: ${balanceCommand}`)
+
+    const stdout = execCommand(balanceCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(`The user holds 1`))    
+  })
+
   test('As NFT holder I can download the files associated to an asset', async () => {
     const destination = `/tmp/nevemined/cli/test/nft`
     const downloadCommand = `${baseCommands.nfts721.download} "${did}" --destination "${destination}" --accountIndex 1  `

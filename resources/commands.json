@@ -984,6 +984,31 @@
 					}
 				]
 			}, {
+				"name": "balance [nftAddress]",
+				"description": "It gets the balance of a NFT",
+				"details": "This command allows to check if an address is a holder of a specific NFT wrapped by a Nevermined DID",
+				"examples": ["ncli nfts721 hold did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "balanceNft",
+				"positionalArguments": [{
+					"name": "nftAddress",
+					"type": "string",
+					"description": "The NFT contract address"
+				}],
+				"optionalArguments": [{
+						"name": "address",
+						"type": "string",
+						"default": "",
+						"description": "The address of the account to get the balance"
+					},
+					{
+						"name": "nftType",
+						"type": "number",
+						"default": "721",
+						"hidden": true,
+						"description": "The NFT type"
+					}
+				]
+			}, {
 				"name": "mint [did]",
 				"description": "Mints a ERC-721 NFT",
 				"details": "This command allows to the owner of an asset to mint a ERC-721 based NFT",
@@ -1389,6 +1414,34 @@
 						"description": "The address of the account to validate as holder"
 					},
 					{
+						"name": "nftType",
+						"type": "number",
+						"default": "1155",
+						"hidden": true,
+						"description": "The NFT type"
+					}
+				]
+			}, {
+				"name": "balance [nftAddress] [did]",
+				"description": "It gets the balance of a NFT",
+				"details": "This command allows to check if an address is a holder of a specific NFT wrapped by a Nevermined DID",
+				"examples": ["ncli nfts1155 hold did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "balanceNft",
+				"positionalArguments": [{
+					"name": "nftAddress",
+					"type": "string",
+					"description": "The NFT contract address"
+				}, {
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}],
+				"optionalArguments": [{
+						"name": "address",
+						"type": "string",
+						"default": "",
+						"description": "The address of the account to get the balance"
+					}, {
 						"name": "nftType",
 						"type": "number",
 						"default": "1155",
