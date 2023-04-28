@@ -14,7 +14,7 @@
 		"nativeToken": "MATIC",
 		"networkId": "80001",
 		"networkName": "mumbai",
-		"contractsVersion": "3.0.0",
+		"contractsVersion": "3.1.0",
 		"tagName": "public",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
@@ -178,14 +178,37 @@
 		"externalNetwork": false
 	},
 	"oneMumbai": {
-		"envDescription": "Nevermined One testnet environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://nevermined.io/",
+		"envDescription": "Nevermined One internal environment where Nevermined developers can integrate new versions of the application.",
+		"envUrl": "https://mumbai.nevermined.one/",
 		"isProduction": false,
 		"nvm": {
 			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api.mumbai.nevermined.one",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
 			"neverminedNodeUri": "https://node.mumbai.nevermined.one",
+			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
+			"verbose": true
+		},
+		"nativeToken": "MATIC",
+		"networkId": "80001",
+		"networkName": "mumbai",
+		"contractsVersion": "3.1.0",
+		"tagName": "public",
+		"etherscanUrl": "https://mumbai.polygonscan.com",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": false
+	},
+	"appMumbai": {
+		"envDescription": "Nevermined One testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://mumbai.nevermined.app/",
+		"isProduction": false,
+		"nvm": {
+			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
+			"marketplaceUri": "https://marketplace-api.mumbai.nevermined.app",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"neverminedNodeUri": "https://node.mumbai.nevermined.app",
 			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
 			"verbose": true
 		},
