@@ -44,7 +44,7 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('Clone an existing NFT (ERC-721) Subscription contract with parameters', async () => {
-    const cloneCommand = `${baseCommands.nfts721.clone} ${nftAddress}  --accountIndex 0`
+    const cloneCommand = `${baseCommands.nfts721.clone} ${nftAddress}  --accountIndex 0 --name "NVM Subscription" --symbol "NVM" --cap 0`
     console.debug(`COMMAND: ${cloneCommand}`)
 
     const stdout = execCommand(cloneCommand, execOpts)
