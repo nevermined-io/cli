@@ -769,7 +769,7 @@
 			}, {
 				"name": "clone [nftAddress]",
 				"description": "It clones an existing NFT (ERC-721) contract",
-				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract clonned will be owned by the user doing that clonning action.",
+				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract cloned will be owned by the user doing that clonning action.",
 				"examples": ["ncli nfts721 clone 0x37BB53e3d293494DE59fBe1FF78500423dcFd43B --params 'Token Name' --params 'SYMBOL'"],
 				"commandHandler": "cloneNft",
 				"positionalArguments": [{
@@ -1235,7 +1235,7 @@
 			}, {
 				"name": "clone [nftAddress]",
 				"description": "It clones an existing NFT (ERC-1155) contract",
-				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract clonned will be owned by the user doing that clonning action.",
+				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract cloned will be owned by the user doing that clonning action.",
 				"examples": ["ncli nfts1155 clone 0x37BB53e3d293494DE59fBe1FF78500423dcFd43B --params 'Token Name' --params 'SYMBOL'"],
 				"commandHandler": "cloneNft",
 				"positionalArguments": [{

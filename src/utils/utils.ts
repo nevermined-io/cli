@@ -28,18 +28,23 @@ export const loadNevermined = async (
   network: string,
   verbose = false
 ): Promise<Nevermined> => {
-  
-  const nvm = await Nevermined.getInstance({
-    ...config.nvm,
-    verbose: verbose ? verbose : config.nvm.verbose
-  })
-  if (!nvm.keeper) {
-    logger.error(
-      chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
-    )
+  try {
+    logger.log(JSON.stringify(config.nvm.web3ProviderUri))
+    const nvm = await Nevermined.getInstance({
+      ...config.nvm,
+      verbose: verbose ? verbose : config.nvm.verbose
+    })
+    if (!nvm.keeper) {
+      logger.error(
+        chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
+      )
+    }    
+    return nvm
+  } catch (error) {
+    logger.error(chalk.red(`ERROR: ${(error as Error).message}\n`))
+    process.exit(1)
   }
 
-  return nvm
 }
 
 export const loginMarketplaceApi = async (

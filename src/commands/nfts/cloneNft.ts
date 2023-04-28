@@ -55,7 +55,7 @@ export const cloneNft = async (
     )    
   }
 
-  logger.info(`Contract clonned into address: ${clonnedAddress}\n`)
+  logger.info(`Contract cloned at address: ${clonnedAddress}\n`)
 
   return {
     status: StatusCodes.OK,
