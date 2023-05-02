@@ -30,7 +30,7 @@ jobs:
           token: ${{ secrets.API_TOKEN_GITHUB }}
           opengsn: 'true'
           estuary: 'true'
-          contracts-version: 'v3.1.0'
+          contracts-version: 'v3.2.1'
       - name: Check artifacts and circuits
         run: |
           nvm-tools copy-artifacts /tmp/.nevermined/artifacts

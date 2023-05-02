@@ -17,19 +17,7 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
   let nftAddress = ''
   let orderAgreementId = ''
 
-  beforeAll(async () => {
-    try {
-      console.log(`Funding account: ${execOpts.accounts[0]}`)
-      const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[0]}" --token erc20`
-      console.debug(`COMMAND: ${fundCommand}`)
   
-      execCommand(fundCommand, execOpts)
-    } catch {
-      console.error('Unable to fund account')
-    }
-
-  })
-
   test('Deploy a new NFT (ERC-721) Subscription contract with parameters', async () => {
     const deployCommand = `${baseCommands.nfts721.deploy} ${abiPathSubscription}  --accountIndex 0 --params "Token Name" --params Symbol --addMinter true `
     console.debug(`COMMAND: ${deployCommand}`)
