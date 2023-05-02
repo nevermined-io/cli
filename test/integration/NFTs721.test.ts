@@ -11,7 +11,7 @@ import execCommand from '../helpers/ExecCommand'
 import { didZeroX } from '@nevermined-io/sdk'
 
 describe('NFTs (ERC-721) e2e Testing', () => {
-  const abiPath = 'test/resources/nfts/TestNFT721.json'
+  const abiPath = 'test/resources/nfts/NFT721SubscriptionUpgradeable.json'
   let did = ''
   let orderAgreementId = ''
   let nftAddress = ''
@@ -110,6 +110,16 @@ describe('NFTs (ERC-721) e2e Testing', () => {
     expect(stdout.includes(did))
     expect(stdout.includes(`Claiming NFT (ERC-721)`))
     expect(stdout.includes(`Transfer done!`))
+  })
+
+  test('The buyer can see the NFT balance (ERC-721)', async () => {
+    const balanceCommand = `${baseCommands.nfts721.balance} "${nftAddress}" "${execOpts.accounts[1]}" --accountIndex 1 `
+    console.debug(`COMMAND: ${balanceCommand}`)
+
+    const stdout = execCommand(balanceCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(`The user holds 1`))    
   })
 
   test('As NFT holder I can download the files associated to an asset', async () => {

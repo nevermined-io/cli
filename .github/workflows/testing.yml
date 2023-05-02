@@ -25,12 +25,12 @@ jobs:
           yarn build
           yarn start --help
 
-      - uses: nevermined-io/nvm-tools-actions@v0.9.0
+      - uses: nevermined-io/nvm-tools-actions@v0.10.0
         with:
           token: ${{ secrets.API_TOKEN_GITHUB }}
-          opengsn: "true"
-          estuary: "true"
-          contracts-version: "v3.0.0"
+          opengsn: 'true'
+          estuary: 'true'
+          contracts-version: 'v3.2.1'
       - name: Check artifacts and circuits
         run: |
           nvm-tools copy-artifacts /tmp/.nevermined/artifacts
@@ -41,14 +41,14 @@ jobs:
 
       - name: Run integration tests
         env:
-          LOCAL_CONF_DIR: "/tmp/.nevermined"
+          LOCAL_CONF_DIR: '/tmp/.nevermined'
           SEED_WORDS: ${{ secrets.TEST_MNEMONIC }}
-          TOKEN_ADDRESS: "0x0000000000000000000000000000000000000000"
-          WEB3_PROVIDER_URL: "http://contracts.nevermined.localnet"
-          NETWORK: "geth-localnet"
+          TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000'
+          WEB3_PROVIDER_URL: 'http://contracts.nevermined.localnet'
+          NETWORK: 'geth-localnet'
           IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
-          NO_GRAPH: "true"
+          NO_GRAPH: 'true'
         run: |
           yarn test:integration
       - name: Upload logs

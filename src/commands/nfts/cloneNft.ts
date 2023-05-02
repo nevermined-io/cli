@@ -16,9 +16,11 @@ export const cloneNft = async (
   logger: Logger
 ): Promise<ExecutionOutput> => {
   
-  const { nftAddress, nftType } = argv
+  const { nftAddress } = argv
 
   logger.info(chalk.dim(`Clonning NFT contract from address ${nftAddress}...`))
+
+  const nftType = Number(argv.nftType) === 721 ? 721 : 1155
 
   if (!ethers.utils.isAddress(nftAddress))
     return {
@@ -27,13 +29,25 @@ export const cloneNft = async (
     }
 
   const operators: string[] = []
+  
   argv.operators.forEach((_operator: string) => {
     if (ethers.utils.isAddress(_operator)) operators.push(_operator)
   })
 
   let clonnedAddress
 
-  if (nftType == 721)  {
+  logger.debug(`Clonning NFT-${nftType} using params:`)
+  logger.debug(`\tName: ${argv.name}`)
+  logger.debug(`\tSymbol: ${argv.symbol}`)
+  logger.debug(`\tURI: ${argv.uri}`)
+  logger.debug(`\tCap: ${argv.cap}`)
+
+  if (nftType === 721)  {
+    if (!operators.includes(nvm.keeper.conditions.transferNft721Condition.getAddress()))
+      operators.push(nvm.keeper.conditions.transferNft721Condition.getAddress())
+
+    logger.debug(`\tOperators: ${JSON.stringify(operators)}`)
+
     await nvm.contracts.loadNft721(nftAddress)
     clonnedAddress = await nvm.nfts721.getContract.createClone(
       argv.name, 
@@ -44,18 +58,20 @@ export const cloneNft = async (
       creatorAccount
     )
   } else {
-    await nvm.contracts.loadNft721(nftAddress)
-    clonnedAddress = await nvm.nfts721.getContract.createClone(
+    if (!operators.includes(nvm.keeper.conditions.transferNftCondition.getAddress()))
+      operators.push(nvm.keeper.conditions.transferNftCondition.getAddress())
+
+    await nvm.contracts.loadNft1155(nftAddress)
+    clonnedAddress = await nvm.nfts1155.getContract.createClone(
       argv.name, 
       argv.symbol, 
       argv.uri, 
-      BigNumber.from(argv.cap), 
       operators, 
       creatorAccount
     )    
   }
 
-  logger.info(`Contract clonned into address: ${clonnedAddress}\n`)
+  logger.info(`Contract cloned at address: ${clonnedAddress}\n`)
 
   return {
     status: StatusCodes.OK,

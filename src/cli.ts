@@ -84,7 +84,6 @@ const cmdHandler = async (
 
   try {
     if (requiresAccount) {
-      
       nvm = await loadNevermined(config, network, verbose)
       if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
 

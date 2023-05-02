@@ -11,6 +11,7 @@ export const commandRegex = {
   },
   nfts: {
     deploy: new RegExp('.*Contract deployed into address: (.{42}).*', 'gm'),
+    clone: new RegExp('.*Contract cloned at address: (.{42}).*', 'gm'),
     create: new RegExp('.*Created DID: (.{71}).*', 'gm'),
     publishMetadata: new RegExp('.*NFT Metadata Created: (.*)', 'gm'),
     order: new RegExp('.*NFT Agreement Created: (.{66})', 'g')
@@ -153,6 +154,14 @@ export const parseNFTOrderAgreementId = (stdout: string): string => {
 
 export const parseAddressOfContractDeployed = (stdout: string): string => {
   const parsed = commandRegex.nfts.deploy.exec(stdout)
+  if (parsed != null) {
+    return parsed[1]
+  }
+  return ''
+}
+
+export const parseAddressOfContractCloned = (stdout: string): string => {
+  const parsed = commandRegex.nfts.clone.exec(stdout)
   if (parsed != null) {
     return parsed[1]
   }

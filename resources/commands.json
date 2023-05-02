@@ -769,7 +769,7 @@
 			}, {
 				"name": "clone [nftAddress]",
 				"description": "It clones an existing NFT (ERC-721) contract",
-				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract clonned will be owned by the user doing that clonning action.",
+				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract cloned will be owned by the user doing that clonning action.",
 				"examples": ["ncli nfts721 clone 0x37BB53e3d293494DE59fBe1FF78500423dcFd43B --params 'Token Name' --params 'SYMBOL'"],
 				"commandHandler": "cloneNft",
 				"positionalArguments": [{
@@ -974,6 +974,31 @@
 						"type": "string",
 						"default": "",
 						"description": "The address of the account to validate as holder"
+					},
+					{
+						"name": "nftType",
+						"type": "number",
+						"default": "721",
+						"hidden": true,
+						"description": "The NFT type"
+					}
+				]
+			}, {
+				"name": "balance [nftAddress]",
+				"description": "It gets the balance of a NFT",
+				"details": "This command allows to check if an address is a holder of a specific NFT wrapped by a Nevermined DID",
+				"examples": ["ncli nfts721 hold did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "balanceNft",
+				"positionalArguments": [{
+					"name": "nftAddress",
+					"type": "string",
+					"description": "The NFT contract address"
+				}],
+				"optionalArguments": [{
+						"name": "address",
+						"type": "string",
+						"default": "",
+						"description": "The address of the account to get the balance"
 					},
 					{
 						"name": "nftType",
@@ -1210,7 +1235,7 @@
 			}, {
 				"name": "clone [nftAddress]",
 				"description": "It clones an existing NFT (ERC-1155) contract",
-				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract clonned will be owned by the user doing that clonning action.",
+				"details": "Nevermined Smart Contracts are deployed in a blockchain, with this command it's possible to clone the implementation of an already deployed Smart Contract. The new contract cloned will be owned by the user doing that clonning action.",
 				"examples": ["ncli nfts1155 clone 0x37BB53e3d293494DE59fBe1FF78500423dcFd43B --params 'Token Name' --params 'SYMBOL'"],
 				"commandHandler": "cloneNft",
 				"positionalArguments": [{
@@ -1389,6 +1414,34 @@
 						"description": "The address of the account to validate as holder"
 					},
 					{
+						"name": "nftType",
+						"type": "number",
+						"default": "1155",
+						"hidden": true,
+						"description": "The NFT type"
+					}
+				]
+			}, {
+				"name": "balance [nftAddress] [did]",
+				"description": "It gets the balance of a NFT",
+				"details": "This command allows to check if an address is a holder of a specific NFT wrapped by a Nevermined DID",
+				"examples": ["ncli nfts1155 balance 0xF841Ff2C8abF1751A83923755EbD2F66bBAa5BFE did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "balanceNft",
+				"positionalArguments": [{
+					"name": "nftAddress",
+					"type": "string",
+					"description": "The NFT contract address"
+				}, {
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}],
+				"optionalArguments": [{
+						"name": "address",
+						"type": "string",
+						"default": "",
+						"description": "The address of the account to get the balance"
+					}, {
 						"name": "nftType",
 						"type": "number",
 						"default": "1155",
