@@ -1425,7 +1425,7 @@
 				"name": "balance [nftAddress] [did]",
 				"description": "It gets the balance of a NFT",
 				"details": "This command allows to check if an address is a holder of a specific NFT wrapped by a Nevermined DID",
-				"examples": ["ncli nfts1155 hold did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"examples": ["ncli nfts1155 balance 0xF841Ff2C8abF1751A83923755EbD2F66bBAa5BFE did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
 				"commandHandler": "balanceNft",
 				"positionalArguments": [{
 					"name": "nftAddress",
