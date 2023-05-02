@@ -11,7 +11,7 @@ import execCommand from '../helpers/ExecCommand'
 import { didZeroX } from '@nevermined-io/sdk'
 
 describe('NFTs (ERC-721) e2e Testing', () => {
-  const abiPath = 'test/resources/nfts/TestNFT721.json'
+  const abiPath = 'test/resources/nfts/NFT721SubscriptionUpgradeable.json'
   let did = ''
   let orderAgreementId = ''
   let nftAddress = ''
