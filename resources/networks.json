@@ -134,49 +134,6 @@
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
 	},
-	"polygon-localnet": {
-		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running in your computer, please visit https://github.com/nevermined-io/tools/",
-		"isProduction": false,
-		"nvm": {
-			"web3ProviderUri": "http://contracts.nevermined.localnet",
-			"marketplaceUri": "http://marketplace.nevermined.localnet",
-			"graphHttpUri": "http://localhost:9000/subgraphs/name/nevermined-io/development",
-			"neverminedNodeUri": "http://node.nevermined.localnet",
-			"neverminedNodeAddress": "0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0",
-			"verbose": true
-		},
-		"nativeToken": "MATIC",
-		"networkId": "8997",
-		"networkName": "polygon-localnet",
-		"etherscanUrl": "",
-		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": false
-	},
-	"defiMumbai": {
-		"envDescription": "Testnet environment for the DeFi Marketplace.",
-		"envUrl": "https://defi.public.nevermined.network/",
-		"isProduction": false,
-		"nvm": {
-			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
-			"marketplaceUri": "https://marketplace-api-public.nevermined.network/",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/common",
-			"neverminedNodeUri": "https://gateway.mumbai.public.nevermined.network",
-			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
-			"verbose": true
-		},
-		"nativeToken": "MATIC",
-		"networkId": "80001",
-		"networkName": "mumbai",
-		"contractsVersion": "2.1.0",
-		"tagName": "public",
-		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": false
-	},
 	"oneMumbai": {
 		"envDescription": "Nevermined One internal environment where Nevermined developers can integrate new versions of the application.",
 		"envUrl": "https://mumbai.nevermined.one/",
@@ -219,6 +176,52 @@
 		"tagName": "public",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},
+	"appMatic": {
+		"envDescription": "The Polygon production environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://nevermined.app/",
+		"isProduction": true,
+		"nvm": {
+			"web3ProviderUri": "https://polygon-rpc.com",
+			"marketplaceUri": "https://marketplace-api.matic.nevermined.app",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"neverminedNodeUri": "https://node.matic.nevermined.app",
+			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
+			"verbose": true
+		},
+		"nativeToken": "MATIC",
+		"networkId": "137",
+		"networkName": "matic",
+		"contractsVersion": "3.2.1",
+		"tagName": "public",
+		"etherscanUrl": "https://polygonscan.com",
+		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},		
+	"appChiado": {
+		"envDescription": "Nevermined App Chiado (Gnosis) testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://chiado.nevermined.app/",
+		"isProduction": false,
+		"nvm": {
+			"web3ProviderUri": "https://rpc.chiadochain.net",
+			"marketplaceUri": "https://marketplace-api.chiado.nevermined.app",
+			"graphHttpUri": "",
+			"neverminedNodeUri": "https://node.chiado.nevermined.app",
+			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
+			"verbose": true
+		},
+		"nativeToken": "xDAI",
+		"networkId": "10200",
+		"networkName": "chiado",
+		"contractsVersion": "3.2.1",
+		"tagName": "public",
+		"etherscanUrl": "https://blockscout.chiadochain.net",
+		"erc20TokenAddress": "0x1bcA156f746C6Eb8b18d61654293e2Fc5b653fF5",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
