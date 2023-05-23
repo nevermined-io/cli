@@ -50,7 +50,7 @@ export const accountsNew = async (
     logger.info(`Wallet added to ${destination} file`)
     logger.info(`Wallet password: ${password}`)
     const json = await wallet.encrypt(password)
-    fs.writeFileSync(destination, JSON.stringify(json, null, 4))
+    fs.writeFileSync(destination, json)
   }
 
   return {
