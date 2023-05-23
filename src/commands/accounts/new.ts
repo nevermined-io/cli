@@ -46,9 +46,12 @@ export const accountsNew = async (
     )
   )
 
-  if(password != ''){
+  if (password !== '' && destination !== ''){
+    logger.info(`Wallet added to ${destination} file`)
+    logger.info(`Wallet password: ${password}`)
     const json = await wallet.encrypt(password)
     fs.writeFileSync(destination, JSON.stringify(json, null, 4))
+    
   }
 
   return {

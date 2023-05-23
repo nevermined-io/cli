@@ -101,7 +101,7 @@
 					{
 						"name": "password",
 						"type": "string",
-						"demandOption": true,
+						"default": "",
 						"description": "Password to encrypt the new wallet"
 					}
 			]
