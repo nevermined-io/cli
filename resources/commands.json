@@ -91,7 +91,20 @@
 				"commandHandler": "accountsNew",
 				"requiresAccount": false,
 				"positionalArguments": [],
-				"optionalArguments": []
+				"optionalArguments": [
+					{
+						"name": "destination",
+						"type": "string",
+						"default": "./account.json",
+						"description": "The json encrypted file destination. By default ./account.json"
+					},
+					{
+						"name": "password",
+						"type": "string",
+						"default": "",
+						"description": "Password to encrypt the new wallet"
+					}
+			]
 			}, {
 				"name": "list",
 				"description": "List all accounts related with your credentials.",
