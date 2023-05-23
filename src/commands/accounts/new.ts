@@ -5,6 +5,7 @@ import { Logger } from 'log4js'
 import { ethers } from 'ethers'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
+import fs from 'fs'
 
 export const accountsNew = async (
   nvm: Nevermined,
@@ -13,6 +14,8 @@ export const accountsNew = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
+  const { destination, password } = argv
+
   logger.info(chalk.dim('Creating wallet ...'))
 
   const wallet = ethers.Wallet.createRandom()
@@ -42,6 +45,11 @@ export const accountsNew = async (
       )}\n`
     )
   )
+
+  if(password != ''){
+    const json = await wallet.encrypt(password)
+    fs.writeFileSync(destination, JSON.stringify(json, null, 4))
+  }
 
   return {
     status: StatusCodes.OK,
