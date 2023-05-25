@@ -152,7 +152,7 @@
 		"contractsVersion": "3.2.1",
 		"tagName": "public",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"erc20TokenAddress": "0x2058a9d7613eee744279e3856ef0eada5fcbaa7e",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": false
@@ -175,7 +175,7 @@
 		"contractsVersion": "3.2.1",
 		"tagName": "public",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
+		"erc20TokenAddress": "0x2058a9d7613eee744279e3856ef0eada5fcbaa7e",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
