@@ -27,6 +27,7 @@ export * from './nfts/getJWT'
 export * from './accounts/new'
 export * from './accounts/list'
 export * from './accounts/fund'
+export * from './accounts/export'
 
 // agreements
 export * from './agreements/showAgreement'
