@@ -28,8 +28,7 @@ export const loadNevermined = async (
   network: string,
   verbose = false
 ): Promise<Nevermined> => {
-  try {
-    logger.log(JSON.stringify(config.nvm.web3ProviderUri))
+  try {    
     const nvm = await Nevermined.getInstance({
       ...config.nvm,
       verbose: verbose ? verbose : config.nvm.verbose
@@ -132,8 +131,8 @@ export const findAccountOrFirst = (
   address: string
 ): Account => {
   let account
-
-  accounts.map((a) => console.log(`ACCOUNT ${a.getId()}`))
+  
+  accounts.map((a) => logger.info(`ACCOUNT ${a.getId()}`))
 
   if (ethers.utils.isAddress(address)) {
     account = accounts.find(
@@ -161,6 +160,37 @@ export const findAccountOrFirst = (
   }
 
   return accounts[0]
+}
+
+export const printWallet = (wallet: ethers.Wallet) => {
+  logger.info(
+    chalk.dim(`Wallet address: ${chalk.yellowBright(wallet.address)}`)
+  )
+  logger.info(
+    chalk.dim(`Wallet public key: ${chalk.yellowBright(wallet.publicKey)}`)
+  )
+  logger.info(
+    chalk.dim(`Wallet private key: ${chalk.yellowBright(wallet.privateKey)}`)
+  )
+  logger.info(chalk.dim(`Wallet Seed Words:`))
+
+  logger.info(
+    chalk.dim(`  Phrase: ${chalk.yellowBright(wallet.mnemonic.phrase)}`)
+  )
+  logger.info(chalk.dim(`  Path: ${chalk.yellowBright(wallet.mnemonic.path)}`))
+  logger.info(
+    chalk.dim(`  Locale: ${chalk.yellowBright(wallet.mnemonic.locale)}`)
+  )
+
+  logger.info(
+    chalk.dim(
+      `\nIf you want to use it in the CLI run:\n${chalk.yellow(
+        'export SEED_WORDS="' + wallet.mnemonic.phrase + '"'
+      )}\n`
+    )
+  )
+
+
 }
 
 export const printNftTokenBanner = async (nft721: Nft721Contract) => {

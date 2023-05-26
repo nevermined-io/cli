@@ -1,5 +1,5 @@
 import { Account, Nevermined } from '@nevermined-io/sdk'
-import { StatusCodes } from '../../utils'
+import { StatusCodes, printWallet } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ethers } from 'ethers'
@@ -19,32 +19,7 @@ export const accountsNew = async (
   logger.info(chalk.dim('Creating wallet ...'))
 
   const wallet = ethers.Wallet.createRandom()
-  logger.info(
-    chalk.dim(`Wallet address: ${chalk.yellowBright(wallet.address)}`)
-  )
-  logger.info(
-    chalk.dim(`Wallet public key: ${chalk.yellowBright(wallet.publicKey)}`)
-  )
-  logger.info(
-    chalk.dim(`Wallet private key: ${chalk.yellowBright(wallet.privateKey)}`)
-  )
-  logger.info(chalk.dim(`Wallet Seed Words:`))
-
-  logger.info(
-    chalk.dim(`  Phrase: ${chalk.yellowBright(wallet.mnemonic.phrase)}`)
-  )
-  logger.info(chalk.dim(`  Path: ${chalk.yellowBright(wallet.mnemonic.path)}`))
-  logger.info(
-    chalk.dim(`  Locale: ${chalk.yellowBright(wallet.mnemonic.locale)}`)
-  )
-
-  logger.info(
-    chalk.dim(
-      `\nIf you want to use it in the CLI run:\n${chalk.yellow(
-        'export SEED_WORDS="' + wallet.mnemonic.phrase + '"'
-      )}\n`
-    )
-  )
+  printWallet(wallet)
 
   if (password !== '' && destination !== ''){
     logger.info(`Wallet added to ${destination} file`)
