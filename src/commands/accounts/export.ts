@@ -7,7 +7,7 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import fs from 'fs'
 
-export const accountsNew = async (
+export const accountsExport = async (
   nvm: Nevermined,
   account: Account,
   argv: any,
@@ -16,10 +16,10 @@ export const accountsNew = async (
 ): Promise<ExecutionOutput> => {
   const { destination, password } = argv
 
-  logger.info(chalk.dim('Creating wallet ...'))
+  logger.info(chalk.dim('Export wallet ...'))
 
-  const wallet = ethers.Wallet.createRandom()
-  printWallet(wallet)
+  const wallet = ethers.Wallet.fromMnemonic(config.seed!)
+  printWallet(wallet)  
 
   if (password !== '' && destination !== ''){
     logger.info(`Wallet added to ${destination} file`)
