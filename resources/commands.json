@@ -665,6 +665,18 @@
 					"description": "The agreement id"
 				}],
 				"optionalArguments": []
+			}, {
+				"name": "abort [agreementId]",
+				"description": "Abort an agreement that is timed out",
+				"details": "An agreement in Nevermined keeps track of the state of the different conditions that need to be fulfilled in order to facilitate some service (access, download, computation, etc). Given a `serviceAgreementId` this command aborts an expired agreement on-chain. When the agreement is aborted this command will release any payment locked as part of the agreement.",
+				"examples": ["ncli agreements abort 0xf29bebaeacf865b4f57373aeb84635cc68c7719761607aec2802f1ad87213777"],
+				"commandHandler": "abortAgreement",
+				"positionalArguments": [{
+					"name": "agreementId",
+					"type": "string",
+					"description": "The agreement id"
+				}],
+				"optionalArguments": []
 			}]
 		}, {
 			"name": "provenance",

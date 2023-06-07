@@ -32,6 +32,7 @@ export * from './accounts/export'
 // agreements
 export * from './agreements/showAgreement'
 export * from './agreements/listAgreements'
+export * from './agreements/abortAgreement'
 
 // network
 export * from './network/networkStatus'

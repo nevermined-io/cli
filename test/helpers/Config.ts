@@ -105,7 +105,8 @@ export const baseCommands = {
   },
   agreements: {
     list: `${BASE_COMMAND} ${VERBOSE} agreements list `,
-    show: `${BASE_COMMAND} ${VERBOSE} agreements show `
+    show: `${BASE_COMMAND} ${VERBOSE} agreements show `,
+    abort: `${BASE_COMMAND} ${VERBOSE} agreements abort `
   },
   provenance: {
     register: `${BASE_COMMAND} ${VERBOSE} provenance register `,
