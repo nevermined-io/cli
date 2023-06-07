@@ -114,6 +114,8 @@ export const baseCommands = {
     inspect: `${BASE_COMMAND} ${VERBOSE} provenance inspect `
   },
   utils: {
+    encodeDID: `${BASE_COMMAND} ${VERBOSE} utils encode-did `,
+    decodeDID: `${BASE_COMMAND} ${VERBOSE} utils decode-did `,
     upload: `${BASE_COMMAND} ${VERBOSE} utils upload `,
     decrypt: `${BASE_COMMAND} ${VERBOSE} utils decrypt `,
     encrypt: `${BASE_COMMAND} ${VERBOSE} utils encrypt `,

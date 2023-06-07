@@ -1,8 +1,11 @@
+import { DID } from '@nevermined-io/sdk'
 import { execOpts, baseCommands, metadataConfig } from '../helpers/Config'
 import execCommand from '../helpers/ExecCommand'
 import {
   parseCIDFromNFTMetadata,
-  parseDIDFromNewNFT
+  parseDIDFromNewNFT,
+  parseDecodedDID,
+  parseEncodedDID
 } from '../helpers/StdoutParser'
 
 describe('Utils e2e Testing', () => {
@@ -20,6 +23,29 @@ describe('Utils e2e Testing', () => {
     'https://i1.wp.com/hyperallergic.com/wp-content/uploads/2016/04/goya-saturn-pigeons.gif?resize=470%2C470&quality=100'
   const royalties = '1'
   const royaltiesReceiver = '0x068ed00cf0441e4829d9784fcbe7b9e26d4bd8d0'
+
+  test('Encode and Decode DIDs', async () => {
+    const did = DID.generate()
+
+    const command = `${baseCommands.utils.encodeDID} ${did.getDid()} `
+    console.debug(`COMMAND: ${command}`)
+    let stdout = execCommand(command, execOpts as any).toString()
+
+    const encoded = parseEncodedDID(stdout as any)
+
+    console.log(`STDOUT: ${stdout}`)
+
+    const decodeCommand = `${baseCommands.utils.decodeDID} ${encoded} `
+    console.debug(`COMMAND: ${decodeCommand}`)
+    stdout = execCommand(decodeCommand, execOpts as any).toString()
+
+    const decoded = parseDecodedDID(stdout as any)
+
+    const didDecoded = DID.fromEncoded(decoded)
+
+    expect(did.getDid() === didDecoded.getDid())
+
+  })
 
   test('Publishing NFT Metadata', async () => {
     const command = `${baseCommands.utils.publishMetadata} --image "${imageUrl}" --name "${name}" --description "${description}" --externalUrl "${externalUrl}" --animationUrl "${animationUrl}" --royalties ${royalties} --royaltiesReceiver ${royaltiesReceiver} `
