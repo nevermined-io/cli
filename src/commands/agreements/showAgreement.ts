@@ -56,7 +56,7 @@ export const showAgreement = async (
   logger.info(chalk.dim(`Condition Ids:`))
   await agreementData.conditionIds.forEach(async (_conditionId, _index) => {
     const cond = await nvm.keeper.conditionStoreManager.getCondition(_conditionId)    
-    logger.info(chalk.dim(`\tCondition Id[${_index}]= ${_conditionId} with status: ${cond.state}`))
+    logger.info(chalk.dim(`\tCondition Id[${_index}]= ${_conditionId} with status: ${cond.state}. Timeout: ${cond.timeOut} - Timelock: ${cond.timeLock}`))
   })
 
   if (contractName === 'NFTAccessTemplate')
