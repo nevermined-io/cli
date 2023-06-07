@@ -6,6 +6,7 @@ import { getMetadata } from '../helpers/ddo-metadata-generator'
 import { ethers } from 'ethers'
 import { JWTPayload, decodeJwt } from 'jose'
 import { parseNFTOrderAgreementId } from '../helpers/StdoutParser'
+import { ARTIFACTS_PATH } from '../../src/utils'
 
 
 describe('Abort Agreements Testing', () => {
@@ -32,6 +33,7 @@ describe('Abort Agreements Testing', () => {
 
 
   beforeAll(async () => {
+    config.artifactsFolder = ARTIFACTS_PATH
     nevermined = await Nevermined.getInstance(config)
 
     ;[collector1, publisher,,, ] = await nevermined.accounts.list()
