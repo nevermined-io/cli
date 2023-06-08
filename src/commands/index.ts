@@ -32,6 +32,7 @@ export * from './accounts/export'
 // agreements
 export * from './agreements/showAgreement'
 export * from './agreements/listAgreements'
+export * from './agreements/abortAgreement'
 
 // network
 export * from './network/networkStatus'
@@ -52,3 +53,5 @@ export * from './utils/publishNftMetadata'
 export * from './utils/getNftMetadata'
 export * from './utils/downloadArtifacts'
 export * from './utils/cleanArtifacts'
+export * from './utils/encodeDID'
+export * from './utils/decodeDID'

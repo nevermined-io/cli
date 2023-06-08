@@ -18,7 +18,11 @@ export const accountsExport = async (
 
   logger.info(chalk.dim('Export wallet ...'))
 
-  const wallet = ethers.Wallet.fromMnemonic(config.seed!)
+  const pathLength = ethers.utils.defaultPath.length
+  const accountPath = ethers.utils.defaultPath.substring(0, pathLength - 1) + argv.accountIndex
+  logger.info(`Using account path: ${accountPath}`)
+
+  const wallet = ethers.Wallet.fromMnemonic(config.seed!, accountPath)
   printWallet(wallet)  
 
   if (password !== '' && destination !== ''){

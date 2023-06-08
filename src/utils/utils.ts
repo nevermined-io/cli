@@ -320,10 +320,14 @@ export const printSearchResult = async (
 }
 
 export const printNativeTokenBanner = async () => {
-  logger.info(chalk.dim('\n===== Native Token (ETH, MATIC, etc) ====='))
-  logger.info(
-    chalk.dim(`Decimals: ${chalk.whiteBright(Constants.ETHDecimals)}\n`)
-  )
+  try {
+    logger.info(chalk.dim('\n===== Native Token (ETH, MATIC, etc) ====='))
+    logger.info(
+      chalk.dim(`Decimals: ${chalk.whiteBright(Constants.ETHDecimals)}\n`)
+    )
+  } catch (error) {
+    logger.warn(`Error printing Native token banner: ${(error as Error).message}`)
+  }
 }
 
 export const printErc20TokenBanner = async (token: Token) => {
@@ -392,35 +396,23 @@ export const loadToken = async (
   } else {    
 
     // if the token address is not zero try to load it
-    token = nvm.keeper.token // eslint-disable-line
-    const nvmTokenAddress = token.getAddress() || ''
     logger.debug(
-      `Loading ERC20 Token ${config.erc20TokenAddress.toLowerCase()}`
+      `Loading ERC20 Token ${config.erc20TokenAddress}`
     )
-
-    // check if we have a different token configured
-    if (
-      config.erc20TokenAddress.toLowerCase() !== nvmTokenAddress.toLowerCase()
-    ) {
-      let tokenAddress
-      try {
-        tokenAddress = ethers.utils.getAddress(config.erc20TokenAddress)
-      } catch {
-        tokenAddress = nvmTokenAddress
-      }
-
-      token = await nvm.contracts.loadErc20(tokenAddress)
-      config.erc20TokenAddress = tokenAddress
-    } else {
-      logger.debug(
-        chalk.yellow(`WARNING: Using Nevermined token '${token.address}'!\n`)
+    try {
+      token = await nvm.contracts.loadErc20(
+        ethers.utils.getAddress(config.erc20TokenAddress)
       )
-    }
-    logger.debug(`Using Token Address: ${token.address}`)
 
-    if (verbose) {
-      await printErc20TokenBanner(token)
+      logger.debug(`Using Token Address: ${token.address}`)
+  
+      if (verbose) {
+        await printErc20TokenBanner(token)
+      }
+    } catch (error) {
+      logger.error(`Error loading ERC20 token: ${(error as Error).message}`)
     }
+    
   }
   return token
 }

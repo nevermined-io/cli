@@ -31,6 +31,8 @@ export const commandRegex = {
     register: new RegExp('.*Provenance Id: (.*)', 'gm')
   },
   utils: {
+    encodeDID: new RegExp('DID Encoded: (.*)\\n', 'gm'),
+    decodeDID: new RegExp('DID Decoded: (.*)\\n', 'gm'),
     upload: new RegExp('URL: (.*)\\nPassword: (.*)\\n', 'gm')
   }
 }
@@ -73,6 +75,22 @@ export const parsePasswordFromOrder = (stdout: string): any => {
 
 export const parseDIDFromNewNFT = (stdout: string): string => {
   const did = commandRegex.nfts.create.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+
+export const parseEncodedDID = (stdout: string): string => {
+  const did = commandRegex.utils.encodeDID.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+
+export const parseDecodedDID = (stdout: string): string => {
+  const did = commandRegex.utils.decodeDID.exec(stdout)
   if (did != null) {
     return did[1]
   }

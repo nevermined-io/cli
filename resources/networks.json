@@ -221,7 +221,7 @@
 		"contractsVersion": "3.2.1",
 		"tagName": "public",
 		"etherscanUrl": "https://gnosisscan.io",
-		"erc20TokenAddress": "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",
+		"erc20TokenAddress": "0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true

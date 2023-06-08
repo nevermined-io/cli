@@ -66,3 +66,4 @@ describe('Agreements e2e Testing', () => {
     expect(stdoutShow.includes('Access Provider:'))
   })
 })
+

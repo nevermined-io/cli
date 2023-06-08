@@ -11,7 +11,8 @@ import {
   logger,
   loginMarketplaceApi,
   configureLocalEnvironment,
-  loadAccountFromSeedWords
+  loadAccountFromSeedWords,
+  loadToken
 } from '../src/utils'
 import { StatusCodes } from './utils/enums'
 import { configure, addLayout } from 'log4js'
@@ -105,7 +106,10 @@ const cmdHandler = async (
           `Using account: '${chalk.whiteBright(userAccount.getId())}'\n`
         )
       )
-
+      const token = await loadToken(nvm, config, argv.verbose)
+      if (token)
+        nvm.keeper.token = token
+      
       await loginMarketplaceApi(nvm, userAccount)
     }
   } catch (err) {

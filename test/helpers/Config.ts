@@ -105,7 +105,8 @@ export const baseCommands = {
   },
   agreements: {
     list: `${BASE_COMMAND} ${VERBOSE} agreements list `,
-    show: `${BASE_COMMAND} ${VERBOSE} agreements show `
+    show: `${BASE_COMMAND} ${VERBOSE} agreements show `,
+    abort: `${BASE_COMMAND} ${VERBOSE} agreements abort `
   },
   provenance: {
     register: `${BASE_COMMAND} ${VERBOSE} provenance register `,
@@ -113,6 +114,8 @@ export const baseCommands = {
     inspect: `${BASE_COMMAND} ${VERBOSE} provenance inspect `
   },
   utils: {
+    encodeDID: `${BASE_COMMAND} ${VERBOSE} utils encode-did `,
+    decodeDID: `${BASE_COMMAND} ${VERBOSE} utils decode-did `,
     upload: `${BASE_COMMAND} ${VERBOSE} utils upload `,
     decrypt: `${BASE_COMMAND} ${VERBOSE} utils decrypt `,
     encrypt: `${BASE_COMMAND} ${VERBOSE} utils encrypt `,

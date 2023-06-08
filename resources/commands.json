@@ -665,6 +665,18 @@
 					"description": "The agreement id"
 				}],
 				"optionalArguments": []
+			}, {
+				"name": "abort [agreementId]",
+				"description": "Abort an agreement that is timed out",
+				"details": "An agreement in Nevermined keeps track of the state of the different conditions that need to be fulfilled in order to facilitate some service (access, download, computation, etc). Given a `serviceAgreementId` this command aborts an expired agreement on-chain. When the agreement is aborted this command will release any payment locked as part of the agreement.",
+				"examples": ["ncli agreements abort 0xf29bebaeacf865b4f57373aeb84635cc68c7719761607aec2802f1ad87213777"],
+				"commandHandler": "abortAgreement",
+				"positionalArguments": [{
+					"name": "agreementId",
+					"type": "string",
+					"description": "The agreement id"
+				}],
+				"optionalArguments": []
 			}]
 		}, {
 			"name": "provenance",
@@ -1808,6 +1820,30 @@
 					"demandOption": false,
 					"description": "The folder where are the artifacts to clean. For example /tmp"
 				}]
+			}, {
+				"name": "encode-did [did]",
+				"description": "Encode a DID in base36 format",
+				"details": "This command allows to encode a DID in base36 format. That format is used to shorten the DID, specially for web services.",
+				"examples": ["ncli utils encode-did did:nv:3fc08573160370d81ee075c80b800ae90d87eb5dd458b96febd11a0dac02baf5"],
+				"commandHandler": "encodeDID",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID to encode"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "decode-did [encoded]",
+				"description": "Decoded a DID previosly encoded in base36 format",
+				"details": "This command allows to decode a DID that is encoded in base36 format.",
+				"examples": ["ncli utils decode-did nhf7kkweh295qelv1zuy8lc1fre7ojla0nuuhrg4wqp9zuo89"],
+				"commandHandler": "decodeDID",
+				"positionalArguments": [{
+					"name": "encoded",
+					"type": "string",
+					"description": "The encoded DID in base36 format"
+				}],
+				"optionalArguments": []
 			}]
 		}
 
