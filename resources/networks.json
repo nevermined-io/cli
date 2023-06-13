@@ -182,7 +182,7 @@
 	},
 	"appMatic": {
 		"envDescription": "The Polygon production environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://nevermined.app/",
+		"envUrl": "https://matic.nevermined.app/",
 		"isProduction": true,
 		"nvm": {
 			"web3ProviderUri": "https://polygon-rpc.com",
@@ -199,6 +199,52 @@
 		"tagName": "public",
 		"etherscanUrl": "https://polygonscan.com",
 		"erc20TokenAddress": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},		
+	"appGoerli": {
+		"envDescription": "Nevermined App Goerli (Arbitrum) testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://goerli.nevermined.app/",
+		"isProduction": false,
+		"nvm": {
+			"web3ProviderUri": "https://goerli-rollup.arbitrum.io/rpc",
+			"marketplaceUri": "https://marketplace-api.goerli.nevermined.app",
+			"graphHttpUri": "",
+			"neverminedNodeUri": "https://node.goerli.nevermined.app",
+			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
+			"verbose": true
+		},
+		"nativeToken": "ETH",
+		"networkId": "421613",
+		"networkName": "arbitrum-goerli",
+		"contractsVersion": "3.2.2",
+		"tagName": "public",
+		"etherscanUrl": "https://goerli.arbiscan.io",
+		"erc20TokenAddress": "0xfd064A18f3BF249cf1f87FC203E90D8f650f2d63",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	}, 	
+	"appArbitrum": {
+		"envDescription": "The Arbitrum One production environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://nevermined.app/",
+		"isProduction": true,
+		"nvm": {
+			"web3ProviderUri": "https://arb1.arbitrum.io/rpc",
+			"marketplaceUri": "https://marketplace-api.arbitrum.nevermined.app",
+			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
+			"neverminedNodeUri": "https://node.arbitrum.nevermined.app",
+			"neverminedNodeAddress": "0x824dbcE5E9C96C5b8ce2A35a25a5ab87eD1D00b1",
+			"verbose": true
+		},
+		"nativeToken": "ETH",
+		"networkId": "42161",
+		"networkName": "arbitrum-one",
+		"contractsVersion": "3.2.2",
+		"tagName": "public",
+		"etherscanUrl": "https://arbiscan.io",
+		"erc20TokenAddress": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
@@ -225,7 +271,7 @@
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
-	},		
+	},				
 	"appChiado": {
 		"envDescription": "Nevermined App Chiado (Gnosis) testnet environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://chiado.nevermined.app/",
