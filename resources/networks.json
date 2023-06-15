@@ -44,30 +44,7 @@
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
-	},
-	"arbitrum-one": {
-		"envDescription": "The Arbitrum production environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://arbitrum.io/",
-		"isProduction": true,
-		"nvm": {
-			"web3ProviderUri": "https://arb1.arbitrum.io/rpc",
-			"marketplaceUri": "https://marketplace-api.arbitrum-one.public.nevermined.rocks",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://node.arbitrum-one.public.nevermined.rocks",
-			"neverminedNodeAddress": "0xD1bF18059D590dE610D3E2D0F43Dd63C0eB2aA86",
-			"verbose": true
-		},
-		"nativeToken": "ETH",
-		"networkId": "42161",
-		"networkName": "arbitrum-one",
-		"contractsVersion": "2.1.0",
-		"tagName": "public",
-		"etherscanUrl": "https://arbiscan.io/",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": true
-	},	
+	},		
 	"goerli": {
 		"envDescription": "The Ethereum testnet environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://goerli.net/",
@@ -90,30 +67,7 @@
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
-	},
-	"arbitrum-goerli": {
-		"envDescription": "The Arbitrum testnet environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://arbitrum.io/",
-		"isProduction": false,
-		"nvm": {
-			"web3ProviderUri": "https://goerli-rollup.arbitrum.io/rpc",
-			"marketplaceUri": "https://marketplace-api.arbitrum-goerli.public.nevermined.rocks",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://node.arbitrum-goerli.public.nevermined.rocks",
-			"neverminedNodeAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
-			"verbose": true
-		},
-		"nativeToken": "ETH",
-		"networkId": "421613",
-		"networkName": "arbitrum-goerli",
-		"contractsVersion": "2.1.0",
-		"tagName": "public",
-		"etherscanUrl": "https://goerli-rollup-explorer.arbitrum.io/",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": true
-	},		
+	},	
 	"geth-localnet": {
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running on your computer, please visit https://github.com/nevermined-io/tools/",
 		"isProduction": false,
