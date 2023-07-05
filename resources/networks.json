@@ -88,28 +88,28 @@
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
 	},
-	"oneMumbai": {
+	"oneStaging": {
 		"envDescription": "Nevermined One internal environment where Nevermined developers can integrate new versions of the application.",
-		"envUrl": "https://mumbai.nevermined.one/",
+		"envUrl": "https://goerli.nevermined.one/",
 		"isProduction": false,
 		"nvm": {
-			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
-			"marketplaceUri": "https://marketplace-api.mumbai.nevermined.one",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://node.mumbai.nevermined.one",
+			"web3ProviderUri": "https://goerli-rollup.arbitrum.io/rpc",
+			"marketplaceUri": "https://marketplace-api.goerli.nevermined.one",
+			"graphHttpUri": "",
+			"neverminedNodeUri": "https://node.goerli.nevermined.one",
 			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
 			"verbose": true
 		},
-		"nativeToken": "MATIC",
-		"networkId": "80001",
-		"networkName": "mumbai",
-		"contractsVersion": "3.2.1",
+		"nativeToken": "ETH",
+		"networkId": "421613",
+		"networkName": "arbitrum-goerli",
+		"contractsVersion": "3.2.2",
 		"tagName": "public",
-		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0x2058a9d7613eee744279e3856ef0eada5fcbaa7e",
+		"etherscanUrl": "https://goerli.arbiscan.io",
+		"erc20TokenAddress": "0xfd064A18f3BF249cf1f87FC203E90D8f650f2d63",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
-		"externalNetwork": false
+		"externalNetwork": true
 	},
 	"appMumbai": {
 		"envDescription": "Nevermined One testnet environment where users can interact with Nevermined protocol.",
