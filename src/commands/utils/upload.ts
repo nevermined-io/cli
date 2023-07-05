@@ -27,9 +27,9 @@ export const uploadFile = async (
     }
 
   try {
-    const stream = fs.createReadStream(file)
-    
-    const { url, password } = await nvm.services.node.uploadContent(stream, encrypt, uploadBackend)
+    const buffer = fs.readFileSync(file)
+
+    const { url, password } = await nvm.services.node.uploadContent(buffer.toString('utf8'), encrypt, uploadBackend)
     logger.info(`File uploaded to URL: ${url}`)
     if (password) {
       logger.info(`Password: ${password}`)
