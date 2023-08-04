@@ -1093,6 +1093,50 @@
 					}
 				]
 			}, {
+				"name": "mint-subscription [nftAddress]",
+				"description": "Mints a ERC-721 Subscription NFT",
+				"details": "This command allows to the owner of an asset to mint a ERC-721 Subscription NFT",
+				"examples": ["ncli nfts721 mint-subscription 0xaaa6F10d641BC9d8039365B27f4DF2C5F5eebbbb --receiver 0xDef6F10d641BC9d8039365B27f4DF2C5F5eeb041 --tokenId 1"],
+				"commandHandler": "mintSubscriptionNft",
+				"positionalArguments": [{
+					"name": "nftAddress",
+					"type": "string",
+					"default": "",
+					"description": "The address of the NFT (ERC-721) contract"
+				}],
+				"optionalArguments": [{
+						"name": "tokenId",
+						"type": "string",
+						"default": "",
+						"description": "The token id to mint"
+					},
+					{
+						"name": "receiver",
+						"type": "string",
+						"default": "",
+						"description": "The address of the receiver of the NFT, if not given will be the minter address"
+					},	
+					{
+						"name": "abiPath",
+						"type": "string",
+						"default": "",
+						"description": "The subscription NFT Abi path"
+					},						
+					{
+						"name": "duration",
+						"type": "string",
+						"default": "0",
+						"description": "The duration of the subscription in blocks"
+					},							
+					{
+						"name": "nftType",
+						"type": "number",
+						"default": "721",
+						"hidden": true,
+						"description": "The NFT type"
+					}
+				]
+			}, {
 				"name": "burn [did] [nftAddress]",
 				"description": "It Burns a ERC-721 NFT",
 				"details": "It allows to a ERC-721 NFT owner to burn it",
