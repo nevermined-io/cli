@@ -42,9 +42,7 @@ export const mintSubscriptionNft = async (
   const tokenId = argv.tokenId && argv.tokenId.toString().length > 0 ? Number(argv.tokenId) : Number(0)
   
   const subscriptionContract = loadSubscriptionContract(config, nftAddress)
-  
-  console.log(await subscriptionContract.symbol())
-  
+    
   await subscriptionContract["mint(address,uint256,uint256)"](receiver as string, tokenId, 0)
 
 

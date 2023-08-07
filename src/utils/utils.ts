@@ -68,7 +68,6 @@ export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
 
 export const loadSubscriptionContract = (config: ConfigEntry, nftAddress: string): Contract => {
   const abiNvmConfig = `${ARTIFACTS_PATH}/NFT721SubscriptionUpgradeable.${config.networkName?.toLowerCase()}.json`
-  console.log(abiNvmConfig)
   const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
 
   return new ethers.Contract(
