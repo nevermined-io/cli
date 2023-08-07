@@ -149,4 +149,15 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
 
   })  
 
+  test('As NFT Publisher I can whitelist to an account', async () => {
+    
+    const whitelistCommand = `${baseCommands.nfts721.mintSubscription} "${nftAddress}" --receiver ${execOpts.accounts[2]} --tokenId 1`
+    console.debug(`COMMAND: ${whitelistCommand}`)
+
+    const stdout = execCommand(whitelistCommand, execOpts)
+
+    console.debug(`STDOUT: ${stdout}`)
+    expect(stdout.includes(`Minted NFT Subscription (ERC-721)`))
+  }) 
+
 })

@@ -2,7 +2,7 @@ import {
   Nevermined,
   Account,
   NFT721Api,
-  BigNumber
+  BigNumber,
 } from '@nevermined-io/sdk'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -74,14 +74,11 @@ export const accountsList = async (
               (                
                 await nft721Api.nftContract.events.getPastEvents({
                   eventName: 'Transfer',
-                  methodName: 'getTransfers',
-                  filterJsonRpc: { to: a.getId() },
                   filterSubgraph: { where: { to: a.getId() } },
-                  fromBlock: 0,
-                  toBlock: 'latest',
+                  filterJsonRpc: { to: a.getId() },
                   result: {
                     tokenId: true
-                  }
+                  },
                 })
               ).map(
                 async (l: {

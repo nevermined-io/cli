@@ -70,6 +70,7 @@ export const baseCommands = {
     create: `${BASE_COMMAND} ${VERBOSE} nfts721 create `,
     show: `${BASE_COMMAND} ${VERBOSE} nfts721 show `,
     mint: `${BASE_COMMAND} ${VERBOSE} nfts721 mint `,
+    mintSubscription: `${BASE_COMMAND} ${VERBOSE} nfts721 mint-subscription `,
     hold: `${BASE_COMMAND} ${VERBOSE} nfts721 hold `,
     balance: `${BASE_COMMAND} ${VERBOSE} nfts721 balance `,
     burn: `${BASE_COMMAND} ${VERBOSE} nfts721 burn `,
