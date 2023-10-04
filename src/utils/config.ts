@@ -1,5 +1,5 @@
 import HDWalletProvider from '@truffle/hdwallet-provider'
-import ethers, { HDNodeWallet } from 'ethers'
+import ethers, { HDNodeWallet, JsonRpcProvider, Mnemonic } from 'ethers'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { mkdirSync, writeFileSync } from 'fs'
@@ -169,7 +169,11 @@ export async function getConfig(
   }
 
   // TODO: Decommission the integration via Truffle HDWalletProvider
-  const provider = Web3Provider.getWeb3(config.nvm)
+  // const provider = Web3Provider.getWeb3(config.nvm)
+  const provider = new JsonRpcProvider(config.web3ProviderUri, undefined, {
+    cacheTimeout: -1,
+  })
+
   let hdWalletProvider: HDWalletProvider
   let signer: Signer
   if (requiresAccount) {
@@ -188,16 +192,22 @@ export async function getConfig(
         providerOrUrl: config.nvm.web3ProviderUri,
       })
     } else {
-      signer = HDNodeWallet.fromMnemonic(ethers.Mnemonic.fromPhrase(config.seed!))
+      console.log(`====> Preparing Signer`)      
+      //signer = HDNodeWallet.fromMnemonic(mnemonic)
+      signer = HDNodeWallet.fromPhrase(config.seed!)
+      
+      console.log(`====> Initializing HDWalletProvider`)
       hdWalletProvider = new HDWalletProvider({
         mnemonic: config.seed!,
         providerOrUrl: config.nvm.web3ProviderUri,
         addressIndex: accountIndex,
         numberOfAddresses: 10
       })
+
+
     }
   } else {
-    signer = HDNodeWallet.fromMnemonic(ethers.Mnemonic.fromPhrase(DUMMY_SEED_WORDS))
+    signer = HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(DUMMY_SEED_WORDS))
     hdWalletProvider = new HDWalletProvider({
       mnemonic: DUMMY_SEED_WORDS,
       providerOrUrl: config.nvm.web3ProviderUri,
@@ -208,7 +218,7 @@ export async function getConfig(
 
   return {
     ...config,
-    signer: signer.connect(await provider),
+    signer: signer.connect(provider),
     nvm: {
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,

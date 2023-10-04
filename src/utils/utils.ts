@@ -1,4 +1,4 @@
-import { Contract, FunctionFragment } from 'ethers'
+import { Contract, FunctionFragment, Mnemonic } from 'ethers'
 import {
   Account,
   DDO,
@@ -26,11 +26,16 @@ export const loadNevermined = async (
   network: string,
   verbose = false
 ): Promise<Nevermined> => {
-  try {    
+  try {
+    console.log(` ====> Loading Nevermined instance for network ${network}`)
+    console.log(config.nvm)    
     const nvm = await Nevermined.getInstance({
       ...config.nvm,
       verbose: verbose ? verbose : config.nvm.verbose
     })
+    console.log(` ====> NVM Loaded`)    
+
+    // await nvm.keeper.loadCurveRoyaltiesInstance()
     if (!nvm.keeper) {
       logger.error(
         chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
@@ -123,7 +128,7 @@ export const loadHDWalletFromSeedWords = (
   seedWords: string,
   index = 0
 ): ethers.HDNodeWallet => {
-  const hdNode = ethers.HDNodeWallet.fromMnemonic(ethers.Mnemonic.fromPhrase(seedWords))
+  const hdNode = ethers.HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(seedWords))
   return hdNode.derivePath(`m/44'/60'/0'/0/${index}`)
 }
 
@@ -131,7 +136,7 @@ export const loadAccountFromSeedWords = (
   seedWords: string,
   index = 0
 ): Account => {
-  const hdNode = ethers.HDNodeWallet.fromMnemonic(ethers.Mnemonic.fromPhrase(seedWords))
+  const hdNode = ethers.HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(seedWords))
   return new Account(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
 }
 

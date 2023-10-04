@@ -1,5 +1,5 @@
 import { generateId } from '@nevermined-io/sdk'
-import { ethers } from 'ethers'
+import { Mnemonic, ethers } from 'ethers'
 
 const NETWORK = process.env.NETWORK || 'geth-localnet'
 const BASE_COMMAND = `yarn start -n ${NETWORK}`
@@ -21,7 +21,7 @@ export const loadAddressesFromSeedWords = (
   numberOfAccounts = 10
 ): string[] => {
   if (seedWords) {
-    const hdNode = ethers.HDNodeWallet.fromMnemonic(ethers.Mnemonic.fromPhrase(seedWords))
+    const hdNode = ethers.HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(seedWords))
     const addresses = []
     for (let index = 0; index < numberOfAccounts; index++) {
       addresses.push(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)

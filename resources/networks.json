@@ -88,7 +88,7 @@
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
 	},
-	"oneStaging": {
+	"appStaging": {
 		"envDescription": "Nevermined One internal environment where Nevermined developers can integrate new versions of the application.",
 		"envUrl": "https://goerli.nevermined.one/",
 		"isProduction": false,

@@ -2,7 +2,7 @@ import { Account, Nevermined } from '@nevermined-io/sdk'
 import { StatusCodes, printWallet } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
-import { ethers } from 'ethers'
+import { Mnemonic, ethers } from 'ethers'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import fs from 'fs'
@@ -22,7 +22,7 @@ export const accountsExport = async (
   const accountPath = ethers.defaultPath.substring(0, pathLength - 1) + argv.accountIndex
   logger.info(`Using account path: ${accountPath}`)
   
-  const wallet = ethers.HDNodeWallet.fromMnemonic(ethers.Mnemonic.fromPhrase(config.seed!), accountPath)
+  const wallet = ethers.HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(config.seed!), accountPath)
   printWallet(wallet)  
 
   if (password !== '' && destination !== ''){

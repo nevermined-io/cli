@@ -1,4 +1,4 @@
-import { Account, Nevermined, Nft1155Contract, Nft721Contract, Web3Provider } from '@nevermined-io/sdk'
+import { Account, Nevermined, Nft1155Contract, Nft721Contract } from '@nevermined-io/sdk'
 import { ContractTransactionReceipt, ContractTransactionResponse, FunctionFragment, ethers } from 'ethers'
 import {
   StatusCodes,
@@ -24,14 +24,15 @@ export const deployNft = async (
   
   logger.info(chalk.dim('Deploying NFT contract...'))
 
-  const web3 = Web3Provider.getWeb3(config.nvm)
+  // const web3 = Web3Provider.getWeb3(config.nvm)
 
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   const content = fs.readFileSync(abiPath)
   const artifact = JSON.parse(content.toString())
-
-  const signer = await (await web3).getSigner(account)
+  
+  const signer = await nvm.web3.getSigner(account)
+  // const signer = await (await web3).getSigner(account)
   const contract = new ethers.ContractFactory(
     artifact.abi,
     artifact.bytecode,
