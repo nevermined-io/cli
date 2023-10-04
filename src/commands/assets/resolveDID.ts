@@ -17,7 +17,7 @@ export const resolveDID = async (
   logger.info(chalk.dim(`Resolving the asset: ${chalk.green(did)}`))
 
   logger.info(
-    chalk.dim(`Using DIDRegistry: ${await nvm.keeper.didRegistry.getAddress()}`)
+    chalk.dim(`Using DIDRegistry: ${await nvm.keeper.didRegistry.address}`)
   )
   const onchainInfo: any = await nvm.keeper.didRegistry.getDIDRegister(did)
 

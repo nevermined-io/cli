@@ -24,7 +24,7 @@ export const mintSubscriptionNft = async (
     chalk.dim(`Using Minter: ${chalk.whiteBright(minterAccount.getId())}`)
   )
 
-  if (!ethers.utils.isAddress(nftAddress)) {
+  if (!ethers.isAddress(nftAddress)) {
     return {
       status: StatusCodes.ERROR,      
       errorMessage: `Invalid NFT address '${nftAddress}'`
@@ -32,7 +32,7 @@ export const mintSubscriptionNft = async (
   }
 
   let receiver
-  if (ethers.utils.isAddress(argv.receiver)) receiver = argv.receiver
+  if (ethers.isAddress(argv.receiver)) receiver = argv.receiver
   else receiver = minterAccount.getId()
 
   logger.debug(

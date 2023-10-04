@@ -1,5 +1,5 @@
 import HDWalletProvider from '@truffle/hdwallet-provider'
-import ethers from 'ethers'
+import ethers, { HDNodeWallet } from 'ethers'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { mkdirSync, writeFileSync } from 'fs'
@@ -110,11 +110,11 @@ export function getNetworksConfig(): CliConfig {
   return JSON.parse(fs.readFileSync(networksJsonPath).toString())
 }
 
-export function getConfig(
+export async function getConfig(
   network: string,
   requiresAccount = true,
   accountIndex = 0
-): ConfigEntry {
+): Promise<ConfigEntry> {
   if (!process.env.SEED_WORDS) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
       const accountMessage =
@@ -188,7 +188,7 @@ export function getConfig(
         providerOrUrl: config.nvm.web3ProviderUri,
       })
     } else {
-      signer = Wallet.fromMnemonic(config.seed!)
+      signer = HDNodeWallet.fromMnemonic(ethers.Mnemonic.fromPhrase(config.seed!))
       hdWalletProvider = new HDWalletProvider({
         mnemonic: config.seed!,
         providerOrUrl: config.nvm.web3ProviderUri,
@@ -197,7 +197,7 @@ export function getConfig(
       })
     }
   } else {
-    signer = Wallet.fromMnemonic(DUMMY_SEED_WORDS)
+    signer = HDNodeWallet.fromMnemonic(ethers.Mnemonic.fromPhrase(DUMMY_SEED_WORDS))
     hdWalletProvider = new HDWalletProvider({
       mnemonic: DUMMY_SEED_WORDS,
       providerOrUrl: config.nvm.web3ProviderUri,
@@ -208,7 +208,7 @@ export function getConfig(
 
   return {
     ...config,
-    signer: signer.connect(provider),
+    signer: signer.connect(await provider),
     nvm: {
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,

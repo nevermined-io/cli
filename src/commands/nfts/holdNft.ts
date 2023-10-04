@@ -41,13 +41,13 @@ export const holdNft = async (
   if (nftType === 721) {     
     const nft = await nvm.contracts.loadNft721(nftAddress)
     balance = await nft.balanceOf(new Account(userAddress))
-    isHolder = balance.gt(0)
+    isHolder = balance > 0
 
   } else {
     logger.info(`Checking balance`)
     const nft = await nvm.contracts.loadNft1155Contract(nftAddress)
     balance = await nft.balance(userAddress, zeroX(ddo.shortId()))
-    isHolder = balance.gt(0)
+    isHolder = balance > 0
   }
 
   if (isHolder)

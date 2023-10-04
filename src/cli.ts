@@ -39,7 +39,7 @@ const cmdHandler = async (
   if (process.env.NETWORK) network = process.env.NETWORK
 
   try {
-    config = getConfig(network as string, requiresAccount, accountIndex)
+    config = await getConfig(network as string, requiresAccount, accountIndex)
     await configureLocalEnvironment(network as string, config)
   } catch (err) {
     console.error(`Error setting up the CLI: ${(err as Error).message}`)

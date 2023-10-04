@@ -1,4 +1,4 @@
-import { Account, BigNumber, Nevermined } from '@nevermined-io/sdk'
+import { Account, Nevermined } from '@nevermined-io/sdk'
 import {
   StatusCodes
 } from '../../utils'
@@ -22,7 +22,7 @@ export const cloneNft = async (
 
   const nftType = Number(argv.nftType) === 721 ? 721 : 1155
 
-  if (!ethers.utils.isAddress(nftAddress))
+  if (!ethers.isAddress(nftAddress))
     return {
       status: StatusCodes.ERROR,
       errorMessage: `Invalid contract address ${nftAddress}`
@@ -31,7 +31,7 @@ export const cloneNft = async (
   const operators: string[] = []
   
   argv.operators.forEach((_operator: string) => {
-    if (ethers.utils.isAddress(_operator)) operators.push(_operator)
+    if (ethers.isAddress(_operator)) operators.push(_operator)
   })
 
   let clonnedAddress
@@ -43,8 +43,8 @@ export const cloneNft = async (
   logger.debug(`\tCap: ${argv.cap}`)
 
   if (nftType === 721)  {
-    if (!operators.includes(nvm.keeper.conditions.transferNft721Condition.getAddress()))
-      operators.push(nvm.keeper.conditions.transferNft721Condition.getAddress())
+    if (!operators.includes(nvm.keeper.conditions.transferNft721Condition.address))
+      operators.push(nvm.keeper.conditions.transferNft721Condition.address)
 
     logger.debug(`\tOperators: ${JSON.stringify(operators)}`)
 
@@ -53,13 +53,13 @@ export const cloneNft = async (
       argv.name, 
       argv.symbol, 
       argv.uri, 
-      BigNumber.from(argv.cap), 
+      BigInt(argv.cap), 
       operators, 
       creatorAccount
     )
   } else {
-    if (!operators.includes(nvm.keeper.conditions.transferNftCondition.getAddress()))
-      operators.push(nvm.keeper.conditions.transferNftCondition.getAddress())
+    if (!operators.includes(nvm.keeper.conditions.transferNftCondition.address))
+      operators.push(nvm.keeper.conditions.transferNftCondition.address)
 
     await nvm.contracts.loadNft1155(nftAddress)
     clonnedAddress = await nvm.nfts1155.getContract.createClone(

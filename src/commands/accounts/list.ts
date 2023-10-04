@@ -2,7 +2,9 @@ import {
   Nevermined,
   Account,
   NFT721Api,
-  BigNumber,
+  parseEther,
+  formatEther,
+  formatUnits,
 } from '@nevermined-io/sdk'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -57,16 +59,14 @@ export const accountsList = async (
   const loadedAccounts = await Promise.all(
     accounts.map(async (a, index) => {
       
-      const balanceFormatted = BigNumber.formatEther(await a.getEtherBalance())
-      const ethBalance = BigNumber.parseEther(
+      const balanceFormatted = formatEther(await a.getEtherBalance())
+      const ethBalance = parseEther(
         balanceFormatted
       )      
 
       const tokenBalance = (
-        token ? await token.balanceOf(a.getId()) : BigNumber.from(0)
-      )
-        .div(10)
-        .mul(decimals)
+        token ? await token.balanceOf(a.getId()) : 0n
+      ) /10n * BigInt(decimals)
 
       const inventory = withInventory
         ? (
@@ -112,7 +112,7 @@ export const accountsList = async (
         tokenBalance,
         url: `${config.etherscanUrl}/address/${a.getId()}`,
         nftTokenUrl: `${config.etherscanUrl}/token/${nftTokenAddress}`,
-        nftBalance: withInventory ? await nft721Api.balanceOf(a) : BigNumber.from(0),
+        nftBalance: withInventory ? await nft721Api.balanceOf(a) : 0n,
         inventory
       }
     })
@@ -129,7 +129,7 @@ export const accountsList = async (
     logger.info(
       chalk.dim(
         `${config.nativeToken} Balance: ${chalk.whiteBright(
-          BigNumber.formatEther(a.ethBalance)
+          formatEther(a.ethBalance)
         )} ${config.nativeToken}`
       )
     )
@@ -137,7 +137,7 @@ export const accountsList = async (
       logger.info(
         chalk.dim(
           `Token Balance: ${chalk.whiteBright(
-            BigNumber.formatUnits(a.tokenBalance, decimals)
+            formatUnits(a.tokenBalance, decimals)
           )} ${chalk.whiteBright(symbol)}`
         )
       )

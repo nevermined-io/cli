@@ -41,6 +41,7 @@ export const getAsset = async (
     provider_rsa_private: ''
   }
   const dtp = await Dtp.getInstance(instanceConfig, cryptoConfig)
+  const serviceReference = argv.serviceIndex ? argv.serviceIndex : 'nft-sales'
 
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
   if (isDTP) {
@@ -52,8 +53,8 @@ export const getAsset = async (
   }
 
   if (!argv.agreementId) {
-    logger.info(chalk.dim(`Ordering asset: ${did}`))
-    agreementId = await nvm.assets.order(did, account)
+    logger.info(chalk.dim(`Ordering asset: ${did}`))    
+    agreementId = await nvm.assets.order(did, serviceReference, account)
   } else {
     agreementId = argv.agreementId
   }
@@ -78,6 +79,7 @@ export const getAsset = async (
   const path = await nvm.assets.access(
     agreementId,
     did,
+    serviceReference,
     account,
     destination,
     argv.fileIndex

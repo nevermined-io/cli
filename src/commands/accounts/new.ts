@@ -34,9 +34,8 @@ export const accountsNew = async (
       walletAddress: wallet.address,
       walletPublicKey: wallet.publicKey,
       walletPrivateKey: wallet.privateKey,
-      mnemonicPhrase: wallet.mnemonic.phrase,
-      mnemonicPath: wallet.mnemonic.path,
-      mnemonicLocale: wallet.mnemonic.locale
+      mnemonicPhrase: wallet.mnemonic?.phrase,
+      mnemonicPath: wallet.path
     })
   }
 }

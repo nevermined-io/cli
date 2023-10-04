@@ -1,4 +1,4 @@
-import { Account, AssetPrice, AssetAttributes, Nevermined, MetaData, MetaDataMain, zeroX, generateIntantiableConfigFromConfig, BigNumber, PublishMetadata, MetaDataExternalResource, ServiceType, NFTAttributes, NeverminedNFT721Type } from '@nevermined-io/sdk'
+import { Account, AssetPrice, AssetAttributes, Nevermined, MetaData, MetaDataMain, zeroX, generateIntantiableConfigFromConfig, MetaDataExternalResource, ServiceType, NFTAttributes, NeverminedNFT721Type, PublishMetadataOptions, ServiceAttributes } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printTokenBanner,
@@ -59,9 +59,9 @@ export const registerAsset = async (
     }
   }
 
-  const ddoPrice = BigNumber.from(argv.price).gt(0)
-    ? BigNumber.from(argv.price)
-    : BigNumber.from(0)
+  const ddoPrice = BigInt(argv.price) > 0n
+    ? BigInt(argv.price)
+    : 0n
   logger.debug(`With Price ${ddoPrice}`)
 
 
@@ -160,7 +160,7 @@ export const registerAsset = async (
   const networkFee = await configContract.getMarketplaceFee()
 
   const assetPrice = new AssetPrice(account.getId(), ddoPrice)
-    .setTokenAddress(token ? token.getAddress() : config.erc20TokenAddress)
+    .setTokenAddress(token ? token.address : config.erc20TokenAddress)
 
   if (networkFee.gt(0)) {
     assetPrice.addNetworkFees(
@@ -170,20 +170,34 @@ export const registerAsset = async (
     logger.info(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)
   }
 
-  let publishMetadata = PublishMetadata.OnlyMetadataAPI
+  let publishMetadata = PublishMetadataOptions.OnlyMetadataAPI
 
   if (argv.publishMetadata?.toLowerCase() === 'ipfs')
-    publishMetadata = PublishMetadata.IPFS  
+    publishMetadata = PublishMetadataOptions.IPFS  
 
 
   logger.info(chalk.dim('\nCreating Asset ...'))
+
+  const serviceAttributes: ServiceAttributes[] = []
+  if (serviceTypes.includes('nft-sales')) {
+    serviceAttributes.push({
+      serviceType: 'nft-sales',
+      price: assetPrice,
+      nft: { amount: 1n, nftTransfer: argv.transfer, isSubscription: argv.type === 'subscription' }
+    })
+  }
 
   let ddo
   if (serviceTypes.includes('nft-access'))  {
     const nftType = Number(argv.nftType) === 721 ? 721 : 1155
     logger.info(chalk.dim(`\nNFT [${nftType}] ...`))
+    
+    serviceAttributes.push({
+      serviceType: 'nft-access',      
+      nft: { amount: 1n}
+    })
 
-    if (!ethers.utils.isAddress(argv.subscriptionNFT))
+    if (!ethers.isAddress(argv.subscriptionNFT))
       return {
         status: StatusCodes.ERROR,
         errorMessage: `Invalid contract address ${argv.subscriptionNFT}`
@@ -196,11 +210,10 @@ export const registerAsset = async (
         const nftAttributes = NFTAttributes.getNFT721Instance({
           metadata: ddoMetadata,
           nftType: argv.access === 'subscription' ? NeverminedNFT721Type.nft721Subscription: NeverminedNFT721Type.nft721,          
-          serviceTypes,
+          services: serviceAttributes,
           providers: [config.nvm.neverminedNodeAddress!],
           nftContractAddress: argv.subscriptionNFT,
           preMint: false,
-          nftTransfer: false
         })
         ddo = await nft721Api.create(nftAttributes, account) 
 
@@ -211,11 +224,10 @@ export const registerAsset = async (
         const nftAttributes = NFTAttributes.getNFT1155Instance({
           metadata: ddoMetadata,
           ercType: 1155,
-          serviceTypes,
+          services: serviceAttributes,
           providers: [config.nvm.neverminedNodeAddress!],
           nftContractAddress: argv.subscriptionNFT,
           preMint: false,
-          nftTransfer: false
         })
         ddo = await nft1155Api.create(nftAttributes, account)         
       }
@@ -223,15 +235,17 @@ export const registerAsset = async (
   } else {
     const assetAttributes = AssetAttributes.getInstance({
       metadata: ddoMetadata,
-      price: assetPrice,
-      serviceTypes: ['access'],
+      services: [{
+        serviceType: 'access',
+        price: assetPrice
+      }],      
       providers: [config.nvm.neverminedNodeAddress!]
     })
   
     ddo = await nvm.assets.create(
       assetAttributes,
       account,
-      publishMetadata
+      { metadata: publishMetadata }
     )
   }
 

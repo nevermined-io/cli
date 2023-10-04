@@ -40,7 +40,7 @@ async function generateCommandsDocumentation(
   const parsed = Eta.renderFile('commands_template', commandsDefinition)
 
   if (parsed !== undefined) {
-    return await parsed
+    return await parsed || ''
   }
   throw new Error(`Unable to generate commands documentation`)
 }
@@ -58,7 +58,7 @@ async function generateEnvironmentsDocumentation(
   })
 
   if (parsed !== undefined) {
-    return await parsed
+    return await parsed || ''
   }
   throw new Error(`Unable to generate environments documentation`)
 }

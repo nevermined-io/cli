@@ -1,4 +1,4 @@
-import { AccessCondition, Account, ConditionState, Nevermined, ServiceCommon, ServiceNFTSales, TransferNFT721Condition, TransferNFTCondition, getAssetPriceFromService, getNftAmountFromService, getNftContractAddressFromService } from '@nevermined-io/sdk'
+import { AccessCondition, Account, ConditionState, DDO, Nevermined, ServiceCommon, ServiceNFTSales, TransferNFT721Condition, TransferNFTCondition } from '@nevermined-io/sdk'
 import { StatusCodes, getContractNameFromAddress } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -80,13 +80,13 @@ export const abortAgreement = async (
     logger.info(chalk.dim(`Condition is aborted. Distributing payment back...`))
     if (contractName === 'NFTSalesTemplate') {
       service = ddo.findServiceByType('nft-sales')
-      const nftAddress = getNftContractAddressFromService(service as ServiceNFTSales)
+      const nftAddress = DDO.getNftContractAddressFromService(service as ServiceNFTSales)
       await nvm.contracts.loadNft1155(nftAddress)
-      await nvm.nfts1155.releaseRewards(agreementId, ddo.id, getNftAmountFromService(service), account)
+      await nvm.nfts1155.releaseRewards(agreementId, ddo.id, service.index, DDO.getNftAmountFromService(service), account)
 
     } else if (contractName === 'NFT721SalesTemplate') {
       service = ddo.findServiceByType('nft-sales')
-      const nftAddress = getNftContractAddressFromService(service as ServiceNFTSales)
+      const nftAddress = DDO.getNftContractAddressFromService(service as ServiceNFTSales)
       await nvm.contracts.loadNft721(nftAddress)      
       await nvm.nfts721.releaseRewards(agreementId, ddo.id, account)
 
@@ -102,7 +102,7 @@ export const abortAgreement = async (
           status: StatusCodes.ERROR,
         }
       }
-      const assetPrice = getAssetPriceFromService(service)
+      const assetPrice = DDO.getAssetPriceFromService(service)
       await nvm.agreements.conditions.releaseReward(
         agreementId,
         assetPrice.getAmounts(),
