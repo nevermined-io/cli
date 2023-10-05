@@ -54,8 +54,9 @@ export const deployNft = async (
   if (nftType === 721)  {
     args.push(argv.cap)
   }
+  args.push(nvm.keeper.nvmConfig.address)
 
-  logger.debug(`NFT Type: ${typeof nftType}`)
+  logger.debug(`NFT Type: ${nftType}`)
   logger.debug(`Params : ${JSON.stringify(args)}`)
 
   const argument = isZos ? [] : args

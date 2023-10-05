@@ -1,4 +1,4 @@
-import { Contract, FunctionFragment, Mnemonic } from 'ethers'
+import { Contract, FunctionFragment, HDNodeWallet, Wallet, getAddress } from 'ethers'
 import {
   Account,
   DDO,
@@ -10,7 +10,8 @@ import {
   QueryResult,
   ServiceType,
   Token,
-  ConditionType
+  ConditionType,
+  makeAccount
 } from '@nevermined-io/sdk'
 import chalk from 'chalk'
 import { Constants } from './enums'
@@ -27,13 +28,14 @@ export const loadNevermined = async (
   verbose = false
 ): Promise<Nevermined> => {
   try {
-    console.log(` ====> Loading Nevermined instance for network ${network}`)
-    console.log(config.nvm)    
     const nvm = await Nevermined.getInstance({
       ...config.nvm,
       verbose: verbose ? verbose : config.nvm.verbose
     })
-    console.log(` ====> NVM Loaded`)    
+    
+    const accounts = await nvm.accounts.list()
+    logger.debug(`Accounts: ${accounts.length}`)
+    accounts.map((a) => logger.debug(`ACCOUNT ${a.getId()}`))
 
     // await nvm.keeper.loadCurveRoyaltiesInstance()
     if (!nvm.keeper) {
@@ -52,9 +54,9 @@ export const loadNevermined = async (
 export const loginMarketplaceApi = async (
   nvm: Nevermined,
   account: Account
-): Promise<boolean> => {
-  const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)
-  await nvm.services.marketplace.login(clientAssertion)
+): Promise<boolean> => {  
+  const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)  
+  await nvm.services.marketplace.login(clientAssertion)  
   return true
 }
 
@@ -124,20 +126,22 @@ export const getDidHash = (did: string): string => did.replace('did:nv:', '')
 
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
-export const loadHDWalletFromSeedWords = (
-  seedWords: string,
-  index = 0
-): ethers.HDNodeWallet => {
-  const hdNode = ethers.HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(seedWords))
-  return hdNode.derivePath(`m/44'/60'/0'/0/${index}`)
+
+export const getWalletFromJSON = (
+  keyfilePath: string, 
+  password: string
+): Wallet | HDNodeWallet => {
+  const data = fs.readFileSync(keyfilePath)
+  const keyfile = JSON.parse(data.toString())
+  return ethers.Wallet.fromEncryptedJsonSync(keyfile, password)  
 }
 
 export const loadAccountFromSeedWords = (
   seedWords: string,
   index = 0
 ): Account => {
-  const hdNode = ethers.HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(seedWords))
-  return new Account(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
+  const wallet = makeAccount(seedWords, index)
+  return new Account(wallet.address)
 }
 
 export const findAccountOrFirst = (
@@ -413,7 +417,7 @@ export const loadToken = async (
     )
     try {
       token = await nvm.contracts.loadErc20(
-        ethers.getAddress(config.erc20TokenAddress)
+        getAddress(config.erc20TokenAddress)
       )
 
       logger.debug(`Using Token Address: ${token.address}`)

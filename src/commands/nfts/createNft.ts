@@ -98,7 +98,7 @@ export const createNft = async (
   const networkFee = await configContract.getMarketplaceFee()
   const assetPrice = new AssetPrice(creatorAccount.getId(), ddoPrice)
     .setTokenAddress(token ? token.address : config.erc20TokenAddress)
-  if (networkFee.gt(0)) {
+  if (networkFee > 0) {
     assetPrice.addNetworkFees(
       await configContract.getFeeReceiver(),
       networkFee

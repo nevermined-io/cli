@@ -158,15 +158,15 @@
 					"description": "Load NFT (ERC-721) inventory as well"
 				}]
 			}, {
-				"name": "fund [account]",
+				"name": "fund [addressToFund]",
 				"description": "Funds an account with ERC20 tokens on a testnet",
 				"details": "In the test environments all tokens lack real value. Typically in Nevermined you need to use different type of tokens. The Native token (`ETH`, `MATIC`, etc) to pay for the gas resulting to write into a blockchain network, and optionally with a `ERC20` token to do some payments. This command allows to get some funds in a testnet environment allowing to a user to run different processes on a testnet. This command will not work in production environments where the tokens have actual value.",
 				"examples": ["ncli accounts fund 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
 				"commandHandler": "accountsFund",
 				"positionalArguments": [{
-					"name": "account",
+					"name": "addressToFund",
 					"type": "string",
-					"description": "The account to fund"
+					"description": "The account address to fund"
 				}],
 				"optionalArguments": []
 			}]

@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, Nevermined, Nft721Contract } from '@nevermined-io/sdk'
 import {
   StatusCodes
 } from '../../utils'
@@ -48,8 +48,12 @@ export const cloneNft = async (
 
     logger.debug(`\tOperators: ${JSON.stringify(operators)}`)
 
-    await nvm.contracts.loadNft721(nftAddress)
-    clonnedAddress = await nvm.nfts721.getContract.createClone(
+    const nftContract = await Nft721Contract.getInstance(
+      (nvm.keeper as any).instanceConfig,
+      nftAddress,
+    )
+    //await nvm.contracts.loadNft721(nftAddress)
+    clonnedAddress = await nftContract.createClone(
       argv.name, 
       argv.symbol, 
       argv.uri, 

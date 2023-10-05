@@ -1,8 +1,7 @@
-import { Account, AssetPrice, AssetAttributes, Nevermined, MetaData, MetaDataMain, zeroX, generateIntantiableConfigFromConfig, MetaDataExternalResource, ServiceType, NFTAttributes, NeverminedNFT721Type, PublishMetadataOptions, ServiceAttributes } from '@nevermined-io/sdk'
+import { Account, AssetPrice, AssetAttributes, Nevermined, MetaData, MetaDataMain, zeroX, MetaDataExternalResource, ServiceType, NFTAttributes, NeverminedNFT721Type, PublishMetadataOptions, ServiceAttributes, generateInstantiableConfigFromConfig } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printTokenBanner,
-  loadToken,
   loadNeverminedConfigContract,
   getFeesFromBigNumber,
   getExtraInputParams
@@ -23,10 +22,11 @@ export const registerAsset = async (
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { verbose, metadata, assetType } = argv
-  const token = await loadToken(nvm, config, verbose)
+  const token = nvm.keeper.token
   
+  console.log(`We use the account ${account.getId()}`)
   const instanceConfig = {
-    ...generateIntantiableConfigFromConfig(config.nvm),
+    ...(await generateInstantiableConfigFromConfig(config.nvm)),
     nevermined: nvm,
   }
   const dtp = await Dtp.getInstance(instanceConfig, null as any)
@@ -162,7 +162,7 @@ export const registerAsset = async (
   const assetPrice = new AssetPrice(account.getId(), ddoPrice)
     .setTokenAddress(token ? token.address : config.erc20TokenAddress)
 
-  if (networkFee.gt(0)) {
+  if (networkFee > 0) {
     assetPrice.addNetworkFees(
       await configContract.getFeeReceiver(),
       networkFee

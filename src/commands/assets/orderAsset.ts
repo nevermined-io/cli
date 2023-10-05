@@ -20,7 +20,7 @@ export const orderAsset = async (
 ): Promise<ExecutionOutput> => {
   const { did } = argv
 
-  const serviceReference = argv.serviceIndex ? argv.serviceIndex : 'nft-sales'
+  const serviceReference = argv.serviceIndex ? argv.serviceIndex : 'access'
 
   // TODO: Enable DTP when `sdk-dtp` is ready
   // const keyTransfer = await makeKeyTransfer()

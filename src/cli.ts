@@ -99,6 +99,7 @@ const cmdHandler = async (
           `Please, check if you are connected to the right node url. Currently using: ${config.nvm.web3ProviderUri}\n`
         )
       }
+
       userAccount = loadAccountFromSeedWords(config.seed!, accountIndex)
 
       logger.debug(
@@ -107,8 +108,15 @@ const cmdHandler = async (
         )
       )
       const token = await loadToken(nvm, config, argv.verbose)
-      if (token)
+      if (token)  {
         nvm.keeper.token = token
+      }
+        
+      logger.debug(
+        chalk.dim(
+          `Login to Marketplace API with account: '${userAccount.getId()}'\n`
+        )
+      )
       
       await loginMarketplaceApi(nvm, userAccount)
     }

@@ -1,5 +1,4 @@
-import HDWalletProvider from '@truffle/hdwallet-provider'
-import ethers, { HDNodeWallet, JsonRpcProvider, Mnemonic } from 'ethers'
+import ethers, { HDNodeWallet, Mnemonic } from 'ethers'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { mkdirSync, writeFileSync } from 'fs'
@@ -10,7 +9,8 @@ import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
 import { Wallet, Signer } from 'ethers'
-import { Web3Provider } from '@nevermined-io/sdk'
+import { Web3Provider, makeAccounts } from '@nevermined-io/sdk'
+import { getWalletFromJSON } from './utils'
 
 dotenv.config()
 
@@ -113,7 +113,7 @@ export function getNetworksConfig(): CliConfig {
 export async function getConfig(
   network: string,
   requiresAccount = true,
-  accountIndex = 0
+  _accountIndex = 0
 ): Promise<ConfigEntry> {
   if (!process.env.SEED_WORDS) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
@@ -168,54 +168,29 @@ export async function getConfig(
     }
   }
 
-  // TODO: Decommission the integration via Truffle HDWalletProvider
-  // const provider = Web3Provider.getWeb3(config.nvm)
-  const provider = new JsonRpcProvider(config.web3ProviderUri, undefined, {
-    cacheTimeout: -1,
-  })
+  const provider = await Web3Provider.getWeb3(config.nvm)
 
-  let hdWalletProvider: HDWalletProvider
   let signer: Signer
+  let accounts: ethers.Wallet[] = []
   if (requiresAccount) {
     if (!process.env.SEED_WORDS) {
       signer = Wallet.fromEncryptedJsonSync(
         process.env.KEYFILE_PATH!,
         process.env.KEYFILE_PASSWORD!
+      ) 
+      accounts.push(
+        getWalletFromJSON(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!) as Wallet
       )
-      hdWalletProvider = new HDWalletProvider({
-        privateKeys: [
-          getPrivateKey(
-            process.env.KEYFILE_PATH!,
-            process.env.KEYFILE_PASSWORD!
-          )
-        ],
-        providerOrUrl: config.nvm.web3ProviderUri,
-      })
     } else {
-      console.log(`====> Preparing Signer`)      
-      //signer = HDNodeWallet.fromMnemonic(mnemonic)
-      signer = HDNodeWallet.fromPhrase(config.seed!)
-      
-      console.log(`====> Initializing HDWalletProvider`)
-      hdWalletProvider = new HDWalletProvider({
-        mnemonic: config.seed!,
-        providerOrUrl: config.nvm.web3ProviderUri,
-        addressIndex: accountIndex,
-        numberOfAddresses: 10
-      })
 
-
+      signer = Wallet.fromPhrase(config.seed!)
+      accounts = makeAccounts(config.seed!)
     }
   } else {
     signer = HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(DUMMY_SEED_WORDS))
-    hdWalletProvider = new HDWalletProvider({
-      mnemonic: DUMMY_SEED_WORDS,
-      providerOrUrl: config.nvm.web3ProviderUri,
-      addressIndex: 0,
-      numberOfAddresses: 1
-    })
+    accounts = makeAccounts(DUMMY_SEED_WORDS, 1)
   }
-
+  
   return {
     ...config,
     signer: signer.connect(provider),
@@ -223,14 +198,7 @@ export async function getConfig(
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,
       circuitsFolder: CIRCUITS_PATH,
-      web3Provider: hdWalletProvider
+      accounts,
     }
   }
-}
-
-function getPrivateKey(keyfilePath: string, password: string): string {
-  const data = fs.readFileSync(keyfilePath)
-  const keyfile = JSON.parse(data.toString())
-  const wallet = ethers.Wallet.fromEncryptedJsonSync(keyfile, password)
-  return wallet.privateKey
 }
