@@ -1,5 +1,5 @@
 import { generateId, makeAccounts } from '@nevermined-io/sdk'
-import { Mnemonic, ethers } from 'ethers'
+import { ethers } from 'ethers'
 
 const NETWORK = process.env.NETWORK || 'geth-localnet'
 const BASE_COMMAND = `yarn start -n ${NETWORK}`
