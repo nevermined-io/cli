@@ -43,7 +43,6 @@ describe('Assets e2e Testing', () => {
     console.log(`STDOUT: ${stdout}`)
 
     const [address, privateKey] = parseNewAccount(stdout)
-    accountAddress = address
 
     console.log(`Address: ${address}`)
     expect(address === null ? false : address.startsWith('0x'))
