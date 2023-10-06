@@ -187,7 +187,7 @@ export async function getConfig(
       accounts = makeAccounts(config.seed!)
     }
   } else {
-    signer = HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(DUMMY_SEED_WORDS))
+    signer = HDNodeWallet.fromPhrase(DUMMY_SEED_WORDS)
     accounts = makeAccounts(DUMMY_SEED_WORDS, 1)
   }
   
