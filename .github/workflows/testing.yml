@@ -10,6 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Reclaim some disk space
+        run: docker system prune --all --volumes -f      
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
@@ -49,7 +51,6 @@ jobs:
           NETWORK: 'geth-localnet'
           IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
           IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
-          NO_GRAPH: 'true'
         run: |
           yarn test:integration
       - name: Upload logs
