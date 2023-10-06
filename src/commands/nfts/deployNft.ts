@@ -18,21 +18,18 @@ export const deployNft = async (
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
-  const { account, abiPath } = argv
+  const { abiPath } = argv
 
   const nftType = Number(argv.nftType)
   
   logger.info(chalk.dim('Deploying NFT contract...'))
-
-  // const web3 = Web3Provider.getWeb3(config.nvm)
 
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   const content = fs.readFileSync(abiPath)
   const artifact = JSON.parse(content.toString())
   
-  const signer = await nvm.web3.getSigner(account)
-  // const signer = await (await web3).getSigner(account)
+  const signer = config.signer
   const contract = new ethers.ContractFactory(
     artifact.abi,
     artifact.bytecode,
