@@ -87,7 +87,7 @@ export const deployNft = async (
   const addressesToApprove: string[] = argv.approve.filter(
     (_key: string) => _key !== '' && _key !== undefined
   )
-  if (config.nvm.neverminedNodeAddress) addressesToApprove.push(config.nvm.neverminedNodeAddress!)
+  //if (config.nvm.neverminedNodeAddress) addressesToApprove.push(config.nvm.neverminedNodeAddress!)
 
 
   if (nftType === 721)  {

@@ -42,6 +42,9 @@ export const cloneNft = async (
   logger.debug(`\tURI: ${argv.uri}`)
   logger.debug(`\tCap: ${argv.cap}`)
 
+  if (!operators.includes(nvm.keeper.didRegistry.address))
+    operators.push(nvm.keeper.didRegistry.address)
+
   if (nftType === 721)  {
     if (!operators.includes(nvm.keeper.conditions.transferNft721Condition.address))
       operators.push(nvm.keeper.conditions.transferNft721Condition.address)
@@ -64,6 +67,8 @@ export const cloneNft = async (
     if (!operators.includes(nvm.keeper.conditions.transferNftCondition.address))
       operators.push(nvm.keeper.conditions.transferNftCondition.address)
 
+
+
       const nftContract = await Nft1155Contract.getInstance(
         (nvm.keeper as any).instanceConfig,
         nftAddress,
@@ -79,6 +84,7 @@ export const cloneNft = async (
   }
 
   logger.info(`Contract cloned at address: ${clonnedAddress}\n`)
+  logger.info(`using operators: ${JSON.stringify(operators)}\n`)
 
   return {
     status: StatusCodes.OK,
