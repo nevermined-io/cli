@@ -143,8 +143,6 @@ export async function getConfig(
   if (process.env.WEB3_PROVIDER_URL) config.nvm.web3ProviderUri = process.env.WEB3_PROVIDER_URL
   if (process.env.MARKETPLACE_API_URL)
     config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
-  //if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
-  // if (process.env.NO_GRAPH) config.nvm.graphHttpUri = undefined
   config.nvm.graphHttpUri = process.env.GRAPH_URL
   if (process.env.NVM_NODE_URL) config.nvm.neverminedNodeUri = process.env.NVM_NODE_URL
   if (process.env.NODE_ADDRESS)
