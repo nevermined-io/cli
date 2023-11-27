@@ -70,6 +70,45 @@ describe('Assets e2e Testing', () => {
     expect(didImport === null ? false : didImport.startsWith('did:nv:'))
   })
 
+  test('Grant and revoke providers', async () => {
+
+    const grantAccount = execOpts.accounts[5]
+    
+    ////// GRANTING PROVIDER
+
+    const grantCommand = `${baseCommands.assets.grantAssetProvider} ${did} ${grantAccount}`
+    console.debug(`COMMAND: ${grantCommand}`)
+
+    const stdout = execCommand(grantCommand, execOpts)
+
+    console.log(`STDOUT: ${stdout}`)
+    expect(stdout.includes('Permissions granted'))
+
+    
+    ////// GETTING PROVIDERS
+
+    const getCommand = `${baseCommands.assets.getAssetProviders} ${did}`
+    console.debug(`COMMAND: ${getCommand}`)
+
+    const stdoutGet = execCommand(getCommand, execOpts)
+
+    console.log(`STDOUT: ${stdoutGet}`)
+    expect(stdout.includes(`Provider address: ${grantAccount}`))
+
+
+    ////// REVOKING PROVIDER
+
+    const revokeCommand = `${baseCommands.assets.revokeAssetProvider} ${did} ${grantAccount}`
+    console.debug(`COMMAND: ${revokeCommand}`)
+
+    const stdoutRevoke = execCommand(revokeCommand, execOpts)
+
+    console.log(`STDOUT: ${stdoutRevoke}`)
+    expect(stdout.includes('Permissions revoked'))
+
+
+  })
+
   test('Search for an asset', async () => {
     const registerAssetCommand = `${baseCommands.assets.registerAsset} --name "searching test" --author "john.doe" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)

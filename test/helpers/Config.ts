@@ -60,7 +60,10 @@ export const baseCommands = {
     downloadAsset: `${BASE_COMMAND} ${VERBOSE} assets download `,
     orderAsset: `${BASE_COMMAND} ${VERBOSE} assets order `,
     getAsset: `${BASE_COMMAND} ${VERBOSE} assets get `,
-    resolveDID: `${BASE_COMMAND} ${VERBOSE} assets resolve `
+    resolveDID: `${BASE_COMMAND} ${VERBOSE} assets resolve `,
+    getAssetProviders: `${BASE_COMMAND} ${VERBOSE} assets get-providers `,
+    grantAssetProvider: `${BASE_COMMAND} ${VERBOSE} assets grant-provider `,
+    revokeAssetProvider: `${BASE_COMMAND} ${VERBOSE} assets revoke-provider `
   },
   nfts721: {
     deploy: `${BASE_COMMAND} ${VERBOSE} nfts721 deploy `,

@@ -9,3 +9,4 @@ package-lock.json
 yarn.lock
 artifacts/
 .idea
+.yalc*

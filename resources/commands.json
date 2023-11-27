@@ -580,6 +580,50 @@
 					"description": "Password for receiving encrypted files"
 				}]
 			}, {
+				"name": "get-providers [did]",
+				"description": "Gets the list of provider addresses granted to an asset",
+				"details": "This method gest the complete list of providers granted to an asset",
+				"examples": ["ncli assets get-providers did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f"],
+				"commandHandler": "getAssetProviders",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "grant-provider [did] [providerAddress]",
+				"description": "Grant an address as provider of an asset",
+				"details": "This method adds an address as provider of an asset",
+				"examples": ["ncli assets grant-provider did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f 0x736DCC96D89cB2F9E2316cD826668f4E1c4861B0"],
+				"commandHandler": "grantAssetProvider",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}, {
+					"name": "providerAddress",
+					"type": "string",
+					"description": "The provider address"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "revoke-provider [did] [providerAddress]",
+				"description": "Revokes an address as provider of an asset",
+				"details": "This method revokes an address as provider of an asset",
+				"examples": ["ncli assets revoke-provider did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f 0x736DCC96D89cB2F9E2316cD826668f4E1c4861B0"],
+				"commandHandler": "revokeAssetProvider",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}, {
+					"name": "providerAddress",
+					"type": "string",
+					"description": "The provider address"
+				}],
+				"optionalArguments": []
+			}, {
 				"name": "get [did]",
 				"description": "Order & download or download directly a previously purchased asset",
 				"details": "This commands is the best entry point to access the files attached to a Nevermined asset. Depending on the parameters provided, it allows to order and download the files of an asset, or if this was already purchased, provides the service agreement to download them.",
