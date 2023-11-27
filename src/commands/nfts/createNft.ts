@@ -1,4 +1,4 @@
-import { Account, AssetPrice, getRoyaltyAttributes, Nevermined, NeverminedNFT1155Type, NeverminedNFT721Type, NFTAttributes, RoyaltyKind, ServiceType, BigNumber, zeroX, PublishMetadata, AssetAttributes, MetaDataExternalResource } from '@nevermined-io/sdk'
+import { Account, AssetPrice, getRoyaltyAttributes, Nevermined, NeverminedNFT1155Type, NeverminedNFT721Type, NFTAttributes, RoyaltyKind, ServiceType, zeroX, AssetAttributes, MetaDataExternalResource, PublishMetadataOptions, ServiceAttributes } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -12,7 +12,7 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { ethers } from 'ethers'
+import { ethers, parseUnits } from 'ethers'
 
 
 export const createNft = async (
@@ -35,7 +35,7 @@ export const createNft = async (
     }
   }
 
-  const royaltiesAmount = BigNumber.parseUnits(String(argv.royalties), 4)
+  const royaltiesAmount = parseUnits(String(argv.royalties), 4)
   logger.info(`Royalties: ${royaltiesAmount}`)
 
   logger.info(chalk.dim('Loading token'))
@@ -45,9 +45,9 @@ export const createNft = async (
   logger.debug(chalk.dim(`Using creator: '${creatorAccount.getId()}'\n`))
 
   let ddoMetadata
-  const ddoPrice = BigNumber.from(argv.price).gt(0)
-    ? BigNumber.from(argv.price)
-    : BigNumber.from(0)
+  const ddoPrice = BigInt(argv.price) > 0n
+    ? BigInt(argv.price)
+    : 0n
 
   if (!metadata) {
     if (argv.name === '' || argv.author === '' || argv.urls === '') {
@@ -57,7 +57,7 @@ export const createNft = async (
       }
     }
 
-    logger.trace(`new BigNumber ${BigNumber.from(argv.price)}`)
+    logger.trace(`new BigInt ${BigInt(argv.price)}`)
     logger.trace(`DDO Price: ${ddoPrice}`)
     logger.trace(`to Fixed: ${ddoPrice.toString()}`)
 
@@ -91,14 +91,14 @@ export const createNft = async (
   const royaltyAttributes = getRoyaltyAttributes(
     nvm,
     RoyaltyKind.Standard,
-    royaltiesAmount.toNumber()
+    Number(royaltiesAmount),
   )
 
   const configContract = loadNeverminedConfigContract(config)
   const networkFee = await configContract.getMarketplaceFee()
   const assetPrice = new AssetPrice(creatorAccount.getId(), ddoPrice)
-    .setTokenAddress(token ? token.getAddress() : config.erc20TokenAddress)
-  if (networkFee.gt(0)) {
+    .setTokenAddress(token ? token.address : config.erc20TokenAddress)
+  if (networkFee > 0) {
     assetPrice.addNetworkFees(
       await configContract.getFeeReceiver(),
       networkFee
@@ -117,11 +117,11 @@ export const createNft = async (
 
   const providers: string[] = []
   argv.providers.forEach((_provider: string) => {
-    if (ethers.utils.isAddress(_provider)) providers.push(_provider)
+    if (ethers.isAddress(_provider)) providers.push(_provider)
   })
   if (config.nvm.neverminedNodeAddress && 
       !providers.includes(config.nvm.neverminedNodeAddress) && 
-      ethers.utils.isAddress(config.nvm.neverminedNodeAddress))
+      ethers.isAddress(config.nvm.neverminedNodeAddress))
     providers.push(config.nvm.neverminedNodeAddress)
   
   logger.info(`Adding Node addresses as asset providers: ${JSON.stringify(providers)}`)
@@ -132,16 +132,35 @@ export const createNft = async (
 
   let ddo
 
-  let publishMetadata = PublishMetadata.OnlyMetadataAPI
+  let publishMetadata = PublishMetadataOptions.OnlyMetadataAPI
   if (argv.publishMetadata.toLowerCase() === 'ipfs')
-    publishMetadata = PublishMetadata.IPFS  
+    publishMetadata = PublishMetadataOptions.IPFS  
 
   if (argv.type) ddoMetadata.main.type = argv.type
+  const serviceAttributes: ServiceAttributes[] = []
   
+  if (services.includes('nft-sales')) {
+    
+    serviceAttributes.push({
+      serviceType: 'nft-sales',
+      price: assetPrice,
+      nft: { 
+        amount: 1n, 
+        nftTransfer: argv.transfer, 
+        isSubscription: argv.type === 'subscription', 
+        duration:  argv.type === 'subscription' ? argv.duration: 0  
+      }
+    })
+  }
+  if (services.includes('nft-access')) {
+    serviceAttributes.push({
+      serviceType: 'nft-access',      
+      nft: { amount: 1n}
+    })
+  }
   const assetAttributes = AssetAttributes.getInstance({
       metadata: ddoMetadata,
-      price: assetPrice,
-      serviceTypes: services
+      services: serviceAttributes
   })
   let nftAttributes: NFTAttributes
   
@@ -161,19 +180,13 @@ export const createNft = async (
       preMint: argv.preMint,
       providers,
       royaltyAttributes,
-      nftMetadataUrl: argv.nftMetadata,
-      nftTransfer: argv.transfer,
-      isSubscription: argv.type === 'subscription'
+      nftMetadataUrl: argv.nftMetadata,      
     })
-    if (argv.subscription)
-      nftAttributes = {
-        ...nftAttributes,
-        duration: argv.duration
-      }
+
     ddo = await nvm.nfts721.create(
         nftAttributes,
         creatorAccount,
-        publishMetadata
+        { metadata: publishMetadata }
     )    
     
     const transferCondAddress = nvm.keeper.conditions.transferNft721Condition.address
@@ -182,23 +195,21 @@ export const createNft = async (
     logger.debug(`Is Transfer NFT721 Operator? ${isOperator}`)
 
   } else {
-    nftAttributes = NFTAttributes.getNFT1155Instance({
+    nftAttributes = NFTAttributes.getCreditsSubscriptionInstance({
       ...assetAttributes,
       ercType: 1155,
       nftType: NeverminedNFT1155Type.nft1155,      
-      nftContractAddress: argv.nftAddress || nvm.keeper.nftUpgradeable.getAddress(),
+      nftContractAddress: argv.nftAddress || nvm.keeper.nftUpgradeable.address,
       cap: argv.cap,
       preMint: argv.preMint,
       providers,
       royaltyAttributes,
       nftMetadataUrl: argv.nftMetadata,
-      nftTransfer: argv.transfer,
-      isSubscription: argv.type === 'subscription' ? argv.duration: 0
     })            
     ddo = await nvm.nfts1155.create(
         nftAttributes,
         creatorAccount,
-        publishMetadata
+        { metadata: publishMetadata }
     )
 
   }

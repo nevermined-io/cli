@@ -20,6 +20,8 @@ export const orderAsset = async (
 ): Promise<ExecutionOutput> => {
   const { did } = argv
 
+  const serviceReference = argv.serviceIndex ? argv.serviceIndex : 'access'
+
   // TODO: Enable DTP when `sdk-dtp` is ready
   // const keyTransfer = await makeKeyTransfer()
 
@@ -27,7 +29,7 @@ export const orderAsset = async (
 
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
-  const agreementId = await nvm.assets.order(did, account)
+  const agreementId = await nvm.assets.order(did, serviceReference, account)
   // }
 
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))

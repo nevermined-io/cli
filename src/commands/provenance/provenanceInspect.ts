@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, Nevermined, jsonReplacer } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { printProvenanceEntry } from '../../utils/utils'
@@ -26,6 +26,6 @@ export const provenanceInspect = async (
 
   return {
     status: StatusCodes.OK,
-    results: JSON.stringify(provenance)
+    results: JSON.stringify(provenance, jsonReplacer)
   }
 }

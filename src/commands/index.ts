@@ -7,6 +7,9 @@ export * from './assets/orderAsset'
 export * from './assets/getAsset'
 export * from './assets/resolveDID'
 export * from './assets/retireDID'
+export * from './assets/getAssetProviders'
+export * from './assets/grantAssetProvider'
+export * from './assets/revokeAssetProvider'
 
 // nfts (ERC-721 & ERC-1155)
 export * from './nfts/cloneNft'

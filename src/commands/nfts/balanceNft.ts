@@ -1,4 +1,4 @@
-import { Account, didZeroX, Nevermined, zeroX } from '@nevermined-io/sdk'
+import { Account, didZeroX, jsonReplacer, Nevermined, zeroX } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -37,7 +37,7 @@ export const balanceNft = async (
     status: StatusCodes.OK,
     results: JSON.stringify({
       balance
-    })
+    }, jsonReplacer)
   }
 
 }

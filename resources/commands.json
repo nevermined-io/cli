@@ -158,15 +158,15 @@
 					"description": "Load NFT (ERC-721) inventory as well"
 				}]
 			}, {
-				"name": "fund [account]",
+				"name": "fund [addressToFund]",
 				"description": "Funds an account with ERC20 tokens on a testnet",
 				"details": "In the test environments all tokens lack real value. Typically in Nevermined you need to use different type of tokens. The Native token (`ETH`, `MATIC`, etc) to pay for the gas resulting to write into a blockchain network, and optionally with a `ERC20` token to do some payments. This command allows to get some funds in a testnet environment allowing to a user to run different processes on a testnet. This command will not work in production environments where the tokens have actual value.",
 				"examples": ["ncli accounts fund 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
 				"commandHandler": "accountsFund",
 				"positionalArguments": [{
-					"name": "account",
+					"name": "addressToFund",
 					"type": "string",
-					"description": "The account to fund"
+					"description": "The account address to fund"
 				}],
 				"optionalArguments": []
 			}]
@@ -579,6 +579,50 @@
 					"type": "string",
 					"description": "Password for receiving encrypted files"
 				}]
+			}, {
+				"name": "get-providers [did]",
+				"description": "Gets the list of provider addresses granted to an asset",
+				"details": "This method gest the complete list of providers granted to an asset",
+				"examples": ["ncli assets get-providers did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f"],
+				"commandHandler": "getAssetProviders",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "grant-provider [did] [providerAddress]",
+				"description": "Grant an address as provider of an asset",
+				"details": "This method adds an address as provider of an asset",
+				"examples": ["ncli assets grant-provider did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f 0x736DCC96D89cB2F9E2316cD826668f4E1c4861B0"],
+				"commandHandler": "grantAssetProvider",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}, {
+					"name": "providerAddress",
+					"type": "string",
+					"description": "The provider address"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "revoke-provider [did] [providerAddress]",
+				"description": "Revokes an address as provider of an asset",
+				"details": "This method revokes an address as provider of an asset",
+				"examples": ["ncli assets revoke-provider did:nv:912e7a547bcd675ffbc5d2063ef770e15744029f048f706f6bb0281df4f4700f 0x736DCC96D89cB2F9E2316cD826668f4E1c4861B0"],
+				"commandHandler": "revokeAssetProvider",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}, {
+					"name": "providerAddress",
+					"type": "string",
+					"description": "The provider address"
+				}],
+				"optionalArguments": []
 			}, {
 				"name": "get [did]",
 				"description": "Order & download or download directly a previously purchased asset",

@@ -1,4 +1,4 @@
-import { Account, BigNumber, Nevermined, NFTsBaseApi } from '@nevermined-io/sdk'
+import { Account, Nevermined, NFTsBaseApi } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -49,7 +49,7 @@ export const accessNft = async (
 
     const nft = await nvm.contracts.loadNft721(nftAddress)
     const balance = await nft.balanceOf(consumerAccount)
-    isHolder = balance.gt(0)    
+    isHolder = balance > 0n
 
   } else {
     logger.info(`Checking balance`)
@@ -57,7 +57,7 @@ export const accessNft = async (
     const nftContract = await nvm.contracts.loadNft1155(nftAddress)
 
     const balance = await nftContract.balance(ddo.shortId(), consumerAccount.getId())
-    isHolder = balance.gt(0)
+    isHolder = balance > 0n
   }
   
   logger.debug(`Is user holder? ${isHolder}`)
@@ -72,7 +72,7 @@ export const accessNft = async (
     if (nftType === 721)      
       isSuccessfulTransfer = await nvm.nfts721.claim(agreementId, seller, consumerAccount.getId())      
     else
-      isSuccessfulTransfer = await nvm.nfts1155.claim(agreementId, seller, consumerAccount.getId(), BigNumber.from(1))
+      isSuccessfulTransfer = await nvm.nfts1155.claim(agreementId, seller, consumerAccount.getId(), 1n)
     
       
     

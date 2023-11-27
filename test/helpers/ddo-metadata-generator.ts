@@ -1,4 +1,4 @@
-import { AssetPrice, BigNumber, MetaData } from "@nevermined-io/sdk"
+import { AssetPrice, MetaData } from "@nevermined-io/sdk"
 
 
 const metadata: Partial<MetaData> = {
@@ -147,4 +147,4 @@ export const getMetadata = (nonce: string | number = Math.random(), name = 'Test
   generateMetadata(name, nonce) as MetaData
 
 export const getAssetPrice = (receiver: string) =>
-  new AssetPrice(receiver, BigNumber.from('21' + '0'.repeat(18)))
+  new AssetPrice(receiver, BigInt('21' + '0'.repeat(18)))

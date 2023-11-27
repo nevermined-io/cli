@@ -1,4 +1,4 @@
-import { Account, BigNumber, DDO, getAssetPriceFromDDOByService, Nevermined, zeroX } from '@nevermined-io/sdk'
+import { Account, DDO, Nevermined, formatUnits, zeroX } from '@nevermined-io/sdk'
 import {
   Constants,
   StatusCodes,
@@ -86,8 +86,8 @@ export const showNft = async (
     )
   )
 
-  const price = BigNumber.formatUnits(
-    getAssetPriceFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+  const price = formatUnits(
+    DDO.getAssetPriceFromService(ddo.findServiceByType('nft-sales')).getTotalPrice(),
     decimals
   )
 
@@ -103,7 +103,7 @@ export const showNft = async (
   // Showing ERC-721 NFT information
   if (metadata.attributes.main.ercType == 721) {
     console.log(`Loading NFT-721 details ...`)
-    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.getAddress()
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.address
     const nft = await nvm.contracts.loadNft721(nftAddress)
      nftDetails = await nft.details(did)
 
@@ -134,7 +134,7 @@ export const showNft = async (
       logger.warn(`Token Id not found`)
     }
   } else {
-    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.getAddress()
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.address
     const nft = await nvm.contracts.loadNft1155(nftAddress)
     nftDetails = await nft.details(did)
 

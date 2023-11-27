@@ -1,36 +1,31 @@
 name: Testing
 
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Reclaim some disk space
+        run: docker system prune --all --volumes -f      
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
 
       - name: Install dependencies
         run: |
           yarn
       - name: Run linters
         run: yarn lint
-      - name: Build
-        run: |
-          yarn build
-          yarn start --help
 
-      - uses: nevermined-io/nvm-tools-actions@v0.12.0
+      - uses: nevermined-io/nvm-tools-actions@v0.15.0
         with:
           token: ${{ secrets.API_TOKEN_GITHUB }}
           opengsn: 'true'
           estuary: 'true'
-          contracts-version: 'v3.2.1'
+          contracts-version: 'v3.5.4'
+          node-version: 'latest'
       - name: Check artifacts and circuits
         run: |
           nvm-tools copy-artifacts /tmp/.nevermined/artifacts
@@ -39,16 +34,22 @@ jobs:
           nvm-tools copy-circuits /tmp/.nevermined/circuits
           ls -l /tmp/.nevermined/circuits/keytransfer.wasm
 
+      - name: Build
+        run: |
+          yarn build
+          yarn start --help  
+
       - name: Run integration tests
         env:
-          LOCAL_CONF_DIR: '/tmp/.nevermined'
           SEED_WORDS: ${{ secrets.TEST_MNEMONIC }}
+          INFURA_TOKEN: ${{ secrets.INFURA_TOKEN }}
+          IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
+          IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
+          LOCAL_CONF_DIR: '/tmp/.nevermined'          
           TOKEN_ADDRESS: '0x0000000000000000000000000000000000000000'
           WEB3_PROVIDER_URL: 'http://contracts.nevermined.localnet'
           NETWORK: 'geth-localnet'
-          IPFS_PROJECT_ID: ${{ secrets.IPFS_PROJECT_ID }}
-          IPFS_PROJECT_SECRET: ${{ secrets.IPFS_PROJECT_SECRET }}
-          NO_GRAPH: 'true'
+
         run: |
           yarn test:integration
       - name: Upload logs

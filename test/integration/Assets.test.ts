@@ -9,14 +9,15 @@ import * as fs from 'fs'
 import { mkdtempSync } from 'fs'
 import * as Path from 'path'
 import { generateId } from '@nevermined-io/sdk'
-import execCommand from '../helpers/ExecCommand'
+import execCommand, { fundTestAccount } from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {
   let did = ''
 
   beforeAll(async () => {
     console.log(`NETWORK: ${execOpts.env.NETWORK}`)
-    
+    fundTestAccount(execOpts.accounts[1])
+
     const registerAssetCommand = `${baseCommands.assets.registerAsset}  --accountIndex 0 --name "${metadataConfig.name}" --author "${metadataConfig.author}" --price "${metadataConfig.price}" --urls ${metadataConfig.url} --contentType ${metadataConfig.contentType}`
     console.debug(`COMMAND: ${registerAssetCommand}`)
 
@@ -67,6 +68,45 @@ describe('Assets e2e Testing', () => {
     const didImport = parseDIDFromNewAsset(stdout)
     console.log(`DID: ${didImport}`)
     expect(didImport === null ? false : didImport.startsWith('did:nv:'))
+  })
+
+  test('Grant and revoke providers', async () => {
+
+    const grantAccount = execOpts.accounts[5]
+    
+    ////// GRANTING PROVIDER
+
+    const grantCommand = `${baseCommands.assets.grantAssetProvider} ${did} ${grantAccount}`
+    console.debug(`COMMAND: ${grantCommand}`)
+
+    const stdout = execCommand(grantCommand, execOpts)
+
+    console.log(`STDOUT: ${stdout}`)
+    expect(stdout.includes('Permissions granted'))
+
+    
+    ////// GETTING PROVIDERS
+
+    const getCommand = `${baseCommands.assets.getAssetProviders} ${did}`
+    console.debug(`COMMAND: ${getCommand}`)
+
+    const stdoutGet = execCommand(getCommand, execOpts)
+
+    console.log(`STDOUT: ${stdoutGet}`)
+    expect(stdout.includes(`Provider address: ${grantAccount}`))
+
+
+    ////// REVOKING PROVIDER
+
+    const revokeCommand = `${baseCommands.assets.revokeAssetProvider} ${did} ${grantAccount}`
+    console.debug(`COMMAND: ${revokeCommand}`)
+
+    const stdoutRevoke = execCommand(revokeCommand, execOpts)
+
+    console.log(`STDOUT: ${stdoutRevoke}`)
+    expect(stdout.includes('Permissions revoked'))
+
+
   })
 
   test('Search for an asset', async () => {

@@ -2,7 +2,7 @@ import { Account, Nevermined } from '@nevermined-io/sdk'
 import { StatusCodes, printWallet } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
-import { ethers } from 'ethers'
+import { Mnemonic, ethers } from 'ethers'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 import fs from 'fs'
@@ -18,11 +18,11 @@ export const accountsExport = async (
 
   logger.info(chalk.dim('Export wallet ...'))
 
-  const pathLength = ethers.utils.defaultPath.length
-  const accountPath = ethers.utils.defaultPath.substring(0, pathLength - 1) + argv.accountIndex
+  const pathLength = ethers.defaultPath.length
+  const accountPath = ethers.defaultPath.substring(0, pathLength - 1) + argv.accountIndex
   logger.info(`Using account path: ${accountPath}`)
-
-  const wallet = ethers.Wallet.fromMnemonic(config.seed!, accountPath)
+  
+  const wallet = ethers.HDNodeWallet.fromMnemonic(Mnemonic.fromPhrase(config.seed!), accountPath)
   printWallet(wallet)  
 
   if (password !== '' && destination !== ''){
@@ -38,9 +38,8 @@ export const accountsExport = async (
       walletAddress: wallet.address,
       walletPublicKey: wallet.publicKey,
       walletPrivateKey: wallet.privateKey,
-      mnemonicPhrase: wallet.mnemonic.phrase,
-      mnemonicPath: wallet.mnemonic.path,
-      mnemonicLocale: wallet.mnemonic.locale
+      mnemonicPhrase: wallet.mnemonic?.phrase,
+      mnemonicPath: wallet.path      
     })
   }
 }

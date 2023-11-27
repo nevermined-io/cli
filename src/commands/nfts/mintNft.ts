@@ -1,4 +1,4 @@
-import { Account, BigNumber, Nevermined, zeroX } from '@nevermined-io/sdk'
+import { Account, Nevermined, zeroX } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -8,7 +8,7 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { ethers } from 'ethers'
+import { FunctionFragment, ethers } from 'ethers'
 
 export const mintNft = async (
   nvm: Nevermined,
@@ -43,13 +43,13 @@ export const mintNft = async (
   )
 
   let receiver
-  if (ethers.utils.isAddress(argv.receiver)) receiver = argv.receiver
+  if (ethers.isAddress(argv.receiver)) receiver = argv.receiver
   else receiver = minterAccount.getId()
 
   if (nftType === 721) {
     // Minting NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.getAddress()
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.address
 
     const nft = await nvm.contracts.loadNft721(nftAddress)
     if (verbose) {
@@ -57,8 +57,8 @@ export const mintNft = async (
     }
 
     // We check the number of parameters expected by the mint function to adapt the parameters
-    const mintAbiDefinition = nft.getContract.contract.interface.fragments
-      .filter((item: { name: string }) => item.name === 'mint')
+    const mintAbiDefinition = nft.nftContract.contract.interface.fragments
+      .filter((item: FunctionFragment) => item.name === 'mint')
       .map((entry: { inputs: any }) => entry.inputs)
 
     if (mintAbiDefinition.length == 3) {
@@ -91,10 +91,10 @@ export const mintNft = async (
       }
     }
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.getAddress()
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.address
     const nft = await nvm.contracts.loadNft1155(nftAddress)
 
-    await nft.mint(did, BigNumber.from(argv.amount), receiver, minterAccount)
+    await nft.mint(did, BigInt(argv.amount), receiver, minterAccount)
     
 
     logger.info(

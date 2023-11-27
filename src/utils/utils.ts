@@ -1,10 +1,8 @@
-import { Contract } from 'ethers'
+import { Contract, FunctionFragment, HDNodeWallet, Wallet, getAddress } from 'ethers'
 import {
   Account,
   DDO,
   Nevermined,  
-  BigNumber,
-  findServiceConditionByName,
   Nft721Contract,
   noZeroX,
   ProvenanceMethod,
@@ -12,7 +10,8 @@ import {
   QueryResult,
   ServiceType,
   Token,
-  ConditionType
+  ConditionType,
+  makeAccount
 } from '@nevermined-io/sdk'
 import chalk from 'chalk'
 import { Constants } from './enums'
@@ -28,11 +27,17 @@ export const loadNevermined = async (
   network: string,
   verbose = false
 ): Promise<Nevermined> => {
-  try {    
+  try {
     const nvm = await Nevermined.getInstance({
       ...config.nvm,
       verbose: verbose ? verbose : config.nvm.verbose
     })
+    
+    const accounts = await nvm.accounts.list()
+    logger.debug(`Accounts: ${accounts.length}`)
+    accounts.map((a) => logger.debug(`ACCOUNT ${a.getId()}`))
+
+    // await nvm.keeper.loadCurveRoyaltiesInstance()
     if (!nvm.keeper) {
       logger.error(
         chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
@@ -49,9 +54,9 @@ export const loadNevermined = async (
 export const loginMarketplaceApi = async (
   nvm: Nevermined,
   account: Account
-): Promise<boolean> => {
-  const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)
-  await nvm.services.marketplace.login(clientAssertion)
+): Promise<boolean> => {  
+  const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)  
+  await nvm.services.marketplace.login(clientAssertion)  
   return true
 }
 
@@ -84,15 +89,15 @@ export const getNFTAddressFromInput = (
   conditionType: ConditionType = 'transferNFT'
 ): string | undefined => {
 
-  if (!nftAddress || !ethers.utils.isAddress(nftAddress)) {
+  if (!nftAddress || !ethers.isAddress(nftAddress)) {
 
     const salesService = ddo.findServiceByType(serviceType)
     if (!salesService) throw new Error(`No NFT contract address found`)
 
-    const condition = findServiceConditionByName(salesService, conditionType)
+    const condition = DDO.findServiceConditionByName(salesService, conditionType)
 
     const _contractParam = condition.parameters.find(
-      (p) => p.name === '_contractAddress' || p.name === '_contract'
+      (p: { name: string }) => p.name === '_contractAddress' || p.name === '_contract'
     )
     
     return _contractParam?.value as string
@@ -102,12 +107,12 @@ export const getNFTAddressFromInput = (
 }
 
 export const getSignatureOfMethod = (
-  contractInstace: ethers.Contract,
+  contractInstace: ethers.BaseContract,
   methodName: string,
   args: any[]
 ): string => {
   const methods = contractInstace.interface.fragments.filter(
-    (f) => f.name === methodName
+    (f: FunctionFragment) => f.name === methodName,
   )
   const foundMethod =
     methods.find((f) => f.inputs.length === args.length) || methods[0]
@@ -121,20 +126,22 @@ export const getDidHash = (did: string): string => did.replace('did:nv:', '')
 
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
-export const loadHDWalletFromSeedWords = (
-  seedWords: string,
-  index = 0
-): ethers.utils.HDNode => {
-  const hdNode = ethers.utils.HDNode.fromMnemonic(seedWords)
-  return hdNode.derivePath(`m/44'/60'/0'/0/${index}`)
+
+export const getWalletFromJSON = (
+  keyfilePath: string, 
+  password: string
+): Wallet | HDNodeWallet => {
+  const data = fs.readFileSync(keyfilePath)
+  const keyfile = JSON.parse(data.toString())
+  return ethers.Wallet.fromEncryptedJsonSync(keyfile, password)  
 }
 
 export const loadAccountFromSeedWords = (
   seedWords: string,
   index = 0
 ): Account => {
-  const hdNode = ethers.utils.HDNode.fromMnemonic(seedWords)
-  return new Account(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
+  const wallet = makeAccount(seedWords, index)
+  return new Account(wallet.address)
 }
 
 export const findAccountOrFirst = (
@@ -145,7 +152,7 @@ export const findAccountOrFirst = (
   
   accounts.map((a) => logger.info(`ACCOUNT ${a.getId()}`))
 
-  if (ethers.utils.isAddress(address)) {
+  if (ethers.isAddress(address)) {
     account = accounts.find(
       (a: Account) => a.getId().toLowerCase() === address.toLowerCase()
     )
@@ -173,7 +180,7 @@ export const findAccountOrFirst = (
   return accounts[0]
 }
 
-export const printWallet = (wallet: ethers.Wallet) => {
+export const printWallet = (wallet: ethers.HDNodeWallet) => {
   logger.info(
     chalk.dim(`Wallet address: ${chalk.yellowBright(wallet.address)}`)
   )
@@ -186,17 +193,14 @@ export const printWallet = (wallet: ethers.Wallet) => {
   logger.info(chalk.dim(`Wallet Seed Words:`))
 
   logger.info(
-    chalk.dim(`  Phrase: ${chalk.yellowBright(wallet.mnemonic.phrase)}`)
+    chalk.dim(`  Phrase: ${chalk.yellowBright(wallet.mnemonic?.phrase)}`)
   )
-  logger.info(chalk.dim(`  Path: ${chalk.yellowBright(wallet.mnemonic.path)}`))
-  logger.info(
-    chalk.dim(`  Locale: ${chalk.yellowBright(wallet.mnemonic.locale)}`)
-  )
+  logger.info(chalk.dim(`  Path: ${chalk.yellowBright(wallet.path)}`))
 
   logger.info(
     chalk.dim(
       `\nIf you want to use it in the CLI run:\n${chalk.yellow(
-        'export SEED_WORDS="' + wallet.mnemonic.phrase + '"'
+        'export SEED_WORDS="' + wallet.mnemonic?.phrase + '"'
       )}\n`
     )
   )
@@ -213,20 +217,21 @@ export const printNftTokenBanner = async (nft721: Nft721Contract) => {
 
   let owner = ''
   try {
-    owner = await nft721.contract.call('owner', [])
+    
+    owner = await nft721.call('owner', [])
     logger.info(chalk.dim(`Owner: ${chalk.whiteBright(owner)}`))
   } catch {
     logger.info(`Owner: The NFT doesn't expose the owner`)
   }
 
   try {
-    const name = await nft721.contract.call('name', [])
+    const name = await nft721.call('name', [])
     logger.info(chalk.dim(`Name: ${chalk.whiteBright(name)}`))
   } catch {
     logger.info(`Name: The NFT doesn't expose the name`)
   }
   try {
-    const symbol = await await nft721.contract.call('symbol', [])
+    const symbol = await await nft721.call('symbol', [])
     logger.info(chalk.dim(`Symbol: ${chalk.whiteBright(symbol)}`))
   } catch {
     logger.info(`Symbol: The NFT doesn't expose the symbol`)
@@ -346,10 +351,10 @@ export const printErc20TokenBanner = async (token: Token) => {
     const { address } = token
 
     const [name, symbol, decimals, totalSupply] = await Promise.all([
-      token.contract.name(),
-      token.contract.symbol(),
-      token.contract.decimals(),
-      token.contract.totalSupply()
+      token.name(),
+      token.symbol(),
+      token.decimals(),
+      token.totalSupply()
     ])
   
     logger.info(chalk.dim('\n===== ERC20 Contract ====='))
@@ -359,7 +364,7 @@ export const printErc20TokenBanner = async (token: Token) => {
     logger.info(chalk.dim(`Decimals: ${chalk.whiteBright(decimals)}`))
     logger.info(
       chalk.dim(
-        `Total Supply: ${chalk.whiteBright(totalSupply / 10 ** decimals)}`
+        `Total Supply: ${chalk.whiteBright(totalSupply / 10n ** BigInt(decimals))}`
       )
     )
   } catch (error) {
@@ -412,7 +417,7 @@ export const loadToken = async (
     )
     try {
       token = await nvm.contracts.loadErc20(
-        ethers.utils.getAddress(config.erc20TokenAddress)
+        getAddress(config.erc20TokenAddress)
       )
 
       logger.debug(`Using Token Address: ${token.address}`)
@@ -464,6 +469,6 @@ export const getJsonLoggerConfig = (): Configuration => {
   }
 }
 
-export const getFeesFromBigNumber = (fees: BigNumber): string => {
-  return (fees.toNumber() / 10000).toPrecision(2).toString()
+export const getFeesFromBigNumber = (fees: bigint): string => {
+  return ((fees / 10000n) / 100n).toString()
 }

@@ -1,11 +1,11 @@
-import { Account, BigNumber, Nevermined } from '@nevermined-io/sdk'
+import { Account, Nevermined } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { Logger } from 'log4js'
 import chalk from 'chalk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
-const ERC20_DISPENSED_AMOUNT = BigNumber.from(100)
+const ERC20_DISPENSED_AMOUNT = 100n
 
 export const accountsFund = async (
   nvm: Nevermined,
@@ -16,34 +16,36 @@ export const accountsFund = async (
 ): Promise<ExecutionOutput> => {
   const { verbose } = argv
 
+  const addressToFund = argv.addressToFund ? argv.addressToFund : account.getId()
   let errorMessage = ''
   const results: string[] = []
   logger.info(
-    chalk.dim(`Funding account with ERC20: '${chalk.whiteBright(account.getId())}'`)
+    chalk.dim(`Funding account with ERC20: '${chalk.whiteBright(addressToFund)}'`)
   )
   
   try {
     logger.info(
       chalk.dim(
-        `Calling Dispenser with address ${nvm.keeper.dispenser.getAddress()} to get 
-        ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(account.getId())}`
+        `Calling Dispenser with address ${nvm.keeper.dispenser.address} to get 
+        ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(addressToFund)}`
       )
     )
+    // const scale = 10n ** BigInt(await nvm.keeper.token.decimals())
     await nvm.keeper.dispenser.requestTokens(
       ERC20_DISPENSED_AMOUNT,
-      account.getId()
+      addressToFund
     )
     logger.info(
       chalk.dim(
         `Funded ${ERC20_DISPENSED_AMOUNT} ERC20 tokens to ${chalk.whiteBright(
-          account.getId()
+          addressToFund
         )}`
       )
     )
     results.push('erc20')
   } catch (err) {
     const erc20ErrorMessage = `Funding ERC20 Tokens to ${chalk.whiteBright(
-      account.getId())} failed!`
+      addressToFund)} failed!`
     logger.error(erc20ErrorMessage)
     errorMessage = `${errorMessage}, ${erc20ErrorMessage}`
     if (verbose) {

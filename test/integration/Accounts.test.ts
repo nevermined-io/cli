@@ -6,8 +6,7 @@ import {
 import execCommand from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {
-  let accountAddress: string
-  const abiPath = 'test/resources/nfts/TestNFT721.json'
+  const abiPath = 'test/resources/nfts/NFT721SubscriptionUpgradeable.json'
 
   test('List all the accounts ', async () => {
     const listCommand = `${baseCommands.accounts.list} `
@@ -44,7 +43,6 @@ describe('Assets e2e Testing', () => {
     console.log(`STDOUT: ${stdout}`)
 
     const [address, privateKey] = parseNewAccount(stdout)
-    accountAddress = address
 
     console.log(`Address: ${address}`)
     expect(address === null ? false : address.startsWith('0x'))
@@ -52,7 +50,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Fund an account', async () => {
-    const fundCommand = `${baseCommands.accounts.fund} "${accountAddress}" --token both`
+    const fundCommand = `${baseCommands.accounts.fund} "${execOpts.accounts[9]}" --token both`
     console.debug(`FUND COMMAND: ${fundCommand}`)
 
     const stdout = execCommand(fundCommand, execOpts)
@@ -61,7 +59,7 @@ describe('Assets e2e Testing', () => {
   })
 
   test('Get the balance of an account', async () => {
-    const balanceCommand = `${baseCommands.accounts.balance} "${accountAddress}" `
+    const balanceCommand = `${baseCommands.accounts.balance} "${execOpts.accounts[9]}" `
     console.debug(`BALANCE COMMAND: ${balanceCommand}`)
 
     const stdout = execCommand(balanceCommand, execOpts)

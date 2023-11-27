@@ -1,4 +1,4 @@
-import { Account, BigNumber, Nevermined } from '@nevermined-io/sdk'
+import { Account, Nevermined } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -31,7 +31,7 @@ export const burnNft = async (
   if (nftType == 721) {
     // Burning NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.getAddress()
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.address
 
     await nvm.contracts.loadNft721(nftAddress)
 
@@ -53,10 +53,10 @@ export const burnNft = async (
       }
     }
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.getAddress()
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.address
     const nft = await nvm.contracts.loadNft1155(nftAddress)
 
-    await nft.burn(tokenId, BigNumber.from(argv.amount), burnerAccount)
+    await nft.burn(tokenId, BigInt(argv.amount), burnerAccount)
     
     logger.info(
       chalk.dim(

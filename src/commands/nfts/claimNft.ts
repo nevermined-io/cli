@@ -1,4 +1,4 @@
-import { Account, BigNumber, getAssetPriceFromDDOByService, Nevermined } from '@nevermined-io/sdk'
+import { Account, DDO, Nevermined, formatUnits } from '@nevermined-io/sdk'
 import { Constants, StatusCodes, loadToken, getNFTAddressFromInput } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -71,8 +71,8 @@ export const claimNft = async (
 
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
-  const price = BigNumber.formatUnits(
-    getAssetPriceFromDDOByService(ddo, 'nft-sales').getTotalPrice(),
+  const price = formatUnits(
+    DDO.getAssetPriceFromService(ddo.findServiceByReference('nft-sales')).getTotalPrice(),
     decimals
   )
 

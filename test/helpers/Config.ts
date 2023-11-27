@@ -1,4 +1,4 @@
-import { generateId } from '@nevermined-io/sdk'
+import { generateId, makeAccounts } from '@nevermined-io/sdk'
 import { ethers } from 'ethers'
 
 const NETWORK = process.env.NETWORK || 'geth-localnet'
@@ -21,11 +21,8 @@ export const loadAddressesFromSeedWords = (
   numberOfAccounts = 10
 ): string[] => {
   if (seedWords) {
-    const hdNode = ethers.utils.HDNode.fromMnemonic(seedWords)
-    const addresses = []
-    for (let index = 0; index < numberOfAccounts; index++) {
-      addresses.push(hdNode.derivePath(`m/44'/60'/0'/0/${index}`).address)
-    }
+    const accounts: ethers.Wallet[] = makeAccounts(seedWords, numberOfAccounts)
+    const addresses = accounts.map(account => { return account.address })
     return addresses
   }
   // If no seed words we return a list of pre-defined addresses for testing purposes
@@ -35,6 +32,7 @@ export const loadAddressesFromSeedWords = (
     '0xA78deb2Fa79463945C247991075E2a0e98Ba7A09'
   ]
 }
+
 
 export const execOpts = {
   encoding: 'utf8',
@@ -62,7 +60,10 @@ export const baseCommands = {
     downloadAsset: `${BASE_COMMAND} ${VERBOSE} assets download `,
     orderAsset: `${BASE_COMMAND} ${VERBOSE} assets order `,
     getAsset: `${BASE_COMMAND} ${VERBOSE} assets get `,
-    resolveDID: `${BASE_COMMAND} ${VERBOSE} assets resolve `
+    resolveDID: `${BASE_COMMAND} ${VERBOSE} assets resolve `,
+    getAssetProviders: `${BASE_COMMAND} ${VERBOSE} assets get-providers `,
+    grantAssetProvider: `${BASE_COMMAND} ${VERBOSE} assets grant-provider `,
+    revokeAssetProvider: `${BASE_COMMAND} ${VERBOSE} assets revoke-provider `
   },
   nfts721: {
     deploy: `${BASE_COMMAND} ${VERBOSE} nfts721 deploy `,

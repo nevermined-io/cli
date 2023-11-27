@@ -1,5 +1,4 @@
-import HDWalletProvider from '@truffle/hdwallet-provider'
-import ethers from 'ethers'
+import ethers, { HDNodeWallet } from 'ethers'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { mkdirSync, writeFileSync } from 'fs'
@@ -10,7 +9,8 @@ import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
 import { Wallet, Signer } from 'ethers'
-import { Web3Provider } from '@nevermined-io/sdk'
+import { Web3Provider, makeAccounts } from '@nevermined-io/sdk'
+import { getWalletFromJSON } from './utils'
 
 dotenv.config()
 
@@ -110,11 +110,11 @@ export function getNetworksConfig(): CliConfig {
   return JSON.parse(fs.readFileSync(networksJsonPath).toString())
 }
 
-export function getConfig(
+export async function getConfig(
   network: string,
   requiresAccount = true,
-  accountIndex = 0
-): ConfigEntry {
+  _accountIndex = 0
+): Promise<ConfigEntry> {
   if (!process.env.SEED_WORDS) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
       const accountMessage =
@@ -143,8 +143,9 @@ export function getConfig(
   if (process.env.WEB3_PROVIDER_URL) config.nvm.web3ProviderUri = process.env.WEB3_PROVIDER_URL
   if (process.env.MARKETPLACE_API_URL)
     config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
-  if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
-  if (process.env.NO_GRAPH) config.nvm.graphHttpUri = undefined
+  //if (process.env.GRAPH_URL) config.nvm.graphHttpUri = process.env.GRAPH_URL
+  // if (process.env.NO_GRAPH) config.nvm.graphHttpUri = undefined
+  config.nvm.graphHttpUri = process.env.GRAPH_URL
   if (process.env.NVM_NODE_URL) config.nvm.neverminedNodeUri = process.env.NVM_NODE_URL
   if (process.env.NODE_ADDRESS)
     config.nvm.neverminedNodeAddress = process.env.NODE_ADDRESS
@@ -168,44 +169,29 @@ export function getConfig(
     }
   }
 
-  // TODO: Decommission the integration via Truffle HDWalletProvider
-  const provider = Web3Provider.getWeb3(config.nvm)
-  let hdWalletProvider: HDWalletProvider
+  const provider = await Web3Provider.getWeb3(config.nvm)
+
   let signer: Signer
+  let accounts: ethers.Wallet[] = []
   if (requiresAccount) {
     if (!process.env.SEED_WORDS) {
       signer = Wallet.fromEncryptedJsonSync(
         process.env.KEYFILE_PATH!,
         process.env.KEYFILE_PASSWORD!
+      ) 
+      accounts.push(
+        getWalletFromJSON(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!) as Wallet
       )
-      hdWalletProvider = new HDWalletProvider({
-        privateKeys: [
-          getPrivateKey(
-            process.env.KEYFILE_PATH!,
-            process.env.KEYFILE_PASSWORD!
-          )
-        ],
-        providerOrUrl: config.nvm.web3ProviderUri,
-      })
     } else {
-      signer = Wallet.fromMnemonic(config.seed!)
-      hdWalletProvider = new HDWalletProvider({
-        mnemonic: config.seed!,
-        providerOrUrl: config.nvm.web3ProviderUri,
-        addressIndex: accountIndex,
-        numberOfAddresses: 10
-      })
+
+      signer = Wallet.fromPhrase(config.seed!)
+      accounts = makeAccounts(config.seed!)
     }
   } else {
-    signer = Wallet.fromMnemonic(DUMMY_SEED_WORDS)
-    hdWalletProvider = new HDWalletProvider({
-      mnemonic: DUMMY_SEED_WORDS,
-      providerOrUrl: config.nvm.web3ProviderUri,
-      addressIndex: 0,
-      numberOfAddresses: 1
-    })
+    signer = HDNodeWallet.fromPhrase(DUMMY_SEED_WORDS)
+    accounts = makeAccounts(DUMMY_SEED_WORDS, 1)
   }
-
+  
   return {
     ...config,
     signer: signer.connect(provider),
@@ -213,14 +199,7 @@ export function getConfig(
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,
       circuitsFolder: CIRCUITS_PATH,
-      web3Provider: hdWalletProvider
+      accounts,
     }
   }
-}
-
-function getPrivateKey(keyfilePath: string, password: string): string {
-  const data = fs.readFileSync(keyfilePath)
-  const keyfile = JSON.parse(data.toString())
-  const wallet = ethers.Wallet.fromEncryptedJsonSync(keyfile, password)
-  return wallet.privateKey
 }
