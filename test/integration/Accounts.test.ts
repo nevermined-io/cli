@@ -6,7 +6,7 @@ import {
 import execCommand from '../helpers/ExecCommand'
 
 describe('Assets e2e Testing', () => {
-  const abiPath = 'test/resources/nfts/TestNFT721.json'
+  const abiPath = 'test/resources/nfts/NFT721SubscriptionUpgradeable.json'
 
   test('List all the accounts ', async () => {
     const listCommand = `${baseCommands.accounts.list} `
