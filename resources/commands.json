@@ -9,7 +9,7 @@
 		{
 			"name": "network",
 			"alias": "n",
-			"default": "mumbai",
+			"default": "appTesting",
 			"type": "string",
 			"description": "The network to use"
 		},
