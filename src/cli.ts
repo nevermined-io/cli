@@ -86,6 +86,7 @@ const cmdHandler = async (
   try {
     if (requiresAccount) {
       nvm = await loadNevermined(config, network, verbose)
+      
       if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
 
       const networkId = await nvm.keeper.getNetworkId()
@@ -99,9 +100,18 @@ const cmdHandler = async (
           `Please, check if you are connected to the right node url. Currently using: ${config.nvm.web3ProviderUri}\n`
         )
       }
+      logger.debug(
+        chalk.dim(
+          `Connected to Network:'${networkId}'\n`
+        )
+      )
+      userAccount = await nvm.accounts.list().then(accounts => accounts[accountIndex])
 
-      userAccount = loadAccountFromSeedWords(config.seed!, accountIndex)
-
+      if (!userAccount || !userAccount.getId()) {
+        throw new Error(
+          `Error loading account from the wallet. Please check if the account exists in the wallet.`
+        )        
+      }
       logger.debug(
         chalk.dim(
           `Using account: '${chalk.whiteBright(userAccount.getId())}'\n`

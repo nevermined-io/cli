@@ -35,14 +35,14 @@ export const loadNevermined = async (
     
     const accounts = await nvm.accounts.list()
     logger.debug(`Accounts: ${accounts.length}`)
-    accounts.map((a) => logger.debug(`ACCOUNT ${a.getId()}`))
+    accounts.map((a) => logger.debug(`loadNevermined: Account - ${a.getId()}`))
 
-    // await nvm.keeper.loadCurveRoyaltiesInstance()
     if (!nvm.keeper) {
       logger.error(
         chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
       )
     }    
+    
     return nvm
   } catch (error) {
     logger.error(chalk.red(`ERROR: ${(error as Error).message}\n`))
@@ -150,7 +150,7 @@ export const findAccountOrFirst = (
 ): Account => {
   let account
   
-  accounts.map((a) => logger.info(`ACCOUNT ${a.getId()}`))
+  accounts.map((a) => logger.info(`Account found: ${a.getId()}`))
 
   if (ethers.isAddress(address)) {
     account = accounts.find(

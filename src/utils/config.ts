@@ -9,7 +9,7 @@ import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
 import { Wallet, Signer } from 'ethers'
-import { Web3Provider, makeAccounts } from '@nevermined-io/sdk'
+import { Account, Web3Provider, makeAccounts } from '@nevermined-io/sdk'
 import { getWalletFromJSON } from './utils'
 
 dotenv.config()
@@ -172,14 +172,14 @@ export async function getConfig(
   let signer: Signer
   let accounts: ethers.Wallet[] = []
   if (requiresAccount) {
-    if (!process.env.SEED_WORDS) {
-      signer = Wallet.fromEncryptedJsonSync(
-        process.env.KEYFILE_PATH!,
+    if (!process.env.SEED_WORDS) {      
+      const encryptedJson = fs.readFileSync(process.env.KEYFILE_PATH!, 'utf-8')
+
+      signer = Wallet.fromEncryptedJsonSync(      
+        encryptedJson,
         process.env.KEYFILE_PASSWORD!
       ) 
-      accounts.push(
-        getWalletFromJSON(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!) as Wallet
-      )
+      accounts.push(signer as ethers.Wallet)
     } else {
 
       signer = Wallet.fromPhrase(config.seed!)
