@@ -10,6 +10,7 @@ export interface ConfigEntry {
   signer: Signer
   envDescription?: string
   envUrl?: string
+  envName: string
   isProduction?: boolean
   networkId?: string
   networkName?: string

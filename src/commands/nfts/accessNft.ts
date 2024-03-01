@@ -1,4 +1,4 @@
-import { Account, Nevermined, NFTsBaseApi } from '@nevermined-io/sdk'
+import { Account, NFTsBaseApi, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -7,10 +7,10 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 
 export const accessNft = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   consumerAccount: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv
@@ -19,7 +19,7 @@ export const accessNft = async (
     chalk.dim(`Access & download NFT associated to ${chalk.whiteBright(did)}`)
   )
 
-  const ddo = await nvm.assets.resolve(did)  
+  const ddo = await nvmApp.sdk.assets.resolve(did)  
   const nftType = Number(argv.nftType)
 
   let isHolder = false
@@ -28,7 +28,7 @@ export const accessNft = async (
   try {
     nftAddress = NFTsBaseApi.getNFTContractAddress(ddo) as string  
   } catch {    
-    nftAddress = nvm.keeper.nftUpgradeable.address
+    nftAddress = nvmApp.sdk.keeper.nftUpgradeable.address
   }
   
   const seller = argv.seller ? argv.seller : ddo.proof.creator
@@ -47,14 +47,14 @@ export const accessNft = async (
 
   if (nftType === 721) {
 
-    const nft = await nvm.contracts.loadNft721(nftAddress)
+    const nft = await nvmApp.sdk.contracts.loadNft721(nftAddress)
     const balance = await nft.balanceOf(consumerAccount)
     isHolder = balance > 0n
 
   } else {
     logger.info(`Checking balance`)
     
-    const nftContract = await nvm.contracts.loadNft1155(nftAddress)
+    const nftContract = await nvmApp.sdk.contracts.loadNft1155(nftAddress)
 
     const balance = await nftContract.balance(ddo.shortId(), consumerAccount.getId())
     isHolder = balance > 0n
@@ -70,9 +70,9 @@ export const accessNft = async (
 
     let isSuccessfulTransfer = false
     if (nftType === 721)      
-      isSuccessfulTransfer = await nvm.nfts721.claim(agreementId, seller, consumerAccount.getId())      
+      isSuccessfulTransfer = await nvmApp.sdk.nfts721.claim(agreementId, seller, consumerAccount.getId())      
     else
-      isSuccessfulTransfer = await nvm.nfts1155.claim(agreementId, seller, consumerAccount.getId(), 1n)
+      isSuccessfulTransfer = await nvmApp.sdk.nfts1155.claim(agreementId, seller, consumerAccount.getId(), 1n)
     
       
     
@@ -88,7 +88,7 @@ export const accessNft = async (
 
   let isSuccessful = false 
   if (argv.nftType === 721)
-    isSuccessful = await nvm.nfts721.access(
+    isSuccessful = await nvmApp.sdk.nfts721.access(
       did,
       consumerAccount,
       destination,
@@ -97,7 +97,7 @@ export const accessNft = async (
     )
   else    {
     logger.debug(`Trying to access NFT-1155`)
-    isSuccessful = await nvm.nfts1155.access(
+    isSuccessful = await nvmApp.sdk.nfts1155.access(
       did,
       consumerAccount,
       destination,

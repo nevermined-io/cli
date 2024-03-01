@@ -1,4 +1,4 @@
-import { Account, DID, Nevermined } from '@nevermined-io/sdk'
+import { Account, DID, NvmApp } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
 import { StatusCodes } from '../../utils'
@@ -6,10 +6,10 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 import chalk from 'chalk'
 
 export const decodeDID = async (
-  nvm: Nevermined,
-  account: Account,
+  _nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
 

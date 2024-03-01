@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -10,10 +10,10 @@ import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const burnNft = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   burnerAccount: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { verbose, did, nftType} = argv
@@ -26,19 +26,19 @@ export const burnNft = async (
     chalk.dim(`Using Account: ${chalk.whiteBright(burnerAccount.getId())}`)
   )
 
-  const ddo = await nvm.assets.resolve(did)
+  const ddo = await nvmApp.sdk.assets.resolve(did)
 
   if (nftType == 721) {
     // Burning NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.address
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvmApp.sdk.nfts721.getContract.address
 
-    await nvm.contracts.loadNft721(nftAddress)
+    await nvmApp.sdk.contracts.loadNft721(nftAddress)
 
     if (verbose) {
-      await printNftTokenBanner(nvm.nfts721.getContract)
+      await printNftTokenBanner(nvmApp.sdk.nfts721.getContract)
     }
-    await nvm.nfts721.burn(tokenId, burnerAccount)
+    await nvmApp.sdk.nfts721.burn(tokenId, burnerAccount)
 
     logger.info(
       chalk.dim(`Burned NFT (ERC-721) with tokenId: ${chalk.whiteBright(tokenId)} `)
@@ -53,8 +53,8 @@ export const burnNft = async (
       }
     }
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.address
-    const nft = await nvm.contracts.loadNft1155(nftAddress)
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvmApp.sdk.nfts1155.getContract.address
+    const nft = await nvmApp.sdk.contracts.loadNft1155(nftAddress)
 
     await nft.burn(tokenId, BigInt(argv.amount), burnerAccount)
     

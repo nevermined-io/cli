@@ -1,4 +1,4 @@
-import { Account, ConditionState, Nevermined } from '@nevermined-io/sdk'
+import { Account, ConditionState, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -6,10 +6,10 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const listAgreements = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv
@@ -17,9 +17,9 @@ export const listAgreements = async (
   logger.info(
     chalk.dim(`Loading agreements for DID: '${chalk.whiteBright(did)}'\n`)
   )
-  const ddo = await nvm.assets.resolve(did)
+  const ddo = await nvmApp.sdk.assets.resolve(did)
 
-  const agreements = await nvm.agreements.getAgreements(ddo.shortId())
+  const agreements = await nvmApp.sdk.agreements.getAgreements(ddo.shortId())
 
   if (agreements.length === 0) {
     logger.info(chalk.dim(`No agreements for '${chalk.whiteBright(ddo.id)}'!`))
@@ -27,8 +27,8 @@ export const listAgreements = async (
 
   for (const agreement of agreements) {
     try {
-      const status = await nvm.agreements.status(agreement.agreementId, true)
-      const contractName = await nvm.keeper.getTemplateByAddress(agreement.templateId).contractName
+      const status = await nvmApp.sdk.agreements.status(agreement.agreementId, true)
+      const contractName = await nvmApp.sdk.keeper.getTemplateByAddress(agreement.templateId).contractName
 
       logger.info(
         chalk.dim(

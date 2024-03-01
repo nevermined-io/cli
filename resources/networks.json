@@ -1,75 +1,7 @@
-{
-	"mumbai": {
-		"envDescription": "Public testnet environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://nevermined.io/",
-		"isProduction": false,
-		"nvm": {
-			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
-			"marketplaceUri": "https://marketplace-api.mumbai.public.nevermined.network",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://node.mumbai.public.nevermined.network",
-			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
-			"verbose": true
-		},
-		"nativeToken": "MATIC",
-		"networkId": "80001",
-		"networkName": "mumbai",
-		"contractsVersion": "3.5.4",
-		"tagName": "public",
-		"etherscanUrl": "https://mumbai.polygonscan.com",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": true
-	},
-	"matic": {
-		"envDescription": "The Polygon production environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://nevermined.io/",
-		"isProduction": true,
-		"nvm": {
-			"web3ProviderUri": "https://polygon-rpc.com",
-			"marketplaceUri": "https://marketplace-api.matic.public.nevermined.network",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://node.matic.public.nevermined.network",
-			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
-			"verbose": true
-		},
-		"nativeToken": "MATIC",
-		"networkId": "137",
-		"networkName": "matic",
-		"contractsVersion": "2.1.0",
-		"tagName": "public",
-		"etherscanUrl": "https://polygonscan.com",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": true
-	},		
-	"goerli": {
-		"envDescription": "The Ethereum testnet environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://goerli.net/",
-		"isProduction": false,
-		"nvm": {
-			"web3ProviderUri": "",
-			"marketplaceUri": "https://marketplace-api.goerli.public.nevermined.rocks",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://node.goerli.public.nevermined.rocks",
-			"neverminedNodeAddress": "0xB82dc620BB4dE6712376055a5cfc0DF11112D442",
-			"verbose": true
-		},
-		"nativeToken": "ETH",
-		"networkId": "5",
-		"networkName": "goerli",
-		"contractsVersion": "2.1.0",
-		"tagName": "public",
-		"etherscanUrl": "https://goerli.etherscan.io",
-		"erc20TokenAddress": "0xe11A86849d99F524cAC3E7A0Ec1241828e332C62",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": true
-	},	
+{			
 	"geth-localnet": {
 		"envDescription": "This environment is used for local development. If you want to have a fully functional environment running on your computer, please visit https://github.com/nevermined-io/tools/",
+		"envName": "Local",
 		"isProduction": false,
 		"nvm": {
 			"web3ProviderUri": "http://contracts.nevermined.localnet",
@@ -91,6 +23,7 @@
 	"appStaging": {
 		"envDescription": "Nevermined One internal environment where Nevermined developers can integrate new versions of the application.",
 		"envUrl": "https://staging.nevermined.app/",
+		"envName": "Staging",
 		"isProduction": false,
 		"nvm": {
 			"web3ProviderUri": "https://sepolia-rollup.arbitrum.io/rpc",
@@ -114,6 +47,7 @@
 	"appMumbai": {
 		"envDescription": "Nevermined One testnet environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://mumbai.nevermined.app/",
+		"envName": "Mumbai",
 		"isProduction": false,
 		"nvm": {
 			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
@@ -126,7 +60,7 @@
 		"nativeToken": "MATIC",
 		"networkId": "80001",
 		"networkName": "mumbai",
-		"contractsVersion": "3.4.0",
+		"contractsVersion": "3.5.6",
 		"tagName": "public",
 		"etherscanUrl": "https://mumbai.polygonscan.com",
 		"erc20TokenAddress": "0x2058a9d7613eee744279e3856ef0eada5fcbaa7e",
@@ -137,6 +71,7 @@
 	"appMatic": {
 		"envDescription": "The Polygon production environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://matic.nevermined.app/",
+		"envName": "Matic",
 		"isProduction": true,
 		"nvm": {
 			"web3ProviderUri": "https://polygon-rpc.com",
@@ -149,7 +84,7 @@
 		"nativeToken": "MATIC",
 		"networkId": "137",
 		"networkName": "matic",
-		"contractsVersion": "3.5.4",
+		"contractsVersion": "3.5.6",
 		"tagName": "public",
 		"etherscanUrl": "https://polygonscan.com",
 		"erc20TokenAddress": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
@@ -160,6 +95,7 @@
 	"appTesting": {
 		"envDescription": "Nevermined App (Arbitrum Sepolia) testnet environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://testing.nevermined.app/",
+		"envName": "Testing",
 		"isProduction": false,
 		"nvm": {
 			"web3ProviderUri": "https://sepolia-rollup.arbitrum.io/rpc",
@@ -183,6 +119,7 @@
 	"appArbitrum": {
 		"envDescription": "The Arbitrum One production environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://nevermined.app/",
+		"envName": "Live",
 		"isProduction": true,
 		"nvm": {
 			"web3ProviderUri": "https://arb1.arbitrum.io/rpc",
@@ -206,6 +143,7 @@
 	"appGnosis": {
 		"envDescription": "The Gnosis production environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://gnosis.nevermined.app/",
+		"envName": "Gnosis",
 		"isProduction": true,
 		"nvm": {
 			"web3ProviderUri": "https://rpc.gnosischain.com/",
@@ -222,29 +160,6 @@
 		"tagName": "public",
 		"etherscanUrl": "https://gnosisscan.io",
 		"erc20TokenAddress": "0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83",
-		"gasMultiplier": 0,
-		"gasPriceMultiplier": 0,
-		"externalNetwork": true
-	},				
-	"appChiado": {
-		"envDescription": "Nevermined App Chiado (Gnosis) testnet environment where users can interact with Nevermined protocol.",
-		"envUrl": "https://chiado.nevermined.app/",
-		"isProduction": false,
-		"nvm": {
-			"web3ProviderUri": "https://rpc.chiadochain.net",
-			"marketplaceUri": "https://marketplace-api.chiado.nevermined.app",
-			"graphHttpUri": "",
-			"neverminedNodeUri": "https://node.chiado.nevermined.app",
-			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
-			"verbose": true
-		},
-		"nativeToken": "xDAI",
-		"networkId": "10200",
-		"networkName": "chiado",
-		"contractsVersion": "3.2.1",
-		"tagName": "public",
-		"etherscanUrl": "https://blockscout.chiadochain.net",
-		"erc20TokenAddress": "0x1bcA156f746C6Eb8b18d61654293e2Fc5b653fF5",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true

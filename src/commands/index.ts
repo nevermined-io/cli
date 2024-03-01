@@ -11,7 +11,7 @@ export * from './assets/getAssetProviders'
 export * from './assets/grantAssetProvider'
 export * from './assets/revokeAssetProvider'
 
-// nfts (ERC-721 & ERC-1155)
+// // nfts (ERC-721 & ERC-1155)
 export * from './nfts/cloneNft'
 export * from './nfts/deployNft'
 export * from './nfts/createNft'
@@ -27,7 +27,7 @@ export * from './nfts/downloadNft'
 export * from './nfts/accessNft'
 export * from './nfts/getJWT'
 
-// accounts
+// // accounts
 export * from './accounts/new'
 export * from './accounts/list'
 export * from './accounts/fund'

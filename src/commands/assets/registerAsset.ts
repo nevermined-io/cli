@@ -1,4 +1,4 @@
-import { Account, AssetPrice, AssetAttributes, Nevermined, MetaData, MetaDataMain, zeroX, MetaDataExternalResource, ServiceType, NFTAttributes, NeverminedNFT721Type, PublishMetadataOptions, ServiceAttributes, generateInstantiableConfigFromConfig } from '@nevermined-io/sdk'
+import { Account, AssetPrice, AssetAttributes, MetaData, MetaDataMain, zeroX, MetaDataExternalResource, ServiceType, NFTAttributes, NeverminedNFT721Type, PublishMetadataOptions, ServiceAttributes, generateInstantiableConfigFromConfig, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printTokenBanner,
@@ -15,27 +15,31 @@ import { Dtp } from '@nevermined-io/sdk-dtp'
 import { ethers } from 'ethers'
 
 export const registerAsset = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { verbose, metadata, assetType } = argv
-  const token = nvm.keeper.token
+  const token = nvmApp.sdk.keeper.token
   
   console.log(`We use the account ${account.getId()}`)
-  const instanceConfig = {
-    ...(await generateInstantiableConfigFromConfig(config.nvm)),
-    nevermined: nvm,
-  }
-  const dtp = await Dtp.getInstance(instanceConfig, null as any)
-  
+
+  let dtp: Dtp = undefined  
+
   const isDTP = argv.password ? true : false
-  const password = argv.password ? Buffer.from(argv.password).toString('hex') : ''
-  if (verbose) {
-    printTokenBanner(token)
+  if (isDTP) {
+    logger.info(`Is a DTP asset`)
+    const instanceConfig = {
+      ...(await generateInstantiableConfigFromConfig(config.nvm)),
+      nevermined: nvmApp.sdk,
+    }
+    dtp = await Dtp.getInstance(instanceConfig, null as any)
   }
+
+  const password = argv.password ? Buffer.from(argv.password).toString('hex') : ''
+  if (verbose) await printTokenBanner(token)
 
   logger.info(chalk.dim(`Registering asset (${assetType}) ...`))
 
@@ -101,7 +105,7 @@ export const registerAsset = async (
       } as MetaDataMain
     }    
     if (isDTP) {
-      const nodeInfo = await nvm.services.node.getNeverminedNodeInfo()
+      const nodeInfo = await nvmApp.sdk.services.node.getNeverminedNodeInfo()
       const providerKey = nodeInfo['babyjub-public-key']
       
       ddoMetadata.additionalInformation = {
@@ -188,6 +192,7 @@ export const registerAsset = async (
   }
 
   let ddo
+  
   if (serviceTypes.includes('nft-access'))  {
     const nftType = Number(argv.nftType) === 721 ? 721 : 1155
     logger.info(chalk.dim(`\nNFT [${nftType}] ...`))
@@ -205,7 +210,7 @@ export const registerAsset = async (
 
       if (nftType === 721) {
     
-        const nft721Api = await nvm.contracts.loadNft721(argv.subscriptionNFT)
+        const nft721Api = await nvmApp.sdk.contracts.loadNft721(argv.subscriptionNFT)
 
         const nftAttributes = NFTAttributes.getNFT721Instance({
           metadata: ddoMetadata,
@@ -219,7 +224,7 @@ export const registerAsset = async (
 
       } else {
 
-        const nft1155Api = await nvm.contracts.loadNft1155(argv.subscriptionNFT)
+        const nft1155Api = await nvmApp.sdk.contracts.loadNft1155(argv.subscriptionNFT)
 
         const nftAttributes = NFTAttributes.getNFT1155Instance({
           metadata: ddoMetadata,
@@ -242,7 +247,8 @@ export const registerAsset = async (
       providers: [config.nvm.neverminedNodeAddress!]
     })
   
-    ddo = await nvm.assets.create(
+    logger.debug(`Calling the Nevermined SDK to create the asset...`)
+    ddo = await nvmApp.sdk.assets.create(
       assetAttributes,
       account,
       { metadata: publishMetadata }
@@ -250,7 +256,7 @@ export const registerAsset = async (
   }
 
 
-  const register = (await nvm.keeper.didRegistry.getDIDRegister(
+  const register = (await nvmApp.sdk.keeper.didRegistry.getDIDRegister(
     zeroX(ddo.shortId())
   )) as {
     owner: string

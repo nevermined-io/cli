@@ -7,12 +7,11 @@ import {
   getConfig,
   getDefaultLoggerConfig,
   getJsonLoggerConfig,
-  loadNevermined,
   logger,
   loginMarketplaceApi,
   configureLocalEnvironment,
-  loadAccountFromSeedWords,
-  loadToken
+  loadToken,
+  loadNeverminedApp
 } from '../src/utils'
 import { StatusCodes } from './utils/enums'
 import { configure, addLayout } from 'log4js'
@@ -20,7 +19,7 @@ import { ExecutionOutput } from './models/ExecutionOutput'
 import fs from 'fs'
 import * as CliCommands from './commands'
 import { CLICommandsDefinition } from './models/CLICommandsDefinition'
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { ConfigEntry } from './models/ConfigDefinition'
 type CliCommands = typeof CliCommands
 
@@ -33,7 +32,7 @@ const cmdHandler = async (
   let { verbose, network, accountIndex } = argv
 
   let config: ConfigEntry
-  let nvm: Nevermined
+  let nvmApp: NvmApp
   let userAccount: Account
 
   if (process.env.NETWORK) network = process.env.NETWORK
@@ -84,12 +83,13 @@ const cmdHandler = async (
   )
 
   try {
-    if (requiresAccount) {
-      nvm = await loadNevermined(config, network, verbose)
-      
-      if (!nvm.keeper) process.exit(StatusCodes.FAILED_TO_CONNECT)
+    nvmApp = await loadNeverminedApp(config, network, requiresAccount, verbose)
 
-      const networkId = await nvm.keeper.getNetworkId()
+    if (requiresAccount) {
+        
+      if (!nvmApp.isWeb3Connected()) process.exit(StatusCodes.FAILED_TO_CONNECT)
+
+      const networkId = await nvmApp.sdk.keeper.getNetworkId()
       
       if (networkId !== Number(config.networkId)) {
         logger.warn(chalk.red(`\nWARNING: Network connectivity issue`))
@@ -105,8 +105,8 @@ const cmdHandler = async (
           `Connected to Network:'${networkId}'\n`
         )
       )
-      userAccount = await nvm.accounts.list().then(accounts => accounts[accountIndex])
-
+      userAccount = await nvmApp.sdk.accounts.list().then(accounts => accounts[accountIndex])
+      
       if (!userAccount || !userAccount.getId()) {
         throw new Error(
           `Error loading account from the wallet. Please check if the account exists in the wallet.`
@@ -117,9 +117,9 @@ const cmdHandler = async (
           `Using account: '${chalk.whiteBright(userAccount.getId())}'\n`
         )
       )
-      const token = await loadToken(nvm, config, argv.verbose)
+      const token = await loadToken(nvmApp.sdk, config, argv.verbose)
       if (token)  {
-        nvm.keeper.token = token
+        nvmApp.sdk.keeper.token = token
       }
         
       logger.debug(
@@ -128,7 +128,7 @@ const cmdHandler = async (
         )
       )
       
-      await loginMarketplaceApi(nvm, userAccount)
+      await loginMarketplaceApi(nvmApp.sdk, userAccount)
     }
   } catch (err) {
     logger.error(`Error Connecting to Nevermined: ${(err as Error).message}`)
@@ -136,8 +136,8 @@ const cmdHandler = async (
   }
   
   try {
-    const executionOutput: ExecutionOutput = await CliCommands[cmd](
-      nvm!,
+    const executionOutput: ExecutionOutput = await CliCommands[cmd](      
+      nvmApp!,
       userAccount!,
       argv,
       config,

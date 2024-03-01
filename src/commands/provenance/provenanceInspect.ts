@@ -1,4 +1,4 @@
-import { Account, Nevermined, jsonReplacer } from '@nevermined-io/sdk'
+import { Account, NvmApp, jsonReplacer } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { printProvenanceEntry } from '../../utils/utils'
@@ -7,10 +7,10 @@ import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const provenanceInspect = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { provenanceId } = argv
@@ -21,7 +21,7 @@ export const provenanceInspect = async (
     )
   )
 
-  const provenance = await nvm.provenance.getProvenanceEntry(provenanceId)
+  const provenance = await nvmApp.sdk.provenance.getProvenanceEntry(provenanceId)
   printProvenanceEntry(provenanceId, provenance, logger)
 
   return {

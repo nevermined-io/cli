@@ -1,4 +1,4 @@
-import { Account, Nevermined, zeroX } from '@nevermined-io/sdk'
+import { Account, NvmApp, zeroX } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -11,10 +11,10 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 import { FunctionFragment, ethers } from 'ethers'
 
 export const mintNft = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   minterAccount: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { verbose, did, uri } = argv
@@ -27,8 +27,8 @@ export const mintNft = async (
     chalk.dim(`Using Minter: ${chalk.whiteBright(minterAccount.getId())}`)
   )
 
-  const ddo = await nvm.assets.resolve(did)
-  const register = (await nvm.keeper.didRegistry.getDIDRegister(
+  const ddo = await nvmApp.sdk.assets.resolve(did)
+  const register = (await nvmApp.sdk.keeper.didRegistry.getDIDRegister(
     zeroX(ddo.shortId())
   )) as {
     owner: string
@@ -49,9 +49,9 @@ export const mintNft = async (
   if (nftType === 721) {
     // Minting NFT (ERC-721)
 
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.address
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvmApp.sdk.nfts721.getContract.address
 
-    const nft = await nvm.contracts.loadNft721(nftAddress)
+    const nft = await nvmApp.sdk.contracts.loadNft721(nftAddress)
     if (verbose) {
       await printNftTokenBanner(nft.getContract)
     }
@@ -83,16 +83,16 @@ export const mintNft = async (
     )
   } else {
     // Minting NFT (ERC-1155)
-
+    
     if (argv.amount < 1 || argv.amount > register.mintCap) {
       return {
         status: StatusCodes.ERROR,
         errorMessage: `Invalid number of ERC-1155 NFTs to mint. It should be >=1 and < cap`
       }
     }
-
-    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.address
-    const nft = await nvm.contracts.loadNft1155(nftAddress)
+    
+    const nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvmApp.sdk.nfts1155.getContract.address
+    const nft = await nvmApp.sdk.contracts.loadNft1155(nftAddress)
 
     await nft.mint(did, BigInt(argv.amount), receiver, minterAccount)
     

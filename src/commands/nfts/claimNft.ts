@@ -1,4 +1,4 @@
-import { Account, DDO, Nevermined, formatUnits } from '@nevermined-io/sdk'
+import { Account, DDO, NvmApp, formatUnits } from '@nevermined-io/sdk'
 import { Constants, StatusCodes, loadToken, getNFTAddressFromInput } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -6,7 +6,7 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const claimNft = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   userAccount: Account,
   argv: any,
   config: ConfigEntry,
@@ -16,7 +16,7 @@ export const claimNft = async (
 
   const nftType = Number(argv.nftType)
   
-  const token = await loadToken(nvm, config, verbose)
+  const token = await loadToken(nvmApp.sdk, config, verbose)
 
   logger.info(
     chalk.dim(`Claiming NFT order by agreement: '${chalk.whiteBright(agreementId)}'`)
@@ -24,7 +24,7 @@ export const claimNft = async (
 
   let agreementData
   try {
-    agreementData = await nvm.keeper.agreementStoreManager.getAgreement(
+    agreementData = await nvmApp.sdk.keeper.agreementStoreManager.getAgreement(
       agreementId
     )
     logger.trace(`Agreement Data = ${JSON.stringify(agreementData)}`)
@@ -42,11 +42,11 @@ export const claimNft = async (
     )
   )
 
-  await nvm.keeper.conditionStoreManager.getCondition(
+  await nvmApp.sdk.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
   )
 
-  const conditionData = await nvm.keeper.conditionStoreManager.getCondition(
+  const conditionData = await nvmApp.sdk.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
   )
   logger.debug(
@@ -55,7 +55,7 @@ export const claimNft = async (
     )
   )
 
-  const ddo = await nvm.assets.resolve(agreementData.did)  
+  const ddo = await nvmApp.sdk.assets.resolve(agreementData.did)  
   const buyerAddress = argv.buyerAddress ? argv.buyerAddress : userAccount.getId()
   const sellerAddress = argv.sellerAddress ? argv.sellerAddress : ddo.proof.creator
 
@@ -89,14 +89,14 @@ export const claimNft = async (
     let nftAddress
     try {
       nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales')
-      await nvm.contracts.loadNft721(nftAddress!)
+      await nvmApp.sdk.contracts.loadNft721(nftAddress!)
     } catch {
       return {
         status: StatusCodes.ERROR,
         errorMessage: `No NFT Contract Address found`
       }
     }    
-    isSuccessfulTransfer = await nvm.nfts721.claim(
+    isSuccessfulTransfer = await nvmApp.sdk.nfts721.claim(
       agreementId,
       sellerAddress,
       buyerAddress
@@ -109,7 +109,7 @@ export const claimNft = async (
         `Claiming NFT (ERC-1155) '${chalk.whiteBright(ddo.id)}' ...`
       )
     )
-    isSuccessfulTransfer = await nvm.nfts1155.claim(
+    isSuccessfulTransfer = await nvmApp.sdk.nfts1155.claim(
       agreementId,
       sellerAddress,
       buyerAddress,

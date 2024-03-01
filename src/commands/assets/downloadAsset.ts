@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
@@ -12,10 +12,10 @@ readline.createInterface({
 })
 
 export const downloadAsset = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv
@@ -28,7 +28,7 @@ export const downloadAsset = async (
     argv.destination :
     `${argv.destination}/`
 
-  const path = await nvm.assets.download(
+  const path = await nvmApp.sdk.assets.download(
     did,
     account,
     destination,

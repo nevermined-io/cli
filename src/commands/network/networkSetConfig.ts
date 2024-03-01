@@ -1,6 +1,6 @@
 import { StatusCodes } from '../../utils'
 import { Logger } from 'log4js'
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
@@ -8,10 +8,10 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 type GovernanceParams = 'fees' | 'governor'
 
 export const networkSetConfig = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   account: Account,
   argv: any,
-  configEntry: ConfigEntry,
+  _configEntry: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { network } = argv
@@ -37,7 +37,7 @@ export const networkSetConfig = async (
   }
 
   try {
-    const isGovernor = await nvm.keeper.nvmConfig.isGovernor(account.getId())
+    const isGovernor = await nvmApp.sdk.keeper.nvmConfig.isGovernor(account.getId())
     if (!isGovernor) {
       const errorMessage = `The account you are using is not a Governor of the network: ${account.getId()}`
       return {
@@ -61,7 +61,7 @@ export const networkSetConfig = async (
         `Setting up Fees ... with values ${JSON.stringify(functionParams)}`
       )
       try {
-        await nvm.keeper.nvmConfig.setNetworkFees(
+        await nvmApp.sdk.keeper.nvmConfig.setNetworkFees(
           functionParams[0],
           functionParams[1],
           account
@@ -77,7 +77,7 @@ export const networkSetConfig = async (
     } else if (_param === 'governor') {
       logger.info(`Setting up a new Governor ${argv.newValue}`)
       try {
-        await nvm.keeper.nvmConfig.setGovernor(argv.newValue, account)
+        await nvmApp.sdk.keeper.nvmConfig.setGovernor(argv.newValue, account)
       } catch (error) {
         const errorMessage = `Unable to modify 'governor' parameter: ${error}`
         logger.error(errorMessage)

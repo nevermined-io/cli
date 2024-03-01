@@ -1,4 +1,4 @@
-import { Account, generateInstantiableConfigFromConfig, Nevermined } from '@nevermined-io/sdk'
+import { Account, generateInstantiableConfigFromConfig, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
@@ -13,7 +13,7 @@ readline.createInterface({
 })
 
 export const getAsset = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   account: Account,
   argv: any,
   config: ConfigEntry,
@@ -23,29 +23,30 @@ export const getAsset = async (
 
   let agreementId
 
-  const ddo = await nvm.assets.resolve(did)
+  const ddo = await nvmApp.sdk.assets.resolve(did)
   const metadata = ddo.findServiceByType('metadata')
 
   const isDTP = metadata.attributes.main.files?.some( _f => _f.encryption === 'dtp')
 
   const instanceConfig = {    
     ...(await generateInstantiableConfigFromConfig(config.nvm)),
-    nevermined: nvm,
+    nevermined: nvmApp.sdk,
   }
 
-  const nodeInfo = await nvm.services.node.getNeverminedNodeInfo()
+  const nodeInfo = await nvmApp.sdk.services.node.getNeverminedNodeInfo()
   const cryptoConfig: CryptoConfig = {
     provider_key: '',
     provider_password: '',
     provider_rsa_public: nodeInfo['rsa-public-key'],
     provider_rsa_private: ''
   }
-  const dtp = await Dtp.getInstance(instanceConfig, cryptoConfig)
+  let dtp: Dtp = undefined
   const serviceReference = argv.serviceIndex ? argv.serviceIndex : 'access'
 
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
   if (isDTP) {
     logger.info(`Is a DTP asset`)
+    dtp = await Dtp.getInstance(instanceConfig, cryptoConfig)
     const babyAccount = await dtp.babyjubAccount(argv.password)
     account.babySecret = babyAccount.babySecret
     account.babyX = babyAccount.babyX
@@ -54,7 +55,7 @@ export const getAsset = async (
 
   if (!argv.agreementId) {
     logger.info(chalk.dim(`Ordering asset: ${did}`))    
-    agreementId = await nvm.assets.order(did, serviceReference, account)
+    agreementId = await nvmApp.sdk.assets.order(did, serviceReference, account)
   } else {
     agreementId = argv.agreementId
   }
@@ -76,7 +77,7 @@ export const getAsset = async (
     argv.destination :
     `${argv.destination}/`
 
-  const path = await nvm.assets.access(
+  const path = await nvmApp.sdk.assets.access(
     agreementId,
     did,
     serviceReference,

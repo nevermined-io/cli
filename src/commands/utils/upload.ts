@@ -1,4 +1,4 @@
-import { Account, Nevermined, NodeUploadBackends } from '@nevermined-io/sdk'
+import { Account, NodeUploadBackends, NvmApp } from '@nevermined-io/sdk'
 import fs from 'fs'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { StatusCodes } from '../../utils'
@@ -7,11 +7,11 @@ import { Logger } from 'log4js'
 import chalk from 'chalk'
 
 export const uploadFile = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger  
 ): Promise<ExecutionOutput> => {
   const { file, encrypt } = argv
@@ -29,7 +29,7 @@ export const uploadFile = async (
   try {
     const buffer = fs.readFileSync(file)
 
-    const { url, password } = await nvm.services.node.uploadContent(buffer.toString('utf8'), encrypt, uploadBackend)
+    const { url, password } = await nvmApp.sdk.services.node.uploadContent(buffer.toString('utf8'), encrypt, uploadBackend)
     logger.info(`File uploaded to URL: ${url}`)
     if (password) {
       logger.info(`Password: ${password}`)

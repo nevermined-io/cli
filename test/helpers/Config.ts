@@ -2,7 +2,7 @@ import { generateId, makeAccounts } from '@nevermined-io/sdk'
 import { ethers } from 'ethers'
 
 const NETWORK = process.env.NETWORK || 'geth-localnet'
-const BASE_COMMAND = `yarn start -n ${NETWORK}`
+const BASE_COMMAND = `yarn dev -n ${NETWORK}`
 const VERBOSE = '-v'
 
 export const metadataConfig = {

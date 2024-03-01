@@ -1933,7 +1933,419 @@
 				}],
 				"optionalArguments": []
 			}]
-		}
+		}, {
+			"name": "app",
+			"description": "Interacts with the Nevermined App",
+			"usage": "usage: $0 app <command> parameters [options]",
+			"subcommands": [{
+				"name": "create-time-plan",
+				"description": "Registers a new Time Plan",
+				"details": "This command registers a new Time based plan on the Nevermined App. This plan will be used to allow users to access to some exclusive contents for a period of time.",
+				"examples": ["ncli app create-time-plan --name 'One Month Premium Plan' --author 'John Doe' --duration 1 --period months --price 1 "],
+				"commandHandler": "createPlan",
+				"positionalArguments": [],
+				"optionalArguments": [{
+						"name": "name",
+						"type": "string",
+						"default": "",
+						"description": "The plan name"
+					}, {
+						"name": "author",
+						"type": "string",
+						"default": "",
+						"description": "The author of the file/s"
+					},
+					{
+						"name": "duration",
+						"type": "number",
+						"demand": true,
+						"default": "0",
+						"description": "The duration of the subscription. This attribute must be configured with the period attribute"
+					},
+					{
+						"name": "period",
+						"type": "string",
+						"demand": true,
+						"default": "forever",
+						"description": "The duration of the subscription. This attribute must be configured with the duration attribute"
+					},
+					{
+						"name": "tag",
+						"type": "array",
+						"demandOption": false,
+						"description": "Tag"
+					},
+					{
+						"name": "coverImage",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Url to the cover image of the plan"
+					},						
+					{
+						"name": "price",
+						"type": "number",
+						"demand": true,
+						"description": "The plan price"
+					}, {
+						"name": "token",
+						"type": "string",
+						"default": "",
+						"description": "The address of the token to be used to pay for the plan. If the zero address is given native token will be used."
+					}
+				]
+			}, {
+				"name": "create-credits-plan",
+				"description": "Registers a new Credits Plan",
+				"details": "This command registers a new Credits based plan on the Nevermined App. This plan will be used to allow users to access to some exclusive contents while the user has credits.",
+				"examples": ["ncli app create-credits-plan --name 'AI Premium Plan' --author 'John Doe' --credits 100 --price 1"],
+				"commandHandler": "createPlan",
+				"positionalArguments": [],
+				"optionalArguments": [{
+						"name": "name",
+						"type": "string",
+						"default": "",
+						"description": "The plan name"
+					}, {
+						"name": "author",
+						"type": "string",
+						"default": "",
+						"description": "The author of the file/s"
+					},
+					{
+						"name": "credits",
+						"type": "number",
+						"demand": true,
+						"default": "0",
+						"description": "Number of credits included as part of the plan"
+					},
+					{
+						"name": "period",
+						"type": "string",
+						"demand": true,
+						"default": "forever",
+						"description": "The duration of the subscription. This attribute must be configured with the duration attribute"
+					},
+					{
+						"name": "tag",
+						"type": "array",
+						"demandOption": false,
+						"description": "Tag"
+					},
+					{
+						"name": "coverImage",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Url to the cover image of the plan"
+					},						
+					{
+						"name": "price",
+						"type": "number",
+						"demand": true,
+						"description": "The plan price"
+					}, {
+						"name": "token",
+						"type": "string",
+						"default": "",
+						"description": "The address of the token to be used to pay for the plan. If the zero address is given native token will be used."
+					}
+				]
+			}, {
+				"name": "show-plan [did]",
+				"description": "Retrieves information about a Plan",
+				"details": "For a given DID this command displays information about the plan ",
+				"examples": ["ncli app show-plan did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "showPlan",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID associated with the NFT (tokenId)"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "balance [did]",
+				"description": "It gets the balance of a user for a specific plan",
+				"details": "This command allows to check if a user is a subscriber of a specific plan",
+				"examples": ["ncli app balance did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "balancePlan",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}],
+				"optionalArguments": [{
+						"name": "address",
+						"type": "string",
+						"default": "",
+						"description": "The address of the account to get the balance"
+					}
+				]
+			}, {
+				"name": "register-agent [subscriptionDid]",
+				"description": "Registers a new AI Agent/Service in the Nevermined App",
+				"details": "This command allows to register a new AI Agent/Service in the Nevermined App. This will allow to offer that service to the Nevermined ecosystem.",
+				"examples": ["ncli app register-agent did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --name 'My AI Agent'"],
+				"commandHandler": "registerAgent",
+				"positionalArguments": [{
+					"name": "subscriptionDid",
+					"type": "string",
+					"description": "The DID of the subscription"
+				}],
+				"optionalArguments": [{
+						"name": "name",
+						"type": "string",
+						"default": "",
+						"demand":true,
+						"description": "The name of the agent"
+					}, {
+						"name": "description",
+						"type": "string",
+						"default": "",
+						"description": "The description of the agent"
+					},
+					{
+						"name": "tag",
+						"type": "array",
+						"demandOption": false,
+						"description": "Tag"
+					},
+					{
+						"name": "coverImage",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Url to the cover image of the plan"
+					},
+					{
+						"name": "openApiUrl",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "OpenAPI full URL with description of the service"
+					},
+					{
+						"name": "endpoint",
+						"type": "array",
+						"demandOption": true,
+						"description": "Endpoint where the agent is available. The format is method|url. Example: --endpoint GET|http://example.com/get/(.*)"
+					}]
+			}, {
+				"name": "register-agent [subscriptionDid]",
+				"description": "Registers a new AI Agent/Service in the Nevermined App",
+				"details": "This command allows to register a new AI Agent/Service in the Nevermined App. This will allow to offer that service to the Nevermined ecosystem.",
+				"examples": ["ncli app register-agent did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --name 'My AI Agent'"],
+				"commandHandler": "registerAgent",
+				"positionalArguments": [{
+					"name": "subscriptionDid",
+					"type": "string",
+					"description": "The DID of the subscription"
+				}],
+				"optionalArguments": [{
+						"name": "name",
+						"type": "string",
+						"default": "",
+						"demand":true,
+						"description": "The name of the agent"
+					}, {
+						"name": "description",
+						"type": "string",
+						"default": "",
+						"description": "The description of the agent"
+					},
+					{
+						"name": "tag",
+						"type": "array",
+						"demandOption": false,
+						"description": "Tag"
+					},
+					{
+						"name": "coverImage",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Url to the cover image of the plan"
+					},
+					{
+						"name": "openApiUrl",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "OpenAPI full URL with description of the service"
+					},
+					{
+						"name": "authType",
+						"type": "string",
+						"demandOption": false,
+						"default": "none",
+						"description": "Type of authentication required to access the service. Possible values are: none, basic, bearer"
+					},
+					{
+						"name": "credentials",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Authentication credentials to access the service. If authType is basic, the format is username:password. If authType is bearer, the format is the access token"
+					},										
+					{
+						"name": "endpoint",
+						"type": "array",
+						"demandOption": true,
+						"description": "Endpoint where the agent is available. The format is method|url. Example: --endpoint GET|http://example.com/get/(.*)"
+					},
+					{
+						"name": "dynamicCost",
+						"type": "boolean",
+						"demandOption": false,
+						"default": false,
+						"description": "Indicates if the agent has dynamic cost"
+					}, 
+					{
+						"name": "cost",
+						"type": "number",
+						"demandOption": true,
+						"default": "1",
+						"description": "The cost in credits of using the service"
+					}, 
+					{
+						"name": "maxCost",
+						"type": "number",
+						"demandOption": false,						
+						"description": "The capped cost in credits of using the service. This parameter is only used if dynamicCost is true"
+					}
 
+				]
+			}, {
+				"name": "register-files [subscriptionDid]",
+				"description": "Registers file assests in the Nevermined App",
+				"details": "This command allows to register new file assets (datasets, models, algorithmls, etc) in the Nevermined App. This will allow the download of them the Nevermined ecosystem.",
+				"examples": ["ncli app register-files did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --name 'My Model' "],
+				"commandHandler": "registerAgent",
+				"positionalArguments": [{
+					"name": "subscriptionDid",
+					"type": "string",
+					"description": "The DID of the subscription"
+				}],
+				"optionalArguments": [{
+						"name": "name",
+						"type": "string",
+						"default": "",
+						"demand":true,
+						"description": "The name of the agent"
+					}, {
+						"name": "description",
+						"type": "string",
+						"default": "",
+						"description": "The description of the agent"
+					},
+					{
+						"name": "tag",
+						"type": "array",
+						"demandOption": false,
+						"description": "Tag"
+					},
+					{
+						"name": "coverImage",
+						"type": "string",
+						"demandOption": false,
+						"default": "",
+						"description": "Url to the cover image of the plan"
+					},
+					{
+						"name": "url",
+						"type": "array",
+						"demandOption": true,
+						"description": "The full URL where the file is available."
+					},
+					{
+						"name": "cost",
+						"type": "number",
+						"demandOption": true,
+						"default": "1",
+						"description": "The cost in credits of using the service"
+					}
+				]
+			}, {
+				"name": "order [did]",
+				"description": "Orders and pays for a subscription",
+				"details": "When a user orders an asset attached to a NFT, this command purchases that NFT and get it transferred to the wallet completing that purchase. This will allow later on to get access to the exclusive contents attached to the asset demonstrating the possesion of that NFT.",
+				"examples": ["ncli app order did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e "],
+				"commandHandler": "orderPlan",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID of the plan"
+				}],
+				"optionalArguments": [{
+					"name": "agreementId",
+					"type": "string",
+					"demandOption": false,
+					"description": "The identifier of the agreement created by the buyer"
+				}
+				]
+			}, {
+				"name": "access-token [did]",
+				"description": "Gets the access token for an agent",
+				"details": "When a user is a subscriber for a plan that includes access to an agent, this command gets the access token to use that agent.",
+				"examples": ["ncli app access-token did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e "],
+				"commandHandler": "getAccessToken",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID of the agent"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "access [did]",
+				"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-1155 NFT",
+				"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+				"examples": ["ncli app access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
+				"commandHandler": "accessNft",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID of the asset"
+				}],
+				"optionalArguments": [{
+					"name": "agreementId",
+					"type": "string",
+					"description": "The identifier of the agreement created by the buyer"
+				}, {
+					"name": "destination",
+					"type": "string",
+					"demandOption": true,
+					"description": "The destination of the files downloaded"
+				}, {
+					"name": "nftType",
+					"type": "number",
+					"default": "1155",
+					"hidden": true,
+					"description": "The NFT type"
+				}]
+			}, {
+				"name": "download [did]",
+				"description": "As NFT holder this allows to download the files associated to a NFT",
+				"details": "This command will allow to purchase a NFT and download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+				"examples": ["ncli app download did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --destination /tmp/nevemined/"],
+				"commandHandler": "downloadNft",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The DID asset identifier that works as tokenId for the NFT"
+				}],
+				"optionalArguments": [{
+					"name": "destination",
+					"type": "string",
+					"demandOption": true,
+					"description": "The destination of the files"
+				}, {
+					"name": "nftType",
+					"type": "number",
+					"default": "1155",
+					"hidden": true,
+					"description": "The NFT type"
+				}]
+			}]
+		}
 	]
 }

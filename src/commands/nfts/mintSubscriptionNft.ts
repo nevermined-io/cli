@@ -1,4 +1,4 @@
-import { Account,  Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   loadSubscriptionContract,
@@ -10,7 +10,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 import { ethers } from 'ethers'
 
 export const mintSubscriptionNft = async (
-  nvm: Nevermined,
+  _nvmApp: NvmApp,
   minterAccount: Account,
   argv: any,
   config: ConfigEntry,

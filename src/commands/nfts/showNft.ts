@@ -1,4 +1,4 @@
-import { Account, DDO, Nevermined, formatUnits, zeroX } from '@nevermined-io/sdk'
+import { Account, DDO, NvmApp, formatUnits, zeroX } from '@nevermined-io/sdk'
 import {
   Constants,
   StatusCodes,
@@ -13,7 +13,7 @@ import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const showNft = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   userAccount: Account,
   argv: any,
   config: ConfigEntry,
@@ -21,7 +21,7 @@ export const showNft = async (
 ): Promise<ExecutionOutput> => {
   const { verbose, did } = argv
 
-  const token = await loadToken(nvm, config, verbose)
+  const token = await loadToken(nvmApp.sdk, config, verbose)
 
   logger.info(
     chalk.dim(
@@ -31,9 +31,9 @@ export const showNft = async (
     )
   )
 
-  const ddo = await nvm.assets.resolve(did)
+  const ddo = await nvmApp.sdk.assets.resolve(did)
 
-  const { url } = (await nvm.keeper.didRegistry.getDIDRegister(
+  const { url } = (await nvmApp.sdk.keeper.didRegistry.getDIDRegister(
     zeroX(ddo.shortId())
   )) as {
     url: string
@@ -103,8 +103,8 @@ export const showNft = async (
   // Showing ERC-721 NFT information
   if (metadata.attributes.main.ercType == 721) {
     console.log(`Loading NFT-721 details ...`)
-    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts721.getContract.address
-    const nft = await nvm.contracts.loadNft721(nftAddress)
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvmApp.sdk.nfts721.getContract.address
+    const nft = await nvmApp.sdk.contracts.loadNft721(nftAddress)
      nftDetails = await nft.details(did)
 
     if (verbose) {
@@ -134,14 +134,14 @@ export const showNft = async (
       logger.warn(`Token Id not found`)
     }
   } else {
-    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvm.nfts1155.getContract.address
-    const nft = await nvm.contracts.loadNft1155(nftAddress)
+    nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvmApp.sdk.nfts1155.getContract.address
+    const nft = await nvmApp.sdk.contracts.loadNft1155(nftAddress)
     nftDetails = await nft.details(did)
 
-    const storedDIDRegister: any = await nvm.keeper.didRegistry.getDIDRegister(
+    const storedDIDRegister: any = await nvmApp.sdk.keeper.didRegistry.getDIDRegister(
       did
     )
-    const erc1155Balance = await nvm.keeper.nftUpgradeable.balance(
+    const erc1155Balance = await nvmApp.sdk.keeper.nftUpgradeable.balance(
       userAccount.getId(),
       did
     )
