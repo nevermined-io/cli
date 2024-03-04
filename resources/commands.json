@@ -1935,7 +1935,7 @@
 			}]
 		}, {
 			"name": "app",
-			"description": "Interacts with the Nevermined App",
+			"description": "Interacts with the Nevermined App - https://nevermined.app/",
 			"usage": "usage: $0 app <command> parameters [options]",
 			"subcommands": [{
 				"name": "create-time-plan",
@@ -1967,7 +1967,7 @@
 						"type": "string",
 						"demand": true,
 						"default": "forever",
-						"description": "The duration of the subscription. This attribute must be configured with the duration attribute"
+						"description": "The duration of the subscription (hours, days, months, years, forever). This attribute must be configured with the duration attribute"
 					},
 					{
 						"name": "tag",
@@ -1987,11 +1987,19 @@
 						"type": "number",
 						"demand": true,
 						"description": "The plan price"
-					}, {
+					}, 
+					{
 						"name": "token",
 						"type": "string",
 						"default": "",
 						"description": "The address of the token to be used to pay for the plan. If the zero address is given native token will be used."
+					}, 
+					{
+						"name": "planType",
+						"type": "string",
+						"default": "time",
+						"hidden": true,
+						"description": "The plan type: (time, credits)"
 					}
 				]
 			}, {
@@ -2044,11 +2052,19 @@
 						"type": "number",
 						"demand": true,
 						"description": "The plan price"
-					}, {
+					}, 
+					{
 						"name": "token",
 						"type": "string",
 						"default": "",
 						"description": "The address of the token to be used to pay for the plan. If the zero address is given native token will be used."
+					},
+					{
+						"name": "planType",
+						"type": "string",
+						"default": "credits",
+						"hidden": true,
+						"description": "The plan type: (time, credits)"
 					}
 				]
 			}, {
@@ -2063,73 +2079,6 @@
 					"description": "The DID associated with the NFT (tokenId)"
 				}],
 				"optionalArguments": []
-			}, {
-				"name": "balance [did]",
-				"description": "It gets the balance of a user for a specific plan",
-				"details": "This command allows to check if a user is a subscriber of a specific plan",
-				"examples": ["ncli app balance did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
-				"commandHandler": "balancePlan",
-				"positionalArguments": [{
-					"name": "did",
-					"type": "string",
-					"description": "The asset DID"
-				}],
-				"optionalArguments": [{
-						"name": "address",
-						"type": "string",
-						"default": "",
-						"description": "The address of the account to get the balance"
-					}
-				]
-			}, {
-				"name": "register-agent [subscriptionDid]",
-				"description": "Registers a new AI Agent/Service in the Nevermined App",
-				"details": "This command allows to register a new AI Agent/Service in the Nevermined App. This will allow to offer that service to the Nevermined ecosystem.",
-				"examples": ["ncli app register-agent did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --name 'My AI Agent'"],
-				"commandHandler": "registerAgent",
-				"positionalArguments": [{
-					"name": "subscriptionDid",
-					"type": "string",
-					"description": "The DID of the subscription"
-				}],
-				"optionalArguments": [{
-						"name": "name",
-						"type": "string",
-						"default": "",
-						"demand":true,
-						"description": "The name of the agent"
-					}, {
-						"name": "description",
-						"type": "string",
-						"default": "",
-						"description": "The description of the agent"
-					},
-					{
-						"name": "tag",
-						"type": "array",
-						"demandOption": false,
-						"description": "Tag"
-					},
-					{
-						"name": "coverImage",
-						"type": "string",
-						"demandOption": false,
-						"default": "",
-						"description": "Url to the cover image of the plan"
-					},
-					{
-						"name": "openApiUrl",
-						"type": "string",
-						"demandOption": false,
-						"default": "",
-						"description": "OpenAPI full URL with description of the service"
-					},
-					{
-						"name": "endpoint",
-						"type": "array",
-						"demandOption": true,
-						"description": "Endpoint where the agent is available. The format is method|url. Example: --endpoint GET|http://example.com/get/(.*)"
-					}]
 			}, {
 				"name": "register-agent [subscriptionDid]",
 				"description": "Registers a new AI Agent/Service in the Nevermined App",
@@ -2203,7 +2152,7 @@
 					{
 						"name": "cost",
 						"type": "number",
-						"demandOption": true,
+						"demandOption": false,
 						"default": "1",
 						"description": "The cost in credits of using the service"
 					}, 
@@ -2220,7 +2169,7 @@
 				"description": "Registers file assests in the Nevermined App",
 				"details": "This command allows to register new file assets (datasets, models, algorithmls, etc) in the Nevermined App. This will allow the download of them the Nevermined ecosystem.",
 				"examples": ["ncli app register-files did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --name 'My Model' "],
-				"commandHandler": "registerAgent",
+				"commandHandler": "registerFiles",
 				"positionalArguments": [{
 					"name": "subscriptionDid",
 					"type": "string",
@@ -2284,7 +2233,25 @@
 				}
 				]
 			}, {
-				"name": "access-token [did]",
+				"name": "balance [did]",
+				"description": "It gets the balance of a user for a specific plan",
+				"details": "This command allows to check if a user is a subscriber of a specific plan",
+				"examples": ["ncli app balance did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "balancePlan",
+				"positionalArguments": [{
+					"name": "did",
+					"type": "string",
+					"description": "The asset DID"
+				}],
+				"optionalArguments": [{
+						"name": "address",
+						"type": "string",
+						"default": "",
+						"description": "The address of the account to get the balance"
+					}
+				]
+			}, {
+				"name": "get-token [did]",
 				"description": "Gets the access token for an agent",
 				"details": "When a user is a subscriber for a plan that includes access to an agent, this command gets the access token to use that agent.",
 				"examples": ["ncli app access-token did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e "],

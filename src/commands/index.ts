@@ -49,7 +49,7 @@ export * from './provenance/provenanceHistory'
 export * from './provenance/provenanceInspect'
 export * from './provenance/registerProvenance'
 
-//utils
+// utils
 export * from './utils/decrypt'
 export * from './utils/encrypt'
 export * from './utils/upload'
@@ -59,3 +59,12 @@ export * from './utils/downloadArtifacts'
 export * from './utils/cleanArtifacts'
 export * from './utils/encodeDID'
 export * from './utils/decodeDID'
+
+// app
+export * from './app/createPlan'
+export * from './app/showPlan'
+export * from './app/registerAgent'
+export * from './app/registerFiles'
+export * from './app/orderPlan'
+export * from './app/balancePlan'
+export * from './app/getAccessToken'

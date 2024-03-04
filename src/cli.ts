@@ -65,11 +65,7 @@ const cmdHandler = async (
     }
   }
 
-  logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
-  logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
-  logger.debug(
-    chalk.dim(`Using node url: '${chalk.whiteBright(config.nvm.web3ProviderUri)}'\n`)
-  )
+
 
   logger.debug(
     chalk.dim(`Gas Multiplier: '${chalk.whiteBright(config.gasMultiplier)}'\n`)
@@ -84,6 +80,16 @@ const cmdHandler = async (
 
   try {
     nvmApp = await loadNeverminedApp(config, network, requiresAccount, verbose)
+    config = { ...config, ...nvmApp.config }
+
+    logger.debug(chalk.dim(`Debug mode: '${chalk.greenBright('on')}'\n`))
+    logger.debug(chalk.dim(`Using network: '${chalk.whiteBright(network)}'\n`))
+    logger.debug(
+      chalk.dim(`Using app url: '${chalk.whiteBright(config.nvm.appUrl)}'\n`)
+    )
+    logger.debug(
+      chalk.dim(`Using node url: '${chalk.whiteBright(config.nvm.web3ProviderUri)}'\n`)
+    )
 
     if (requiresAccount) {
         

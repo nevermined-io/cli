@@ -1,4 +1,4 @@
-import { Contract, FunctionFragment, HDNodeWallet, Wallet, getAddress } from 'ethers'
+import { Contract, FunctionFragment, HDNodeWallet, Wallet, getAddress, isAddress } from 'ethers'
 import {
   Account,
   DDO,
@@ -452,29 +452,34 @@ export const getContractNameFromAddress = async (
 export const loadToken = async (
   nvm: Nevermined,
   config: ConfigEntry,
-  verbose: boolean
+  verbose: boolean,
+  tokenAddress?: string
 ): Promise<Token | null> => {
   // default to no token
   let token: Token | null = null
 
   if (
-    config.erc20TokenAddress!.toLowerCase() ===
-      Constants.ZeroAddress.toLowerCase() ||
-    config.erc20TokenAddress!.toLowerCase() ===
-      Constants.ShortZeroAddress.toLowerCase()
+    tokenAddress && tokenAddress === Constants.ZeroAddress ||
+    (
+      config.erc20TokenAddress!.toLowerCase() ===
+        Constants.ZeroAddress.toLowerCase() ||
+      config.erc20TokenAddress!.toLowerCase() ===
+        Constants.ShortZeroAddress.toLowerCase()
+    )
   ) {
     logger.debug(
       chalk.yellow('INFO: Using native token (ETH, MATIC, etc) for payments!\n')
     )
   } else {    
 
+    const erc20Address = tokenAddress && isAddress(tokenAddress) ? tokenAddress : config.erc20TokenAddress
     // if the token address is not zero try to load it
     logger.debug(
-      `Loading ERC20 Token ${config.erc20TokenAddress}`
+      `Loading ERC20 Token ${erc20Address}`
     )
     try {
       token = await nvm.contracts.loadErc20(
-        getAddress(config.erc20TokenAddress)
+        getAddress(erc20Address)
       )
 
       logger.debug(`Using Token Address: ${token.address}`)

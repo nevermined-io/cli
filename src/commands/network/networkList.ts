@@ -31,7 +31,10 @@ export const networkList = async (
         )}`
       )
       logger.info(
-        `\n\tWeb3 Provider Uri: ${chalk.yellow(networksConfig[_key].nvm.web3ProviderUri)}`
+        `\n\tApp Url: ${chalk.yellow(networksConfig[_key].nvm.appUrl)}`
+      )
+      logger.info(
+        `\tWeb3 Provider Uri: ${chalk.yellow(networksConfig[_key].nvm.web3ProviderUri)}`
       )
       logger.info(
         `\tNevermined Node: ${chalk.yellow(networksConfig[_key].nvm.neverminedNodeUri)}`

@@ -115,6 +115,18 @@ export const baseCommands = {
     history: `${BASE_COMMAND} ${VERBOSE} provenance history `,
     inspect: `${BASE_COMMAND} ${VERBOSE} provenance inspect `
   },
+  app: {
+    createTimePlan: `${BASE_COMMAND} ${VERBOSE} app create-time-plan `,
+    createCreditsPlan: `${BASE_COMMAND} ${VERBOSE} app create-credits-plan `,
+    showPlan: `${BASE_COMMAND} ${VERBOSE} app show-plan `,
+    balance: `${BASE_COMMAND} ${VERBOSE} app balance `,
+    registerAgent: `${BASE_COMMAND} ${VERBOSE} app register-agent `,
+    registerFiles: `${BASE_COMMAND} ${VERBOSE} app register-files `,
+    order: `${BASE_COMMAND} ${VERBOSE} app order `,
+    getToken: `${BASE_COMMAND} ${VERBOSE} app get-token `,
+    access: `${BASE_COMMAND} ${VERBOSE} app access `,
+    download: `${BASE_COMMAND} ${VERBOSE} app download `
+  },
   utils: {
     encodeDID: `${BASE_COMMAND} ${VERBOSE} utils encode-did `,
     decodeDID: `${BASE_COMMAND} ${VERBOSE} utils decode-did `,
