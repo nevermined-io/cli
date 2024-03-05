@@ -1,4 +1,4 @@
-import ethers, { HDNodeWallet, Mnemonic, defaultPath, getIndexedAccountPath } from 'ethers'
+import ethers, { HDNodeWallet, Mnemonic, getIndexedAccountPath } from 'ethers'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { mkdirSync, writeFileSync } from 'fs'

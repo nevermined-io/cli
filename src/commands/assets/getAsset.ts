@@ -54,7 +54,7 @@ export const getAsset = async (
   }
 
   if (!argv.agreementId) {
-    logger.info(chalk.dim(`Ordering asset: ${did}`))    
+    logger.info(chalk.dim(`No agreementId. Ordering asset using reference ${serviceReference}: ${did}`))    
     agreementId = await nvmApp.sdk.assets.order(did, serviceReference, account)
   } else {
     agreementId = argv.agreementId
