@@ -19,7 +19,7 @@ export const downloadNft = async (
     `${argv.destination}/`
 
   logger.info(
-    chalk.dim(`Downloading NFT associated to ${chalk.whiteBright(did)}`)
+    chalk.dim(`Downloading files associated to ${chalk.whiteBright(did)}`)
   )
   logger.info(chalk.dim(`Downloading to: ${chalk.whiteBright(destination)}`))
 
@@ -50,7 +50,7 @@ export const downloadNft = async (
   }
 
   logger.info(
-    chalk.dim(`NFT Assets downloaded to: ${chalk.whiteBright(destination)}`)
+    chalk.dim(`File Assets downloaded to: ${chalk.whiteBright(destination)}`)
   )
 
   return {

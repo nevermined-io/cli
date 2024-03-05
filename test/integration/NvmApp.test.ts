@@ -12,10 +12,12 @@ import execCommand from '../helpers/ExecCommand'
 describe('Nevermined App integration e2e Testing', () => {
 
   const openApiUrl = 'https://chatgpt-plugin.nevermined.app/openapi.json'
+  const serviceHTTPVerb = 'POST'
   const serviceEndpoint = 'https://chatgpt-plugin.nevermined.app/ask'
   const serviceCredentials = process.env.SERVICE_CREDENTIALS || ''
 
   let agentDID = ''
+  let fileDID = ''
   let orderAgreementId = ''
   let creditsSubsDID = ''
 
@@ -73,7 +75,7 @@ describe('Nevermined App integration e2e Testing', () => {
 
 
   test('Shows Plan information', async () => {
-    const showCommand = `${baseCommands.app.showPlan} "${creditsSubsDID}" `
+    const showCommand = `${baseCommands.app.show} "${creditsSubsDID}" `
     console.debug(`COMMAND: ${showCommand}`)
 
     const showStdout = execCommand(showCommand, execOpts)
@@ -86,7 +88,7 @@ describe('Nevermined App integration e2e Testing', () => {
 
 
   test('Register a new agent', async () => {
-    const commandNewAgent = `${baseCommands.app.registerAgent} "${creditsSubsDID}" --name "My Test Agent ${generateId()}" --author "Nevermined" --openApiUrl ${openApiUrl} --authType bearer --credentials ${serviceCredentials} --endpoint ${serviceEndpoint} --cost 1 `
+    const commandNewAgent = `${baseCommands.app.registerAgent} "${creditsSubsDID}" --name "My Test Agent ${generateId()}" --author "Nevermined" --openApiUrl ${openApiUrl} --authType bearer --credentials ${serviceCredentials} --endpoint ${serviceHTTPVerb}@${serviceEndpoint} --cost 1 `
     const newAgentStdout = execCommand(commandNewAgent, execOpts)
 
     console.debug(`STDOUT: ${newAgentStdout}`)
@@ -96,12 +98,24 @@ describe('Nevermined App integration e2e Testing', () => {
     
   })
 
+  test('Shows Agent', async () => {
+    const showCommand = `${baseCommands.app.show} "${agentDID}" `
+    console.debug(`COMMAND: ${showCommand}`)
+
+    const showStdout = execCommand(showCommand, execOpts)
+
+    console.debug(`STDOUT: ${showStdout}`)
+    expect(showStdout.includes(creditsSubsDID))
+    expect(showStdout.includes(`Plan Type: credits`))
+    
+  })
+
   test('Register a new files asset', async () => {
-    const commandNewFiles = `${baseCommands.app.registerFiles} "${creditsSubsDID}" --name "My Test Files asset ${generateId()}" --author "Nevermined" --openApiUrl ${openApiUrl} --authType bearer --credentials ${serviceCredentials} --url ${metadataConfig.url} --cost 1 `
+    const commandNewFiles = `${baseCommands.app.registerFiles} "${creditsSubsDID}" --name "My Test Files asset ${generateId()}" --author "Nevermined" --url ${metadataConfig.url} --cost 1 `
     const newFilesStdout = execCommand(commandNewFiles, execOpts)
 
     console.debug(`STDOUT: ${newFilesStdout}`)
-    const fileDID = parseDIDFromNewFileAsset(newFilesStdout)
+    fileDID = parseDIDFromNewFileAsset(newFilesStdout)
     console.debug(`Files asset created with DID: ${fileDID}`)
     expect(fileDID === '' ? false : fileDID.startsWith('did:nv:'))
     
@@ -121,7 +135,6 @@ describe('Nevermined App integration e2e Testing', () => {
     
   })
 
-  // We are HERE!
   test('Check if a user is a subscriber', async () => {
     const balanceCommand = `${baseCommands.app.balance} "${creditsSubsDID}" --accountIndex 1`
     console.debug(`COMMAND: ${balanceCommand}`)
@@ -146,13 +159,15 @@ describe('Nevermined App integration e2e Testing', () => {
     
   })
 
-  test.skip('Query a service', async () => {
-    expect(false) // Not implemented
-    
-  })
+  test('Download a file', async () => {
+    const downloadCommand = `${baseCommands.app.download} "${fileDID}" --agreementId ${orderAgreementId} --destination /tmp/.nevermined/cli-test-downloads/ --accountIndex 1`
+    console.debug(`COMMAND: ${downloadCommand}`)
 
-  test.skip('Download a file', async () => {
-    expect(false) // Not implemented
+    const downloadStdout = execCommand(downloadCommand, execOpts)
+
+    console.debug(`STDOUT: ${downloadStdout}`)
+    expect(downloadStdout.includes(fileDID))
+    expect(downloadStdout.includes(`Files downloaded succesfully`))
     
   })
 

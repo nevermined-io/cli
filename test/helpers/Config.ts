@@ -119,6 +119,7 @@ export const baseCommands = {
     createTimePlan: `${BASE_COMMAND} ${VERBOSE} app create-time-plan `,
     createCreditsPlan: `${BASE_COMMAND} ${VERBOSE} app create-credits-plan `,
     showPlan: `${BASE_COMMAND} ${VERBOSE} app show-plan `,
+    show: `${BASE_COMMAND} ${VERBOSE} app show `,
     balance: `${BASE_COMMAND} ${VERBOSE} app balance `,
     registerAgent: `${BASE_COMMAND} ${VERBOSE} app register-agent `,
     registerFiles: `${BASE_COMMAND} ${VERBOSE} app register-files `,

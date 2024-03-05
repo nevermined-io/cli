@@ -54,8 +54,10 @@ export const registerAgent = async (
 
   const endpoints: { [verb: string]: string }[] = []
   argv.endpoint.map((e: string) => {
-    const [verb, url] = e.split('|')
-    endpoints.push({ [verb]: url })
+    if (e.split('@').length >= 2) {
+      const [verb, url] = e.split('@')    
+      endpoints.push({ [verb.toLocaleUpperCase()]: url })
+    }    
   })
 
   if (endpoints.length === 0) {
@@ -64,6 +66,8 @@ export const registerAgent = async (
       errorMessage: `Invalid endpoints list. It should be a list of strings in the format: verb|url`
     }
   }
+  logger.debug(`Endpoints: ${JSON.stringify(endpoints)}`)
+
   const isDynamic = argv.dynamicCost === 'true'
 
   const agentMetadata = NvmAppMetadata.getServiceMetadataTemplate(

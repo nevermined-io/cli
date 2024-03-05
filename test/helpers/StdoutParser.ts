@@ -96,7 +96,7 @@ export const parseDIDFromNewAgent = (stdout: string): string => {
 }
 
 export const parseDIDFromNewFileAsset = (stdout: string): string => {
-  const did = commandRegex.app.createAgent.exec(stdout)
+  const did = commandRegex.app.createFileAsset.exec(stdout)
   if (did != null) {
     return did[1]
   }

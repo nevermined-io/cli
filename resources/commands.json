@@ -2068,15 +2068,15 @@
 					}
 				]
 			}, {
-				"name": "show-plan [did]",
-				"description": "Retrieves information about a Plan",
-				"details": "For a given DID this command displays information about the plan ",
-				"examples": ["ncli app show-plan did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
-				"commandHandler": "showPlan",
+				"name": "show [did]",
+				"description": "Retrieves information about an Asset",
+				"details": "For a given DID this command displays information about the asset ",
+				"examples": ["ncli app show did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e"],
+				"commandHandler": "showAsset",
 				"positionalArguments": [{
 					"name": "did",
 					"type": "string",
-					"description": "The DID associated with the NFT (tokenId)"
+					"description": "The DID associated with the Asset"
 				}],
 				"optionalArguments": []
 			}, {
@@ -2140,7 +2140,7 @@
 						"name": "endpoint",
 						"type": "array",
 						"demandOption": true,
-						"description": "Endpoint where the agent is available. The format is method|url. Example: --endpoint GET|http://example.com/get/(.*)"
+						"description": "Endpoint where the agent is available. The format is method@url. Example: --endpoint GET@http://example.com/get/(.*)"
 					},
 					{
 						"name": "dynamicCost",
@@ -2263,44 +2263,22 @@
 				}],
 				"optionalArguments": []
 			}, {
-				"name": "access [did]",
-				"description": "Having a serviceAgreementId, it downloads the data associated to a ERC-1155 NFT",
-				"details": "Providing a `serviceAgreementId` this command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
-				"examples": ["ncli app access did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e 0xb716555c3b40bd01836826e114607d65b1ebb04e8a051977e6d902eca2df750b --destination /tmp/nevemined/ --seller 0xe2DD09d719Da89e5a3D0F2549c7E24566e947260"],
-				"commandHandler": "accessNft",
-				"positionalArguments": [{
-					"name": "did",
-					"type": "string",
-					"description": "The DID of the asset"
-				}],
-				"optionalArguments": [{
-					"name": "agreementId",
-					"type": "string",
-					"description": "The identifier of the agreement created by the buyer"
-				}, {
-					"name": "destination",
-					"type": "string",
-					"demandOption": true,
-					"description": "The destination of the files downloaded"
-				}, {
-					"name": "nftType",
-					"type": "number",
-					"default": "1155",
-					"hidden": true,
-					"description": "The NFT type"
-				}]
-			}, {
 				"name": "download [did]",
-				"description": "As NFT holder this allows to download the files associated to a NFT",
-				"details": "This command will allow to purchase a NFT and download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
+				"description": "As subscriber this command allows to download the files associated to a NFT",
+				"details": "This command will allow to download the file contents associated to a DID that has a NFT (ERC-721) as access control mechanism. If the account of the user executing this command hold the NFT, it will be able to download the files.",
 				"examples": ["ncli app download did:nv:afd733c23c41af948be7ec039c3fb2048d437e082a69ea3f336cdf452a49be7e --destination /tmp/nevemined/"],
-				"commandHandler": "downloadNft",
+				"commandHandler": "downloadFiles",
 				"positionalArguments": [{
 					"name": "did",
 					"type": "string",
 					"description": "The DID asset identifier that works as tokenId for the NFT"
 				}],
 				"optionalArguments": [{
+					"name": "agreementId",
+					"type": "string",
+					"demandOption": true,
+					"description": "The identifier of the agreement created by the buyer"
+				}, {
 					"name": "destination",
 					"type": "string",
 					"demandOption": true,

@@ -1,4 +1,4 @@
-import { Account, zeroX, NvmApp, NvmAppMetadata, MetaDataExternalResource } from '@nevermined-io/sdk'
+import { Account, NvmApp, NvmAppMetadata, MetaDataExternalResource } from '@nevermined-io/sdk'
 import {
   StatusCodes} from '../../utils'
 import chalk from 'chalk'
@@ -29,7 +29,7 @@ export const registerFiles = async (
   const urls: MetaDataExternalResource[] = []
   let index = 0
   argv.url.map((url: string) => {
-    
+    logger.debug(`Adding file with url: ${url}`)
     urls.push({
       index,
       contentType: 'text/plain',
@@ -50,6 +50,8 @@ export const registerFiles = async (
     argv.author,
   )
 
+  filesMetadata.main.files = urls
+  
   const costInCredits = BigInt(argv.cost)
 
   const ddo = await nvmApp.registerFileAsset(
@@ -58,7 +60,7 @@ export const registerFiles = async (
     costInCredits
   )
   
-  const assetUrl = `${config.nvm.appUrl}/en/file/${zeroX(ddo.shortId())}`
+  const assetUrl = `${config.nvm.appUrl}/en/file/${ddo.shortId()}`
   logger.info(
     chalk.dim(
       `File asset created with DID: ${chalk.whiteBright(

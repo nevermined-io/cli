@@ -24,8 +24,6 @@ export const registerAsset = async (
   const { verbose, metadata, assetType } = argv
   const token = nvmApp.sdk.keeper.token
   
-  console.log(`We use the account ${account.getId()}`)
-
   let dtp: Dtp = undefined  
 
   const isDTP = argv.password ? true : false
@@ -157,8 +155,6 @@ export const registerAsset = async (
     ...ddoMetadata.additionalInformation,
     customData
   }
-
-  console.log(`DDO Metadata = ${JSON.stringify(ddoMetadata)}`)
 
   const configContract = loadNeverminedConfigContract(config)
   const networkFee = await configContract.getMarketplaceFee()

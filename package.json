@@ -25,7 +25,7 @@
     "ncli": "./dist/src/index.js"
   },
   "dependencies": {
-    "@nevermined-io/sdk": "^2.2.5",
+    "@nevermined-io/sdk": "^2.2.8",
     "@nevermined-io/sdk-dtp": "^0.7.0-rc5",
     "log4js": "^6.9.1",
     "chalk": "^4.1.2",

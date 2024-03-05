@@ -62,9 +62,10 @@ export * from './utils/decodeDID'
 
 // app
 export * from './app/createPlan'
-export * from './app/showPlan'
+export * from './app/showAsset'
 export * from './app/registerAgent'
 export * from './app/registerFiles'
 export * from './app/orderPlan'
 export * from './app/balancePlan'
 export * from './app/getAccessToken'
+export * from './app/downloadFiles'

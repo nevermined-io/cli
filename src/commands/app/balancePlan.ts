@@ -29,26 +29,36 @@ export const balancePlan = async (
     )
   )
 
-  const balance = await nvmApp.sdk.nfts1155.balance(did, userAddress)
-  logger.debug(`Balance: ${balance}`)
+  const subscriptionOwner = await nvmApp.sdk.assets.owner(did)
+
+  logger.debug(`CLI Subscription Owner: ${subscriptionOwner}`)
+  logger.debug(`CLI User Address: ${userAddress}`)
+
+  const planBalance = await nvmApp.getBalance(did, userAddress)
+  
+  if (planBalance.isSubscriptionOwner)
+    logger.info(
+      chalk.dim(`The address ${userAddress} IS the owner of the Plan`)
+    )
+
   if (subscriptionType === SubscriptionType.Time) {
-    if (balance > 0n) {
+    if (planBalance.canAccess) {
       logger.info(
-        chalk.dim(`Time plan NOT expired, the ${userAddress} is still a subscriber for the Plan with Did: ${chalk.whiteBright(did)}`)
+        chalk.dim(`Time plan NOT expired, the ${userAddress} is still a subscriber for the Plan`)
       )
     } else {
       logger.info(
-        chalk.dim(`Time is not a subscriber for the Plan with Did: ${chalk.whiteBright(did)}`)
+        chalk.dim(`Time is not a subscriber for the Plan`)
       )
     }
   } else {
-    if (balance > 0n) {
+    if (planBalance.canAccess) {
       logger.info(
-        chalk.dim(`The ${userAddress} is a subscriber with a balance of ${balance} credits for the Plan with Did: ${chalk.whiteBright(did)}`)
+        chalk.dim(`The ${userAddress} is a subscriber with a balance of ${planBalance.balance} credits for the Plan`)
       )
     } else {
       logger.info(
-        chalk.dim(`The ${userAddress} has no balance for the Plan with Did: ${chalk.whiteBright(did)}`)
+        chalk.dim(`The ${userAddress} has no balance for the Plan`)
       )
     }  
   }  
@@ -57,7 +67,9 @@ export const balancePlan = async (
     status: StatusCodes.OK,
     results: JSON.stringify({
       subscriptionType,
-      balance
+      isOwner: planBalance.isSubscriptionOwner,
+      canAccess: planBalance.canAccess,
+      balance: planBalance.balance
     }, jsonReplacer)
   }
 

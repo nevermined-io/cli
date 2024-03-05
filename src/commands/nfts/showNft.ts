@@ -102,7 +102,7 @@ export const showNft = async (
   let nftAddress = ''
   // Showing ERC-721 NFT information
   if (metadata.attributes.main.ercType == 721) {
-    console.log(`Loading NFT-721 details ...`)
+    logger.debug(`Loading NFT-721 details ...`)
     nftAddress = getNFTAddressFromInput(argv.nftAddress, ddo, 'nft-sales') || nvmApp.sdk.nfts721.getContract.address
     const nft = await nvmApp.sdk.contracts.loadNft721(nftAddress)
      nftDetails = await nft.details(did)

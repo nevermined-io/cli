@@ -109,7 +109,7 @@ export const accessNft = async (
 
   if (isSuccessful) {
     logger.info(
-      chalk.dim(`NFT Assets downloaded to: ${chalk.whiteBright(destination)}`)
+      chalk.dim(`File Assets downloaded to: ${chalk.whiteBright(destination)}`)
     )
     return {
       status: StatusCodes.OK,

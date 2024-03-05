@@ -38,7 +38,7 @@ export const accountsList = async (
     accounts = await nvm.accounts.list()
   }
 
-  console.log(`We use the account ${accounts[0].getId()}`)
+  logger.trace(`We use the account ${accounts[0].getId()}`)
 
   // if we have a token use it, otherwise fall back to ETH decimals
   const decimals =

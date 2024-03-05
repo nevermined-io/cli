@@ -22,7 +22,7 @@ export const orderPlan = async (
     orderResult = await nvmApp.orderSubscription(argv.did)
   
   if (orderResult.success) {
-    logger.info(chalk.dim(`Plan purchased succesfully: '${chalk.whiteBright(orderResult.agreementId)}'`))
+    logger.info(chalk.dim(`Plan purchased succesfully: ${chalk.whiteBright(orderResult.agreementId)}`))
 
     return { 
       status: StatusCodes.OK, 
