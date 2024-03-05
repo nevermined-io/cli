@@ -51,7 +51,11 @@ export const getAsset = async (
     account.babySecret = babyAccount.babySecret
     account.babyX = babyAccount.babyX
     account.babyY = babyAccount.babyY
+    
   }
+
+  const service = ddo.findServiceByReference(serviceReference)
+  console.log(`Service: ${service.attributes.serviceAgreementTemplate.contractName}`)
 
   if (!argv.agreementId) {
     logger.info(chalk.dim(`No agreementId. Ordering asset using reference ${serviceReference}: ${did}`))    
