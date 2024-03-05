@@ -8,7 +8,7 @@ import {
 import execCommand from '../helpers/ExecCommand'
 
 // TODO: Re-enable DTP tests when `sdk-dtp` is published back
-describe('Assets e2e Testing', () => {
+describe.skip('Assets e2e Testing', () => {
   let did = ''
   let url = ''
   let password = ''
