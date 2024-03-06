@@ -2139,6 +2139,7 @@
 					{
 						"name": "endpoint",
 						"type": "array",
+						"default": [],
 						"demandOption": true,
 						"description": "Endpoint where the agent is available. The format is method@url. Example: --endpoint GET@http://example.com/get/(.*)"
 					},

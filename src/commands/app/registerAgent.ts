@@ -18,8 +18,10 @@ export const registerAgent = async (
   logger.info(chalk.dim(`Registering Agent ...`))
 
   logger.debug(chalk.dim(`Using publisher account: '${publisherAccount.getId()}'\n`))
-  
-  if (argv.name === '' || argv.endpoint === '') {
+    
+  const paramEndpoints: string[] = argv.endpoint
+
+  if (argv.name === '' || paramEndpoints.length < 1) {
     return {
       status: StatusCodes.ERROR,
       errorMessage: `The following parameters need to be given: name, endpoint`
@@ -53,7 +55,10 @@ export const registerAgent = async (
   }
 
   const endpoints: { [verb: string]: string }[] = []
-  argv.endpoint.map((e: string) => {
+  
+  paramEndpoints.map((_e: string) => {
+    const e = new String(_e)
+    
     if (e.split('@').length >= 2) {
       const [verb, url] = e.split('@')    
       endpoints.push({ [verb.toLocaleUpperCase()]: url })
