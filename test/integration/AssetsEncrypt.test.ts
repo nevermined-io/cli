@@ -8,7 +8,7 @@ import {
 import execCommand from '../helpers/ExecCommand'
 
 // TODO: Re-enable DTP tests when `sdk-dtp` is published back
-describe.skip('Assets e2e Testing', () => {
+describe('Assets e2e Testing', () => {
   let did = ''
   let url = ''
   let password = ''
@@ -57,7 +57,7 @@ describe.skip('Assets e2e Testing', () => {
   })
 
   test('Order and download an asset', async () => {
-    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 0 --fileIndex 1 --password abde --destination /tmp`
+    const getCommand = `${baseCommands.assets.getAsset} ${did} --accountIndex 1 --fileIndex 1 --password abde --destination /tmp/.cli-test`
     console.debug(`COMMAND: ${getCommand}`)
 
     const getStdout = execCommand(getCommand, execOpts)

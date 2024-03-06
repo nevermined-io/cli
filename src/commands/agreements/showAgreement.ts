@@ -53,11 +53,11 @@ export const showAgreement = async (
     )
   )
 
-  logger.info(chalk.dim(`Condition Ids:`))
-  await agreementData.conditionIds.forEach(async (_conditionId, _index) => {
-    const cond = await nvmApp.sdk.keeper.conditionStoreManager.getCondition(_conditionId)    
-    logger.info(chalk.dim(`\tCondition Id[${_index}]= ${_conditionId} with status: ${cond.state}. Timeout: ${cond.timeOut} - Timelock: ${cond.timeLock}`))
-  })
+  // logger.info(chalk.dim(`Condition Ids:`))
+  // await agreementData.conditionIds.map(async (_conditionId, _index) => {
+  //   const cond = await nvmApp.sdk.keeper.conditionStoreManager.getCondition(_conditionId)    
+  //   logger.info(chalk.dim(`\tCondition Id[${_index}]= ${_conditionId} with status: ${cond.state}. Timeout: ${cond.timeOut} - Timelock: ${cond.timeLock}`))
+  // })
 
   if (contractName === 'NFTAccessTemplate')
     await nvmApp.sdk.keeper.templates.nftAccessTemplate.printAgreementStatus(
@@ -81,7 +81,7 @@ export const showAgreement = async (
     await nvmApp.sdk.keeper.templates.nft721AccessTemplate.printAgreementStatus(
       agreementId
     )
-  else if (contractName === 'NFT721SalesTemplate')
+  else if (contractName === 'NFT721SalesTemplate')      
     await nvmApp.sdk.keeper.templates.nft721SalesTemplate.printAgreementStatus(
       agreementId
     )
