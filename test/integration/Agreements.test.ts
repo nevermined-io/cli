@@ -32,7 +32,7 @@ describe('Agreements e2e Testing', () => {
     console.log(`DID: ${did}`)
     expect(did === '' ? false : did.startsWith('did:nv:'))
 
-    const orderCommand = `${baseCommands.assets.orderAsset} ${did} --accountIndex 0  `
+    const orderCommand = `${baseCommands.assets.orderAsset} ${did} --accountIndex 0 `
     console.debug(`COMMAND: ${orderCommand}`)
 
     const orderStdout = execCommand(orderCommand, execOpts)

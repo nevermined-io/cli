@@ -1,13 +1,13 @@
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const resolveDID = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -17,9 +17,9 @@ export const resolveDID = async (
   logger.info(chalk.dim(`Resolving the asset: ${chalk.green(did)}`))
 
   logger.info(
-    chalk.dim(`Using DIDRegistry: ${await nvm.keeper.didRegistry.address}`)
+    chalk.dim(`Using DIDRegistry: ${await nvmApp.sdk.keeper.didRegistry.address}`)
   )
-  const onchainInfo: any = await nvm.keeper.didRegistry.getDIDRegister(did)
+  const onchainInfo: any = await nvmApp.sdk.keeper.didRegistry.getDIDRegister(did)
 
   logger.info(
     chalk.dim(
@@ -61,7 +61,7 @@ export const resolveDID = async (
 
   let ddo
   try {
-    ddo = await nvm.assets.resolve(did)
+    ddo = await nvmApp.sdk.assets.resolve(did)
     if (!ddo || ddo.id! !== did) {
       logger.warn('Asset not found')
       return {
@@ -80,7 +80,7 @@ export const resolveDID = async (
   }
 
   // Check if Nevermined Node is a provider
-  const isProvider = await nvm.keeper.didRegistry.isDIDProvider(
+  const isProvider = await nvmApp.sdk.keeper.didRegistry.isDIDProvider(
     ddo.id,
     config.nvm.neverminedNodeAddress || ''
   )

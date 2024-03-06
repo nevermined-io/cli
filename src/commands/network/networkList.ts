@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes, getNetworksConfig } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -6,10 +6,10 @@ import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const networkList = async (
-  nvm: Nevermined,
-  account: Account,
+  _nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  configEntry: ConfigEntry,
+  _configEntry: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { hideInternal } = argv
@@ -31,7 +31,10 @@ export const networkList = async (
         )}`
       )
       logger.info(
-        `\n\tWeb3 Provider Uri: ${chalk.yellow(networksConfig[_key].nvm.web3ProviderUri)}`
+        `\n\tApp Url: ${chalk.yellow(networksConfig[_key].nvm.appUrl)}`
+      )
+      logger.info(
+        `\tWeb3 Provider Uri: ${chalk.yellow(networksConfig[_key].nvm.web3ProviderUri)}`
       )
       logger.info(
         `\tNevermined Node: ${chalk.yellow(networksConfig[_key].nvm.neverminedNodeUri)}`

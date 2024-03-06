@@ -1,4 +1,4 @@
-import { AccessCondition, Account, ConditionState, DDO, Nevermined, ServiceCommon, ServiceNFTSales, TransferNFT721Condition, TransferNFTCondition } from '@nevermined-io/sdk'
+import { AccessCondition, Account, ConditionState, DDO, NvmApp, ServiceCommon, ServiceNFTSales, TransferNFT721Condition, TransferNFTCondition } from '@nevermined-io/sdk'
 import { StatusCodes, getContractNameFromAddress } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -6,7 +6,7 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const abortAgreement = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   account: Account,
   argv: any,
   config: ConfigEntry,
@@ -20,15 +20,15 @@ export const abortAgreement = async (
     )
   )
 
-  const agreementData = await nvm.keeper.agreementStoreManager.getAgreement(
+  const agreementData = await nvmApp.sdk.keeper.agreementStoreManager.getAgreement(
     agreementId
   )
   
-  const ddo = await nvm.assets.resolve(agreementData.did)
+  const ddo = await nvmApp.sdk.assets.resolve(agreementData.did)
   logger.info(chalk.dim(`DID: ${chalk.whiteBright(ddo.id)}`))
 
   const contractName = await getContractNameFromAddress(
-    nvm,
+    nvmApp.sdk,
     agreementData.templateId
   )
 
@@ -45,17 +45,17 @@ export const abortAgreement = async (
   )
 
   const accessConditionId = agreementData.conditionIds.length > 1 ? agreementData.conditionIds[1] : agreementData.conditionIds[0]
-  let conditionData = await nvm.keeper.conditionStoreManager.getCondition(accessConditionId)
+  let conditionData = await nvmApp.sdk.keeper.conditionStoreManager.getCondition(accessConditionId)
   logger.debug(`Access condition ${accessConditionId} - state: ${conditionData.state}`)
   logger.debug(`Condition timeout: ${conditionData.timeOut}`)
 
   let accessCondition: TransferNFTCondition | TransferNFT721Condition | AccessCondition
   if (contractName === 'NFTSalesTemplate')
-    accessCondition = nvm.keeper.conditions.transferNftCondition
+    accessCondition = nvmApp.sdk.keeper.conditions.transferNftCondition
   else if (contractName === 'NFT721SalesTemplate')
-    accessCondition = nvm.keeper.conditions.transferNft721Condition
+    accessCondition = nvmApp.sdk.keeper.conditions.transferNft721Condition
   else if (contractName === 'AccessTemplate' || contractName === 'EscrowAccessTemplate')
-    accessCondition = nvm.keeper.conditions.accessCondition
+    accessCondition = nvmApp.sdk.keeper.conditions.accessCondition
   else  {
     logger.error(`Contract not supported: ${contractName}`)
     return {
@@ -65,7 +65,7 @@ export const abortAgreement = async (
 
   
   if (conditionData.state === ConditionState.Unfulfilled) {
-    const isTimedOut = await nvm.keeper.conditionStoreManager.isConditionTimedOut(accessConditionId)
+    const isTimedOut = await nvmApp.sdk.keeper.conditionStoreManager.isConditionTimedOut(accessConditionId)
     logger.debug(`Is condition timed out? ${isTimedOut}`)
     if (isTimedOut) {
       logger.info(chalk.dim(`Condition is timed out. Aborting agreement...`))
@@ -74,21 +74,21 @@ export const abortAgreement = async (
     } 
   }
 
-  conditionData = await nvm.keeper.conditionStoreManager.getCondition(accessConditionId)
+  conditionData = await nvmApp.sdk.keeper.conditionStoreManager.getCondition(accessConditionId)
   if (conditionData.state === ConditionState.Aborted) {
     let service: ServiceCommon
     logger.info(chalk.dim(`Condition is aborted. Distributing payment back...`))
     if (contractName === 'NFTSalesTemplate') {
       service = ddo.findServiceByType('nft-sales')
       const nftAddress = DDO.getNftContractAddressFromService(service as ServiceNFTSales)
-      await nvm.contracts.loadNft1155(nftAddress)
-      await nvm.nfts1155.releaseRewards(agreementId, ddo.id, service.index, DDO.getNftAmountFromService(service), account)
+      await nvmApp.sdk.contracts.loadNft1155(nftAddress)
+      await nvmApp.sdk.nfts1155.releaseRewards(agreementId, ddo.id, service.index, DDO.getNftAmountFromService(service), account)
 
     } else if (contractName === 'NFT721SalesTemplate') {
       service = ddo.findServiceByType('nft-sales')
       const nftAddress = DDO.getNftContractAddressFromService(service as ServiceNFTSales)
-      await nvm.contracts.loadNft721(nftAddress)      
-      await nvm.nfts721.releaseRewards(agreementId, ddo.id, account)
+      await nvmApp.sdk.contracts.loadNft721(nftAddress)      
+      await nvmApp.sdk.nfts721.releaseRewards(agreementId, ddo.id, account)
 
     } else {
       
@@ -103,7 +103,7 @@ export const abortAgreement = async (
         }
       }
       const assetPrice = DDO.getAssetPriceFromService(service)
-      await nvm.agreements.conditions.releaseReward(
+      await nvmApp.sdk.agreements.conditions.releaseReward(
         agreementId,
         assetPrice.getAmounts(),
         assetPrice.getReceivers(),

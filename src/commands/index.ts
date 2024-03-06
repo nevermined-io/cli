@@ -11,7 +11,7 @@ export * from './assets/getAssetProviders'
 export * from './assets/grantAssetProvider'
 export * from './assets/revokeAssetProvider'
 
-// nfts (ERC-721 & ERC-1155)
+// // nfts (ERC-721 & ERC-1155)
 export * from './nfts/cloneNft'
 export * from './nfts/deployNft'
 export * from './nfts/createNft'
@@ -27,7 +27,7 @@ export * from './nfts/downloadNft'
 export * from './nfts/accessNft'
 export * from './nfts/getJWT'
 
-// accounts
+// // accounts
 export * from './accounts/new'
 export * from './accounts/list'
 export * from './accounts/fund'
@@ -49,7 +49,7 @@ export * from './provenance/provenanceHistory'
 export * from './provenance/provenanceInspect'
 export * from './provenance/registerProvenance'
 
-//utils
+// utils
 export * from './utils/decrypt'
 export * from './utils/encrypt'
 export * from './utils/upload'
@@ -59,3 +59,13 @@ export * from './utils/downloadArtifacts'
 export * from './utils/cleanArtifacts'
 export * from './utils/encodeDID'
 export * from './utils/decodeDID'
+
+// app
+export * from './app/createPlan'
+export * from './app/showAsset'
+export * from './app/registerAgent'
+export * from './app/registerFiles'
+export * from './app/orderPlan'
+export * from './app/balancePlan'
+export * from './app/getAccessToken'
+export * from './app/downloadFiles'

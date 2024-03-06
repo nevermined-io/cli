@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { Logger } from 'log4js'
 import chalk from 'chalk'
@@ -8,12 +8,13 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 const ERC20_DISPENSED_AMOUNT = 100n
 
 export const accountsFund = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
+  const nvm = nvmApp.sdk
   const { verbose } = argv
 
   const addressToFund = argv.addressToFund ? argv.addressToFund : account.getId()

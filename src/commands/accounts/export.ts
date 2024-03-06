@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes, printWallet } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -8,8 +8,8 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 import fs from 'fs'
 
 export const accountsExport = async (
-  nvm: Nevermined,
-  account: Account,
+  _nvmApp: NvmApp,
+  _account: Account,
   argv: any,
   config: ConfigEntry,
   logger: Logger

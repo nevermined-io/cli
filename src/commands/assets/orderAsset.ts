@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import readline from 'readline'
@@ -12,10 +12,10 @@ readline.createInterface({
 })
 
 export const orderAsset = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv
@@ -29,7 +29,7 @@ export const orderAsset = async (
 
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
 
-  const agreementId = await nvm.assets.order(did, serviceReference, account)
+  const agreementId = await nvmApp.sdk.assets.order(did, serviceReference, account)
   // }
 
   logger.info(chalk.dim(`Agreement Id: ${agreementId}`))

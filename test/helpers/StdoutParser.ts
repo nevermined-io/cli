@@ -18,6 +18,12 @@ export const commandRegex = {
     //order: new RegExp('(0x[a-fA-F|\d]{64})', 'g')
     // .*NFT Agreement Created:\s(0x[a-fA-F|\d]{64})
   },
+  app: {
+    createPlan: new RegExp('.*Plan with DID created: (.*)\\n', 'g'),
+    createAgent: new RegExp('.*Agent created with DID: (.*)\\n', 'g'),
+    createFileAsset: new RegExp('.*File asset created with DID: (.*)\\n', 'g'),
+    order: new RegExp('.*Plan purchased succesfully: (.{66})', 'g')
+  },
   accounts: {
     newAccount: new RegExp(
       '.*Wallet address:.(.*)\\nWallet public key: (.*)\\n',
@@ -73,10 +79,43 @@ export const parsePasswordFromOrder = (stdout: string): any => {
   return ''
 }
 
+export const parseDIDFromNewPlan = (stdout: string): string => {
+  const did = commandRegex.app.createPlan.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+
+export const parseDIDFromNewAgent = (stdout: string): string => {
+  const did = commandRegex.app.createAgent.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+
+export const parseDIDFromNewFileAsset = (stdout: string): string => {
+  const did = commandRegex.app.createFileAsset.exec(stdout)
+  if (did != null) {
+    return did[1]
+  }
+  return ''
+}
+
 export const parseDIDFromNewNFT = (stdout: string): string => {
   const did = commandRegex.nfts.create.exec(stdout)
   if (did != null) {
     return did[1]
+  }
+  return ''
+}
+
+export const parseOrderPlan = (stdout: string): string => {
+  const parsed = commandRegex.app.order.exec(stdout)
+  console.log(`PARSED ${JSON.stringify(parsed)}`)
+  if (parsed != null) {
+    return parsed[1]
   }
   return ''
 }

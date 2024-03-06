@@ -1,4 +1,4 @@
-import { Account, Nevermined, jsonReplacer } from '@nevermined-io/sdk'
+import { Account, NvmApp, jsonReplacer } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { printProvenanceEvents } from '../../utils/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -7,10 +7,10 @@ import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const provenanceHistory = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv
@@ -19,7 +19,7 @@ export const provenanceHistory = async (
     chalk.dim(`Loading provenance history of: '${chalk.whiteBright(did)}'`)
   )
 
-  const events = await nvm.provenance.getDIDProvenanceEvents(did)
+  const events = await nvmApp.sdk.provenance.getDIDProvenanceEvents(did)
 
   printProvenanceEvents(events, logger)
 

@@ -1,22 +1,22 @@
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const retireDID = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv
 
   logger.info(chalk.dim(`Retiring the asset: ${did}`))
 
-  let ddo = await nvm.assets.resolve(did)
+  let ddo = await nvmApp.sdk.assets.resolve(did)
 
   if (!ddo || ddo.id! !== did) {
     logger.warn('Asset not found')
@@ -25,9 +25,9 @@ export const retireDID = async (
     }
   }
 
-  await nvm.assets.retire(did)
+  await nvmApp.sdk.assets.retire(did)
 
-  ddo = await nvm.assets.resolve(did)
+  ddo = await nvmApp.sdk.assets.resolve(did)
 
   if (!ddo) {
     logger.info(chalk.dim('Asset retired'))

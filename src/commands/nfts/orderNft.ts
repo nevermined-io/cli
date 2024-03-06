@@ -1,4 +1,4 @@
-import { Account, DDO, Nevermined, formatUnits } from '@nevermined-io/sdk'
+import { Account, DDO, NvmApp, formatUnits } from '@nevermined-io/sdk'
 import { Constants, StatusCodes, loadToken, getNFTAddressFromInput } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -6,7 +6,7 @@ import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const orderNft = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   buyerAccount: Account,
   argv: any,
   config: ConfigEntry,
@@ -18,9 +18,9 @@ export const orderNft = async (
 
   logger.info(chalk.dim(`Ordering DID: '${chalk.whiteBright(did)}'!`))
 
-  const token = await loadToken(nvm, config, verbose)
+  const token = await loadToken(nvmApp.sdk, config, verbose)
 
-  const ddo = await nvm.assets.resolve(did)
+  const ddo = await nvmApp.sdk.assets.resolve(did)
 
   logger.debug(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
   logger.info(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`))
@@ -43,11 +43,11 @@ export const orderNft = async (
 
   let agreementId = ''
   if (nftType === 721) {
-    await nvm.contracts.loadNft721(nftAddress!)
-    agreementId = await nvm.nfts721.order(did, buyerAccount)
+    await nvmApp.sdk.contracts.loadNft721(nftAddress!)
+    agreementId = await nvmApp.sdk.nfts721.order(did, buyerAccount)
   } else {
-    await nvm.contracts.loadNft1155(nftAddress!)
-    agreementId = await nvm.nfts1155.order(did, argv.amount, buyerAccount)
+    await nvmApp.sdk.contracts.loadNft1155(nftAddress!)
+    agreementId = await nvmApp.sdk.nfts1155.order(did, argv.amount, buyerAccount)
   }
 
   logger.info(

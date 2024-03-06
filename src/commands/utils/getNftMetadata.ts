@@ -1,4 +1,4 @@
-import { Account, didZeroX, Nevermined } from '@nevermined-io/sdk'
+import { Account, didZeroX, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes, getNFTAddressFromInput } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import IpfsHelper from '../../utils/IpfsHelper'
@@ -9,10 +9,10 @@ import fetch from 'cross-fetch'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const getNftMetadata = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv
@@ -22,7 +22,7 @@ export const getNftMetadata = async (
   logger.info(chalk.dim(`Getting NFT Metadata:`))
 
   // Resolves the DID
-  const ddo = await nvm.assets.resolve(did)
+  const ddo = await nvmApp.sdk.assets.resolve(did)
 
   if (!ddo) {
     return {
@@ -40,7 +40,7 @@ export const getNftMetadata = async (
     ddo.findServiceByType('nft-sales')
   ) {
     is1155 = true
-    nftAddress = nvm.keeper.nftUpgradeable.address
+    nftAddress = nvmApp.sdk.keeper.nftUpgradeable.address
     logger.debug(
       `The DID has a ERC-1155 NFT attached with address ${nftAddress}`
     )
@@ -64,9 +64,9 @@ export const getNftMetadata = async (
   // logger.info(JSON.stringify(nftContract.methods))
   const didHash = didZeroX(getDidHash(did))
   if (is1155) {
-    metadataUrl = await nvm.keeper.nftUpgradeable.uri(did)
+    metadataUrl = await nvmApp.sdk.keeper.nftUpgradeable.uri(did)
   } else {
-    const nftContract = await nvm.contracts.loadNft721(nftAddress || nvm.nfts721.getContract.address)
+    const nftContract = await nvmApp.sdk.contracts.loadNft721(nftAddress || nvmApp.sdk.nfts721.getContract.address)
     metadataUrl = await nftContract.getContract.tokenURI(didHash)
   }
 

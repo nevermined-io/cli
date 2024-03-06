@@ -1,4 +1,4 @@
-import { Account, generateId, Nevermined } from '@nevermined-io/sdk'
+import { Account, generateId, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
@@ -6,10 +6,10 @@ import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const registerProvenance = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   creatorAccount: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { method } = argv
@@ -20,7 +20,7 @@ export const registerProvenance = async (
 
   const provenanceId = generateId()
 
-  const ddo = await nvm.assets.resolve(argv.did)
+  const ddo = await nvmApp.sdk.assets.resolve(argv.did)
 
   if (method === 'wasGeneratedBy') {
     logger.warn(
@@ -30,7 +30,7 @@ export const registerProvenance = async (
     )
     return { status: StatusCodes.OK }
   } else if (method === 'used') {
-    await nvm.provenance.used(
+    await nvmApp.sdk.provenance.used(
       provenanceId,
       ddo.shortId(),
       argv.agentId,
@@ -40,7 +40,7 @@ export const registerProvenance = async (
       creatorAccount
     )
   } else if (method === 'wasDerivedFrom') {
-    await nvm.provenance.wasDerivedFrom(
+    await nvmApp.sdk.provenance.wasDerivedFrom(
       provenanceId,
       ddo.shortId(),
       argv.relatedDid,
@@ -50,7 +50,7 @@ export const registerProvenance = async (
       creatorAccount
     )
   } else if (method === 'wasAssociatedWith') {
-    await nvm.provenance.wasAssociatedWith(
+    await nvmApp.sdk.provenance.wasAssociatedWith(
       provenanceId,
       ddo.shortId(),
       argv.agentId,
@@ -59,7 +59,7 @@ export const registerProvenance = async (
       creatorAccount
     )
   } else if (method === 'ActedOnBehalf') {
-    await nvm.provenance.actedOnBehalf(
+    await nvmApp.sdk.provenance.actedOnBehalf(
       provenanceId,
       ddo.shortId(),
       argv.agentId,

@@ -1,4 +1,4 @@
-import ethers, { HDNodeWallet } from 'ethers'
+import ethers, { HDNodeWallet, Mnemonic, getIndexedAccountPath } from 'ethers'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { mkdirSync, writeFileSync } from 'fs'
@@ -10,7 +10,6 @@ import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
 import { Wallet, Signer } from 'ethers'
 import { Web3Provider, makeAccounts } from '@nevermined-io/sdk'
-import { getWalletFromJSON } from './utils'
 
 dotenv.config()
 
@@ -87,9 +86,9 @@ export async function configureLocalEnvironment(
           file: destinationPackage,
           cwd: ARTIFACTS_PATH
         })
-        console.log(
-          `Artifacts downloaded (${destinationPackage} file) and de-compressed in the destination folder (${ARTIFACTS_PATH})`
-        )
+        
+        // `Artifacts downloaded (${destinationPackage} file) and de-compressed in the destination folder (${ARTIFACTS_PATH})`
+        
       } catch (error) {
         throw new Error(
           `Unable to write and unpack the artifacts from: ${destinationPackage}`
@@ -113,7 +112,7 @@ export function getNetworksConfig(): CliConfig {
 export async function getConfig(
   network: string,
   requiresAccount = true,
-  _accountIndex = 0
+  accountIndex = 0
 ): Promise<ConfigEntry> {
   if (!process.env.SEED_WORDS) {
     if (!process.env.KEYFILE_PATH || !process.env.KEYFILE_PASSWORD) {
@@ -172,18 +171,23 @@ export async function getConfig(
   let signer: Signer
   let accounts: ethers.Wallet[] = []
   if (requiresAccount) {
-    if (!process.env.SEED_WORDS) {
-      signer = Wallet.fromEncryptedJsonSync(
-        process.env.KEYFILE_PATH!,
+    if (!process.env.SEED_WORDS) {      
+      const encryptedJson = fs.readFileSync(process.env.KEYFILE_PATH!, 'utf-8')
+
+      signer = Wallet.fromEncryptedJsonSync(      
+        encryptedJson,
         process.env.KEYFILE_PASSWORD!
       ) 
-      accounts.push(
-        getWalletFromJSON(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!) as Wallet
-      )
+      accounts.push(signer as ethers.Wallet)
     } else {
-
-      signer = Wallet.fromPhrase(config.seed!)
+      
+      const node = HDNodeWallet.fromSeed(
+        Mnemonic.fromPhrase(config.seed!).computeSeed()
+      )
+      signer = node.derivePath(getIndexedAccountPath(accountIndex))                  
+      
       accounts = makeAccounts(config.seed!)
+      
     }
   } else {
     signer = HDNodeWallet.fromPhrase(DUMMY_SEED_WORDS)

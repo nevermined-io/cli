@@ -113,7 +113,7 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(didDataset))
-    expect(stdout.includes(`NFT Assets downloaded to: ${destination}`))
+    expect(stdout.includes(`File Assets downloaded to: ${destination}`))
 
     const files = fs.readdirSync(destination || '')
     expect(files.length == 1)
@@ -142,7 +142,7 @@ describe('Subscription NFTs (ERC-721) e2e Testing', () => {
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(didDataset))
-    expect(stdout.includes(`NFT Assets downloaded to: ${destination}`))
+    expect(stdout.includes(`File Assets downloaded to: ${destination}`))
 
     const files = fs.readdirSync(destination || '')
     expect(files.length == 1)

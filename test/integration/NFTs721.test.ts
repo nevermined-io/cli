@@ -131,7 +131,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
 
     console.debug(`STDOUT: ${stdout}`)
     expect(stdout.includes(did))
-    expect(stdout.includes(`NFT Assets downloaded to: ${destination}`))
+    expect(stdout.includes(`File Assets downloaded to: ${destination}`))
 
     const files = fs.readdirSync(destination || '')
     expect(files.length == 1)

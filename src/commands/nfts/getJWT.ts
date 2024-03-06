@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -6,7 +6,7 @@ import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const getJWT = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   userAccount: Account,
   argv: any,
   config: ConfigEntry,
@@ -20,7 +20,7 @@ export const getJWT = async (
   
   try {
     // Get the subscription token of the asset     
-    const subscriptionToken = await nvm.services.node.getSubscriptionToken(did, userAccount)
+    const subscriptionToken = await nvmApp.sdk.services.node.getSubscriptionToken(did, userAccount)
   
     logger.info(
       chalk.dim(`JWT Token: ${chalk.whiteBright(subscriptionToken.accessToken)}`)

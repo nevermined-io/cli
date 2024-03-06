@@ -1,4 +1,4 @@
-import { Account, Nevermined, Nft1155Contract, Nft721Contract } from '@nevermined-io/sdk'
+import { Account, Nft1155Contract, Nft721Contract, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes
 } from '../../utils'
@@ -9,10 +9,10 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 import { ethers } from 'ethers'
 
 export const cloneNft = async (
-  nvm: Nevermined,
+  nvmApp: NvmApp,
   creatorAccount: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   
@@ -42,17 +42,17 @@ export const cloneNft = async (
   logger.debug(`\tURI: ${argv.uri}`)
   logger.debug(`\tCap: ${argv.cap}`)
 
-  if (!operators.includes(nvm.keeper.didRegistry.address))
-    operators.push(nvm.keeper.didRegistry.address)
+  if (!operators.includes(nvmApp.sdk.keeper.didRegistry.address))
+    operators.push(nvmApp.sdk.keeper.didRegistry.address)
 
   if (nftType === 721)  {
-    if (!operators.includes(nvm.keeper.conditions.transferNft721Condition.address))
-      operators.push(nvm.keeper.conditions.transferNft721Condition.address)
+    if (!operators.includes(nvmApp.sdk.keeper.conditions.transferNft721Condition.address))
+      operators.push(nvmApp.sdk.keeper.conditions.transferNft721Condition.address)
 
     logger.debug(`\tOperators: ${JSON.stringify(operators)}`)
 
     const nftContract = await Nft721Contract.getInstance(
-      (nvm.keeper as any).instanceConfig,
+      (nvmApp.sdk.keeper as any).instanceConfig,
       nftAddress,
     )
     clonnedAddress = await nftContract.createClone(
@@ -64,13 +64,13 @@ export const cloneNft = async (
       creatorAccount
     )
   } else {
-    if (!operators.includes(nvm.keeper.conditions.transferNftCondition.address))
-      operators.push(nvm.keeper.conditions.transferNftCondition.address)
+    if (!operators.includes(nvmApp.sdk.keeper.conditions.transferNftCondition.address))
+      operators.push(nvmApp.sdk.keeper.conditions.transferNftCondition.address)
 
 
 
       const nftContract = await Nft1155Contract.getInstance(
-        (nvm.keeper as any).instanceConfig,
+        (nvmApp.sdk.keeper as any).instanceConfig,
         nftAddress,
       )
       

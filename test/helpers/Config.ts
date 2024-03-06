@@ -2,7 +2,7 @@ import { generateId, makeAccounts } from '@nevermined-io/sdk'
 import { ethers } from 'ethers'
 
 const NETWORK = process.env.NETWORK || 'geth-localnet'
-const BASE_COMMAND = `yarn start -n ${NETWORK}`
+const BASE_COMMAND = `yarn dev -n ${NETWORK}`
 const VERBOSE = '-v'
 
 export const metadataConfig = {
@@ -114,6 +114,19 @@ export const baseCommands = {
     register: `${BASE_COMMAND} ${VERBOSE} provenance register `,
     history: `${BASE_COMMAND} ${VERBOSE} provenance history `,
     inspect: `${BASE_COMMAND} ${VERBOSE} provenance inspect `
+  },
+  app: {
+    createTimePlan: `${BASE_COMMAND} ${VERBOSE} app create-time-plan `,
+    createCreditsPlan: `${BASE_COMMAND} ${VERBOSE} app create-credits-plan `,
+    showPlan: `${BASE_COMMAND} ${VERBOSE} app show-plan `,
+    show: `${BASE_COMMAND} ${VERBOSE} app show `,
+    balance: `${BASE_COMMAND} ${VERBOSE} app balance `,
+    registerAgent: `${BASE_COMMAND} ${VERBOSE} app register-agent `,
+    registerFiles: `${BASE_COMMAND} ${VERBOSE} app register-files `,
+    order: `${BASE_COMMAND} ${VERBOSE} app order `,
+    getToken: `${BASE_COMMAND} ${VERBOSE} app get-token `,
+    access: `${BASE_COMMAND} ${VERBOSE} app access `,
+    download: `${BASE_COMMAND} ${VERBOSE} app download `
   },
   utils: {
     encodeDID: `${BASE_COMMAND} ${VERBOSE} utils encode-did `,

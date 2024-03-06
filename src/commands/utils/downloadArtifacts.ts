@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account,  NvmApp } from '@nevermined-io/sdk'
 import { ARTIFACTS_PATH, ARTIFACTS_REPOSITORY } from '../../utils/config'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
@@ -10,11 +10,11 @@ import fetch from 'cross-fetch'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const downloadArtifacts = async (
-  nvm: Nevermined,
-  account: Account,
+  _nvmApp: NvmApp,
+  _account: Account,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { contractsVersion, networkId, tag, destination } = argv

@@ -4,21 +4,21 @@ import {
   StatusCodes
 } from '../../utils'
 import { Logger } from 'log4js'
-import { Account, Nevermined, PlatformTechStatus } from '@nevermined-io/sdk'
+import { Account, NvmApp, PlatformTechStatus } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const networkStatus = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   argv: any,
   configEntry: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { network } = argv
 
-  const platformVersions = await nvm.utils.versions.get()
+  const platformVersions = await nvmApp.sdk.utils.versions.get()
 
   logger.info(
     chalk.dim(
@@ -27,11 +27,11 @@ export const networkStatus = async (
   )
 
   logger.info(
-    chalk.dim(` Network Id ${chalk.bgBlue(await nvm.keeper.getNetworkId())}`)
+    chalk.dim(` Network Id ${chalk.bgBlue(await nvmApp.sdk.keeper.getNetworkId())}`)
   )
   logger.info(
     chalk.dim(
-      ` Network Name ${chalk.yellow(await nvm.keeper.getNetworkName())}`
+      ` Network Name ${chalk.yellow(await nvmApp.sdk.keeper.getNetworkName())}`
     )
   )
 

@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
@@ -8,10 +8,10 @@ import { aes_decryption_256 } from '@nevermined-io/sdk-dtp'
 import chalk from 'chalk'
 
 export const decryptFile = async (
-  nvm: Nevermined,
-  account: Account,
+  _nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   logger.info(chalk.dim(`Decrypting file`))

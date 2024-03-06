@@ -1,4 +1,4 @@
-import { Contract, FunctionFragment, HDNodeWallet, Wallet, getAddress } from 'ethers'
+import { Contract, FunctionFragment, HDNodeWallet, Wallet, getAddress, isAddress } from 'ethers'
 import {
   Account,
   DDO,
@@ -11,7 +11,9 @@ import {
   ServiceType,
   Token,
   ConditionType,
-  makeAccount
+  makeAccount,
+  NvmApp,
+  NVMAppEnvironments
 } from '@nevermined-io/sdk'
 import chalk from 'chalk'
 import { Constants } from './enums'
@@ -21,6 +23,61 @@ import { Configuration, Logger } from 'log4js'
 import { ethers } from 'ethers'
 import { ConfigEntry } from '../models/ConfigDefinition'
 import * as fs from 'fs'
+
+export const loadNeverminedApp = async (
+  config: ConfigEntry,
+  network: string,
+  connectWeb3 = true,
+  verbose = false
+): Promise<NvmApp> => {
+  try {
+    logger.debug(`Trying to connect to environment: ${config.envName}`)
+    const nvmAppEnvironment = NVMAppEnvironments[config.envName]    
+
+    const nvmApp = await NvmApp.getInstance(
+      nvmAppEnvironment,
+      {
+      ...config.nvm,
+      verbose: verbose ? verbose : config.nvm.verbose
+    })
+    if (connectWeb3)  {
+      await nvmApp.connect(
+        await config.signer.getAddress(), 
+        config.nvm, 
+        {
+          loadCore: true,
+          loadServiceAgreements: true,
+          loadNFTs1155: true,
+          loadNFTs721: true,
+          loadDispenser: true,
+          loadERC20Token: true,
+          loadAccessFlow: true,
+          loadDIDTransferFlow: false,
+          loadRewards: false,
+          loadRoyalties: true,
+          loadCompute: false,
+        }
+      )
+      
+      const accounts =  await nvmApp.sdk.accounts.list()
+      
+      logger.debug(`Accounts: ${accounts.length}`)
+      accounts.map((a) => logger.debug(`loadNevermined: Account - ${a.getId()}`))
+  
+      if (!nvmApp.isWeb3Connected()) {
+        logger.error(
+          chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
+        )
+      }    
+    }
+    
+    return nvmApp
+  } catch (error) {
+    logger.error(chalk.red(`ERROR: ${(error as Error).message}\n`))
+    process.exit(1)
+  }
+
+}
 
 export const loadNevermined = async (
   config: ConfigEntry,
@@ -35,14 +92,14 @@ export const loadNevermined = async (
     
     const accounts = await nvm.accounts.list()
     logger.debug(`Accounts: ${accounts.length}`)
-    accounts.map((a) => logger.debug(`ACCOUNT ${a.getId()}`))
+    accounts.map((a) => logger.debug(`loadNevermined: Account - ${a.getId()}`))
 
-    // await nvm.keeper.loadCurveRoyaltiesInstance()
     if (!nvm.keeper) {
       logger.error(
         chalk.red(`ERROR: Nevermined could not connect to '${network}'\n`)
       )
     }    
+    
     return nvm
   } catch (error) {
     logger.error(chalk.red(`ERROR: ${(error as Error).message}\n`))
@@ -150,7 +207,7 @@ export const findAccountOrFirst = (
 ): Account => {
   let account
   
-  accounts.map((a) => logger.info(`ACCOUNT ${a.getId()}`))
+  accounts.map((a) => logger.info(`Account found: ${a.getId()}`))
 
   if (ethers.isAddress(address)) {
     account = accounts.find(
@@ -247,9 +304,9 @@ export const printTokenBanner = async (token: Token | null) => {
       address.toLowerCase() === Constants.ZeroAddress.toLowerCase() ||
       address.toLowerCase() === Constants.ShortZeroAddress.toLowerCase()
     ) {
-      printNativeTokenBanner()
+      await printNativeTokenBanner()
     } else {
-      printErc20TokenBanner(token)
+      await printErc20TokenBanner(token)
     }
   }
 }
@@ -395,29 +452,34 @@ export const getContractNameFromAddress = async (
 export const loadToken = async (
   nvm: Nevermined,
   config: ConfigEntry,
-  verbose: boolean
+  verbose: boolean,
+  tokenAddress?: string
 ): Promise<Token | null> => {
   // default to no token
   let token: Token | null = null
 
   if (
-    config.erc20TokenAddress!.toLowerCase() ===
-      Constants.ZeroAddress.toLowerCase() ||
-    config.erc20TokenAddress!.toLowerCase() ===
-      Constants.ShortZeroAddress.toLowerCase()
+    tokenAddress && tokenAddress === Constants.ZeroAddress ||
+    (
+      config.erc20TokenAddress!.toLowerCase() ===
+        Constants.ZeroAddress.toLowerCase() ||
+      config.erc20TokenAddress!.toLowerCase() ===
+        Constants.ShortZeroAddress.toLowerCase()
+    )
   ) {
     logger.debug(
       chalk.yellow('INFO: Using native token (ETH, MATIC, etc) for payments!\n')
     )
   } else {    
 
+    const erc20Address = tokenAddress && isAddress(tokenAddress) ? tokenAddress : config.erc20TokenAddress
     // if the token address is not zero try to load it
     logger.debug(
-      `Loading ERC20 Token ${config.erc20TokenAddress}`
+      `Loading ERC20 Token ${erc20Address}`
     )
     try {
       token = await nvm.contracts.loadErc20(
-        getAddress(config.erc20TokenAddress)
+        getAddress(erc20Address)
       )
 
       logger.debug(`Using Token Address: ${token.address}`)

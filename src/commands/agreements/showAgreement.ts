@@ -1,4 +1,4 @@
-import { Account, Nevermined } from '@nevermined-io/sdk'
+import { Account, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes, getContractNameFromAddress } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -6,10 +6,10 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const showAgreement = async (
-  nvm: Nevermined,
-  account: Account,
+  nvmApp: NvmApp,
+  _account: Account,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { agreementId } = argv
@@ -20,17 +20,17 @@ export const showAgreement = async (
     )
   )
 
-  const agreementData = await nvm.keeper.agreementStoreManager.getAgreement(
+  const agreementData = await nvmApp.sdk.keeper.agreementStoreManager.getAgreement(
     agreementId
   )
 
   const { accessConsumer, accessProvider } =
-    await nvm.keeper.templates.accessTemplate.getAgreementData(agreementId)
+    await nvmApp.sdk.keeper.templates.accessTemplate.getAgreementData(agreementId)
 
-  const ddo = await nvm.assets.resolve(agreementData.did)
+  const ddo = await nvmApp.sdk.assets.resolve(agreementData.did)
 
   const contractName = await getContractNameFromAddress(
-    nvm,
+    nvmApp.sdk,
     agreementData.templateId
   )
 
@@ -53,36 +53,36 @@ export const showAgreement = async (
     )
   )
 
-  logger.info(chalk.dim(`Condition Ids:`))
-  await agreementData.conditionIds.forEach(async (_conditionId, _index) => {
-    const cond = await nvm.keeper.conditionStoreManager.getCondition(_conditionId)    
-    logger.info(chalk.dim(`\tCondition Id[${_index}]= ${_conditionId} with status: ${cond.state}. Timeout: ${cond.timeOut} - Timelock: ${cond.timeLock}`))
-  })
+  // logger.info(chalk.dim(`Condition Ids:`))
+  // await agreementData.conditionIds.map(async (_conditionId, _index) => {
+  //   const cond = await nvmApp.sdk.keeper.conditionStoreManager.getCondition(_conditionId)    
+  //   logger.info(chalk.dim(`\tCondition Id[${_index}]= ${_conditionId} with status: ${cond.state}. Timeout: ${cond.timeOut} - Timelock: ${cond.timeLock}`))
+  // })
 
   if (contractName === 'NFTAccessTemplate')
-    await nvm.keeper.templates.nftAccessTemplate.printAgreementStatus(
+    await nvmApp.sdk.keeper.templates.nftAccessTemplate.printAgreementStatus(
       agreementId
     )
   else if (contractName === 'NFTSalesTemplate')
-    await nvm.keeper.templates.nftSalesTemplate.printAgreementStatus(
+    await nvmApp.sdk.keeper.templates.nftSalesTemplate.printAgreementStatus(
       agreementId
     )
   else if (contractName === 'AccessTemplate')
-    await nvm.keeper.templates.accessTemplate.printAgreementStatus(agreementId)
+    await nvmApp.sdk.keeper.templates.accessTemplate.printAgreementStatus(agreementId)
   else if (contractName === 'DIDSalesTemplate')
-    await nvm.keeper.templates.didSalesTemplate.printAgreementStatus(
+    await nvmApp.sdk.keeper.templates.didSalesTemplate.printAgreementStatus(
       agreementId
     )
   else if (contractName === 'EscrowComputeExecutionTemplate')
-    await nvm.keeper.templates.escrowComputeExecutionTemplate.printAgreementStatus(
+    await nvmApp.sdk.keeper.templates.escrowComputeExecutionTemplate.printAgreementStatus(
       agreementId
     )
   else if (contractName === 'NFT721AccessTemplate')
-    await nvm.keeper.templates.nft721AccessTemplate.printAgreementStatus(
+    await nvmApp.sdk.keeper.templates.nft721AccessTemplate.printAgreementStatus(
       agreementId
     )
-  else if (contractName === 'NFT721SalesTemplate')
-    await nvm.keeper.templates.nft721SalesTemplate.printAgreementStatus(
+  else if (contractName === 'NFT721SalesTemplate')      
+    await nvmApp.sdk.keeper.templates.nft721SalesTemplate.printAgreementStatus(
       agreementId
     )
 
