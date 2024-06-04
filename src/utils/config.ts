@@ -65,7 +65,7 @@ export async function configureLocalEnvironment(
       console.debug(
         `Remote network artifacts not found: ${ARTIFACTS_PATH}. Downloading them.`
       )
-      const artifactPackageUrl = `${ARTIFACTS_REPOSITORY}/${config.networkId}/${config.tagName}/contracts_v${config.contractsVersion}.tar.gz`
+      const artifactPackageUrl = `${ARTIFACTS_REPOSITORY}/${config.nvm.chainId}/${config.tagName}/contracts_v${config.contractsVersion}.tar.gz`
       const destinationPackage = `${ARTIFACTS_PATH}/contracts_${config.contractsVersion}.tar.gz`
       const response = await fetch(artifactPackageUrl)
       if (response.status !== 200) {

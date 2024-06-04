@@ -14,7 +14,6 @@
 			"verbose": true
 		},
 		"nativeToken": "ETH",
-		"networkId": "1337",
 		"networkName": "geth-localnet",
 		"etherscanUrl": "",
 		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
@@ -28,6 +27,7 @@
 		"envName": "Staging",
 		"isProduction": false,
 		"nvm": {
+			"chainId": 421614,
 			"appUrl": "https://staging.nevermined.app",
 			"web3ProviderUri": "https://sepolia-rollup.arbitrum.io/rpc",
 			"marketplaceUri": "https://marketplace-api.staging.nevermined.app",
@@ -37,7 +37,6 @@
 			"verbose": true
 		},
 		"nativeToken": "ETH",
-		"networkId": "421614",
 		"networkName": "arbitrum-sepolia",
 		"contractsVersion": "3.5.6",
 		"tagName": "public",
@@ -53,6 +52,7 @@
 		"envName": "Mumbai",
 		"isProduction": false,
 		"nvm": {
+			"chainId": 80001,
 			"appUrl": "https://mumbai.nevermined.app",
 			"web3ProviderUri": "https://matic-mumbai.chainstacklabs.com",
 			"marketplaceUri": "https://marketplace-api.mumbai.nevermined.app",
@@ -62,7 +62,6 @@
 			"verbose": true
 		},
 		"nativeToken": "MATIC",
-		"networkId": "80001",
 		"networkName": "mumbai",
 		"contractsVersion": "3.5.6",
 		"tagName": "public",
@@ -78,6 +77,7 @@
 		"envName": "Matic",
 		"isProduction": true,
 		"nvm": {
+			"chainId": 137,
 			"appUrl": "https://matic.nevermined.app",
 			"web3ProviderUri": "https://polygon-rpc.com",
 			"marketplaceUri": "https://marketplace-api.matic.nevermined.app",
@@ -87,7 +87,6 @@
 			"verbose": true
 		},
 		"nativeToken": "MATIC",
-		"networkId": "137",
 		"networkName": "matic",
 		"contractsVersion": "3.5.7",
 		"tagName": "public",
@@ -103,6 +102,7 @@
 		"envName": "Testing",
 		"isProduction": false,
 		"nvm": {
+			"chainId": 421614,
 			"appUrl": "https://testing.nevermined.app",
 			"web3ProviderUri": "https://sepolia-rollup.arbitrum.io/rpc",
 			"marketplaceUri": "https://marketplace-api.testing.nevermined.app",
@@ -112,9 +112,8 @@
 			"verbose": true
 		},
 		"nativeToken": "ETH",
-		"networkId": "421614",
 		"networkName": "arbitrum-sepolia",
-		"contractsVersion": "3.5.6",
+		"contractsVersion": "3.5.7",
 		"tagName": "public",
 		"etherscanUrl": "https://sepolia.arbiscan.io",
 	"erc20TokenAddress": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
@@ -128,6 +127,7 @@
 		"envName": "Live",
 		"isProduction": true,
 		"nvm": {
+			"chainId": 42161,
 			"appUrl": "https://nevermined.app",
 			"web3ProviderUri": "https://arb1.arbitrum.io/rpc",
 			"marketplaceUri": "https://marketplace-api.arbitrum.nevermined.app",
@@ -137,7 +137,6 @@
 			"verbose": true
 		},
 		"nativeToken": "ETH",
-		"networkId": "42161",
 		"networkName": "arbitrum-one",
 		"contractsVersion": "3.5.7",
 		"tagName": "public",
@@ -153,6 +152,7 @@
 		"envName": "base",
 		"isProduction": true,
 		"nvm": {
+			"chainId": 8453,
 			"appUrl": "https://base.nevermined.app",
 			"web3ProviderUri": "https://1rpc.io/base",
 			"marketplaceUri": "https://marketplace-api.base.nevermined.app",
@@ -162,7 +162,6 @@
 			"verbose": true
 		},
 		"nativeToken": "ETH",
-		"networkId": "8453",
 		"networkName": "base",
 		"contractsVersion": "3.5.7",
 		"tagName": "public",
@@ -178,6 +177,7 @@
 		"envName": "Gnosis",
 		"isProduction": true,
 		"nvm": {
+			"chainId": 100,
 			"appUrl": "https://gnosis.nevermined.app",
 			"web3ProviderUri": "https://rpc.gnosischain.com/",
 			"marketplaceUri": "https://marketplace-api.gnosis.nevermined.app",
@@ -187,9 +187,8 @@
 			"verbose": true
 		},
 		"nativeToken": "xDAI",
-		"networkId": "100",
 		"networkName": "gnosis",
-		"contractsVersion": "3.5.6",
+		"contractsVersion": "3.5.7",
 		"tagName": "public",
 		"etherscanUrl": "https://gnosisscan.io",
 		"erc20TokenAddress": "0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83",

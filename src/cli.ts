@@ -99,10 +99,10 @@ const cmdHandler = async (
 
       const networkId = await nvmApp.sdk.keeper.getNetworkId()
       
-      if (networkId !== Number(config.networkId)) {
+      if (networkId !== Number(config.nvm.chainId)) {
         logger.warn(chalk.red(`\nWARNING: Network connectivity issue`))
         logger.warn(
-          `The network id obtained from the blockchain node (${networkId}), is not the same we have in the configuration for the network ${network} (${config.networkId}) `
+          `The network id obtained from the blockchain node (${networkId}), is not the same we have in the configuration for the network ${network} (${config.nvm.chainId}) `
         )
         logger.warn(
           `Please, check if you are connected to the right node url. Currently using: ${config.nvm.web3ProviderUri}\n`

@@ -11,7 +11,6 @@ export interface ConfigEntry {
   envUrl?: string
   envName: string
   isProduction?: boolean
-  networkId?: string
   networkName?: string
   contractsVersion?: string
   tagName?: string
