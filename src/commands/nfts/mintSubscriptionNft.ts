@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   loadSubscriptionContract,
@@ -10,8 +10,8 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 import { ethers } from 'ethers'
 
 export const mintSubscriptionNft = async (
-  _nvmApp: NvmApp,
-  minterAccount: Account,
+  nvmApp: NvmApp,
+  minterAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -41,8 +41,7 @@ export const mintSubscriptionNft = async (
 
   const tokenId = argv.tokenId && argv.tokenId.toString().length > 0 ? Number(argv.tokenId) : Number(0)
   
-  const subscriptionContract = loadSubscriptionContract(config, nftAddress)
-    
+  const subscriptionContract = await loadSubscriptionContract(nvmApp.sdk, config, nftAddress)
   await subscriptionContract["mint(address,uint256,uint256)"](receiver as string, tokenId, 0)
 
 

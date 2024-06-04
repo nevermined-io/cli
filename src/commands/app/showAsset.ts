@@ -1,4 +1,4 @@
-import { Account, ChargeType, DDO, MetaDataExternalResource, NvmApp, formatUnits, zeroX } from '@nevermined-io/sdk'
+import { NvmAccount, ChargeType, DDO, MetaDataExternalResource, NvmApp, formatUnits, zeroX } from '@nevermined-io/sdk'
 import {
   Constants,
   StatusCodes,
@@ -12,7 +12,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const showAsset = async (
   nvmApp: NvmApp,
-  userAccount: Account,
+  _userAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -83,31 +83,31 @@ export const showAsset = async (
     )    
 
   } else if (assetType === 'service')  {
-    logger.info(`Endpoints:`)
-    metadata.attributes.main.webService.endpoints.map((endpoint: any) => {
+    logger.info(`Endpoints:`)    
+    metadata.attributes.main.webService?.endpoints?.map((endpoint: any) => {
       logger.info(`\t${chalk.whiteBright(endpoint.method)}: ${endpoint.url}`)
     })
     logger.info(`Open Endpoints:`)
-    metadata.attributes.main.webService.openEndpoints.map((endpoint: string) => {
+    metadata.attributes.main.webService?.openEndpoints?.map((endpoint: string) => {
       logger.info(`\t${endpoint}`)
     })
     logger.info(
       chalk.dim(`\nOpen API Url: ${chalk.whiteBright(metadata.attributes.additionalInformation?.customData?.openApi)}`)
     )
     const accessService = ddo.findServiceByType('nft-access')
-    if (metadata.attributes.main.webService.chargeType === ChargeType.Fixed)  {
+    if (metadata.attributes.main.webService?.chargeType === ChargeType.Fixed)  {
       logger.info(
-        chalk.dim(`\nAccess Cost: ${chalk.whiteBright(accessService.attributes.main.nftAttributes.amount)}`)
+        chalk.dim(`\nAccess Cost: ${chalk.whiteBright(accessService.attributes.main.nftAttributes?.amount)}`)
       )
-    } else if (metadata.attributes.main.webService.chargeType === ChargeType.Dynamic) {
+    } else if (metadata.attributes.main.webService?.chargeType === ChargeType.Dynamic) {
       logger.info(
-        chalk.dim(`\nAccess Cost between: ${chalk.whiteBright(accessService.attributes.main.nftAttributes.minCreditsToCharge)} and ${chalk.whiteBright(accessService.attributes.main.nftAttributes.maxCreditsToCharge)}`)
+        chalk.dim(`\nAccess Cost between: ${chalk.whiteBright(accessService.attributes.main.nftAttributes?.minCreditsToCharge)} and ${chalk.whiteBright(accessService.attributes.main.nftAttributes?.maxCreditsToCharge)}`)
       )
     }
       
   } else  {
     logger.info(`Files:`)
-    metadata.attributes.main.files.map((resource: MetaDataExternalResource) => {
+    metadata.attributes.main.files?.map((resource: MetaDataExternalResource) => {
       resource.name && logger.info(`\t${chalk.whiteBright(resource.name)}: ${resource.contentType}`)      
     })
   }

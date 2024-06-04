@@ -1,5 +1,5 @@
 import {
-  Account,
+  NvmAccount,
   NFT721Api,
   parseEther,
   formatEther,
@@ -19,7 +19,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const accountsList = async (
   nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -29,7 +29,7 @@ export const accountsList = async (
 
   const token = await loadToken(nvm, config, verbose)
 
-  let accounts: Account[] = []
+  let accounts: NvmAccount[] = []
   if (address) {
     logger.info(`Getting balance of account ${address}`)
     accounts = [await nvm.accounts.getAccount(address)]
@@ -60,7 +60,7 @@ export const accountsList = async (
   const loadedAccounts = await Promise.all(
     accounts.map(async (a, index) => {
       
-      const balanceFormatted = formatEther(await a.getEtherBalance())
+      const balanceFormatted = formatEther(await nvm.accounts.getEtherBalance(a.getId()))
       const ethBalance = parseEther(
         balanceFormatted
       )      

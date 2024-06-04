@@ -1,4 +1,4 @@
-import { Account, NodeUploadBackends, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NodeUploadBackends, NvmApp } from '@nevermined-io/sdk'
 import fs from 'fs'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { StatusCodes } from '../../utils'
@@ -8,7 +8,7 @@ import chalk from 'chalk'
 
 export const uploadFile = async (
   nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   argv: any,
   _config: ConfigEntry,

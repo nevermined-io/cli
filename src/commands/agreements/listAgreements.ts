@@ -1,4 +1,4 @@
-import { Account, ConditionState, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, ConditionState, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const listAgreements = async (
   nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger
@@ -28,7 +28,7 @@ export const listAgreements = async (
   for (const agreement of agreements) {
     try {
       const status = await nvmApp.sdk.agreements.status(agreement.agreementId, true)
-      const contractName = await nvmApp.sdk.keeper.getTemplateByAddress(agreement.templateId).contractName
+      const contractName = await nvmApp.sdk.keeper.getTemplateByAddress(agreement.templateId)?.contractName
 
       logger.info(
         chalk.dim(

@@ -1,5 +1,4 @@
-import { generateId, makeAccounts } from '@nevermined-io/sdk'
-import { ethers } from 'ethers'
+import { generateId, makeWallets } from '@nevermined-io/sdk'
 
 const NETWORK = process.env.NETWORK || 'geth-localnet'
 const BASE_COMMAND = `yarn dev -n ${NETWORK}`
@@ -21,7 +20,7 @@ export const loadAddressesFromSeedWords = (
   numberOfAccounts = 10
 ): string[] => {
   if (seedWords) {
-    const accounts: ethers.Wallet[] = makeAccounts(seedWords, numberOfAccounts)
+    const accounts = makeWallets(seedWords, numberOfAccounts)
     const addresses = accounts.map(account => { return account.address })
     return addresses
   }

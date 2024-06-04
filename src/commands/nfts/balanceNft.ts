@@ -1,4 +1,4 @@
-import { Account, didZeroX, jsonReplacer, NvmApp, zeroX } from '@nevermined-io/sdk'
+import { NvmAccount, didZeroX, jsonReplacer, NvmApp, zeroX } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const balanceNft = async (
   nvmApp: NvmApp,
-  consumerAccount: Account,
+  consumerAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

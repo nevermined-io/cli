@@ -3,14 +3,14 @@ import {
   StatusCodes
 } from '../../utils'
 import { Logger } from 'log4js'
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const networkGetConfig = async (
   nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   configEntry: ConfigEntry,
   logger: Logger
@@ -34,19 +34,19 @@ export const networkGetConfig = async (
   logger.info('')
 
   try {
-    const configContract = loadNeverminedConfigContract(configEntry)
+    const configContract = await loadNeverminedConfigContract(nvmApp.sdk, configEntry)
 
     logger.info(
       chalk.dim(
         ` Network Fee: ${chalk.yellow(
-          await configContract.getMarketplaceFee()
+          (await configContract.read.getMarketplaceFee()) as bigint
         )}`
       )
     )
 
     logger.info(
       chalk.dim(
-        ` Fee Receiver: ${chalk.yellow(await configContract.getFeeReceiver())}`
+        ` Fee Receiver: ${chalk.yellow(await configContract.read.getFeeReceiver())}`
       )
     )
 

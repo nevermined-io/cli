@@ -1,4 +1,4 @@
-import { Account, Nft1155Contract, Nft721Contract, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, Nft1155Contract, Nft721Contract, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes
 } from '../../utils'
@@ -10,7 +10,7 @@ import { ethers } from 'ethers'
 
 export const cloneNft = async (
   nvmApp: NvmApp,
-  creatorAccount: Account,
+  creatorAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

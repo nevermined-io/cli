@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes, getNetworksConfig } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const networkList = async (
   _nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   _configEntry: ConfigEntry,
   logger: Logger

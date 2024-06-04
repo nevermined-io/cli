@@ -1,6 +1,6 @@
 import { StatusCodes } from '../../utils'
 import { Logger } from 'log4js'
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { ConfigEntry } from '../../models/ConfigDefinition'
@@ -9,7 +9,7 @@ type GovernanceParams = 'fees' | 'governor'
 
 export const networkSetConfig = async (
   nvmApp: NvmApp,
-  account: Account,
+  account: NvmAccount,
   argv: any,
   _configEntry: ConfigEntry,
   logger: Logger

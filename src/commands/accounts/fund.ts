@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { Logger } from 'log4js'
 import chalk from 'chalk'
@@ -9,7 +9,7 @@ const ERC20_DISPENSED_AMOUNT = 100n
 
 export const accountsFund = async (
   nvmApp: NvmApp,
-  account: Account,
+  account: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

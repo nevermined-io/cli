@@ -1,4 +1,4 @@
-import { Account,  NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount,  NvmApp } from '@nevermined-io/sdk'
 import { ARTIFACTS_PATH, ARTIFACTS_REPOSITORY } from '../../utils/config'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
@@ -11,7 +11,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const downloadArtifacts = async (
   _nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   argv: any,
   _config: ConfigEntry,

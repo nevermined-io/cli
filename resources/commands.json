@@ -841,8 +841,10 @@
 					"default": "0",
 					"description": "The max number of tokens created in this NFT contract. If 0 means unlimitted"
 				},{
-					"name": "approve",
+					"name": "operators",
 					"type": "array",
+					"default": [],
+					"demandOption": false,
 					"description": "A list of addresses to be approved to manage the NFT contract"
 				},{
 					"name": "addOperator",
@@ -1351,8 +1353,9 @@
 					"default": "",
 					"description": "The nft metadata uri"
 				},{
-					"name": "approve",
-					"type": "array",
+					"name": "operators",
+					"type": "array",					
+					"demandOption": false,
 					"description": "A list of addresses to be approved to manage the NFT contract"
 				},{
 					"name": "addOperator",
@@ -1766,41 +1769,6 @@
 					"type": "boolean",
 					"default": false,
 					"description": "If given it encrypts the file with AES and return password"
-				}]
-			}, {
-				"name": "decrypt [file]",
-				"description": "Decrypt a file",
-				"details": "It decrypts a previously encrypted file using the password provided.",
-				"examples": ["ncli utils decrypt README.md --password 12345678"],
-				"commandHandler": "decryptFile",
-				"positionalArguments": [{
-					"name": "file",
-					"type": "string",
-					"description": "The path to the file to decrypt"
-				},
-				{
-					"name": "password",
-					"type": "string",
-					"default": "",
-					"description": "The password to be used to decrypt the file"
-				}],
-				"optionalArguments": []
-			}, {
-				"name": "encrypt [file]",
-				"description": "Encrypt a file",
-				"details": "It encrypts a file using the password provided.",
-				"examples": ["ncli utils encrypt README.md --password 12345678"],
-				"commandHandler": "encryptFile",
-				"positionalArguments": [{
-					"name": "file",
-					"type": "string",
-					"description": "The path to the file to encrypt"
-				}],
-				"optionalArguments": [{
-					"name": "password",
-					"type": "string",
-					"default": "",
-					"description": "The password to be used to encrypt the file. If empty, a new password will be generated"
 				}]
 			}, {
 				"name": "publish-nft-metadata",
@@ -2231,6 +2199,11 @@
 					"type": "string",
 					"demandOption": false,
 					"description": "The identifier of the agreement created by the buyer"
+				}, {
+					"name": "numCredits",
+					"type": "number",
+					"demandOption": false,
+					"description": "The number of credits to order"
 				}
 				]
 			}, {

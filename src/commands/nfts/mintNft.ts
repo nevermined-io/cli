@@ -1,4 +1,4 @@
-import { Account, NvmApp, zeroX } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp, zeroX } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -12,7 +12,7 @@ import { FunctionFragment, ethers } from 'ethers'
 
 export const mintNft = async (
   nvmApp: NvmApp,
-  minterAccount: Account,
+  minterAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

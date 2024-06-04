@@ -1,4 +1,4 @@
-import { AccessCondition, Account, ConditionState, DDO, NvmApp, ServiceCommon, ServiceNFTSales, TransferNFT721Condition, TransferNFTCondition } from '@nevermined-io/sdk'
+import { AccessCondition, NvmAccount, ConditionState, DDO, NvmApp, ServiceCommon, ServiceNFTSales, TransferNFT721Condition, TransferNFTCondition } from '@nevermined-io/sdk'
 import { StatusCodes, getContractNameFromAddress } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -7,9 +7,9 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const abortAgreement = async (
   nvmApp: NvmApp,
-  account: Account,
+  account: NvmAccount,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { agreementId } = argv
@@ -109,8 +109,8 @@ export const abortAgreement = async (
         assetPrice.getReceivers(),
         agreementData.creator,
         ddo.shortId(),
-        assetPrice.getTokenAddress(),
         account,
+        assetPrice.getTokenAddress(),
       )
   
     }

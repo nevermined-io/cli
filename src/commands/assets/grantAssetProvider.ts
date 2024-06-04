@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -8,7 +8,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const grantAssetProvider = async (
   nvmApp: NvmApp,
-  account: Account,
+  account: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger
@@ -20,7 +20,7 @@ export const grantAssetProvider = async (
   logger.debug(chalk.dim(`Using account: '${account.getId()}'`))
   
   try {
-    await nvmApp.sdk.keeper.didRegistry.addProvider(did, providerAddress, account.getId())
+    await nvmApp.sdk.keeper.didRegistry.addProvider(did, providerAddress, account)
     logger.info(
       chalk.dim(`Permissions granted!`)
     )

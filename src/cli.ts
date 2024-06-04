@@ -19,7 +19,7 @@ import { ExecutionOutput } from './models/ExecutionOutput'
 import fs from 'fs'
 import * as CliCommands from './commands'
 import { CLICommandsDefinition } from './models/CLICommandsDefinition'
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { ConfigEntry } from './models/ConfigDefinition'
 type CliCommands = typeof CliCommands
 
@@ -33,7 +33,7 @@ const cmdHandler = async (
 
   let config: ConfigEntry
   let nvmApp: NvmApp
-  let userAccount: Account
+  let userAccount: NvmAccount
 
   if (process.env.NETWORK) network = process.env.NETWORK
 
@@ -113,7 +113,7 @@ const cmdHandler = async (
           `Connected to Network:'${networkId}'\n`
         )
       )
-      userAccount = await nvmApp.sdk.accounts.list().then(accounts => accounts[accountIndex])
+      userAccount = nvmApp.sdk.accounts.list()[accountIndex]
       
       if (!userAccount || !userAccount.getId()) {
         throw new Error(

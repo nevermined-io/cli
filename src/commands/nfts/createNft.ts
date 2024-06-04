@@ -1,4 +1,4 @@
-import { Account, AssetPrice, getRoyaltyAttributes, NeverminedNFT1155Type, NeverminedNFT721Type, NFTAttributes, RoyaltyKind, ServiceType, zeroX, AssetAttributes, MetaDataExternalResource, PublishMetadataOptions, ServiceAttributes, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, AssetPrice, getRoyaltyAttributes, NeverminedNFT1155Type, NeverminedNFT721Type, NFTAttributes, RoyaltyKind, ServiceType, zeroX, AssetAttributes, MetaDataExternalResource, PublishMetadataOptions, ServiceAttributes, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -17,7 +17,7 @@ import { ethers, parseUnits } from 'ethers'
 
 export const createNft = async (
   nvmApp: NvmApp,
-  creatorAccount: Account,
+  creatorAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -94,13 +94,13 @@ export const createNft = async (
     Number(royaltiesAmount),
   )
 
-  const configContract = loadNeverminedConfigContract(config)
-  const networkFee = await configContract.getMarketplaceFee()
+  const configContract = await loadNeverminedConfigContract(nvmApp.sdk, config)
+  const networkFee = (await configContract.read.getMarketplaceFee()) as bigint
   const assetPrice = new AssetPrice(creatorAccount.getId(), ddoPrice)
     .setTokenAddress(token ? token.address : config.erc20TokenAddress)
   if (networkFee > 0) {
     assetPrice.addNetworkFees(
-      await configContract.getFeeReceiver(),
+      (await configContract.read.getFeeReceiver()) as string,
       networkFee
     )
     logger.info(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)

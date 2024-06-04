@@ -4,6 +4,7 @@
 		"envName": "Local",
 		"isProduction": false,
 		"nvm": {
+			"chainId": 1337,
 			"appUrl": "http://localhost:3000",
 			"web3ProviderUri": "http://contracts.nevermined.localnet",
 			"marketplaceUri": "http://marketplace.nevermined.localnet",
@@ -88,7 +89,7 @@
 		"nativeToken": "MATIC",
 		"networkId": "137",
 		"networkName": "matic",
-		"contractsVersion": "3.5.6",
+		"contractsVersion": "3.5.7",
 		"tagName": "public",
 		"etherscanUrl": "https://polygonscan.com",
 		"erc20TokenAddress": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
@@ -116,7 +117,7 @@
 		"contractsVersion": "3.5.6",
 		"tagName": "public",
 		"etherscanUrl": "https://sepolia.arbiscan.io",
-		"erc20TokenAddress": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
+	"erc20TokenAddress": "0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
@@ -138,7 +139,7 @@
 		"nativeToken": "ETH",
 		"networkId": "42161",
 		"networkName": "arbitrum-one",
-		"contractsVersion": "3.5.6",
+		"contractsVersion": "3.5.7",
 		"tagName": "public",
 		"etherscanUrl": "https://arbiscan.io",
 		"erc20TokenAddress": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
@@ -149,11 +150,11 @@
 	"appBase": {
 		"envDescription": "The Base production environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://base.nevermined.app/",
-		"envName": "Base",
+		"envName": "base",
 		"isProduction": true,
 		"nvm": {
 			"appUrl": "https://base.nevermined.app",
-			"web3ProviderUri": "https://mainnet.base.org",
+			"web3ProviderUri": "https://1rpc.io/base",
 			"marketplaceUri": "https://marketplace-api.base.nevermined.app",
 			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
 			"neverminedNodeUri": "https://node.base.nevermined.app",

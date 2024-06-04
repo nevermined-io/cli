@@ -1,4 +1,4 @@
-import { Account, AssetPrice, zeroX, NvmApp, NvmAppMetadata, DDO } from '@nevermined-io/sdk'
+import { NvmAccount, AssetPrice, zeroX, NvmApp, NvmAppMetadata, DDO } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   loadToken} from '../../utils'
@@ -11,7 +11,7 @@ import { ZeroAddress } from 'ethers'
 
 export const createPlan = async (
   nvmApp: NvmApp,
-  publisherAccount: Account,
+  publisherAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger

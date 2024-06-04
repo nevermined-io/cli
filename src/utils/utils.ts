@@ -1,6 +1,5 @@
-import { Contract, FunctionFragment, HDNodeWallet, Wallet, getAddress, isAddress } from 'ethers'
 import {
-  Account,
+  NvmAccount,
   DDO,
   Nevermined,  
   Nft721Contract,
@@ -11,9 +10,11 @@ import {
   ServiceType,
   Token,
   ConditionType,
-  makeAccount,
   NvmApp,
-  NVMAppEnvironments
+  NVMAppEnvironments,
+  makeWallet,
+  isValidAddress,
+  getChecksumAddress
 } from '@nevermined-io/sdk'
 import chalk from 'chalk'
 import { Constants } from './enums'
@@ -33,7 +34,7 @@ export const loadNeverminedApp = async (
   try {
     logger.debug(`Trying to connect to environment: ${config.envName}`)
     const nvmAppEnvironment = NVMAppEnvironments[config.envName]    
-
+    logger.debug(nvmAppEnvironment)
     const nvmApp = await NvmApp.getInstance(
       nvmAppEnvironment,
       {
@@ -41,8 +42,12 @@ export const loadNeverminedApp = async (
       verbose: verbose ? verbose : config.nvm.verbose
     })
     if (connectWeb3)  {
+      const signer = config.signer as NvmAccount
+      
+      logger.debug(`NvmApp connecting using address ${signer.getAddress()}`)
       await nvmApp.connect(
-        await config.signer.getAddress(), 
+        signer, 
+        '',
         config.nvm, 
         {
           loadCore: true,
@@ -59,10 +64,10 @@ export const loadNeverminedApp = async (
         }
       )
       
-      const accounts =  await nvmApp.sdk.accounts.list()
+      const accounts =  nvmApp.sdk.accounts.list()
       
       logger.debug(`Accounts: ${accounts.length}`)
-      accounts.map((a) => logger.debug(`loadNevermined: Account - ${a.getId()}`))
+      accounts.map((a) => logger.debug(`loadNevermined: NvmAccount - ${a.getId()}`))
   
       if (!nvmApp.isWeb3Connected()) {
         logger.error(
@@ -92,7 +97,7 @@ export const loadNevermined = async (
     
     const accounts = await nvm.accounts.list()
     logger.debug(`Accounts: ${accounts.length}`)
-    accounts.map((a) => logger.debug(`loadNevermined: Account - ${a.getId()}`))
+    accounts.map((a) => logger.debug(`loadNevermined: NvmAccount - ${a.getId()}`))
 
     if (!nvm.keeper) {
       logger.error(
@@ -110,33 +115,23 @@ export const loadNevermined = async (
 
 export const loginMarketplaceApi = async (
   nvm: Nevermined,
-  account: Account
+  account: NvmAccount
 ): Promise<boolean> => {  
   const clientAssertion = await nvm.utils.jwt.generateClientAssertion(account)  
   await nvm.services.marketplace.login(clientAssertion)  
   return true
 }
 
-export const loadNeverminedConfigContract = (config: ConfigEntry): Contract => {
+export const loadNeverminedConfigContract = async (nvm: Nevermined, config: ConfigEntry) => {
   const abiNvmConfig = `${ARTIFACTS_PATH}/NeverminedConfig.${config.networkName?.toLowerCase()}.json`
   const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
-
-  return new ethers.Contract(
-    nvmConfigAbi.address,
-    nvmConfigAbi.abi,
-    config.signer
-  )
+  return nvm.utils.blockchain.loadContract(nvmConfigAbi.address, nvmConfigAbi.abi)
 }
 
-export const loadSubscriptionContract = (config: ConfigEntry, nftAddress: string): Contract => {
+export const loadSubscriptionContract = async (nvm: Nevermined, config: ConfigEntry, nftAddress: string) => {
   const abiNvmConfig = `${ARTIFACTS_PATH}/NFT721SubscriptionUpgradeable.${config.networkName?.toLowerCase()}.json`
   const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
-
-  return new ethers.Contract(
-    nftAddress,
-    nvmConfigAbi.abi,
-    config.signer
-  )
+  return nvm.utils.blockchain.loadContract(nftAddress, nvmConfigAbi.abi)
 }
 
 export const getNFTAddressFromInput = (
@@ -163,55 +158,30 @@ export const getNFTAddressFromInput = (
   }
 }
 
-export const getSignatureOfMethod = (
-  contractInstace: ethers.BaseContract,
-  methodName: string,
-  args: any[]
-): string => {
-  const methods = contractInstace.interface.fragments.filter(
-    (f: FunctionFragment) => f.name === methodName,
-  )
-  const foundMethod =
-    methods.find((f) => f.inputs.length === args.length) || methods[0]
-  if (!foundMethod) {
-    throw new Error(`Method "${methodName}" not found in contract`)
-  }
-  return foundMethod.format()
-}
-
 export const getDidHash = (did: string): string => did.replace('did:nv:', '')
 
 export const formatDid = (did: string): string => `did:nv:${noZeroX(did)}`
 
 
-export const getWalletFromJSON = (
-  keyfilePath: string, 
-  password: string
-): Wallet | HDNodeWallet => {
-  const data = fs.readFileSync(keyfilePath)
-  const keyfile = JSON.parse(data.toString())
-  return ethers.Wallet.fromEncryptedJsonSync(keyfile, password)  
-}
-
 export const loadAccountFromSeedWords = (
   seedWords: string,
   index = 0
-): Account => {
-  const wallet = makeAccount(seedWords, index)
-  return new Account(wallet.address)
+): NvmAccount => {
+  const wallet = makeWallet(seedWords, index)
+  return NvmAccount.fromAccount(wallet)
 }
 
 export const findAccountOrFirst = (
-  accounts: Account[],
+  accounts: NvmAccount[],
   address: string
-): Account => {
+): NvmAccount => {
   let account
   
   accounts.map((a) => logger.info(`Account found: ${a.getId()}`))
 
   if (ethers.isAddress(address)) {
     account = accounts.find(
-      (a: Account) => a.getId().toLowerCase() === address.toLowerCase()
+      (a: NvmAccount) => a.getId().toLowerCase() === address.toLowerCase()
     )
 
     if (!account) {
@@ -436,7 +406,7 @@ export const getContractNameFromAddress = async (
 ): Promise<string | undefined> => {
   const platformVersions = await nvm.utils.versions.get()
 
-  let contractName = undefined
+  let contractName: string | undefined
   Object.keys(platformVersions.sdk.contracts || {}).forEach((_name) => {
     if (
       platformVersions.sdk.contracts![_name] &&
@@ -472,14 +442,14 @@ export const loadToken = async (
     )
   } else {    
 
-    const erc20Address = tokenAddress && isAddress(tokenAddress) ? tokenAddress : config.erc20TokenAddress
+    const erc20Address = tokenAddress && isValidAddress(tokenAddress) ? tokenAddress : config.erc20TokenAddress
     // if the token address is not zero try to load it
     logger.debug(
       `Loading ERC20 Token ${erc20Address}`
     )
     try {
       token = await nvm.contracts.loadErc20(
-        getAddress(erc20Address)
+        getChecksumAddress(erc20Address)
       )
 
       logger.debug(`Using Token Address: ${token.address}`)

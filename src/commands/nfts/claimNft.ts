@@ -1,4 +1,4 @@
-import { Account, DDO, NvmApp, formatUnits } from '@nevermined-io/sdk'
+import { NvmAccount, DDO, NvmApp, formatUnits } from '@nevermined-io/sdk'
 import { Constants, StatusCodes, loadToken, getNFTAddressFromInput } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const claimNft = async (
   nvmApp: NvmApp,
-  userAccount: Account,
+  userAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger

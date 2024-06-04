@@ -1,4 +1,4 @@
-import { Account, NvmApp, NvmAppMetadata, MetaDataExternalResource } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp, NvmAppMetadata, MetaDataExternalResource } from '@nevermined-io/sdk'
 import {
   StatusCodes} from '../../utils'
 import chalk from 'chalk'
@@ -9,7 +9,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const registerFiles = async (
   nvmApp: NvmApp,
-  publisherAccount: Account,
+  publisherAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
