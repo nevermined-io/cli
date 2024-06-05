@@ -15,7 +15,6 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   let did = ''
   let orderAgreementId = ''
   let nftAddress = ''
-  const metadataUri = 'http://nevermined.io/xxx'
 
   beforeAll(async () => {
     try {
@@ -77,7 +76,7 @@ describe('NFTs (ERC-721) e2e Testing', () => {
   })
 
   test('It mints a NFT (ERC-721)', async () => {
-    const mintCommand = `${baseCommands.nfts721.mint} "${did}" --nftAddress ${nftAddress} --uri ${metadataUri}  --accountIndex 0  `
+    const mintCommand = `${baseCommands.nfts721.mint} "${did}" --nftAddress ${nftAddress} --accountIndex 0  `
     console.debug(`COMMAND: ${mintCommand}`)
 
     const stdout = execCommand(mintCommand, execOpts)

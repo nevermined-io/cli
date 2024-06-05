@@ -124,7 +124,7 @@
 	"appBase": {
 		"envDescription": "The Base production environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://base.nevermined.app/",
-		"envName": "base",
+		"envName": "Base",
 		"isProduction": true,
 		"nvm": {
 			"chainId": 8453,

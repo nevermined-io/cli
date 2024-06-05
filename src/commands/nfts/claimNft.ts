@@ -42,6 +42,14 @@ export const claimNft = async (
     )
   )
 
+  if (agreementData.conditionIds.length === 0) {
+    logger.error(`Unable to load Agreement with Id ${agreementId}: No conditions found`)
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Unable to load Agreement with Id ${agreementId}: No conditions found`
+    }
+  }
+
   await nvmApp.sdk.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
   )
@@ -113,7 +121,8 @@ export const claimNft = async (
       agreementId,
       sellerAddress,
       buyerAddress,
-      argv.amount
+      argv.amount,
+      ddo.id
     )
   }
 

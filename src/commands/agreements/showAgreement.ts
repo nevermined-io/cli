@@ -24,6 +24,7 @@ export const showAgreement = async (
     agreementId
   )
 
+  logger.debug(chalk.dim(`Agreement Data: ${JSON.stringify(agreementData)}`))
   const { accessConsumer, accessProvider } =
     await nvmApp.sdk.keeper.templates.accessTemplate.getAgreementData(agreementId)
 
