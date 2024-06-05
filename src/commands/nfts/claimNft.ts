@@ -122,7 +122,7 @@ export const claimNft = async (
       sellerAddress,
       buyerAddress,
       argv.amount,
-      ddo.id
+      // ddo.id
     )
   }
 
