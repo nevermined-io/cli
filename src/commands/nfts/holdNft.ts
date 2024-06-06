@@ -1,4 +1,4 @@
-import { Account, jsonReplacer, NFT1155Api, NFT721Api, NvmApp, zeroX } from '@nevermined-io/sdk'
+import { NvmAccount, jsonReplacer, NFT1155Api, NFT721Api, NvmApp, zeroX } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const holdNft = async (
   nvmApp: NvmApp,
-  consumerAccount: Account,
+  consumerAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger
@@ -40,7 +40,7 @@ export const holdNft = async (
 
   if (nftType === 721) {     
     const nft = await nvmApp.sdk.contracts.loadNft721(nftAddress)
-    balance = await nft.balanceOf(new Account(userAddress))
+    balance = await nft.balanceOf(userAddress)
     isHolder = balance > 0
 
   } else {

@@ -1,4 +1,4 @@
-import { Account, NvmApp, jsonReplacer } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp, jsonReplacer } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { printProvenanceEntry } from '../../utils/utils'
@@ -8,7 +8,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const provenanceInspect = async (
   nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger
@@ -22,6 +22,12 @@ export const provenanceInspect = async (
   )
 
   const provenance = await nvmApp.sdk.provenance.getProvenanceEntry(provenanceId)
+  if (!provenance) {
+    logger.error(
+      chalk.red(`Provenance event with id: '${provenanceId}' not found`)
+    )
+    return { status: StatusCodes.ERROR}  
+  }
   printProvenanceEntry(provenanceId, provenance, logger)
 
   return {

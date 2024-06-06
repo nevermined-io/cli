@@ -1,5 +1,4 @@
-import { NeverminedOptions } from '@nevermined-io/sdk'
-import { Signer } from 'ethers'
+import { NeverminedOptions, NvmAccount } from '@nevermined-io/sdk'
 
 export interface CliConfig {
   [index: string]: ConfigEntry
@@ -7,12 +6,11 @@ export interface CliConfig {
 
 export interface ConfigEntry {
   nvm: NeverminedOptions
-  signer: Signer
+  signer: NvmAccount
   envDescription?: string
   envUrl?: string
   envName: string
   isProduction?: boolean
-  networkId?: string
   networkName?: string
   contractsVersion?: string
   tagName?: string

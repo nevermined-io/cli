@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -7,9 +7,9 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const getJWT = async (
   nvmApp: NvmApp,
-  userAccount: Account,
+  userAccount: NvmAccount,
   argv: any,
-  config: ConfigEntry,
+  _config: ConfigEntry,
   logger: Logger
 ): Promise<ExecutionOutput> => {
   const { did } = argv

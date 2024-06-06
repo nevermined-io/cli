@@ -1,4 +1,4 @@
-import { Account, didZeroX, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, didZeroX, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes, getNFTAddressFromInput } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import IpfsHelper from '../../utils/IpfsHelper'
@@ -10,7 +10,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const getNftMetadata = async (
   nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

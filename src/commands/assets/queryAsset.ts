@@ -1,4 +1,4 @@
-import { Account, NvmApp, ServiceMetadata } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp, ServiceMetadata } from '@nevermined-io/sdk'
 import { StatusCodes, printSearchResult } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const queryAsset = async (
   nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger

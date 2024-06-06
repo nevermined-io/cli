@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { NFTMetadata } from '../../models/NFTMetadata'
@@ -9,7 +9,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const publishNftMetadata = async (
   _nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

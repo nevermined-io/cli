@@ -1,4 +1,4 @@
-import { Account, NvmApp, jsonReplacer } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp, jsonReplacer } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { printProvenanceEvents } from '../../utils/utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
@@ -8,7 +8,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const provenanceHistory = async (
   nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

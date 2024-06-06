@@ -1,4 +1,4 @@
-import { Account, AssetPrice, AssetAttributes, MetaData, MetaDataMain, zeroX, MetaDataExternalResource, ServiceType, NFTAttributes, NeverminedNFT721Type, PublishMetadataOptions, ServiceAttributes, generateInstantiableConfigFromConfig, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, AssetPrice, AssetAttributes, MetaData, MetaDataMain, zeroX, MetaDataExternalResource, ServiceType, NFTAttributes, NeverminedNFT721Type, PublishMetadataOptions, ServiceAttributes, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printTokenBanner,
@@ -11,12 +11,11 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import fs from 'fs'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { Dtp } from '@nevermined-io/sdk-dtp'
 import { ethers } from 'ethers'
 
 export const registerAsset = async (
   nvmApp: NvmApp,
-  account: Account,
+  account: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -24,19 +23,7 @@ export const registerAsset = async (
   const { verbose, metadata, assetType } = argv
   const token = nvmApp.sdk.keeper.token
   
-  let dtp: Dtp = undefined  
 
-  const isDTP = argv.password ? true : false
-  if (isDTP) {
-    logger.info(`Is a DTP asset`)
-    const instanceConfig = {
-      ...(await generateInstantiableConfigFromConfig(config.nvm)),
-      nevermined: nvmApp.sdk,
-    }
-    dtp = await Dtp.getInstance(instanceConfig, null as any)
-  }
-
-  const password = argv.password ? Buffer.from(argv.password).toString('hex') : ''
   if (verbose) await printTokenBanner(token)
 
   logger.info(chalk.dim(`Registering asset (${assetType}) ...`))
@@ -71,15 +58,7 @@ export const registerAsset = async (
 
     const _files: MetaDataExternalResource[] = []
     let _fileIndex = 0
-    if (isDTP) {
-      _files.push({
-        index: _fileIndex,
-        url: password,
-        encryption: 'dtp',
-        contentType: 'text/plain'
-      })
-      _fileIndex++
-    }
+
     argv.urls.forEach((_url: string) => {
       _files.push({
         index: _fileIndex,
@@ -93,7 +72,6 @@ export const registerAsset = async (
     ddoMetadata = {
       main: {
         name: argv.name,
-        isDTP: !!password,
         type: assetType,
         dateCreated: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
         author: argv.author,
@@ -102,17 +80,7 @@ export const registerAsset = async (
         files: _files
       } as MetaDataMain
     }    
-    if (isDTP) {
-      const nodeInfo = await nvmApp.sdk.services.node.getNeverminedNodeInfo()
-      const providerKey = nodeInfo['babyjub-public-key']
-      
-      ddoMetadata.additionalInformation = {
-        poseidonHash: await dtp.keytransfer.hashKey(Buffer.from(password, 'hex')),
-        providerKey,
-        links: argv.urls.map((url: string) => ({ name: 'public url', url }))
-      }
-      logger.info(`We are here now ${JSON.stringify(ddoMetadata.additionalInformation)}`)
-    }
+
     if (assetType === 'algorithm') {
       const containerTokens = argv.cointaer ? argv.container.split(':') : []
       ddoMetadata.main.algorithm = {
@@ -156,15 +124,16 @@ export const registerAsset = async (
     customData
   }
 
-  const configContract = loadNeverminedConfigContract(config)
-  const networkFee = await configContract.getMarketplaceFee()
+  const configContract = await loadNeverminedConfigContract(nvmApp.sdk, config)
+  
+  const networkFee = await configContract.read.getMarketplaceFee() as bigint
 
   const assetPrice = new AssetPrice(account.getId(), ddoPrice)
     .setTokenAddress(token ? token.address : config.erc20TokenAddress)
 
   if (networkFee > 0) {
     assetPrice.addNetworkFees(
-      await configContract.getFeeReceiver(),
+      await configContract.read.getFeeReceiver() as string,
       networkFee
     )
     logger.info(`Network Fees: ${getFeesFromBigNumber(networkFee)}`)

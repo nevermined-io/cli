@@ -1,4 +1,4 @@
-import { Account, DDO, NvmApp, formatUnits, zeroX } from '@nevermined-io/sdk'
+import { NvmAccount, DDO, NvmApp, formatUnits, zeroX } from '@nevermined-io/sdk'
 import {
   Constants,
   StatusCodes,
@@ -14,7 +14,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const showNft = async (
   nvmApp: NvmApp,
-  userAccount: Account,
+  userAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger

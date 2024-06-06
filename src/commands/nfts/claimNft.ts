@@ -1,4 +1,4 @@
-import { Account, DDO, NvmApp, formatUnits } from '@nevermined-io/sdk'
+import { NvmAccount, DDO, NvmApp, formatUnits } from '@nevermined-io/sdk'
 import { Constants, StatusCodes, loadToken, getNFTAddressFromInput } from '../../utils'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const claimNft = async (
   nvmApp: NvmApp,
-  userAccount: Account,
+  userAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -41,6 +41,14 @@ export const claimNft = async (
       `Agreement Data: '${chalk.whiteBright(JSON.stringify(agreementData))}'`
     )
   )
+
+  if (agreementData.conditionIds.length === 0) {
+    logger.error(`Unable to load Agreement with Id ${agreementId}: No conditions found`)
+    return {
+      status: StatusCodes.ERROR,
+      errorMessage: `Unable to load Agreement with Id ${agreementId}: No conditions found`
+    }
+  }
 
   await nvmApp.sdk.keeper.conditionStoreManager.getCondition(
     agreementData.conditionIds[0]
@@ -113,7 +121,8 @@ export const claimNft = async (
       agreementId,
       sellerAddress,
       buyerAddress,
-      argv.amount
+      argv.amount,
+      // ddo.id
     )
   }
 

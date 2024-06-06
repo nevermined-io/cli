@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp, isValidAddress } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   loadSubscriptionContract,
@@ -7,11 +7,10 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { ethers } from 'ethers'
 
 export const mintSubscriptionNft = async (
-  _nvmApp: NvmApp,
-  minterAccount: Account,
+  nvmApp: NvmApp,
+  minterAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -24,7 +23,16 @@ export const mintSubscriptionNft = async (
     chalk.dim(`Using Minter: ${chalk.whiteBright(minterAccount.getId())}`)
   )
 
-  if (!ethers.isAddress(nftAddress)) {
+  if (!isValidAddress(nftAddress)) {
+    return {
+      status: StatusCodes.ERROR,      
+      errorMessage: `Invalid NFT address '${nftAddress}'`
+    }
+  }
+
+  const exists = await nvmApp.sdk.utils.blockchain.checkExists(nftAddress)
+  if (!exists) {
+    logger.error(`Could not find a deployed contract on address: ${nftAddress}`)
     return {
       status: StatusCodes.ERROR,      
       errorMessage: `Invalid NFT address '${nftAddress}'`
@@ -32,20 +40,24 @@ export const mintSubscriptionNft = async (
   }
 
   let receiver
-  if (ethers.isAddress(argv.receiver)) receiver = argv.receiver
+  if (isValidAddress(argv.receiver)) receiver = argv.receiver as `0x${string}`
   else receiver = minterAccount.getId()
 
   logger.debug(
     chalk.dim(`Receiver: ${chalk.whiteBright(receiver)}`)
   )
-
-  const tokenId = argv.tokenId && argv.tokenId.toString().length > 0 ? Number(argv.tokenId) : Number(0)
   
-  const subscriptionContract = loadSubscriptionContract(config, nftAddress)
-    
-  await subscriptionContract["mint(address,uint256,uint256)"](receiver as string, tokenId, 0)
-
-
+  const tokenId = argv.tokenId && argv.tokenId.toString().length > 0 ? argv.tokenId as bigint : 0n
+  
+  const subscriptionContract = await loadSubscriptionContract(nvmApp.sdk, config, nftAddress)
+  logger.info(`Contract loaded with address: ${subscriptionContract.address}`)
+  const args = [receiver, tokenId, 0n]
+  logger.debug(args)
+  
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  await subscriptionContract.write.mint({ args, account: minterAccount.getAccountSigner() })
+  
   logger.info(
     chalk.dim(
       `Minted NFT Subscription (ERC-721) '${chalk.whiteBright(

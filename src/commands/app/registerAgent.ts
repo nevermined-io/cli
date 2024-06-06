@@ -1,4 +1,4 @@
-import { Account, zeroX, NvmApp, NvmAppMetadata, DDO, ResourceAuthentication } from '@nevermined-io/sdk'
+import { NvmAccount, zeroX, NvmApp, NvmAppMetadata, DDO, ResourceAuthentication } from '@nevermined-io/sdk'
 import {
   StatusCodes} from '../../utils'
 import chalk from 'chalk'
@@ -9,7 +9,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const registerAgent = async (
   nvmApp: NvmApp,
-  publisherAccount: Account,
+  publisherAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger

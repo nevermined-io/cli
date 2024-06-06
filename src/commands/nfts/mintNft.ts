@@ -1,4 +1,4 @@
-import { Account, NvmApp, zeroX } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp, isValidAddress, zeroX } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -8,11 +8,10 @@ import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
 import { Logger } from 'log4js'
 import { ConfigEntry } from '../../models/ConfigDefinition'
-import { FunctionFragment, ethers } from 'ethers'
 
 export const mintNft = async (
   nvmApp: NvmApp,
-  minterAccount: Account,
+  minterAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger
@@ -43,7 +42,7 @@ export const mintNft = async (
   )
 
   let receiver
-  if (ethers.isAddress(argv.receiver)) receiver = argv.receiver
+  if (isValidAddress(argv.receiver)) receiver = argv.receiver
   else receiver = minterAccount.getId()
 
   if (nftType === 721) {
@@ -56,23 +55,32 @@ export const mintNft = async (
       await printNftTokenBanner(nft.getContract)
     }
 
-    // We check the number of parameters expected by the mint function to adapt the parameters
-    const mintAbiDefinition = nft.nftContract.contract.interface.fragments
-      .filter((item: FunctionFragment) => item.name === 'mint')
-      .map((entry: { inputs: any }) => entry.inputs)
-
-    if (mintAbiDefinition.length == 3) {
-      logger.debug(`Minting using the To address + tokenId + tokenURI`)
-      await nft.mintWithURL(
-        receiver,
-        zeroX(ddo.shortId()),
-        uri || register.url,
-        minterAccount
-      )
+    
+    if (uri && uri.length > 0) {  
+      logger.debug(`Minting using uri: ${uri}`)    
+      await nft.mintWithURL(receiver, zeroX(ddo.shortId()), uri, minterAccount)
     } else {
-      logger.debug(`Minting using the tokenId`)
       await nft.mint(zeroX(ddo.shortId()), minterAccount)
     }
+    
+    // getInputsOfFunctionFormatted(viemAbi, 'approve')
+    // We check the number of parameters expected by the mint function to adapt the parameters
+    // const mintAbiDefinition = nft.nftContract.contract.interface.fragments
+    //   .filter((item: FunctionFragment) => item.name === 'mint')
+    //   .map((entry: { inputs: any }) => entry.inputs)
+
+    // if (mintAbiDefinition.length == 3) {
+    //   logger.debug(`Minting using the To address + tokenId + tokenURI`)
+    //   await nft.mintWithURL(
+    //     receiver,
+    //     zeroX(ddo.shortId()),
+    //     uri || register.url,
+    //     minterAccount
+    //   )
+    // } else {
+    //   logger.debug(`Minting using the tokenId`)
+    //   await nft.mint(zeroX(ddo.shortId()), minterAccount)
+    // }
 
     logger.info(
       chalk.dim(

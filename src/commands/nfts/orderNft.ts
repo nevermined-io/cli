@@ -1,4 +1,4 @@
-import { Account, DDO, NvmApp, formatUnits } from '@nevermined-io/sdk'
+import { NvmAccount, DDO, NvmApp, formatUnits } from '@nevermined-io/sdk'
 import { Constants, StatusCodes, loadToken, getNFTAddressFromInput } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const orderNft = async (
   nvmApp: NvmApp,
-  buyerAccount: Account,
+  buyerAccount: NvmAccount,
   argv: any,
   config: ConfigEntry,
   logger: Logger
@@ -24,11 +24,14 @@ export const orderNft = async (
 
   logger.debug(chalk.dim(`DID: '${chalk.whiteBright(ddo.id)}'`))
   logger.info(chalk.dim(`Buyer: '${chalk.whiteBright(buyerAccount.getId())}'`))
-
+  
   const decimals =
     token !== null ? await token.decimals() : Constants.ETHDecimals
   const symbol = token !== null ? await token.symbol() : config.nativeToken
 
+  
+  console.log('decimals', decimals)
+  console.log('symbol', symbol)
   const price = formatUnits(
     DDO.getAssetPriceFromService(ddo.findServiceByReference('nft-sales')).getTotalPrice(),
     decimals

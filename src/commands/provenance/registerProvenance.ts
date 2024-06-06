@@ -1,4 +1,4 @@
-import { Account, generateId, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, generateId, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const registerProvenance = async (
   nvmApp: NvmApp,
-  creatorAccount: Account,
+  creatorAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

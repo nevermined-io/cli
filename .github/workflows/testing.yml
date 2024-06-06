@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.API_TOKEN_GITHUB }}
           opengsn: 'true'
           estuary: 'true'
-          contracts-version: 'v3.5.4'
+          contracts-version: 'v3.5.7'
           node-version: 'latest'
       - name: Check artifacts and circuits
         run: |

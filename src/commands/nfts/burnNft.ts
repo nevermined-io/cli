@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import {
   StatusCodes,
   printNftTokenBanner,
@@ -11,7 +11,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const burnNft = async (
   nvmApp: NvmApp,
-  burnerAccount: Account,
+  burnerAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

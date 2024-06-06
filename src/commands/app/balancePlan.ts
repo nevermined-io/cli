@@ -1,4 +1,4 @@
-import { Account, jsonReplacer, NvmApp, SubscriptionType } from '@nevermined-io/sdk'
+import { NvmAccount, jsonReplacer, NvmApp, SubscriptionType } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const balancePlan = async (
   nvmApp: NvmApp,
-  consumerAccount: Account,
+  consumerAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

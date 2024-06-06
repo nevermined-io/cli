@@ -1,4 +1,3 @@
-import ethers, { HDNodeWallet, Mnemonic, getIndexedAccountPath } from 'ethers'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import { mkdirSync, writeFileSync } from 'fs'
@@ -8,8 +7,9 @@ import fetch from 'cross-fetch'
 import { getLogger } from 'log4js'
 import { ConfigEntry, CliConfig } from '../models/ConfigDefinition'
 import path from 'path'
-import { Wallet, Signer } from 'ethers'
-import { Web3Provider, makeAccounts } from '@nevermined-io/sdk'
+import { Wallet, } from 'ethers'
+import { NvmAccount, makeRandomWallet, makeWallets } from '@nevermined-io/sdk'
+import { privateKeyToAccount } from 'viem/accounts'
 
 dotenv.config()
 
@@ -65,7 +65,7 @@ export async function configureLocalEnvironment(
       console.debug(
         `Remote network artifacts not found: ${ARTIFACTS_PATH}. Downloading them.`
       )
-      const artifactPackageUrl = `${ARTIFACTS_REPOSITORY}/${config.networkId}/${config.tagName}/contracts_v${config.contractsVersion}.tar.gz`
+      const artifactPackageUrl = `${ARTIFACTS_REPOSITORY}/${config.nvm.chainId}/${config.tagName}/contracts_v${config.contractsVersion}.tar.gz`
       const destinationPackage = `${ARTIFACTS_PATH}/contracts_${config.contractsVersion}.tar.gz`
       const response = await fetch(artifactPackageUrl)
       if (response.status !== 200) {
@@ -107,6 +107,21 @@ export function getNetworksConfig(): CliConfig {
     'networks.json'
   )
   return JSON.parse(fs.readFileSync(networksJsonPath).toString())
+}
+
+export async function accountFromCredentialsFile(
+  keyFilePath: string,
+  keyFilePassword: string,
+): Promise<NvmAccount> {
+  try {
+    const data = fs.readFileSync(keyFilePath)
+
+    const wallet = Wallet.fromEncryptedJsonSync(data.toString(), keyFilePassword)
+    const account = privateKeyToAccount(wallet.privateKey as `0x${string}`)
+    return NvmAccount.fromAccount(account)
+  } catch (e) {
+    throw new Error(`Error loading account from credentials file ${keyFilePath}`)
+  }
 }
 
 export async function getConfig(
@@ -166,37 +181,40 @@ export async function getConfig(
     }
   }
 
-  const provider = await Web3Provider.getWeb3(config.nvm)
+  // const provider = await Web3Provider.getWeb3(config.nvm)
 
-  let signer: Signer
-  let accounts: ethers.Wallet[] = []
+  let accounts: NvmAccount[] = []
   if (requiresAccount) {
-    if (!process.env.SEED_WORDS) {      
-      const encryptedJson = fs.readFileSync(process.env.KEYFILE_PATH!, 'utf-8')
+    if (!process.env.SEED_WORDS) {   
+      const nvmAccount = await accountFromCredentialsFile(process.env.KEYFILE_PATH!, process.env.KEYFILE_PASSWORD!)   
+      accounts.push(nvmAccount)
+      // const encryptedJson = fs.readFileSync(process.env.KEYFILE_PATH!, 'utf-8')
 
-      signer = Wallet.fromEncryptedJsonSync(      
-        encryptedJson,
-        process.env.KEYFILE_PASSWORD!
-      ) 
-      accounts.push(signer as ethers.Wallet)
+      // signer = Wallet.fromEncryptedJsonSync(      
+      //   encryptedJson,
+      //   process.env.KEYFILE_PASSWORD!
+      // ) 
+      // accounts.push(signer as ethers.Wallet)
     } else {
       
-      const node = HDNodeWallet.fromSeed(
-        Mnemonic.fromPhrase(config.seed!).computeSeed()
-      )
-      signer = node.derivePath(getIndexedAccountPath(accountIndex))                  
+      // const node = HDNodeWallet.fromSeed(
+      //   Mnemonic.fromPhrase(config.seed!).computeSeed()
+      // )
+      // signer = node.derivePath(getIndexedAccountPath(accountIndex))                  
       
-      accounts = makeAccounts(config.seed!)
+      accounts = makeWallets(config.seed!).map((wallet) => NvmAccount.fromAccount(wallet))
+      
       
     }
   } else {
-    signer = HDNodeWallet.fromPhrase(DUMMY_SEED_WORDS)
-    accounts = makeAccounts(DUMMY_SEED_WORDS, 1)
+    // signer = HDNodeWallet.fromPhrase(DUMMY_SEED_WORDS)
+    const wallet = makeRandomWallet()
+    accounts.push(NvmAccount.fromAccount(wallet))
+    
   }
-  
   return {
     ...config,
-    signer: signer.connect(provider),
+    signer: accounts[accountIndex],
     nvm: {
       ...config.nvm,
       artifactsFolder: ARTIFACTS_PATH,

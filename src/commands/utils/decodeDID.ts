@@ -1,4 +1,4 @@
-import { Account, DID, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, DID, NvmApp } from '@nevermined-io/sdk'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import { Logger } from 'log4js'
 import { StatusCodes } from '../../utils'
@@ -7,7 +7,7 @@ import chalk from 'chalk'
 
 export const decodeDID = async (
   _nvmApp: NvmApp,
-  _account: Account,
+  _account: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

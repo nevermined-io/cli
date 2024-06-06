@@ -22,7 +22,7 @@ export const commandRegex = {
     createPlan: new RegExp('.*Plan with DID created: (.*)\\n', 'g'),
     createAgent: new RegExp('.*Agent created with DID: (.*)\\n', 'g'),
     createFileAsset: new RegExp('.*File asset created with DID: (.*)\\n', 'g'),
-    order: new RegExp('.*Plan purchased succesfully: (.{66})', 'g')
+    order: new RegExp('.*Plan purchased and claimed succesfully: (.{66})', 'g')
   },
   accounts: {
     newAccount: new RegExp(

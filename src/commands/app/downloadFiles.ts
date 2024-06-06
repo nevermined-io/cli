@@ -1,4 +1,4 @@
-import { Account, NvmApp } from '@nevermined-io/sdk'
+import { NvmAccount, NvmApp } from '@nevermined-io/sdk'
 import { StatusCodes } from '../../utils'
 import { ExecutionOutput } from '../../models/ExecutionOutput'
 import chalk from 'chalk'
@@ -7,7 +7,7 @@ import { ConfigEntry } from '../../models/ConfigDefinition'
 
 export const downloadFiles = async (
   nvmApp: NvmApp,
-  _buyerAccount: Account,
+  _buyerAccount: NvmAccount,
   argv: any,
   _config: ConfigEntry,
   logger: Logger

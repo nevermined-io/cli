@@ -1,4 +1,4 @@
-import { LogLevel, LoggerInstance, NeverminedOptions, makeAccounts } from "@nevermined-io/sdk"
+import { LogLevel, LoggerInstance, NeverminedOptions, NvmAccount, makeWallets } from "@nevermined-io/sdk"
 
 LoggerInstance.setLevel(LogLevel.Error)
 
@@ -36,7 +36,7 @@ if (process.env.NETWORK_NAME === 'mumbai') {
 }
 
 if (process.env.SEED_WORDS) {
-    configBase.accounts = makeAccounts(process.env.SEED_WORDS)
+    configBase.accounts = makeWallets(process.env.SEED_WORDS).map((wallet) => NvmAccount.fromAccount(wallet))
 }
   
 export const config: NeverminedOptions & { forceVerbose: NeverminedOptions } = configBase as any
