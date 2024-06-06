@@ -216,7 +216,7 @@
 		"contractsVersion": "3.5.7",
 		"tagName": "public",
 		"etherscanUrl": "https://celoscan.io",
-		"erc20TokenAddress": "0xef4229c8c3250C675F21BCefa42f58EfbfF6002a",
+		"erc20TokenAddress": "0xcebA9300f2b948710d2653dD7B07f33A8B32118C",
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
