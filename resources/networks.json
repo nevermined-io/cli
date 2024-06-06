@@ -206,8 +206,8 @@
 			"appUrl": "https://celo.nevermined.app",
 			"web3ProviderUri": "https://forno.celo.org",
 			"marketplaceUri": "https://marketplace-api.celo.nevermined.app",
-			"graphHttpUri": "https://api.thegraph.com/subgraphs/name/nevermined-io/public",
-			"neverminedNodeUri": "https://node.celo.nevermined.app",
+			"graphHttpUri": "",
+			"neverminedNodeUri": "http://node.celo.nevermined.app",
 			"neverminedNodeAddress": "0x824dbcE5E9C96C5b8ce2A35a25a5ab87eD1D00b1",
 			"verbose": true
 		},
