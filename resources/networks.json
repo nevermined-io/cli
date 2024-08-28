@@ -220,5 +220,30 @@
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
+	},
+	"appPeaq": {
+		"envDescription": "The Peaq network production environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://peaq.nevermined.app/",
+		"envName": "Peaq",
+		"isProduction": true,
+		"nvm": {
+			"chainId": 3338,
+			"appUrl": "https://peaq.nevermined.app",
+			"web3ProviderUri": "https://evm.peaq.network",
+			"marketplaceUri": "https://marketplace-api.peaq.nevermined.app",
+			"graphHttpUri": "",
+			"neverminedNodeUri": "http://node.peaq.nevermined.app",
+			"neverminedNodeAddress": "0x824dbcE5E9C96C5b8ce2A35a25a5ab87eD1D00b1",
+			"verbose": true
+		},
+		"nativeToken": "PEAQ",
+		"networkName": "peaq-mainnet",
+		"contractsVersion": "3.5.7",
+		"tagName": "public",
+		"etherscanUrl": "https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fmpfn1.peaq.network#/explorer",
+		"erc20TokenAddress": "0x0000000000000000000000000000000000000000",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
 	}
 }
