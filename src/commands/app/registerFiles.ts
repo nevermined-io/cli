@@ -57,7 +57,8 @@ export const registerFiles = async (
   const ddo = await nvmApp.registerFileAsset(
     filesMetadata,
     argv.subscriptionDid,    
-    costInCredits
+    costInCredits,
+    argv.nftAddress || nvmApp.sdk.keeper.nftUpgradeable.address
   )
   
   const assetUrl = `${config.nvm.appUrl}/en/file/${ddo.shortId()}`

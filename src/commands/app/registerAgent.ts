@@ -100,12 +100,16 @@ export const registerAgent = async (
       costInCredits, // default cost in credits for every succesful query to the agent
       costInCredits, // min amount of credits to be consumed
       maxCostInCredits, // max amount of credits to be consumed
+      argv.nftAddress || nvmApp.sdk.keeper.nftUpgradeable.address
     )
   } else {
     ddo = await nvmApp.registerServiceAsset(
       agentMetadata,
       argv.subscriptionDid,
-      costInCredits
+      costInCredits,
+      undefined,
+      undefined,
+      argv.nftAddress || nvmApp.sdk.keeper.nftUpgradeable.address
     )
   }
   
