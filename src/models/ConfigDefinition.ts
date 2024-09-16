@@ -1,11 +1,11 @@
-import { NeverminedOptions, NvmAccount } from '@nevermined-io/sdk'
+import { NvmAccount, NeverminedAppOptions } from '@nevermined-io/sdk'
 
 export interface CliConfig {
   [index: string]: ConfigEntry
 }
 
 export interface ConfigEntry {
-  nvm: NeverminedOptions
+  nvm: NeverminedAppOptions
   signer: NvmAccount
   envDescription?: string
   envUrl?: string

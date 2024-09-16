@@ -2264,6 +2264,41 @@
 					"hidden": true,
 					"description": "The NFT type"
 				}]
+			}, {
+				"name": "create-api-key [name]",
+				"description": "It creates a new NVM API Key",
+				"details": "Nevermined API Keys allow to interact with the protocol in a programatic way. This command allows the generation of NVM API Keys. NOTE: This method requires the user to setup the ZERO_PROJECT_ID environment variable.",
+				"examples": ["ncli app create-api-key 'My Test API Key'"],
+				"commandHandler": "createApiKey",
+				"requiresAccount": true,
+				"positionalArguments": [{
+					"name": "name",
+					"type": "string",
+					"description": "The name of the NVM API Key to create"
+				}],
+				"optionalArguments": []
+			}, {
+				"name": "list-api-keys",
+				"description": "It lists all the NVM API Keys associated to the user",
+				"details": "This command lists allt he NVM API Keys created by the user.",
+				"examples": ["ncli app list-api-keys"],
+				"commandHandler": "listApiKeys",
+				"requiresAccount": true,
+				"positionalArguments": [],
+				"optionalArguments": []
+			}, {
+				"name": "revoke-api-key [hash]",
+				"description": "It revokes a existing NVM API Key",
+				"details": "Nevermined API Keys allow to interact with the protocol in a programatic way. This command allows to revoke an existing NVM API Keys.",
+				"examples": ["ncli app revoke-api-key 'eyJhbGciOiJFUzI1NksifQ.eyJpc'"],
+				"commandHandler": "revokeApiKey",
+				"requiresAccount": true,
+				"positionalArguments": [{
+					"name": "hash",
+					"type": "string",
+					"description": "The hash of the NVM API Key to revoke"
+				}],
+				"optionalArguments": []
 			}]
 		}
 	]

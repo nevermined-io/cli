@@ -159,6 +159,7 @@ export async function getConfig(
     config.nvm.marketplaceUri = process.env.MARKETPLACE_API_URL
   config.nvm.graphHttpUri = process.env.GRAPH_URL
   if (process.env.NVM_NODE_URL) config.nvm.neverminedNodeUri = process.env.NVM_NODE_URL
+  if (process.env.NVM_BACKEND_URL) config.nvm.neverminedBackendUri = process.env.NVM_BACKEND_URL
   if (process.env.NODE_ADDRESS)
     config.nvm.neverminedNodeAddress = process.env.NODE_ADDRESS
   if (process.env.TOKEN_ADDRESS)
