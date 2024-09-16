@@ -122,6 +122,11 @@ export const loginMarketplaceApi = async (
   return true
 }
 
+export const getNeverminedContractAbi = (contractName: string, networkName: string) => {
+  const abiPath = `${ARTIFACTS_PATH}/${contractName}.${networkName.toLowerCase()}.json`
+  return JSON.parse(fs.readFileSync(abiPath).toString())
+}
+
 export const loadNeverminedConfigContract = async (nvm: Nevermined, config: ConfigEntry) => {
   const abiNvmConfig = `${ARTIFACTS_PATH}/NeverminedConfig.${config.networkName?.toLowerCase()}.json`
   const nvmConfigAbi = JSON.parse(fs.readFileSync(abiNvmConfig).toString())
