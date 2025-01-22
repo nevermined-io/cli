@@ -28,7 +28,9 @@ export const deployNft = async (
   logger.info(JSON.stringify(operators))
   // INFO: We allow the Nevermined Node to fulfill the transfer condition in behalf of the user
   // Typically this only needs to happen once per NFT contract
-  operators.forEach((_addr: string) => {
+  operators
+    .filter((_addr: string) => _addr)
+    .forEach((_addr: string) => {
     _addr = _addr.replace('\\', '')
     logger.debug(`Checking address: ${_addr}`)
     if (isValidAddress(_addr)) addressesToApprove.push(_addr)
