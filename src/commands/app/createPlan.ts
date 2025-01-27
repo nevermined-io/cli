@@ -89,7 +89,7 @@ export const createPlan = async (
   }
 
   logger.info('Plan with DID created:', ddo.id)
-  const planUrl = `${config.nvm.appUrl}/en/subscription/${zeroX(ddo.shortId())}`
+  const planUrl = `${config.nvm.appUrl}/en/plan/${zeroX(ddo.shortId())}`
 
   logger.info(
     chalk.dim(
