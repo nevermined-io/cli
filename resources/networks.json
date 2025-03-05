@@ -99,7 +99,33 @@
 		"gasMultiplier": 0,
 		"gasPriceMultiplier": 0,
 		"externalNetwork": true
-	}, 
+	},
+	"appBaseSepolia": {
+		"envDescription": "Nevermined App (Base Sepolia) testnet environment where users can interact with Nevermined protocol.",
+		"envUrl": "https://base-sepolia.nevermined.app/",
+		"envName": "BaseSepolia",
+		"isProduction": false,
+		"nvm": {
+			"chainId": 84532,
+			"appUrl": "https://base-testing.nevermined.app",
+			"web3ProviderUri": "https://sepolia.base.org",
+			"marketplaceUri": "https://marketplace-api.base-sepolia.nevermined.app",
+			"graphHttpUri": "",
+			"neverminedNodeUri": "https://node.base-sepolia.nevermined.app",
+			"neverminedNodeAddress": "0x5838B5512cF9f12FE9f2beccB20eb47211F9B0bc",
+			"neverminedBackendUri": "https://one-backend.base-sepolia.nevermined.app",
+			"verbose": true
+		},
+		"nativeToken": "ETH",
+		"networkName": "base-sepolia",
+		"contractsVersion": "3.5.9",
+		"tagName": "public",
+		"etherscanUrl": "https://sepolia.basescan.org",
+	"erc20TokenAddress": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+		"gasMultiplier": 0,
+		"gasPriceMultiplier": 0,
+		"externalNetwork": true
+	},  
 	"appArbitrum": {
 		"envDescription": "The Arbitrum One production environment where users can interact with Nevermined protocol.",
 		"envUrl": "https://nevermined.app/",

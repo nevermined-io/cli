@@ -72,7 +72,8 @@ export const createApiKey = async (
   logger.debug(`Creating a new ZeroDev kernel client ...`)
   logger.debug(`Chain ID: ${nvmApp.sdk.client.chain?.id}`)
   
-  const privateKey = toHex(publisherAccount.getAccountSigner().getHdKey().privateKey)
+  const privateKey = toHex((publisherAccount.getAccountSigner() as any).getHdKey().privateKey)
+  // const privateKey = toHex(publisherAccount.getAccountSigner()?.getHdKey().privateKey)
   
   const account = privateKeyToAccount(privateKey)
   logger.debug(`Private key Account: ${account.address}`)
