@@ -36,7 +36,7 @@ jobs:
           yarn build
           yarn test test/integration/NFTs1155.test.ts
       - name: Upload logs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: nevermined-tools-output
